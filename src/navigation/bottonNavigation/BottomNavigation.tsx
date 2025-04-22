@@ -5,7 +5,6 @@ import SearchScreen from "../../appScreens/Search/SearchScreen";
 import FavouriteScreen from "../../appScreens/Favourites/FavouriteScreen";
 import CartScreen from "../../appScreens/Cart/CartScreen";
 import ProfileScreen from "../../appScreens/Profile/ProfileScreen";
-import { setStatusBarHidden } from 'expo-status-bar';
 import { Image, ImageSourcePropType, StyleSheet } from 'react-native';
 import { assets } from '../../../assets/images';
  
@@ -54,6 +53,7 @@ export default function BottomNavigation(){
                 tabBarShowLabel:false,     
                   tabBarIconStyle: {
                     flex:1,
+
 
                   },          
             })
