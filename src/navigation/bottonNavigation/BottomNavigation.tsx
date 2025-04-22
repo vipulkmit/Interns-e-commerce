@@ -16,11 +16,13 @@ export default function BottomNavigation(){
     const Tab = createBottomTabNavigator()
     
     return(
-        <Tab.Navigator screenOptions={({ route }) => {
+        <Tab.Navigator
+        id={undefined}
+        screenOptions={({ route }) => {
 
             return ({
 
-                tabBarIcon: ({ focused, size, color }) => {
+                tabBarIcon: ({ focused }) => {
                     let iconName: ImageSourcePropType;
 
                     if (route.name === 'HomeScreen') {
@@ -34,7 +36,7 @@ export default function BottomNavigation(){
                         assets.Search
                     } else if (route.name === 'FavouriteScreen') {
                         iconName = focused ? 
-                        assets. HeartBlue: 
+                        assets.HeartBlue: 
                         assets.Heart
                     } else if (route.name === 'CartScreen') {
                         iconName = focused ? 
@@ -46,7 +48,7 @@ export default function BottomNavigation(){
                         assets.User
                     }
                     return (
-                        <Image source={iconName} style={{ width: 24, height: 24,objectFit:'contain'}} />
+                        <Image source={iconName} style={{ width: 24, height: 24,resizeMode:'contain'}} />
              ) },
                 tabBarStyle: styles.tabBar,
                 tabBarShowLabel:false,     
