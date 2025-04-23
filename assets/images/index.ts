@@ -17,5 +17,14 @@ export const assets = {
     UserBlue:require('./UserBlue.png'),
     Collection1:require('./Collection1.png'),
     SmallCollection1:require('./SmallCollection1.png'),
-    BackgroundCollection1:require('./BackgroundCollection1.png')
+    BackgroundCollection1:require('./BackgroundCollection1.png'),
+    BannerCarousel:require('./Banner.png'),
+    TrendCard:require('./TrendCard.png'),
+    LogoFor21:require('./LogoFor21.png'),
+    LogoZara: require('./LogoZara.png'),
+    LogoMango: require('./LogoMango.jpg'),
+    LogoPuma: require('./LogoPuma.jpg'),
+    LogoHM: require('./LogoHM.png'),
+    UserImage:require('./UserImage.png'),
+    MainSearch: require('./MainSearch.png')
 }  
