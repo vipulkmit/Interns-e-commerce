@@ -79,7 +79,7 @@ renderItem={({ item }) => renderItem(item)}
 const styles = StyleSheet.create({
 imageBackground: {
 width: width,
-height: 344.67,
+height: 344.68,
 justifyContent: "center",
 alignItems: "center",
 },
