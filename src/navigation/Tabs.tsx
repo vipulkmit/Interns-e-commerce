@@ -1,22 +1,22 @@
 import React from 'react';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import HomeScreen from "../../appScreens/Home/HomeScreen";
-import SearchScreen from "../../appScreens/Search/SearchScreen";
-import FavouriteScreen from "../../appScreens/Favourites/FavouriteScreen";
-import CartScreen from "../../appScreens/Cart/CartScreen";
-import ProfileScreen from "../../appScreens/Profile/ProfileScreen";
 import { Image, ImageSourcePropType, StyleSheet } from 'react-native';
-import { assets } from '../../../assets/images';
+import { assets } from '../../assets/images';
+import HomeNavigator from './HomeNavigator';
+import SearchNavigator from './SearchNavigator';
+import WishlistNavigator from './WishlistNavigator';
+import CartNavigator from './CartNavigator';
+import ProfileNavigator from './ProfileNavigator';
  
 
 
 
-export default function BottomNavigation(){
+export default function RootComponent(){
+    
     const Tab = createBottomTabNavigator()
     
     return(
         <Tab.Navigator
-        id={undefined}
         screenOptions={({ route }) => {
 
             return ({
@@ -24,24 +24,24 @@ export default function BottomNavigation(){
                 tabBarIcon: ({ focused }) => {
                     let iconName: ImageSourcePropType;
 
-                    if (route.name === 'HomeScreen') {
+                    if (route.name === 'HomeNavigator') {
                         iconName = focused ? 
                         assets.HomeBlue : 
                         assets.Home
                     }
-                    else if (route.name === 'SearchScreen') {
+                    else if (route.name === 'SearchNavigator') {
                         iconName = focused ? 
                         assets.SearchBlue : 
                         assets.Search
-                    } else if (route.name === 'FavouriteScreen') {
+                    } else if (route.name === 'WishlistNavigator') {
                         iconName = focused ? 
                         assets.HeartBlue: 
                         assets.Heart
-                    } else if (route.name === 'CartScreen') {
+                    } else if (route.name === 'CartNavigator') {
                         iconName = focused ? 
                         assets.BagBlue : 
                         assets.Bag
-                    } else if (route.name === 'ProfileScreen') {
+                    } else if (route.name === 'ProfileNavigator') {
                         iconName = focused ? 
                         assets.UserBlue : 
                         assets.User
@@ -53,16 +53,14 @@ export default function BottomNavigation(){
                 tabBarShowLabel:false,     
                   tabBarIconStyle: {
                     flex:1,
-
-
                   },          
             })
         }}>
-            <Tab.Screen name="HomeScreen" component={HomeScreen} options={{headerShown:false}}/>
-            <Tab.Screen name="SearchScreen" component={SearchScreen} options={{headerShown:false}}/>
-            <Tab.Screen name="FavouriteScreen" component={FavouriteScreen} options={{headerShown:false}}/>
-            <Tab.Screen name="CartScreen" component={CartScreen} options={{headerShown:false}}/>
-            <Tab.Screen name="ProfileScreen" component={ProfileScreen} options={{headerShown:false}}/>
+            <Tab.Screen name="HomeNavigator" component={HomeNavigator} options={{headerShown:false}}/>
+            <Tab.Screen name="SearchNavigator" component={SearchNavigator} options={{headerShown:false}}/>
+            <Tab.Screen name="WishlistNavigator" component={WishlistNavigator} options={{headerShown:false}}/>
+            <Tab.Screen name="CartNavigator" component={CartNavigator} options={{headerShown:false}}/>
+            <Tab.Screen name="ProfileNavigator" component={ProfileNavigator} options={{headerShown:false}}/>
         </Tab.Navigator>
     )
 }

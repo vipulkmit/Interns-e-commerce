@@ -1,6 +1,8 @@
 import { FlatList, StyleSheet, View, Text, Image, ImageSourcePropType } from "react-native";
 import { assets } from "../../../assets/images";
 import React from 'react';
+import { useFonts } from "expo-font";
+import { fonts } from "../../../assets/fonts";
 
 
 type Category = {
@@ -11,74 +13,111 @@ type Category = {
 
 const categoryData: Category[] = [
     {
-        id: '1',
-        image: assets.category1,
-        name: 'Categories',
-    },
-    {
         id: '2',
-        image: assets.category1,
+        image: assets.men,
         name: 'Men',
     },
     {
         id: '3',
-        image: assets.category1,
+        image: assets.women,
         name: 'Women',
     },
     {
         id: '4',
-        image: assets.category1,
+        image: assets.kids,
         name: 'Kids',
     },
     {
         id: '5',
-        image: assets.category1,
-        name: 'Western Wear',
+        image: assets.Western,
+        name: 'Western wear',
     },
     {
         id: '6',
-        image: assets.category1,
-        name: 'Accessories',
+        image: assets.kids,
+        name: 'Traditional Wear',
     },
 ];
 
+
 const Categories = () => {
+    const font = useFonts({
+        'SFPRODISPLAYBLACKITALIC': fonts.SFPRODISPLAYBLACKITALIC,
+        'SFPRODISPLAYBOLD': fonts.SFPRODISPLAYBOLD,
+        'SFPRODISPLAYHEAVYITALIC': fonts.SFPRODISPLAYHEAVYITALIC,
+        'SFPRODISPLAYMEDIUM': fonts.SFPRODISPLAYMEDIUM,
+        'SFPRODISPLAYREGULAR': fonts.SFPRODISPLAYREGULAR,
+    });
+
+
+
     const renderItem = ({ item }: { item: Category }) => (
         <View style={styles.subContainer}>
-            <Image source = {item.image} style={styles.image}/>
-            <Text style={styles.text} >{item.name}</Text>
+            <Image source={item.image} style={styles.flatlistImage} />
+            <Text style={styles.text} numberOfLines={1}>{item.name}</Text>
         </View>
     );
 
     return (
         <View style={styles.container}>
+            <View style={styles.mainImage}>
+                <View style={styles.categoryImageContainer}>
+                    <Image source={assets.category} style={styles.categoryImage} />
+                </View>
+                <Text numberOfLines={1} style={[styles.text,{paddingTop:8}]}>Categories</Text>
+            </View>
+            <View style={{flex:0.9}}>
             <FlatList
                 data={categoryData}
                 renderItem={renderItem}
                 keyExtractor={(item) => item.id}
                 horizontal
-                />
+            /></View>
         </View>
     );
 };
 
 
-const styles= StyleSheet.create({
-    container:{
-        flex:1,
+const styles = StyleSheet.create({
+    container: {
+        paddingVertical: 20,
+        flexDirection: 'row',
     },
-    image:{
-        height:62,
-        width:62,
-        objectFit:'cover'
+    categoryImageContainer: {
+        height: 65,
+        width: 65,
+        backgroundColor: '#E2EAFF',
+        alignItems: 'center',
+        borderRadius: 40,
+        justifyContent: 'center'
+
     },
-    text:{
-        fontSize:14,
-        paddingTop:10
+    mainImage:{
+        paddingLeft:8,
+        flex:0.2,
+  
     },
-    subContainer:{
-        alignItems:"center",
-        paddingRight:22 
+
+    categoryImage: {
+        height: 25,
+        width: 25,
+    },
+    flatlistImage: {
+        height: 62,
+        width: 62,
+        objectFit: 'cover',
+        borderRadius: 30,
+    },
+    text: {
+        fontSize: 14,
+        paddingTop: 10,
+        fontFamily: 'SFPRODISPLAYREGULAR',
+        color:'#272727'
+    },
+    subContainer: {
+        width:90,
+        alignItems: "center",
+        // backgroundColor:'red'    
     }
 
 })

@@ -1,15 +1,21 @@
 
 export const assets = {
-    category1:require('../images/Ellipse 63.png'),
-    Home:require('../images/Home.png'),
-    HomeBlue:require('../images/HomeBlue.png'),
-    Search:require('../images/Search.png'),
-    SearchBlue:require('../images/SearchBlue.png'),
-    Heart:require('../images/Heart.png'),
-    HeartBlue:require('../images/HeartBlue.png'),
-    Bag:require('../images/Bag.png'),
-    BagBlue:require('../images/BagBlue.png'),
-    User:require('../images/User.png'),
-    UserBlue:require('../images/UserBlue.png'),
-    
+    category: require('./Categories.png'),
+    men:require('./men.png'),
+    women:require('./women.png'),
+    kids:require('./kids.png'),
+    Western:require('./WesternWear.png'),
+    Home:require('./Home.png'),
+    HomeBlue:require('./HomeBlue.png'),
+    Search:require('./Search.png'),
+    SearchBlue:require('./SearchBlue.png'),
+    Heart:require('./Heart.png'),
+    HeartBlue:require('./HeartBlue.png'),
+    Bag:require('./Bag.png'),
+    BagBlue:require('./BagBlue.png'),
+    User:require('./User.png'),
+    UserBlue:require('./UserBlue.png'),
+    Collection1:require('./Collection1.png'),
+    SmallCollection1:require('./SmallCollection1.png'),
+    BackgroundCollection1:require('./BackgroundCollection1.png')
 }  
