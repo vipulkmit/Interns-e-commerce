@@ -1,27 +1,34 @@
-import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-import Categories from './src/components/categories/Categories';
 import React from 'react';
-
-import { NavigationContainer } from '@react-navigation/native';
-import BottomNavigation from './src/navigation/bottonNavigation/BottomNavigation';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import CarouselData from './src/components/carosule_component/carosuel';
+import AddtoCart from './src/components/Buttons/AddtoCart';
+import WishlistButton from './src/components/Buttons/wishlistButton';
+import TrendingCards from './src/components/Cards/TrendingCards';
 
 
 export default function App() {
   return (
-      //  <View style={styles.container}>
-      //   <Categories />
-      // </View> 
-      <NavigationContainer>
-        <BottomNavigation />
-      </NavigationContainer>
+    <View style={styles.container}>
+      <CarouselData />
+      <View style={styles.rowContainer}>
+        <WishlistButton />
+        <AddtoCart />
+      </View>
+      <TrendingCards />
+    </View>
+
   );
 }
 
 
-const styles= StyleSheet.create({
-  container:{
-      flex:1,
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  rowContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    gap: 10,
+    marginTop: 10,
   }
 })
