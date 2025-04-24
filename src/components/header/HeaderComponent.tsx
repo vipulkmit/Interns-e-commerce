@@ -1,8 +1,7 @@
 
 import { Image, StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native"
 import { HeaderProps } from "../../models/userInfo.type"
-import { useFonts } from "expo-font";
-import { fonts } from "../../../assets/fonts";
+
 
 
 const HeaderComponent = ({
@@ -10,13 +9,7 @@ const HeaderComponent = ({
     userName,
     icon,
 }: HeaderProps) => {
-    const font = useFonts({
-        'SFPRODISPLAYBLACKITALIC': fonts.SFPRODISPLAYBLACKITALIC,
-        'SFPRODISPLAYBOLD': fonts.SFPRODISPLAYBOLD,
-        'SFPRODISPLAYHEAVYITALIC': fonts.SFPRODISPLAYHEAVYITALIC,
-        'SFPRODISPLAYMEDIUM': fonts.SFPRODISPLAYMEDIUM,
-        'SFPRODISPLAYREGULAR': fonts.SFPRODISPLAYREGULAR,
-    });
+ 
     return (
         <View style={styles.container} >
             <View style={styles.UserContainer}>

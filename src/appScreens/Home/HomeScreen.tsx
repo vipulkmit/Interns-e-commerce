@@ -2,15 +2,15 @@ import { Dimensions, FlatList, Image, ImageBackground, ScrollView, StyleSheet, T
 import React, { Component } from 'react'
 import HeaderComponent from '../../components/header/HeaderComponent'
 import { assets } from '../../../assets/images'
-
-import { CategoryProps } from '../../models/homePage.type';
+import { CategoryProps, BannerProps, TrendingProps, ProductProps } from '../../models/homePage.type';
 import { useFonts } from 'expo-font';
 import { fonts } from '../../../assets/fonts';
-import { BannerData, CardData, categoryData } from '../../constant';
+import { BannerData, CardData, categoryData, DealData, ProductData } from '../../constant';
 import { HeaderData } from '../../constant'
-import { BannerProps, TrendingProps } from '../../models/userInfo.type';
 import Carousel from 'react-native-reanimated-carousel';
-import CardComponent from '../../components/card/TrendingCards';
+import CardComponent from '../../components/card/CardComponent';
+import ProductComponent from '../../components/product/ProductComponent';
+import ButtonComponent from '../../components/button/ButtonComponent';
 
 
 const { width } = Dimensions.get("window");
@@ -25,12 +25,18 @@ const HomeScreen = () => {
     'SFPRODISPLAYREGULAR': fonts.SFPRODISPLAYREGULAR,
   });
 
+
+  // Category Render Item
+
   const renderItem = ({ item }: { item: CategoryProps }) => (
     <View style={styles.subContainer}>
       <Image source={item.image} style={styles.flatlistImage} />
       <Text style={styles.text} numberOfLines={1}>{item.name}</Text>
     </View>
   );
+
+  // Carousel Render Item
+
 
   const CarouselRenderItem = (item: BannerProps) => (
     <ImageBackground
@@ -49,11 +55,45 @@ const HomeScreen = () => {
     </ImageBackground>
   );
 
-  const TrendingRenderItem=({item}:{item:TrendingProps})=>{return(
-    <View style={{flex:1}}>
-      <CardComponent img={item.img} logo={item.logo} offer={item.offer}/>
-    </View>
-  )}
+
+  // Trending Render Item
+
+
+  const TrendingRenderItem = ({ item }: { item: TrendingProps }) => {
+    return (
+      <View style={styles.container}>
+        <CardComponent img={item.img} logo={item.logo} offer={item.offer} productType={item.productType} />
+      </View>
+    )
+  }
+
+
+  //Deal of the day Render item
+  const DealRenderItem = ({ item }: { item: TrendingProps }) => {
+
+    return (
+      <View style={styles.container}>
+        <CardComponent img={item.img} amount={item.amount} productType={item.productType} productImgStyle={styles.productImage} />
+      </View>
+    )
+  }
+
+
+
+  //Product Render item
+  const ProductRenderItem = ({ item }: { item: ProductProps }) => {
+
+    return (
+      <View style={styles.container}>
+        <ProductComponent images={item.images} productName={item.productName} brandName={item.brandName} initialRate={item.initialRate} rate={item.rate} discount={item.discount} />
+        <View style={styles.buttonView}>
+          <ButtonComponent icon={assets.HeartBlack} buttonText='Whislist' buttonStyle={styles.buttonStyle} />
+          <ButtonComponent icon={assets.WhiteBag} buttonText='Add to Bag' TextStyle={styles.textStyle} buttonStyle={[styles.buttonStyle, { backgroundColor: '#002482' }]} />
+        </View>
+      </View>
+    )
+  }
+
 
 
   return (
@@ -88,28 +128,55 @@ const HomeScreen = () => {
 
       {/* Carousel */}
       <View style={styles.carousel}>
-      <Carousel
-            loop
-            autoPlay
-            autoPlayInterval={3000}
-            width={width}
-            height={344.67}
-            data={BannerData}
-            scrollAnimationDuration={1000}
-            renderItem={({item})=>CarouselRenderItem(item)}
-            />
+        <Carousel
+          loop
+          autoPlay
+          autoPlayInterval={3000}
+          width={width}
+          height={344.67}
+          data={BannerData}
+          scrollAnimationDuration={1000}
+          renderItem={({ item }) => CarouselRenderItem(item)}
+        />
       </View>
 
 
       {/* Trending Cards */}
       <View style={styles.trendContainer}>
-        <Text numberOfLines={1} style={styles.TrendingText}>Trending Offers</Text>
+        <Text numberOfLines={1} style={[styles.TrendingText, { paddingLeft: 10 }]}>Trending Offers</Text>
         {/* <FlatList/> */}
         <FlatList
-        data={CardData}
-        renderItem={TrendingRenderItem}
-        keyExtractor={(item) => item.id.toString()}
-        horizontal
+          data={CardData}
+          renderItem={TrendingRenderItem}
+          keyExtractor={(item) => item.id.toString()}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{ gap: 20 }}
+        />
+      </View>
+
+      {/* Deal of the Day card */}
+      <View style={styles.dealContainer}>
+        <Text numberOfLines={1} style={styles.TrendingText} >Deals Of The Day</Text>
+        <View >
+          <FlatList
+            data={DealData.slice(0, 4)}
+            renderItem={DealRenderItem}
+            keyExtractor={(item) => item.id.toString()}
+            numColumns={2}
+            columnWrapperStyle={styles.row}
+            showsVerticalScrollIndicator={false}
+          />
+        </View>
+      </View>
+
+      {/* Product card */}
+      <View style={styles.dealContainer}>
+        <Text style={styles.TrendingText}>Our Collection</Text>
+        <FlatList
+          data={ProductData}
+          renderItem={ProductRenderItem}
+          keyExtractor={(item) => item.id}
         />
       </View>
     </ScrollView>
@@ -119,26 +186,25 @@ const HomeScreen = () => {
 
 const styles = StyleSheet.create({
 
-  container:{
-    flex:1,
-    backgroundColor:'#FFFFFF'
+  container: {
+    flex: 1,
+    backgroundColor: '#FFFFFF'
   },
 
 
   //HeaderStyle
 
   HeaderStyle: {
-    // height: 48,
+
     backgroundColor: '#FFFFFF',
     paddingHorizontal: 20,
-    // flex:1
+
   },
   //Category Style
   cateoryContainer: {
     paddingTop: 11,
     flexDirection: 'row',
-    // flex:1,
-    // backgroundColor:'pink'
+
   },
   categoryImageContainer: {
     height: 65,
@@ -178,63 +244,94 @@ const styles = StyleSheet.create({
   },
 
   //Carousel Style
-  carousel:{
-    paddingTop:40
+  carousel: {
+    paddingTop: 40
   },
   imageBackground: {
     width: width,
     height: 344.67,
-    justifyContent: "center",
-    alignItems: "center",
-},
-imagestyle: {
-    borderWidth: 0.5,
-    borderColor: "white",
-},
-overlay: {
+  },
+  imagestyle: {
+    borderWidth: 2,
+    borderColor: '#FFFFFF',
+  },
+  overlay: {
     height: "100%",
     justifyContent: "center",
     alignItems: "center",
     gap: 23,
     paddingBottom: 25,
-},
-logostyle: {
+  },
+  logostyle: {
     width: 175,
     height: 29,
-},
-text1: {
-    color: "white",
+  },
+  text1: {
+    color: "#FFFFFF",
     fontSize: 24,
-    fontWeight: "bold",
+    fontFamily: 'SFPRODISPLAYBOLD',
     textAlign: "center",
-},
-button: {
+  },
+  button: {
     backgroundColor: "transparent",
-    borderColor: "white",
-    borderWidth: 1,
-    padding: 5,
+    borderColor: "#FFFFFF",
+    borderWidth: 2,
+
     borderRadius: 10,
     marginTop: 10,
-    width: 100,
-},
-buttonText: {
-    color: "white",
-    fontSize: 16,
-    fontWeight: "bold",
+    width: 118,
+    height: 34
+  },
+  buttonText: {
+    color: "#FFFFFF",
+    fontSize: 18,
     alignSelf: "center",
-},
+    fontFamily: "SFPRODISPLAYREGULAR"
+  },
 
-//TrendingStyle
-trendContainer:{
-  paddingTop:30,
-  paddingLeft:20,
-  backgroundColor:'red'
-},
-TrendingText:{
-  fontFamily:'SFPRODISPLAYMEDIUM',
-  fontSize:20,
-  color:'#272727'
-}
+  //TrendingStyle
+  trendContainer: {
+    paddingTop: 20,
+    paddingLeft: 11,
+
+  },
+  TrendingText: {
+    fontFamily: 'SFPRODISPLAYMEDIUM',
+    fontSize: 20,
+    color: '#272727',
+
+  },
+
+  //Deal of the day
+  productImage: {
+    height: 194,
+    width: 179
+  },
+  dealContainer: {
+    paddingHorizontal: 20,
+    justifyContent: 'center',
+    paddingTop: 20,
+
+
+  },
+  row: {
+
+    gap: 25,
+  },
+  buttonStyle: {
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#002482'
+  },
+  buttonView: {
+    flex: 1,
+    gap: 13,
+    paddingHorizontal: 13,
+    flexDirection: 'row'
+  },
+  textStyle: {
+    color: "#FFFFFF"
+  }
 
 })
 export default HomeScreen

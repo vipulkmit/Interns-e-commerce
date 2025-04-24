@@ -11,8 +11,10 @@ export const assets = {
     SearchBlue:require('./SearchBlue.png'),
     Heart:require('./Heart.png'),
     HeartBlue:require('./HeartBlue.png'),
+    HeartBlack:require('./HeartBlack.png'),
     Bag:require('./Bag.png'),
     BagBlue:require('./BagBlue.png'),
+    WhiteBag:require('./WhiteBag.png'),
     User:require('./User.png'),
     UserBlue:require('./UserBlue.png'),
     Collection1:require('./Collection1.png'),
@@ -26,5 +28,9 @@ export const assets = {
     LogoPuma: require('./LogoPuma.jpg'),
     LogoHM: require('./LogoHM.png'),
     UserImage:require('./UserImage.png'),
-    MainSearch: require('./MainSearch.png')
+    MainSearch: require('./MainSearch.png'),
+    Deal1:require('./Deal1.png'),
+    Deal2:require('./Deal2.png'),
+    Deal3:require('./Deal3.png'),
+    Deal4:require('./Deal4.png'),
 }  
