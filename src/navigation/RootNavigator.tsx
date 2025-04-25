@@ -1,7 +1,8 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import useAuthStore from "../stores/useAuthStore";
 import BottomTabs from "./Tabs";
-import LoginScreen from "../authModule/LoginScreen";
+import LoginScreen from "../Authentication/LoginScreen";
+// import LoginScreen from "../Authentication/LoginScreen";
 
 
 const Stack = createNativeStackNavigator();

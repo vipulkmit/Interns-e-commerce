@@ -16,4 +16,8 @@ export const assets = {
     BagBlue:require('./BagBlue.png'),
     User:require('./User.png'),
     UserBlue:require('./UserBlue.png'),
+    logofirst:require('./firstlogo.png'),
+    applelogo:require('./Apple.png'),
+    googlelogo:require('./Google.png'),
+    facebooklogo:require('./Facebook.png'),
 }  
