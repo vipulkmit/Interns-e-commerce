@@ -166,6 +166,8 @@ const styles = StyleSheet.create({
     height:46,
   },
   
+
+  
    registerContainer: {
     alignSelf: 'center',
     flexDirection: 'row',
