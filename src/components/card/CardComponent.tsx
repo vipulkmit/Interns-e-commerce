@@ -1,7 +1,9 @@
 import React from "react";
-import { Image, Text, View, StyleSheet } from "react-native";
-
+import { Image, Text, View, StyleSheet, Dimensions } from "react-native";
 import { TrendingProps } from "../../models/homePage.type";
+
+
+const { width } = Dimensions.get("window");
 
 
 const CardComponent = ({
@@ -11,19 +13,21 @@ const CardComponent = ({
     logo,
     offer,
     productType,
-    amount
+    amount,
+    staticContainer
 }: TrendingProps) => {
 
     return (
-        <View style={styles.container}>
-            <View style={styles.imgView}> 
-                <Image source={img} style={[styles.imgStyles, productImgStyle]} resizeMode="cover" />
+        <View style={[styles.container]}>
+            <View style={[styles.imgView,productImgStyle]}> 
+                <Image source={img} style={styles.imgStyles} resizeMode="contain" />
             </View>
             <View style={styles.dataView}>
                 {productType ? (
                     <Text numberOfLines={1} style={styles.productTypeStyle}>{productType}</Text>)
-                    : (<Image source={logo} style={styles.logoStyle} resizeMode="stretch" />
-                    )
+                    : (<View style={styles.logoImgContainer}>
+                    <Image source={logo} style={styles.logoStyle} resizeMode="cover" />
+                    </View>)
                 }
             </View>
             <View style={styles.dataView}>
@@ -41,29 +45,38 @@ const styles = StyleSheet.create({
     container: {
         paddingTop: 20,
         flex: 1,
-        marginVertical:4
+        marginVertical:4,
+        // backgroundColor:'red'
     },
     imgView:{
-        flex:1
+        flex:1,
+        // backgroundColor:'red',
+        height: 227,
+        width: 216,
+        borderTopLeftRadius: 5,
+        borderTopRightRadius: 5,
     },
     dataView:{
         flex:1,
         alignItems:'center'
     },
     imgStyles: {
-        height: 227,
-        width: 216,
-        borderTopLeftRadius: 5,
-        borderTopRightRadius: 5,
+        width:'100%',
+        height:'100%',
+       
+    },
+    logoImgContainer:{
+        height: 23,
+        width: 35,
     },
     logoStyle: {
         marginTop: 7,
         alignSelf: 'center',
-        height: 23,
-        width: 35,
+        height:"100%",
+        width:"100%"
     },
     offerStyle: {
-        fontSize: 20,
+        fontSize: 17,
         fontFamily: 'SFPRODISPLAYMEDIUM'
     },
     productTypeStyle: {

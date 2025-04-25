@@ -22,7 +22,8 @@ export type TrendingProps={
     offer?:number,
     productType?:string,
     amount?: number,
-    productImgStyle?:StyleProp<ImageStyle>
+    productImgStyle?:StyleProp<ImageStyle>,
+    staticContainer?:StyleProp<ImageStyle>
 }
 
 

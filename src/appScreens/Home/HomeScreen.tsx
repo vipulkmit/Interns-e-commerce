@@ -16,6 +16,7 @@ import ButtonComponent from '../../components/button/ButtonComponent';
 const { width } = Dimensions.get("window");
 
 
+
 const HomeScreen = () => {
   const font = useFonts({
     'SFPRODISPLAYBLACKITALIC': fonts.SFPRODISPLAYBLACKITALIC,
@@ -299,24 +300,26 @@ const styles = StyleSheet.create({
     fontFamily: 'SFPRODISPLAYMEDIUM',
     fontSize: 20,
     color: '#272727',
-
   },
 
   //Deal of the day
   productImage: {
     height: 194,
-    width: 179
+    width: 179,
+    borderTopRightRadius:8,
+    borderTopLeftRadius:8,
+    overflow:'hidden'
   },
   dealContainer: {
     paddingHorizontal: 20,
     justifyContent: 'center',
     paddingTop: 20,
 
-
   },
   row: {
-
-    gap: 25,
+    // paddingRight: 25,
+    // backgroundColor:'green'
+    gap:20
   },
   buttonStyle: {
     backgroundColor: '#FFFFFF',

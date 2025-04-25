@@ -9,22 +9,28 @@ const ProductComponent = ({
     images,
     productName,
     brandName,
-        initialRate,
+    initialRate,
     rate,
     discount
 }: ProductProps) => {
     return (
         <View style={styles.mainContainer} >
             <View style={styles.container}>
-                <Image source={images[0]} style={styles.Collection} resizeMode='contain' />
+                <View style={styles.CollectionImg}>
+                    <Image source={images[0]} style={styles.Collection} resizeMode='contain' />
+                </View>
                 <View style={styles.subConatiner}>
+                    <View style={styles.SmallCollectionImg}>
                     <Image source={images[1]} style={styles.SmallCollection} resizeMode='contain' />
+                    </View>
                     <TouchableOpacity>
+                        <View style={styles.SmallCollectionImg}>
                         <ImageBackground source={images[2]} style={styles.SmallCollection} resizeMode='contain'>
                             <Text style={styles.numberText}>+{images.length - 2}</Text>
                             <View style={styles.backgroundStyle}>
                             </View>
                         </ImageBackground>
+                        </View>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -52,34 +58,44 @@ const styles = StyleSheet.create({
     },
     dataContainer: {
         flex: 1,
-        paddingLeft:8,
-        paddingBottom:15,
+        paddingLeft: 8,
+        paddingBottom: 15,
 
     },
     container: {
         flexDirection: 'row',
         flex: 1,
-        justifyContent: 'center'
+        justifyContent: 'center',
+        // backgroundColor: 'red'
     },
     subConatiner: {
         paddingLeft: 10,
         gap: 10,
     },
-    Collection: {
+    CollectionImg: {
         height: 216,
         width: 226,
         borderRadius: 10,
     },
-    SmallCollection: {
+    Collection: {
+        height: '100%',
+        width: '100%',
+
+    },
+    SmallCollectionImg:{
         height: 103,
         width: 137,
         borderRadius: 10,
+    },
+    SmallCollection: {
+        height: '100%',
+        width: '100%',
         justifyContent: 'center'
     },
     numberText: {
         color: '#ffffff',
         fontFamily: 'SFPRODISPLAYBOLD',
-        fontSize: 35,
+        fontSize: 33,
         alignSelf: 'center',
         position: 'absolute',
         zIndex: 99
@@ -87,7 +103,7 @@ const styles = StyleSheet.create({
     Amount: {
         flexDirection: 'row',
         paddingTop: 7,
-        flex:1,
+        flex: 1,
     },
     productName: {
         paddingTop: 16,
@@ -109,7 +125,7 @@ const styles = StyleSheet.create({
     },
     rate: {
         fontSize: 20,
-        paddingLeft:17,
+        paddingLeft: 17,
         fontFamily: 'SFPRODISPLAYREGULAR',
         color: '#272727'
     },
@@ -117,8 +133,8 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontFamily: 'SFPRODISPLAYREGULAR',
         color: '#0EB000',
-        paddingLeft:10,
-        alignSelf:'center'
+        paddingLeft: 10,
+        alignSelf: 'center'
     },
     backgroundStyle: {
         backgroundColor: '#272727',
