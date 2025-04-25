@@ -6,12 +6,14 @@ import { TouchableOpacity } from 'react-native'
 
 const HomeScreen = () => {
   const logout = useAuthStore((state) => state.logout)
+
          return (
       <View style={styles.container}>
         <TouchableOpacity style={styles.buttonstyle}onPress={logout}>
           <Text style={styles.textstyle}>Go Back to LoginScreen</Text>
           </TouchableOpacity>
       </View>
+       
     )
 }
 const styles = StyleSheet.create({

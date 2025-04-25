@@ -24,6 +24,8 @@ export const Typography = {
     darksilver:'#7C7979',
     lightpurple:'#EBF0FF',
     silver:'#C4C4C4',
+    checkboxcolour:"#007AFF",
+    logincolor:"#5C61F4"
     },
 
     font: {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import CustomTextInput from '../components/TextInput/customTextInput';
 import CustomButton from '../components/Buttons/customButton';
@@ -6,23 +6,15 @@ import { TouchableOpacity } from 'react-native';
 import { Typography } from '../theme/Colors';
 import { assets } from '../../assets/images';
 import useAuthStore from '../stores/useAuthStore';
-import { AdvancedCheckbox } from 'react-native-advanced-checkbox';
 import { useNavigation } from '@react-navigation/native';
 
 
-
-export default function LoginScreen() {
+export default function SignupScreen() {
   const login = useAuthStore((state) => state.login);
-  const [isSelected, setSelection] = useState(false);
   const Navigation = useNavigation();
 
-
-  const handleForgotPasswordPress = () => {
-   Navigation.navigate('Forgetpassword')
-  };
-
-  const handleRegisterPress = () => {
-     Navigation.navigate('Signup')
+  const handleLogInPress = () => {
+    Navigation.goBack();
   };
 
   const handleSocialLoginPress = () => {
@@ -41,16 +33,26 @@ export default function LoginScreen() {
       </View>
 
       <View style={styles.welcomeandsignup}>
-        <Text style={styles.welcomeText}>Welcome back to E-Com!</Text>
-        <Text style={styles.subText}>Sign in to continue</Text>
+        <Text style={styles.welcomeText}>Welcome to E-Com!</Text>
+        <Text style={styles.subText}>Let's make your account.</Text>
       </View>
+
+      <CustomTextInput
+        // value={name}
+        // onChangeText={setName}
+        placeholder="Name"
+        keyboardType="email-address"
+        iconname='person'
+        iconsize={25}
+        iconcolor={Typography.Colors.lightgrey}
+      />
 
       <CustomTextInput
         // value={email}
         // onChangeText={setEmail}
         placeholder="Your Email / Phone Number"
         keyboardType="email-address"
-        iconname='person'
+        iconname='mail'
         iconsize={25}
         iconcolor={Typography.Colors.lightgrey}
       />
@@ -66,27 +68,17 @@ export default function LoginScreen() {
         iconcolor={Typography.Colors.lightgrey}
       />
 
-
-      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: "space-between", marginBottom: 40 }}>
-        <AdvancedCheckbox
-          value={isSelected}
-          onValueChange={setSelection}
-          label="Remember me"
-          labelStyle={styles.labelStyle}
-          checkedColor={Typography.Colors.checkboxcolour}
-          uncheckedColor={Typography.Colors.lightgrey}
-          checkBoxStyle={styles.checkBoxstyle}
-          size={18}
-        />
-        <TouchableOpacity onPress={handleForgotPasswordPress} style={styles.forgotContainer}>
-          <Text style={styles.forgotText}>Forgot Password?</Text>
-        </TouchableOpacity>
-      </View>
-
+<CustomTextInput
+        // value={password}
+        // onChangeText={setPassword}
+        placeholder="Confirm Password"
+        secureTextEntry
+        iconname='lock'
+        iconsize={25}
+        iconcolor={Typography.Colors.lightgrey}
+      />
 
       <CustomButton title="Login" onPress={login} buttonStyle={styles.buttonstyle} />
-
-
 
       <View style={{ alignSelf: 'center', marginTop: 36, flexDirection: 'row', gap: 10, paddingBottom: 42 }}>
         <View style={{ alignSelf: 'center', height: 0.1, borderWidth: 0.2, width: 170, borderColor: Typography.Colors.lightgrey }}></View>
@@ -109,9 +101,9 @@ export default function LoginScreen() {
       </View>
 
       <View style={styles.registerContainer}>
-        <Text style={styles.registerText}>Don't have an account? </Text>
-        <TouchableOpacity onPress={handleRegisterPress}>
-          <Text style={styles.registerLink}>Register</Text>
+        <Text style={styles.registerText}>Already have an account? </Text>
+        <TouchableOpacity onPress={handleLogInPress}>
+          <Text style={styles.registerLink}>Log In</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -126,8 +118,8 @@ const styles = StyleSheet.create({
   },
   welcomeText: {
     fontSize: 18,
-    fontFamily: Typography.font.bold,
-    color: Typography.Colors.navyblue,
+    fontFamily: Typography.font.heavy,
+    color: Typography.Colors.primary,
     marginTop: 20,
     marginBottom: 5,
   },
@@ -193,11 +185,11 @@ const styles = StyleSheet.create({
   },
   registerText: {
     fontSize: 14,
-    color: Typography.Colors.black,
+    color: Typography.Colors.greydark,
   },
   registerLink: {
     fontSize: 14,
-    color: Typography.Colors.primary,
+    color: Typography.Colors.logincolor,
     fontWeight: 'bold',
   },
   containerlogo: {
@@ -237,5 +229,3 @@ const styles = StyleSheet.create({
     height: 52,
   }
 });
-
-

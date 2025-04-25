@@ -63,16 +63,18 @@ const CustomTextInput: React.FC<CustomTextInputProps> = ({
 
 const styles = StyleSheet.create({
     container: {
+        // width:307,
         marginBottom: 10,
         flexDirection: 'row',
         alignItems: 'center',
         backgroundColor: Typography.Colors.white,
-        borderWidth: 1,
-        borderColor: Typography.Colors.lightgrey,
+        borderWidth: 0.5,
+        borderColor: Typography.Colors.greydark,
         borderRadius: 6,
         padding: 10,
     },
     label: {
+        // borderWidth:0.1,
         fontFamily:Typography.font.bold,
         marginBottom: 4,
         fontSize: 14,
@@ -83,9 +85,13 @@ const styles = StyleSheet.create({
         borderRadius: 6,
         padding: 5,
         fontSize: 16,
+        marginRight:10
     },
     iconStyle:{
+        marginTop:5,
+        marginBottom:5,
         marginRight: 10,
+        marginLeft:18.19
     }
 });
 

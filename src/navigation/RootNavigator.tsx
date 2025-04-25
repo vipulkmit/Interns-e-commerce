@@ -1,8 +1,7 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import useAuthStore from "../stores/useAuthStore";
-import BottomTabs from "./Tabs";
-import LoginScreen from "../Authentication/LoginScreen";
-// import LoginScreen from "../Authentication/LoginScreen";
+import BottomTabs from "./BottomTabs";
+import AuthNavigator from "./AuthNavigator";
 
 
 const Stack = createNativeStackNavigator();
@@ -15,7 +14,7 @@ export default function RootNavigator() {
     {isLoggedIn ? (
       <Stack.Screen name="Main" component={BottomTabs} />
     ) : (
-      <Stack.Screen name="Login" component={LoginScreen} />
+      <Stack.Screen name="Auth" component={AuthNavigator} />
     )}
   </Stack.Navigator>
     )
