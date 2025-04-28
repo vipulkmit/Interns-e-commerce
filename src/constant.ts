@@ -5,7 +5,7 @@ export const HeaderData =
 {
     userName: 'Anna Doe ',
     userImage: assets.UserImage,
-    icon: assets.MainSearch
+    icon: assets.MainSearch,
 }
 
 
@@ -192,7 +192,7 @@ export const ProductData = [
     {
         id: '2',
         images: [assets.Collection1, assets.SmallCollection1, assets.BackgroundCollection1],
-        productName: 'Women White Shirt ',
+        productName: 'Womens White Shirt ',
         brandName: 'Brand Name',
         initialRate:999127,
         rate: 799,
@@ -201,7 +201,7 @@ export const ProductData = [
     {
         id: '3',
         images: [assets.Collection1, assets.SmallCollection1, assets.Collection1, assets.SmallCollection1, assets.BackgroundCollection1],
-        productName: 'Women White Shirt',
+        productName: 'Womens White Shirt',
         brandName: 'Brand Name',
         initialRate: 999,
         rate: 799,
@@ -210,7 +210,7 @@ export const ProductData = [
     {
         id: '4',
         images: [assets.Collection1, assets.SmallCollection1, assets.BackgroundCollection1, assets.Collection1, assets.SmallCollection1, assets.BackgroundCollection1],
-        productName: 'Women White Shirt',
+        productName: 'Womens White Shirt',
         brandName: 'Brand Name',
         initialRate: 999,
         rate: 799,
@@ -219,7 +219,7 @@ export const ProductData = [
     {
         id: '5',
         images: [assets.Collection1, assets.SmallCollection1, assets.BackgroundCollection1],
-        productName: 'Women White Shirt',
+        productName: 'Womens White Shirt',
         brandName: 'Brand Name',
         initialRate: 999,
         rate: 799,
@@ -228,7 +228,7 @@ export const ProductData = [
     {
         id: '6',
         images: [assets.Collection1, assets.SmallCollection1, assets.BackgroundCollection1],
-        productName: 'Women White Shirt',
+        productName: 'Womens White Shirt',
         brandName: 'Brand Name',
         initialRate: 999,
         rate: 799,

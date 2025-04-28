@@ -18,9 +18,9 @@ const CardComponent = ({
 }: TrendingProps) => {
 
     return (
-        <View style={[styles.container]}>
+        <View style={[styles.container,staticContainer]}>
             <View style={[styles.imgView,productImgStyle]}> 
-                <Image source={img} style={styles.imgStyles} resizeMode="contain" />
+                <Image source={img} style={styles.imgStyles} resizeMode="cover" />
             </View>
             <View style={styles.dataView}>
                 {productType ? (
@@ -34,7 +34,7 @@ const CardComponent = ({
                 {offer ? (
                     <Text
                         style={[styles.offerStyle, { paddingTop: 7 }]}>Min {offer}% Off</Text>)
-                    : (<Text numberOfLines={1} style={styles.offerStyle}>Under Rs. {amount}</Text>)}
+                    : (<Text style={styles.offerStyle}>Under Rs. {amount}</Text>)}
             </View>
         </View>
     )
@@ -46,6 +46,7 @@ const styles = StyleSheet.create({
         paddingTop: 20,
         flex: 1,
         marginVertical:4,
+        // marginHorizontal:10
         // backgroundColor:'red'
     },
     imgView:{
@@ -63,6 +64,8 @@ const styles = StyleSheet.create({
     imgStyles: {
         width:'100%',
         height:'100%',
+        borderTopRightRadius:8,
+        borderTopLeftRadius:8
        
     },
     logoImgContainer:{
@@ -76,7 +79,7 @@ const styles = StyleSheet.create({
         width:"100%"
     },
     offerStyle: {
-        fontSize: 17,
+        fontSize: 16.5,
         fontFamily: 'SFPRODISPLAYMEDIUM'
     },
     productTypeStyle: {

@@ -1,4 +1,4 @@
-import { ImageSourcePropType, ImageStyle, StyleProp, TextProps, TextStyle } from "react-native";
+import { ImageProps, ImageSourcePropType, ImageStyle, StyleProp, TextProps, TextStyle } from "react-native";
 
 export type CategoryProps = {
     id: string;
@@ -44,4 +44,14 @@ export type ButtonProps={
     buttonText?:string,
     buttonStyle?:StyleProp<ImageStyle>,
     TextStyle?:StyleProp<ImageStyle>
+}
+
+export type MainHeaderProps={
+    id?:string,
+    productType?:string,
+    onClick:()=> void,
+    back:ImageSourcePropType,
+    icon:ImageSourcePropType,
+    icon1:ImageSourcePropType,
+    icon2:ImageSourcePropType,
 }

@@ -15,10 +15,8 @@ const ButtonComponent = ({
     return (
         <View style={styles.buttonData}>
             <TouchableOpacity style={[styles.button, buttonStyle]}>
-                <View style={styles.buttonContainer}>
-                    <Text style={[styles.textstyle, TextStyle]}>{buttonText}</Text>
-                    <Image source={icon} style={styles.cartIcon} resizeMode="contain" />
-                </View>
+                <Text style={[styles.textstyle, TextStyle]}>{buttonText}</Text>
+                <Image source={icon} style={styles.cartIcon} resizeMode="contain" />
             </TouchableOpacity>
         </View>
     )
@@ -27,7 +25,7 @@ const ButtonComponent = ({
 
 const styles = StyleSheet.create({
     buttonData: {
-        flex:1,
+        flex: 1,
         height: 38,
         width: 180,
     },
@@ -35,13 +33,14 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: "center",
         alignItems: "center",
-        marginBottom: 15,
+        // marginBottom: 15,
+        gap:18,
         borderRadius: 10,
         height: '100%',
         width: '100%',
     },
     cartIcon: {
-        width: 17,
+        width: 15,
         height: 17,
         marginLeft: 5,
     },
@@ -50,9 +49,5 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontFamily: 'SFPRODISPLAYREGULAR'
     },
-    buttonContainer: {
-        flexDirection: 'row',
-        gap: 20
-    }
 })
 export default ButtonComponent;

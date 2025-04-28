@@ -1,3 +1,4 @@
+import { Share } from "react-native";
 
 export const assets = {
     category: require('./Categories.png'),
@@ -14,6 +15,7 @@ export const assets = {
     HeartBlack:require('./HeartBlack.png'),
     Bag:require('./Bag.png'),
     BagBlue:require('./BagBlue.png'),
+    BagBlack:require('./BagBlack.png'),
     WhiteBag:require('./WhiteBag.png'),
     User:require('./User.png'),
     UserBlue:require('./UserBlue.png'),
@@ -33,4 +35,8 @@ export const assets = {
     Deal2:require('./Deal2.png'),
     Deal3:require('./Deal3.png'),
     Deal4:require('./Deal4.png'),
+    ArrowLeft:require('./ArrowLeft.png'),
+    DownArray: require('./DownArray.png'),
+    Share: require('./Share.png'),
+    Clock: require('./clock.png')
 }  

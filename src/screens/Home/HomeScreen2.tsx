@@ -2,16 +2,18 @@ import Carousel from "react-native-reanimated-carousel";
 import { View, Text, ScrollView, StyleSheet, Dimensions, ImageBackground, Image, Animated, TouchableOpacity } from 'react-native'
 import React, { useRef, useState } from 'react'
 import { useFonts } from 'expo-font'
-import { fonts } from '../../assets/fonts';
-import HeaderComponent from '../components/header/HeaderComponent';
-import { assets } from '../../assets/images';
-import { BannerData } from "../constant";
-import { BannerProps } from "../models/homePage.type";
+import { BannerData } from "../../constant";
+import { fonts } from "../../../assets/fonts";
+import { assets } from "../../../assets/images";
+import HeaderComponent from "../../components/header/HeaderComponent";
+import { useNavigation } from "@react-navigation/native";
 
 const width = Dimensions.get("window").width;
-console.log(width);
+// console.log(width);
 
-const ProfileNavigator = () => {
+const HomeScreen2 = () => {
+    const navigation = useNavigation();
+  
   const [currentIndex, setCurrentIndex] = useState(0);
   // const animations = BannerData.map(() => new Animated.Value(8)); // initial width = 8
   const animations = useRef(BannerData.map(() => new Animated.Value(8))).current;
@@ -54,11 +56,13 @@ const ProfileNavigator = () => {
     animateDot(index, true);          // Expand new active dot
     setCurrentIndex(index);
   };
+const handleBackButton=()=>{navigation.navigate('HomeScreen')}
+
 
   return (
     <ScrollView>
       <View style={styles.header}>
-        <HeaderComponent back={assets.ArrowLeft} icon={assets.MainSearch} icon1={assets.HeartBlack} icon2={assets.BagBlack} />
+        <HeaderComponent back={assets.ArrowLeft} icon={assets.MainSearch} icon1={assets.HeartBlack} icon2={assets.BagBlack} onClick={handleBackButton}/>
       </View>
       <Carousel
         loop
@@ -359,7 +363,7 @@ const styles = StyleSheet.create({
     paddingTop:7
   }
 })
-export default ProfileNavigator
+export default HomeScreen2
 
 
 

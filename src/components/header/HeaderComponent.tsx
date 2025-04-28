@@ -1,28 +1,51 @@
 
-import { Image, StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native"
-import { HeaderProps } from "../../models/userInfo.type"
+import { Image, Pressable, StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native"
+import { MainHeaderProps } from "../../models/homePage.type"
+import { assets } from "../../../assets/images"
 
 
 
 const HeaderComponent = ({
-    userImage,
-    userName,
+    id,
+    back,
     icon,
-}: HeaderProps) => {
- 
+    icon1,
+    icon2,
+    onClick,
+    productType
+}: MainHeaderProps) => {
+// console.log(onClick);
+
     return (
-        <View style={styles.container} >
-            <View style={styles.UserContainer}>
-                <Image source={userImage} style={styles.userImage} resizeMode='cover' />
-                <Text numberOfLines={1} style={styles.userName}>{userName}</Text>
+        <>
+            <View style={styles.container} >
+                <View style={styles.UserContainer}>
+                    <Pressable onPress={onClick}>
+                        <Image source={back} style={styles.backIcon}  />
+                    </Pressable>
+                    {/* <Text numberOfLines={1} style={styles.productType}>Tops </Text> */}
+                </View>
+                <View style={styles.iconContainer}>
+                    <TouchableWithoutFeedback >
+                        <Image source={icon} style={styles.icon} />
+                    </TouchableWithoutFeedback>
+                    <TouchableWithoutFeedback >
+                        <Image source={icon1} style={styles.icon} />
+                    </TouchableWithoutFeedback>
+                    <TouchableWithoutFeedback >
+                        <Image source={icon2} style={styles.icon} />
+                    </TouchableWithoutFeedback>
+                </View>
             </View>
-            <View style={styles.iconContainer}>
-                <TouchableWithoutFeedback >
-                    <Image source={icon} style={styles.icon} />
+            <View style={styles.subContainer}>
+                <Text style={styles.text}>Sort By</Text>
+                <TouchableWithoutFeedback>
+                    <Image source={assets.DownArray} style={styles.SubIcon}/>
                 </TouchableWithoutFeedback>
             </View>
-        </View>
+        </>
     )
+
 }
 
 
@@ -31,31 +54,50 @@ const styles = StyleSheet.create(
         container: {
             flexDirection: 'row'
         },
-        userImage: {
-            height: 35,
-            width: 35
+        subContainer:{
+            flexDirection:'row',
+            alignItems:'flex-end',
+            justifyContent:'flex-end',
+            paddingTop:15,
+            paddingRight:10
         },
-        userName: {
+        productType: {
             fontSize: 20,
-            fontFamily: 'SFPRODISPLAYMEDIUM'
+            fontFamily: 'SFPRODISPLAYMEDIUM',
+            color: '#000000',
+            paddingLeft: 13,
+            // alignSelf:'center'
         },
         iconContainer: {
             flex: 1,
-            justifyContent: 'center',
-            alignItems: 'flex-end'
-
+            justifyContent: 'space-around',
+            alignItems: 'center',
+            flexDirection: 'row',
+            // backgroundColor:'red'
         },
         icon: {
-            height: 22,
-            width: 22,
-            color: '#272727'
+            height: 24,
+            width: 24,
+            color: '#272727',
+            // backgroundColor:'#272727'
         },
         UserContainer: {
             flex: 2,
+            // backgroundColor:'green',
             flexDirection: 'row',
-            alignItems: 'center',
-            paddingVertical: 7,
-            gap:13
+            // alignItems: 'center',
+        },
+        backIcon: {
+            height: 32,
+            width: 32
+        },
+        text:{
+            fontSize:14,
+            fontFamily:'SFPRODISPLAYREGULAR'
+        },
+        SubIcon:{
+            height:17,
+            width:17
         }
     }
 )

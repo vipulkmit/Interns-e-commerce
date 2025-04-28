@@ -2,6 +2,7 @@ import React from 'react'
 import { FlatList, Image, ImageBackground, ImageSourcePropType, StyleSheet, Text, Touchable, TouchableOpacity, View } from 'react-native'
 
 import { ProductProps } from '../../models/homePage.type'
+import symbolicateStackTrace from 'react-native/Libraries/Core/Devtools/symbolicateStackTrace'
 
 
 
@@ -14,26 +15,26 @@ const ProductComponent = ({
     discount
 }: ProductProps) => {
     return (
-        <View style={styles.mainContainer} >
-            <View style={styles.container}>
-                <View style={styles.CollectionImg}>
-                    <Image source={images[0]} style={styles.Collection} resizeMode='contain' />
+        <View style={styles.mainContainer}>
+            <View style={styles.photoContainer}>
+                <View style={styles.Container}>
+                    <Image source={images[0]} style={styles.Collection} />
                 </View>
-                <View style={styles.subConatiner}>
-                    <View style={styles.SmallCollectionImg}>
-                    <Image source={images[1]} style={styles.SmallCollection} resizeMode='contain' />
+                <View style={[ styles.Container,{ gap: 15 }]}>
+
+                    <View style={styles.Container}>
+                        <Image source={images[1]} style={styles.Collection} />
                     </View>
-                    <TouchableOpacity>
-                        <View style={styles.SmallCollectionImg}>
-                        <ImageBackground source={images[2]} style={styles.SmallCollection} resizeMode='contain'>
+
+                    <TouchableOpacity style={styles.Container}>
+                        <ImageBackground source={images[2]} style={styles.subConatiner}>
                             <Text style={styles.numberText}>+{images.length - 2}</Text>
-                            <View style={styles.backgroundStyle}>
-                            </View>
+                            <View style={styles.overlay} />
                         </ImageBackground>
-                        </View>
                     </TouchableOpacity>
                 </View>
             </View>
+
             <View style={styles.dataContainer}>
                 <Text numberOfLines={1} style={styles.productName}>{productName}</Text>
                 <Text numberOfLines={1} style={styles.brandName}>{brandName}</Text>
@@ -41,9 +42,9 @@ const ProductComponent = ({
                     <Text style={styles.initialRate}>Rs. {initialRate}</Text>
                     <Text numberOfLines={1} style={styles.rate}>Rs.{rate}</Text>
                     <Text numberOfLines={1} style={styles.discount}>({discount}% Off)</Text>
-
                 </View>
             </View>
+
         </View>
     )
 }
@@ -52,58 +53,60 @@ const ProductComponent = ({
 
 const styles = StyleSheet.create({
     mainContainer: {
-        paddingTop: 17,
-        flex: 1,
-
+        height: 328,
+        marginVertical: 20
     },
-    dataContainer: {
-        flex: 1,
-        paddingLeft: 8,
-        paddingBottom: 15,
-
-    },
-    container: {
+    photoContainer: {
         flexDirection: 'row',
-        flex: 1,
-        justifyContent: 'center',
-        // backgroundColor: 'red'
+        height: '70%',
+        gap: 15
     },
-    subConatiner: {
-        paddingLeft: 10,
-        gap: 10,
-    },
-    CollectionImg: {
-        height: 216,
-        width: 226,
-        borderRadius: 10,
+    Container: {
+        flex: 1
     },
     Collection: {
-        height: '100%',
+        height: '100%', 
         width: '100%',
-
+        borderRadius:10
     },
-    SmallCollectionImg:{
-        height: 103,
-        width: 137,
-        borderRadius: 10,
+    subConatiner: {
+        height:'100%',
+        width:'100%',
+        justifyContent:'center',
+        alignItems:'center',
+        // borderRadius:200
     },
-    SmallCollection: {
-        height: '100%',
-        width: '100%',
-        justifyContent: 'center'
+    dataContainer: {
+        // flex: 1,
+        paddingLeft: 8,
+        paddingBottom: 15,
+        // backgroundColor: 'pink'
     },
+  
     numberText: {
         color: '#ffffff',
         fontFamily: 'SFPRODISPLAYBOLD',
         fontSize: 33,
-        alignSelf: 'center',
+        // alignSelf: 'center',
+        textAlign: 'center',
         position: 'absolute',
         zIndex: 99
     },
+
+    overlay:{
+        backgroundColor: '#272727',
+        opacity: 0.7,
+        height: '100%',
+        width: '100%',
+        justifyContent: 'center',
+        borderRadius: 10
+    },
+ 
     Amount: {
         flexDirection: 'row',
         paddingTop: 7,
-        flex: 1,
+        // flex: 1,
+        // backgroundColor:'red'
     },
     productName: {
         paddingTop: 16,
@@ -135,13 +138,6 @@ const styles = StyleSheet.create({
         color: '#0EB000',
         paddingLeft: 10,
         alignSelf: 'center'
-    },
-    backgroundStyle: {
-        backgroundColor: '#272727',
-        opacity: 0.7,
-        flex: 1,
-        justifyContent: 'center',
-        borderRadius: 10
     }
 })
 export default ProductComponent

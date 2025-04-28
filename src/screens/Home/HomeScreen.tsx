@@ -1,6 +1,5 @@
-import { Dimensions, FlatList, Image, ImageBackground, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { Component } from 'react'
-import HeaderComponent from '../../components/header/HeaderComponent'
+import { Animated, Dimensions, FlatList, Image, ImageBackground, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React, { Component, useRef, useState } from 'react'
 import { assets } from '../../../assets/images'
 import { CategoryProps, BannerProps, TrendingProps, ProductProps } from '../../models/homePage.type';
 import { useFonts } from 'expo-font';
@@ -11,6 +10,8 @@ import Carousel from 'react-native-reanimated-carousel';
 import CardComponent from '../../components/card/CardComponent';
 import ProductComponent from '../../components/product/ProductComponent';
 import ButtonComponent from '../../components/button/ButtonComponent';
+import TopHeaderComponent from '../../components/header/TopHeaderComponent';
+import { useNavigation } from '@react-navigation/native';
 
 
 const { width } = Dimensions.get("window");
@@ -18,6 +19,10 @@ const { width } = Dimensions.get("window");
 
 
 const HomeScreen = () => {
+  const navigation = useNavigation();
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const animations = useRef(BannerData.map(() => new Animated.Value(17))).current;
+
   const font = useFonts({
     'SFPRODISPLAYBLACKITALIC': fonts.SFPRODISPLAYBLACKITALIC,
     'SFPRODISPLAYBOLD': fonts.SFPRODISPLAYBOLD,
@@ -43,8 +48,7 @@ const HomeScreen = () => {
     <ImageBackground
       source={item.image}
       style={styles.imageBackground}
-      imageStyle={styles.imagestyle}
-    >
+      imageStyle={styles.imagestyle}>
       <View style={styles.overlay}>
         <Image style={styles.logostyle} source={item.logoImage} resizeMode='contain' />
         <Text style={styles.text1}>{item.event}</Text>
@@ -55,6 +59,28 @@ const HomeScreen = () => {
       </View>
     </ImageBackground>
   );
+
+
+  const animateDot = (index: number, isActive: boolean) => {
+    Animated.timing(animations[index], {
+      toValue: isActive ? 17 : 17,
+      duration: 200,
+      useNativeDriver: false,
+    }).start();
+  };
+
+  // const handleSnap = (index: number) => {
+  //   setCurrentIndex(index);
+  //   BannerData.forEach((_, i) => {
+  //     animateDot(i, i === index);
+  //   });
+  // };
+
+  const handleSnap = (index: number) => {
+    animateDot(currentIndex, false); // Shrink previous active dot
+    animateDot(index, true);          // Expand new active dot
+    setCurrentIndex(index);
+  };
 
 
   // Trending Render Item
@@ -73,10 +99,11 @@ const HomeScreen = () => {
   const DealRenderItem = ({ item }: { item: TrendingProps }) => {
 
     return (
-      <View style={styles.container}>
+      <Pressable style={styles.dealView} onPress={()=>{navigation.navigate('HomeScreen1')}}>
         <CardComponent img={item.img} amount={item.amount} productType={item.productType} productImgStyle={styles.productImage} />
-      </View>
+      </Pressable>
     )
+
   }
 
 
@@ -103,7 +130,7 @@ const HomeScreen = () => {
 
       {/* Header View */}
       <View style={styles.HeaderStyle}>
-        <HeaderComponent userImage={HeaderData.userImage} userName={HeaderData.userName} icon={HeaderData.icon} />
+        <TopHeaderComponent userImage={HeaderData.userImage} userName={HeaderData.userName} icon={HeaderData.icon} />
       </View>
 
 
@@ -111,7 +138,7 @@ const HomeScreen = () => {
       <View style={styles.cateoryContainer}>
         <View style={styles.mainImage}>
           <View style={styles.categoryImageContainer}>
-            <Image source={assets.category} style={styles.categoryImage} />
+            <Image source={assets.category} style={styles.categoryImage} resizeMode='contain' />
           </View>
           <Text numberOfLines={1} style={[styles.text, { paddingTop: 8 }]}>Categories</Text>
         </View>
@@ -129,17 +156,35 @@ const HomeScreen = () => {
 
       {/* Carousel */}
       <View style={styles.carousel}>
-        <Carousel
-          loop
-          autoPlay
-          autoPlayInterval={3000}
-          width={width}
-          height={344.67}
-          data={BannerData}
-          scrollAnimationDuration={1000}
-          renderItem={({ item }) => CarouselRenderItem(item)}
-        />
+        <View style={{ position: 'relative' }}>
+          <Carousel
+            loop
+            autoPlay
+            autoPlayInterval={3000}
+            width={width}
+            height={344.67}
+            onSnapToItem={handleSnap}
+            data={BannerData}
+            scrollAnimationDuration={1000}
+            renderItem={({ item }) => CarouselRenderItem(item)}
+          />
+          <View style={styles.paginationContainer}>
+            {BannerData.map((_, index) => (
+              <Animated.View
+                key={index}
+                style={[
+                  styles.dot,
+                  {
+                    width: animations[index],
+                    backgroundColor: currentIndex === index ? '#272727' : '#C4C4C4',
+                  },
+                ]}
+              />
+            ))}
+          </View>
+        </View>
       </View>
+
 
 
       {/* Trending Cards */}
@@ -159,16 +204,15 @@ const HomeScreen = () => {
       {/* Deal of the Day card */}
       <View style={styles.dealContainer}>
         <Text numberOfLines={1} style={styles.TrendingText} >Deals Of The Day</Text>
-        <View >
-          <FlatList
-            data={DealData.slice(0, 4)}
-            renderItem={DealRenderItem}
-            keyExtractor={(item) => item.id.toString()}
-            numColumns={2}
-            columnWrapperStyle={styles.row}
-            showsVerticalScrollIndicator={false}
-          />
-        </View>
+        <FlatList
+          data={DealData.slice(0, 4)}
+          renderItem={DealRenderItem}
+          keyExtractor={(item) => item.id.toString()}
+          numColumns={2}
+          contentContainerStyle={{ gap: 10 }}
+          columnWrapperStyle={styles.row}
+          showsVerticalScrollIndicator={false}
+        />
       </View>
 
       {/* Product card */}
@@ -241,7 +285,6 @@ const styles = StyleSheet.create({
   subContainer: {
     width: 90,
     alignItems: "center",
-
   },
 
   //Carousel Style
@@ -260,8 +303,8 @@ const styles = StyleSheet.create({
     height: "100%",
     justifyContent: "center",
     alignItems: "center",
-    gap: 23,
-    paddingBottom: 25,
+    // gap: 23,
+    // paddingBottom: 25,
   },
   logostyle: {
     width: 175,
@@ -272,21 +315,21 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontFamily: 'SFPRODISPLAYBOLD',
     textAlign: "center",
+    paddingTop: 18
   },
   button: {
     backgroundColor: "transparent",
     borderColor: "#FFFFFF",
     borderWidth: 2,
-
     borderRadius: 10,
-    marginTop: 10,
+    marginTop: 27,
     width: 118,
-    height: 34
+    height: 34,
+    alignItems: 'center'
   },
   buttonText: {
     color: "#FFFFFF",
     fontSize: 18,
-    alignSelf: "center",
     fontFamily: "SFPRODISPLAYREGULAR"
   },
 
@@ -303,23 +346,33 @@ const styles = StyleSheet.create({
   },
 
   //Deal of the day
+  dealView: {
+    height: 251,
+    width: '47%',
+    // backgroundColor: 'green'
+  },
   productImage: {
-    height: 194,
-    width: 179,
-    borderTopRightRadius:8,
-    borderTopLeftRadius:8,
-    overflow:'hidden'
+    height: '100%',
+    width: "100%",
+    flex: 7,
+    // backgroundColor:'green',
+    // borderTopRightRadius:8,
+    // borderTopLeftRadius:8,
+    // overflow:'hidden'
   },
   dealContainer: {
     paddingHorizontal: 20,
     justifyContent: 'center',
     paddingTop: 20,
-
+    // backgroundColor: 'red'
   },
   row: {
     // paddingRight: 25,
-    // backgroundColor:'green'
-    gap:20
+    // backgroundColor:'pink',
+    // justifyContent:'space-between'
+    gap: 20,
+    // width:'100%'
+    // paddingRight:10
   },
   buttonStyle: {
     backgroundColor: '#FFFFFF',
@@ -334,7 +387,23 @@ const styles = StyleSheet.create({
   },
   textStyle: {
     color: "#FFFFFF"
-  }
+  },
+  paginationContainer: {
+    position: 'absolute',
+    bottom: 20,                  // 20px from the bottom of the carousel
+    left: 0,
+    right: 0,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  dot: {
+    height: 3,
+    // width:50,
+    borderRadius: 4,
+    marginHorizontal: 4,
+    // transitionDuration: '300ms',
+  },
 
 })
 export default HomeScreen
