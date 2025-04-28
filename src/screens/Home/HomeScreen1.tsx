@@ -13,12 +13,13 @@ const HomeScreen1 = () => {
   const navigation = useNavigation()
   const handleBackButton = () => { navigation.navigate('HomeScreen') }
 
-
+const renderProduct=()=>{
+  navigation.navigate('HomeScreen2')
+}
   const ProductRenderItem = ({ item }: { item: ProductProps }) => {
-
     return (
       <View style={styles.container}>
-        <ProductComponent images={item.images} productName={item.productName} brandName={item.brandName} initialRate={item.initialRate} rate={item.rate} discount={item.discount} />
+        <ProductComponent onClick={renderProduct} images={item.images} productName={item.productName} brandName={item.brandName} initialRate={item.initialRate} rate={item.rate} discount={item.discount} />
         <View style={styles.buttonView}>
           <ButtonComponent icon={assets.HeartBlack} buttonText='Whislist' buttonStyle={styles.buttonStyle} />
           <ButtonComponent icon={assets.WhiteBag} buttonText='Add to Bag' TextStyle={styles.textStyle} buttonStyle={[styles.buttonStyle, { backgroundColor: '#002482' }]} />

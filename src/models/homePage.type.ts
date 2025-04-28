@@ -34,7 +34,8 @@ export type ProductProps = {
     brandName?: string,
     initialRate?: number,
     rate?: number,
-    discount?: string
+    discount?: string,
+    onClick:()=> void,
 }
 
 

@@ -1,5 +1,5 @@
 import React from 'react'
-import { FlatList, Image, ImageBackground, ImageSourcePropType, StyleSheet, Text, Touchable, TouchableOpacity, View } from 'react-native'
+import { FlatList, Image, ImageBackground, ImageSourcePropType, Pressable, StyleSheet, Text, Touchable, TouchableOpacity, View } from 'react-native'
 
 import { ProductProps } from '../../models/homePage.type'
 import symbolicateStackTrace from 'react-native/Libraries/Core/Devtools/symbolicateStackTrace'
@@ -12,7 +12,8 @@ const ProductComponent = ({
     brandName,
     initialRate,
     rate,
-    discount
+    discount,
+    onClick
 }: ProductProps) => {
     return (
         <View style={styles.mainContainer}>
@@ -26,12 +27,12 @@ const ProductComponent = ({
                         <Image source={images[1]} style={styles.Collection} />
                     </View>
 
-                    <TouchableOpacity style={styles.Container}>
-                        <ImageBackground source={images[2]} style={styles.subConatiner}>
+                    <Pressable style={styles.backgroundContainer} onPress={onClick} >
+                        <ImageBackground source={images[2]} style={styles.subConatiner}  >
                             <Text style={styles.numberText}>+{images.length - 2}</Text>
                             <View style={styles.overlay} />
                         </ImageBackground>
-                    </TouchableOpacity>
+                    </Pressable>
                 </View>
             </View>
 
@@ -74,6 +75,8 @@ const styles = StyleSheet.create({
         width:'100%',
         justifyContent:'center',
         alignItems:'center',
+        borderRadius:10,
+        overflow:'hidden'
         // borderRadius:200
     },
     dataContainer: {
@@ -138,6 +141,10 @@ const styles = StyleSheet.create({
         color: '#0EB000',
         paddingLeft: 10,
         alignSelf: 'center'
+    },
+    backgroundContainer:{
+        flex:1,
+        borderRadius:30
     }
 })
 export default ProductComponent

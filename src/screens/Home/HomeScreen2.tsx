@@ -56,7 +56,7 @@ const HomeScreen2 = () => {
     animateDot(index, true);          // Expand new active dot
     setCurrentIndex(index);
   };
-const handleBackButton=()=>{navigation.navigate('HomeScreen')}
+const handleBackButton=()=>{navigation.goBack()}
 
 
   return (
