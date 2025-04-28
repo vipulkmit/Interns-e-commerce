@@ -1,13 +1,12 @@
-import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
-import CustomTextInput from '../components/TextInput/customTextInput';
-import CustomButton from '../components/Buttons/customButton';
-import { TouchableOpacity } from 'react-native';
-import { Typography } from '../theme/Colors';
-import { assets } from '../../assets/images';
-import useAuthStore from '../stores/useAuthStore';
-import { useNavigation } from '@react-navigation/native';
-
+import React from "react";
+import { View, Text, StyleSheet, Image } from "react-native";
+import CustomTextInput from "../components/TextInput/customTextInput";
+import CustomButton from "../components/Buttons/customButton";
+import { TouchableOpacity } from "react-native";
+import { Typography } from "../theme/Colors";
+import { assets } from "../../assets/images";
+import useAuthStore from "../stores/useAuthStore";
+import { useNavigation } from "@react-navigation/native";
 
 export default function SignupScreen() {
   const login = useAuthStore((state) => state.login);
@@ -18,12 +17,11 @@ export default function SignupScreen() {
   };
 
   const handleSocialLoginPress = () => {
-    console.log('login pressed')
+    console.log("login pressed");
   };
 
   return (
     <View style={styles.container}>
-
       <View style={styles.logoContainer}>
         <View style={styles.containerlogo}>
           <View style={styles.diamond}>
@@ -42,7 +40,7 @@ export default function SignupScreen() {
         // onChangeText={setName}
         placeholder="Name"
         keyboardType="email-address"
-        iconname='person'
+        iconname="person"
         iconsize={25}
         iconcolor={Typography.Colors.lightgrey}
       />
@@ -52,40 +50,66 @@ export default function SignupScreen() {
         // onChangeText={setEmail}
         placeholder="Your Email / Phone Number"
         keyboardType="email-address"
-        iconname='mail'
+        iconname="mail"
         iconsize={25}
         iconcolor={Typography.Colors.lightgrey}
       />
-
 
       <CustomTextInput
         // value={password}
         // onChangeText={setPassword}
         placeholder="Password"
         secureTextEntry
-        iconname='lock'
+        iconname="lock"
         iconsize={25}
         iconcolor={Typography.Colors.lightgrey}
       />
 
-<CustomTextInput
+      <CustomTextInput
         // value={password}
         // onChangeText={setPassword}
         placeholder="Confirm Password"
         secureTextEntry
-        iconname='lock'
+        iconname="lock"
         iconsize={25}
         iconcolor={Typography.Colors.lightgrey}
       />
 
-      <CustomButton title="Login" onPress={login} buttonStyle={styles.buttonstyle} />
+      <CustomButton
+        title="Login"
+        onPress={login}
+        buttonStyle={styles.buttonstyle}
+      />
 
-      <View style={{ alignSelf: 'center', marginTop: 36, flexDirection: 'row', gap: 10, paddingBottom: 42 }}>
-        <View style={{ alignSelf: 'center', height: 0.1, borderWidth: 0.2, width: 170, borderColor: Typography.Colors.lightgrey }}></View>
+      <View
+        style={{
+          alignSelf: "center",
+          marginTop: 36,
+          flexDirection: "row",
+          gap: 10,
+          paddingBottom: 22,
+        }}
+      >
+        <View
+          style={{
+            alignSelf: "center",
+            height: 0.1,
+            borderWidth: 0.2,
+            width: 150,
+            borderColor: Typography.Colors.lightgrey,
+          }}
+        ></View>
         <Text style={styles.orText}>OR</Text>
-        <View style={{ alignSelf: 'center', borderWidth: 0.2, height: 0.1, width: 170, borderColor: Typography.Colors.lightgrey }}></View>
+        <View
+          style={{
+            alignSelf: "center",
+            borderWidth: 0.2,
+            height: 0.1,
+            width: 150,
+            borderColor: Typography.Colors.lightgrey,
+          }}
+        ></View>
       </View>
-
 
       <Text style={styles.socialText}>Login using</Text>
       <View style={styles.socialButtons}>
@@ -93,7 +117,10 @@ export default function SignupScreen() {
           <Image source={assets.applelogo} style={styles.socialIconApple} />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => handleSocialLoginPress()}>
-          <Image source={assets.facebooklogo} style={styles.socialIconfacebook} />
+          <Image
+            source={assets.facebooklogo}
+            style={styles.socialIconfacebook}
+          />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => handleSocialLoginPress()}>
           <Image source={assets.googlelogo} style={styles.socialIcongoogle} />
@@ -121,7 +148,7 @@ const styles = StyleSheet.create({
     fontFamily: Typography.font.heavy,
     color: Typography.Colors.primary,
     marginTop: 20,
-    marginBottom: 5,
+    // marginBottom: 5,
   },
   subText: {
     fontFamily: Typography.font.regular,
@@ -131,7 +158,7 @@ const styles = StyleSheet.create({
   },
   forgotContainer: {
     marginTop: 7,
-    alignSelf: 'flex-end',
+    alignSelf: "flex-end",
     marginBottom: 20,
   },
   forgotText: {
@@ -141,13 +168,13 @@ const styles = StyleSheet.create({
   },
   orText: {
     fontFamily: Typography.font.bold,
-    textAlign: 'center',
+    textAlign: "center",
     fontSize: 15,
     color: Typography.Colors.darkgrey,
     marginVertical: 10,
   },
   socialText: {
-    alignSelf: 'center',
+    alignSelf: "center",
     fontFamily: Typography.font.regular,
     fontSize: 16,
     color: Typography.Colors.black,
@@ -155,12 +182,12 @@ const styles = StyleSheet.create({
   },
   socialButtons: {
     height: 40,
-    overflow: 'hidden',
-    alignSelf: 'center',
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+    overflow: "hidden",
+    alignSelf: "center",
+    flexDirection: "row",
+    justifyContent: "space-around",
     width: 230,
-    marginBottom: 52,
+    marginBottom: 32,
   },
 
   socialIconApple: {
@@ -176,11 +203,10 @@ const styles = StyleSheet.create({
     height: 35,
   },
 
-
   registerContainer: {
-    alignSelf: 'center',
-    flexDirection: 'row',
-    alignItems: 'center',
+    alignSelf: "center",
+    flexDirection: "row",
+    alignItems: "center",
     marginTop: 10,
   },
   registerText: {
@@ -190,42 +216,42 @@ const styles = StyleSheet.create({
   registerLink: {
     fontSize: 14,
     color: Typography.Colors.logincolor,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   containerlogo: {
     width: 72,
     height: 72,
     backgroundColor: Typography.Colors.primary,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     borderRadius: 10,
   },
   diamond: {
     width: 32,
     height: 32,
-    transform: [{ rotate: '45deg' }],
+    transform: [{ rotate: "45deg" }],
   },
   logoContainer: {
-    alignItems: 'center',
-    marginTop: 42
+    alignItems: "center",
+    marginTop: 32,
   },
   welcomeandsignup: {
-    alignItems: 'center',
+    alignItems: "center",
     marginTop: 26,
-    paddingBottom: 48
+    paddingBottom: 25,
   },
   labelStyle: {
     fontFamily: Typography.font.regular,
     fontSize: 16,
-    color: Typography.Colors.lightgrey
+    color: Typography.Colors.lightgrey,
   },
   checkBoxstyle: {
     marginLeft: 5,
     borderWidth: 2,
     borderRadius: 5,
-    borderColor: Typography.Colors.lightgrey
+    borderColor: Typography.Colors.lightgrey,
   },
   buttonstyle: {
     height: 52,
-  }
+  },
 });

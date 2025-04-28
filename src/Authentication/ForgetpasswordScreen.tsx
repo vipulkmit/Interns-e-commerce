@@ -1,23 +1,21 @@
-import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
-import CustomTextInput from '../components/TextInput/customTextInput';
-import CustomButton from '../components/Buttons/customButton';
-import { Typography } from '../theme/Colors';
-import { assets } from '../../assets/images';
-import useAuthStore from '../stores/useAuthStore';
-import { useNavigation } from '@react-navigation/native';
-
+import React from "react";
+import { View, Text, StyleSheet, Image } from "react-native";
+import CustomTextInput from "../components/TextInput/customTextInput";
+import CustomButton from "../components/Buttons/customButton";
+import { Typography } from "../theme/Colors";
+import { assets } from "../../assets/images";
+import useAuthStore from "../stores/useAuthStore";
+import { useNavigation } from "@react-navigation/native";
 
 export default function ForgetpasswordScreen() {
   const Navigation = useNavigation();
-   
+
   const Sendverification = () => {
-     Navigation.navigate('Verifyotp')
+    Navigation.navigate("Verifyotp");
   };
 
   return (
     <View style={styles.container}>
-
       <View style={styles.logoContainer}>
         <View style={styles.containerlogo}>
           <View style={styles.diamond}>
@@ -28,7 +26,10 @@ export default function ForgetpasswordScreen() {
 
       <View style={styles.welcomeandsignup}>
         <Text style={styles.welcomeText}>Forgot Password</Text>
-        <Text style={styles.subText}>We will send you a message to set or reset your new password</Text>
+        <Text style={styles.subText}>
+          We will send you a message to set or reset your new{" "}
+        </Text>
+        <Text style={styles.subsubText}>password</Text>
       </View>
 
       <CustomTextInput
@@ -36,14 +37,16 @@ export default function ForgetpasswordScreen() {
         // onChangeText={setEmail}
         placeholder="Your Email / Phone Number"
         keyboardType="email-address"
-        iconname='mail'
+        iconname="mail"
         iconsize={25}
         iconcolor={Typography.Colors.lightgrey}
       />
 
-
-      <CustomButton title="Send Verification" onPress={Sendverification} buttonStyle={styles.buttonstyle} />
-
+      <CustomButton
+        title="Send Verification"
+        onPress={Sendverification}
+        buttonStyle={styles.buttonstyle}
+      />
     </View>
   );
 }
@@ -65,44 +68,40 @@ const styles = StyleSheet.create({
     fontFamily: Typography.font.regular,
     fontSize: 15,
     color: Typography.Colors.lightgrey,
+  },
+  subsubText: {
+    fontFamily: Typography.font.regular,
+    fontSize: 15,
+    color: Typography.Colors.lightgrey,
+    // alignItems: "center",
     marginBottom: 30,
   },
   containerlogo: {
     width: 72,
     height: 72,
     backgroundColor: Typography.Colors.primary,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     borderRadius: 10,
   },
   diamond: {
     width: 32,
     height: 32,
-    transform: [{ rotate: '45deg' }],
+    transform: [{ rotate: "45deg" }],
   },
   logoContainer: {
-    alignItems: 'center',
-    marginTop: 42
+    alignItems: "center",
+    marginTop: 42,
   },
-  welcomeandsignup: {  
-    alignItems: 'center',
-    marginTop: 15 ,
-    paddingBottom: 48
+  welcomeandsignup: {
+    alignItems: "center",
+    marginTop: 15,
+    paddingBottom: 48,
   },
   buttonstyle: {
     height: 52,
-  }
+  },
 });
-
-
-
-
-
-
-
-
-
-
 
 // useEffect(() => {
 //   const backHandler = BackHandler.addEventListener(

@@ -1,37 +1,33 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
-import CustomTextInput from '../components/TextInput/customTextInput';
-import CustomButton from '../components/Buttons/customButton';
-import { TouchableOpacity } from 'react-native';
-import { Typography } from '../theme/Colors';
-import { assets } from '../../assets/images';
-import useAuthStore from '../stores/useAuthStore';
-import { AdvancedCheckbox } from 'react-native-advanced-checkbox';
-import { useNavigation } from '@react-navigation/native';
-
-
+import React, { useState } from "react";
+import { View, Text, StyleSheet, Image } from "react-native";
+import CustomTextInput from "../components/TextInput/customTextInput";
+import CustomButton from "../components/Buttons/customButton";
+import { TouchableOpacity } from "react-native";
+import { Typography } from "../theme/Colors";
+import { assets } from "../../assets/images";
+import useAuthStore from "../stores/useAuthStore";
+import { AdvancedCheckbox } from "react-native-advanced-checkbox";
+import { useNavigation } from "@react-navigation/native";
 
 export default function LoginScreen() {
   const login = useAuthStore((state) => state.login);
   const [isSelected, setSelection] = useState(false);
   const Navigation = useNavigation();
 
-
   const handleForgotPasswordPress = () => {
-   Navigation.navigate('Forgetpassword')
+    Navigation.navigate("Forgetpassword");
   };
 
   const handleRegisterPress = () => {
-     Navigation.navigate('Signup')
+    Navigation.navigate("Signup");
   };
 
   const handleSocialLoginPress = () => {
-    console.log('login pressed')
+    console.log("login pressed");
   };
 
   return (
     <View style={styles.container}>
-
       <View style={styles.logoContainer}>
         <View style={styles.containerlogo}>
           <View style={styles.diamond}>
@@ -50,24 +46,29 @@ export default function LoginScreen() {
         // onChangeText={setEmail}
         placeholder="Your Email / Phone Number"
         keyboardType="email-address"
-        iconname='person'
+        iconname="person"
         iconsize={25}
         iconcolor={Typography.Colors.lightgrey}
       />
-
 
       <CustomTextInput
         // value={password}
         // onChangeText={setPassword}
         placeholder="Password"
         secureTextEntry
-        iconname='lock'
+        iconname="lock"
         iconsize={25}
         iconcolor={Typography.Colors.lightgrey}
       />
 
-
-      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: "space-between", marginBottom: 40 }}>
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
+          marginBottom: 40,
+        }}
+      >
         <AdvancedCheckbox
           value={isSelected}
           onValueChange={setSelection}
@@ -78,30 +79,57 @@ export default function LoginScreen() {
           checkBoxStyle={styles.checkBoxstyle}
           size={18}
         />
-        <TouchableOpacity onPress={handleForgotPasswordPress} style={styles.forgotContainer}>
+        <TouchableOpacity
+          onPress={handleForgotPasswordPress}
+          style={styles.forgotContainer}
+        >
           <Text style={styles.forgotText}>Forgot Password?</Text>
         </TouchableOpacity>
       </View>
 
+      <CustomButton
+        title="Login"
+        onPress={login}
+        buttonStyle={styles.buttonstyle}
+      />
 
-      <CustomButton title="Login" onPress={login} buttonStyle={styles.buttonstyle} />
-
-
-
-      <View style={{ alignSelf: 'center', marginTop: 36, flexDirection: 'row', gap: 10, paddingBottom: 42 }}>
-        <View style={{ alignSelf: 'center', height: 0.1, borderWidth: 0.2, width: 170, borderColor: Typography.Colors.lightgrey }}></View>
+      <View
+        style={{
+          alignSelf: "center",
+          marginTop: 36,
+          flexDirection: "row",
+          gap: 10,
+          paddingBottom: 32,
+        }}
+      >
+        <View
+          style={{
+            alignSelf: "center",
+            height: 0.1,
+            borderWidth: 0.2,
+            width: 150,
+            borderColor: Typography.Colors.lightgrey,
+          }}
+        ></View>
         <Text style={styles.orText}>OR</Text>
-        <View style={{ alignSelf: 'center', borderWidth: 0.2, height: 0.1, width: 170, borderColor: Typography.Colors.lightgrey }}></View>
+        <View
+          style={{
+            alignSelf: "center",
+            borderWidth: 0.2,
+            height: 0.1,
+            width: 150,
+            borderColor: Typography.Colors.lightgrey,
+          }}
+        ></View>
       </View>
-
 
       <Text style={styles.socialText}>Login using</Text>
       <View style={styles.socialButtons}>
         <TouchableOpacity onPress={() => handleSocialLoginPress()}>
-          <Image source={assets.applelogo} style={styles.socialIconApple} />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => handleSocialLoginPress()}>
-          <Image source={assets.facebooklogo} style={styles.socialIconfacebook} />
+          <Image
+            source={assets.facebooklogo}
+            style={styles.socialIconfacebook}
+          />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => handleSocialLoginPress()}>
           <Image source={assets.googlelogo} style={styles.socialIcongoogle} />
@@ -139,7 +167,7 @@ const styles = StyleSheet.create({
   },
   forgotContainer: {
     marginTop: 7,
-    alignSelf: 'flex-end',
+    alignSelf: "flex-end",
     marginBottom: 20,
   },
   forgotText: {
@@ -149,13 +177,13 @@ const styles = StyleSheet.create({
   },
   orText: {
     fontFamily: Typography.font.bold,
-    textAlign: 'center',
+    textAlign: "center",
     fontSize: 15,
     color: Typography.Colors.darkgrey,
     marginVertical: 10,
   },
   socialText: {
-    alignSelf: 'center',
+    alignSelf: "center",
     fontFamily: Typography.font.regular,
     fontSize: 16,
     color: Typography.Colors.black,
@@ -163,18 +191,14 @@ const styles = StyleSheet.create({
   },
   socialButtons: {
     height: 40,
-    overflow: 'hidden',
-    alignSelf: 'center',
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+    overflow: "hidden",
+    alignSelf: "center",
+    flexDirection: "row",
+    justifyContent: "space-around",
     width: 230,
-    marginBottom: 52,
+    marginBottom: 42,
   },
 
-  socialIconApple: {
-    width: 29,
-    height: 35,
-  },
   socialIconfacebook: {
     width: 35,
     height: 35,
@@ -184,11 +208,10 @@ const styles = StyleSheet.create({
     height: 35,
   },
 
-
   registerContainer: {
-    alignSelf: 'center',
-    flexDirection: 'row',
-    alignItems: 'center',
+    alignSelf: "center",
+    flexDirection: "row",
+    alignItems: "center",
     marginTop: 10,
   },
   registerText: {
@@ -198,44 +221,42 @@ const styles = StyleSheet.create({
   registerLink: {
     fontSize: 14,
     color: Typography.Colors.primary,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   containerlogo: {
     width: 72,
     height: 72,
     backgroundColor: Typography.Colors.primary,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     borderRadius: 10,
   },
   diamond: {
     width: 32,
     height: 32,
-    transform: [{ rotate: '45deg' }],
+    transform: [{ rotate: "45deg" }],
   },
   logoContainer: {
-    alignItems: 'center',
-    marginTop: 42
+    alignItems: "center",
+    marginTop: 40,
   },
   welcomeandsignup: {
-    alignItems: 'center',
+    alignItems: "center",
     marginTop: 26,
-    paddingBottom: 48
+    paddingBottom: 28,
   },
   labelStyle: {
     fontFamily: Typography.font.regular,
     fontSize: 16,
-    color: Typography.Colors.lightgrey
+    color: Typography.Colors.lightgrey,
   },
   checkBoxstyle: {
     marginLeft: 5,
     borderWidth: 2,
     borderRadius: 5,
-    borderColor: Typography.Colors.lightgrey
+    borderColor: Typography.Colors.lightgrey,
   },
   buttonstyle: {
     height: 52,
-  }
+  },
 });
-
-

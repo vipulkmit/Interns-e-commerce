@@ -4,36 +4,54 @@ import CustomTextInput from "../components/TextInput/customTextInput";
 import CustomButton from "../components/Buttons/customButton";
 import { Typography } from "../theme/Colors";
 import { assets } from "../../assets/images";
+import useAuthStore from "../stores/useAuthStore";
 import { useNavigation } from "@react-navigation/native";
 
-export default function VerifyotpScreen() {
+export default function PasswordchangeScreen() {
   const Navigation = useNavigation();
 
   const Sendverification = () => {
-    Navigation.navigate("Passwordchange");
+    Navigation.navigate("LoginScreen");
   };
 
   return (
     <View style={styles.container}>
-      {/* <View style={{marginBottom:10}}> */}
-      <View style={styles.welcomeandsignup}>
-        <Text style={styles.welcomeText}>Enter Verification Code</Text>
-        <Text style={styles.subText}>
-          We will send you a message to set or reset your new
-        </Text>
-        <Text style={styles.subsubtext}>password</Text>
+      <View style={styles.logoContainer}>
+        <View style={styles.containerlogo}>
+          <View style={styles.diamond}>
+            <Image source={assets.logofirst} style={styles.diamond} />
+          </View>
+        </View>
       </View>
-      {/* </View> */}
+
+      <View style={styles.welcomeandsignup}>
+        <Text style={styles.welcomeText}>New Password</Text>
+        <Text style={styles.subText}>Set new password for your account</Text>
+        {/* <Text style={styles.subsubText}>password</Text> */}
+      </View>
 
       <CustomTextInput
-        // value={email}
-        // onChangeText={setEmail}
-        placeholder="Enter OTP here"
-        keyboardType="number-pad"
+        // value={password}
+        // onChangeText={setPassword}
+        placeholder="Password"
+        secureTextEntry
+        iconname="lock"
+        iconsize={25}
+        iconcolor={Typography.Colors.lightgrey}
+      />
+
+      <CustomTextInput
+        // value={password}
+        // onChangeText={setPassword}
+        placeholder="Confirm Password"
+        secureTextEntry
+        iconname="lock"
+        iconsize={25}
+        iconcolor={Typography.Colors.lightgrey}
       />
 
       <CustomButton
-        title="Confirm"
+        title="Send Verification"
         onPress={Sendverification}
         buttonStyle={styles.buttonstyle}
       />
@@ -43,8 +61,6 @@ export default function VerifyotpScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 200,
-    // marginBottom:60,
     flex: 1,
     paddingHorizontal: 20,
     backgroundColor: Typography.Colors.white,
@@ -53,20 +69,22 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontFamily: Typography.font.heavy,
     color: Typography.Colors.primary,
-    marginTop: 10,
+    marginTop: 20,
     marginBottom: 5,
   },
   subText: {
     fontFamily: Typography.font.regular,
     fontSize: 15,
     color: Typography.Colors.lightgrey,
-  },
-  subsubtext: {
-    fontFamily: Typography.font.regular,
-    fontSize: 15,
-    color: Typography.Colors.lightgrey,
     marginBottom: 30,
   },
+  // subsubText: {
+  //   fontFamily: Typography.font.regular,
+  //   fontSize: 15,
+  //   color: Typography.Colors.lightgrey,
+  //   // alignItems: "center",
+
+  // },
   containerlogo: {
     width: 72,
     height: 72,
