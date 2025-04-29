@@ -1,24 +1,25 @@
 import { Animated, Dimensions, FlatList, Image, ImageBackground, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { Component, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { assets } from '../../../assets/images'
 import { CategoryProps, BannerProps, TrendingProps, ProductProps } from '../../models/homePage.type';
 import { useFonts } from 'expo-font';
 import { fonts } from '../../../assets/fonts';
-import { BannerData, CardData, categoryData, DealData, ProductData } from '../../constant';
-import { HeaderData } from '../../constant'
+import { BannerData, CardData, categoryData, DealData, ProductData ,HeaderData} from '../../constant';
 import Carousel from 'react-native-reanimated-carousel';
 import CardComponent from '../../components/card/CardComponent';
 import ProductComponent from '../../components/product/ProductComponent';
 import ButtonComponent from '../../components/button/ButtonComponent';
 import TopHeaderComponent from '../../components/header/TopHeaderComponent';
 import { useNavigation } from '@react-navigation/native';
+import useAuthStore from '../../stores/useAuthStore'
 
 
 const { width } = Dimensions.get("window");
 
 
-
 const HomeScreen = () => {
+  const logout = useAuthStore((state) => state.logout)
+
   const navigation = useNavigation();
   const [currentIndex, setCurrentIndex] = useState(0);
   const animations = useRef(BannerData.map(() => new Animated.Value(17))).current;
@@ -69,16 +70,10 @@ const HomeScreen = () => {
     }).start();
   };
 
-  // const handleSnap = (index: number) => {
-  //   setCurrentIndex(index);
-  //   BannerData.forEach((_, i) => {
-  //     animateDot(i, i === index);
-  //   });
-  // };
 
   const handleSnap = (index: number) => {
-    animateDot(currentIndex, false); // Shrink previous active dot
-    animateDot(index, true);          // Expand new active dot
+    animateDot(currentIndex, false); 
+    animateDot(index, true);          
     setCurrentIndex(index);
   };
 
@@ -100,7 +95,7 @@ const HomeScreen = () => {
 
     return (
       <Pressable style={styles.dealView} onPress={()=>{navigation.navigate('HomeScreen1')}}>
-        <CardComponent img={item.img} amount={item.amount} productType={item.productType} productImgStyle={styles.productImage} />
+        <CardComponent staticContainer={styles.staticContainer} img={item.img} amount={item.amount} productType={item.productType} productImgStyle={styles.productImage} />
       </Pressable>
     )
 
@@ -113,7 +108,7 @@ const HomeScreen = () => {
 
     return (
       <View style={styles.container}>
-        <ProductComponent images={item.images} productName={item.productName} brandName={item.brandName} initialRate={item.initialRate} rate={item.rate} discount={item.discount} />
+        <ProductComponent images={item.images} productName={item.productName} brandName={item.brandName} initialRate={item.initialRate} rate={item.rate} discount={item.discount}/>
         <View style={styles.buttonView}>
           <ButtonComponent icon={assets.HeartBlack} buttonText='Whislist' buttonStyle={styles.buttonStyle} />
           <ButtonComponent icon={assets.WhiteBag} buttonText='Add to Bag' TextStyle={styles.textStyle} buttonStyle={[styles.buttonStyle, { backgroundColor: '#002482' }]} />
@@ -121,7 +116,6 @@ const HomeScreen = () => {
       </View>
     )
   }
-
 
 
   return (
@@ -203,7 +197,7 @@ const HomeScreen = () => {
 
       {/* Deal of the Day card */}
       <View style={styles.dealContainer}>
-        <Text numberOfLines={1} style={styles.TrendingText} >Deals Of The Day</Text>
+        <Text numberOfLines={1} style={[styles.TrendingText,{paddingBottom:10}]} >Deals Of The Day</Text>
         <FlatList
           data={DealData.slice(0, 4)}
           renderItem={DealRenderItem}
@@ -224,6 +218,15 @@ const HomeScreen = () => {
           keyExtractor={(item) => item.id}
         />
       </View>
+
+
+
+      <View style={styles.container}>
+        <TouchableOpacity style={styles.buttonstyle}onPress={logout}>
+          <Text style={styles.textstyle}>Go Back to LoginScreen</Text>
+          </TouchableOpacity>
+      </View>
+
     </ScrollView>
   )
 }
@@ -235,7 +238,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFFFFF'
   },
-
 
   //HeaderStyle
 
@@ -303,8 +305,7 @@ const styles = StyleSheet.create({
     height: "100%",
     justifyContent: "center",
     alignItems: "center",
-    // gap: 23,
-    // paddingBottom: 25,
+
   },
   logostyle: {
     width: 175,
@@ -343,36 +344,33 @@ const styles = StyleSheet.create({
     fontFamily: 'SFPRODISPLAYMEDIUM',
     fontSize: 20,
     color: '#272727',
+
   },
 
   //Deal of the day
+  staticContainer:{
+    flex:1,
+    paddingTop:10
+  },
   dealView: {
     height: 251,
     width: '47%',
-    // backgroundColor: 'green'
   },
   productImage: {
-    height: '100%',
     width: "100%",
     flex: 7,
-    // backgroundColor:'green',
-    // borderTopRightRadius:8,
-    // borderTopLeftRadius:8,
-    // overflow:'hidden'
+    borderTopLeftRadius: 5,
+    borderTopRightRadius: 5,
+
+  
   },
   dealContainer: {
     paddingHorizontal: 20,
     justifyContent: 'center',
     paddingTop: 20,
-    // backgroundColor: 'red'
   },
   row: {
-    // paddingRight: 25,
-    // backgroundColor:'pink',
-    // justifyContent:'space-between'
     gap: 20,
-    // width:'100%'
-    // paddingRight:10
   },
   buttonStyle: {
     backgroundColor: '#FFFFFF',
@@ -390,7 +388,7 @@ const styles = StyleSheet.create({
   },
   paginationContainer: {
     position: 'absolute',
-    bottom: 20,                  // 20px from the bottom of the carousel
+    bottom: 20,                  
     left: 0,
     right: 0,
     flexDirection: 'row',
@@ -399,11 +397,34 @@ const styles = StyleSheet.create({
   },
   dot: {
     height: 3,
-    // width:50,
     borderRadius: 4,
     marginHorizontal: 4,
-    // transitionDuration: '300ms',
-  },
 
+  },
+  textstyle: {
+    fontSize: 14,
+    color: 'black',
+    fontWeight: 'bold',
+    padding: 10,
+    textAlign: 'center',
+  },
+  buttonstyle:{
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#002482',
+    justifyContent: 'center',
+    alignItems: 'center',
+  }
 })
 export default HomeScreen
+
+
+
+
+
+
+
+
+
+
+

@@ -38,5 +38,8 @@ export const assets = {
     ArrowLeft:require('./ArrowLeft.png'),
     DownArray: require('./DownArray.png'),
     Share: require('./Share.png'),
-    Clock: require('./clock.png')
+    Clock: require('./clock.png'),
+    logofirst:require('./firstlogo.png'),
+    googlelogo:require('./Google.png'),
+    facebooklogo:require('./Facebook.png'),
 }  

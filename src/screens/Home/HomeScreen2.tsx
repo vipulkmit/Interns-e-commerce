@@ -9,13 +9,12 @@ import HeaderComponent from "../../components/header/HeaderComponent";
 import { useNavigation } from "@react-navigation/native";
 
 const width = Dimensions.get("window").width;
-// console.log(width);
 
 const HomeScreen2 = () => {
     const navigation = useNavigation();
   
   const [currentIndex, setCurrentIndex] = useState(0);
-  // const animations = BannerData.map(() => new Animated.Value(8)); // initial width = 8
+
   const animations = useRef(BannerData.map(() => new Animated.Value(8))).current;
 
 
@@ -44,12 +43,6 @@ const HomeScreen2 = () => {
     }).start();
   };
 
-  // const handleSnap = (index: number) => {
-  //   setCurrentIndex(index);
-  //   BannerData.forEach((_, i) => {
-  //     animateDot(i, i === index);
-  //   });
-  // };
 
   const handleSnap = (index: number) => {
     animateDot(currentIndex, false); // Shrink previous active dot
@@ -76,16 +69,15 @@ const handleBackButton=()=>{navigation.goBack()}
         renderItem={CarouselRenderItem} />
       <View style={styles.paginationContainer}>
         {BannerData.map((_, index) => {
-          // const isActive = index === currentIndex;
           return (
             <Animated.View
               key={index}
               style={[
                 styles.dot,
                 {
-                  // width: isActive ? 20 : 8,
+
                   width: animations[index],
-                  // backgroundColor: isActive ? '#333' : '#ccc',
+              
                   backgroundColor: currentIndex === index ? '#002482' : '#ccc'
                 },
               ]}

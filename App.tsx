@@ -1,15 +1,13 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import RootComponent from './src/navigation/Tabs';
-import { StatusBar } from 'react-native';
+import RootNavigator from './src/navigation/RootNavigator';
+   
 
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <RootComponent/>
-      <StatusBar barStyle='dark-content'/>
-    </NavigationContainer>
+   <NavigationContainer>
+     <RootNavigator/>
+   </NavigationContainer>
   );
 }
-

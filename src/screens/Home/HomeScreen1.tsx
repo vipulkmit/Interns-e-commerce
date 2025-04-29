@@ -11,7 +11,7 @@ import ButtonComponent from '../../components/button/ButtonComponent'
 
 const HomeScreen1 = () => {
   const navigation = useNavigation()
-  const handleBackButton = () => { navigation.navigate('HomeScreen') }
+  const handleBackButton = () => { navigation.goBack() }
 
 const renderProduct=()=>{
   navigation.navigate('HomeScreen2')

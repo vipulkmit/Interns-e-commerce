@@ -2,7 +2,6 @@ import React from 'react'
 import { FlatList, Image, ImageBackground, ImageSourcePropType, Pressable, StyleSheet, Text, Touchable, TouchableOpacity, View } from 'react-native'
 
 import { ProductProps } from '../../models/homePage.type'
-import symbolicateStackTrace from 'react-native/Libraries/Core/Devtools/symbolicateStackTrace'
 
 
 

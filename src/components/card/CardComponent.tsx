@@ -20,7 +20,7 @@ const CardComponent = ({
     return (
         <View style={[styles.container,staticContainer]}>
             <View style={[styles.imgView,productImgStyle]}> 
-                <Image source={img} style={styles.imgStyles} resizeMode="cover" />
+                <Image source={img} style={styles.imgStyles} />
             </View>
             <View style={styles.dataView}>
                 {productType ? (
