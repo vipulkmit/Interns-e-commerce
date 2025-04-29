@@ -1,9 +1,6 @@
 import { Image, Text, TouchableOpacity, View, StyleSheet } from "react-native"
 import { ButtonProps } from "../../models/HomePage.type"
 
-
-
-
 const ButtonComponent = ({
     id,
     icon,
@@ -21,7 +18,6 @@ const ButtonComponent = ({
         </View>
     )
 }
-
 
 const styles = StyleSheet.create({
     buttonData: {
