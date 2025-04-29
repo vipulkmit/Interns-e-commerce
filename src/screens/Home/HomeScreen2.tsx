@@ -1,12 +1,12 @@
 import Carousel from "react-native-reanimated-carousel";
-import { View, Text, ScrollView, StyleSheet, Dimensions, ImageBackground, Image, Animated, TouchableOpacity } from 'react-native'
+import { View, Text, ScrollView, StyleSheet, Dimensions, ImageBackground, Image, Animated, TouchableOpacity, TextInput, Pressable } from 'react-native'
 import React, { useRef, useState } from 'react'
-import { useFonts } from 'expo-font'
 import { BannerData } from "../../constant";
-import { fonts } from "../../../assets/fonts";
 import { assets } from "../../../assets/images";
 import HeaderComponent from "../../components/header/HeaderComponent";
 import { useNavigation } from "@react-navigation/native";
+import { Typography } from "../../theme/Colors";
+// import { TextInput } from "react-native-gesture-handler";
 
 const width = Dimensions.get("window").width;
 
@@ -17,14 +17,8 @@ const HomeScreen2 = () => {
 
   const animations = useRef(BannerData.map(() => new Animated.Value(8))).current;
 
-
-  const font = useFonts({
-    'SFPRODISPLAYBLACKITALIC': fonts.SFPRODISPLAYBLACKITALIC,
-    'SFPRODISPLAYBOLD': fonts.SFPRODISPLAYBOLD,
-    'SFPRODISPLAYHEAVYITALIC': fonts.SFPRODISPLAYHEAVYITALIC,
-    'SFPRODISPLAYMEDIUM': fonts.SFPRODISPLAYMEDIUM,
-    'SFPRODISPLAYREGULAR': fonts.SFPRODISPLAYREGULAR,
-  });
+  const [text, onChangeText] = React.useState('Useless Text');
+  const [number, onChangeNumber] = React.useState('');
 
   const CarouselRenderItem = () => (
     <ImageBackground
@@ -49,6 +43,7 @@ const HomeScreen2 = () => {
     animateDot(index, true);          // Expand new active dot
     setCurrentIndex(index);
   };
+  
 const handleBackButton=()=>{navigation.goBack()}
 
 
@@ -78,7 +73,7 @@ const handleBackButton=()=>{navigation.goBack()}
 
                   width: animations[index],
               
-                  backgroundColor: currentIndex === index ? '#002482' : '#ccc'
+                  backgroundColor: currentIndex === index ? Typography.Colors.primary : Typography.Colors.offwhite
                 },
               ]}
             />
@@ -118,7 +113,7 @@ const handleBackButton=()=>{navigation.goBack()}
       </View>
       <View style={styles.size}>
         <View style={styles.sizeView}>
-          <Text style={[styles.brandName,{fontFamily:'SFPRODISPLAYMEDIUM'}]}>Select Size</Text>
+          <Text style={[styles.brandName,{fontFamily:Typography.font.medium}]}>Select Size</Text>
           <TouchableOpacity>
             <Text style={styles.textStyle}>Size Chart</Text>
           </TouchableOpacity>
@@ -141,16 +136,13 @@ const handleBackButton=()=>{navigation.goBack()}
           </View>
         </View>
       </View>
-      <View>
-
-      </View>
     </ScrollView>
   )
 }
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: Typography.Colors.white,
     paddingVertical: 20,
     paddingHorizontal: 14
   },
@@ -160,7 +152,7 @@ const styles = StyleSheet.create({
   },
   imagestyle: {
     borderWidth: 2,
-    borderColor: '#FFFFFF',
+    borderColor: Typography.Colors.white,
   },
   dataContainer: {
     // flex: 1,
@@ -179,31 +171,31 @@ const styles = StyleSheet.create({
   productName: {
     // paddingTop: 12,
     fontSize: 20,
-    fontFamily: 'SFPRODISPLAYMEDIUM',
-    color: '#272727',
+    fontFamily: Typography.font.medium,
+    color: Typography.Colors.lightblack
   },
   brandName: {
     fontSize: 18,
-    fontFamily: 'SFPRODISPLAYREGULAR',
-    color: '#272727',
+    fontFamily: Typography.font.regular,
+    color:  Typography.Colors.lightblack
   },
   initialRate: {
     fontSize: 14,
     alignSelf: 'center',
-    fontFamily: 'SFPRODISPLAYREGULAR',
+    fontFamily: Typography.font.regular,
     color: '#848484',
     textDecorationLine: 'line-through'
   },
   rate: {
     fontSize: 20,
     paddingLeft: 17,
-    fontFamily: 'SFPRODISPLAYREGULAR',
-    color: '#272727'
+    fontFamily: Typography.font.regular,
+    color: Typography.Colors.lightblack
   },
   discount: {
     fontSize: 14,
-    fontFamily: 'SFPRODISPLAYREGULAR',
-    color: '#0EB000',
+    fontFamily: Typography.font.regular,
+    color: Typography.Colors.lightgreen,
     paddingLeft: 10,
     alignSelf: 'center'
   },
@@ -233,7 +225,7 @@ const styles = StyleSheet.create({
   timerText: {
     color: '#FF4646',
     fontSize: 12,
-    fontFamily: 'SFPRODISPLAYMEDIUM'
+    fontFamily: Typography.font.medium
   },
   amountTimer: {
     flexDirection: 'row',
@@ -289,7 +281,7 @@ const styles = StyleSheet.create({
     // alignItems:'center',
     // justifyContent:'center',
     // borderWidth:1,
-    backgroundColor: '#FFFFFF'
+    backgroundColor:Typography.Colors.white,
 
   },
   colorCircle5: {
@@ -301,9 +293,9 @@ const styles = StyleSheet.create({
 
   },
   colorText: {
-    color: '#272727',
+    color: Typography.Colors.lightblack,
     fontSize: 12,
-    fontFamily: 'SFPRODISPLAYREGULAR'
+    fontFamily: Typography.font.regular,
   },
   paginationContainer: {
     flexDirection: 'row',
@@ -327,33 +319,41 @@ const styles = StyleSheet.create({
   },
   textStyle:{
     fontSize:12,
-    fontFamily:'SFPRODISPLAYREGULAR',
-    color:'#002482'
+    fontFamily:Typography.font.regular,
+    color:Typography.Colors.primary
   },
   sizeBox:{
-    backgroundColor:'#FFFFFF',
+    backgroundColor:Typography.Colors.white,
     height:42,
     width:42,
     borderWidth:1,
-    borderColor:'#FFFFFF',
-    paddingRight:17,
+    borderColor:Typography.Colors.white,
+    // paddingRight:17,
     alignItems:'center',
     justifyContent:'center',
+    // flex:1
     // gap:17
   },
   sizeText:{
-    color:'#272727',
+    color:Typography.Colors.lightblack,
     fontSize:12,
-    fontFamily:'SFPRODISPLAYREGULAR',
+    fontFamily:Typography.font.regular,
+    // textAlign:'center'
     // alignSelf:'center'
-    paddingLeft:8
+    // paddingLeft:8
     // alignSelf:'center'
   },
   sizeData:{
     flexDirection:'row',
     gap:17,
     paddingTop:7
-  }
+  },
+  input: {
+    height: 40,
+    margin: 12,
+    borderWidth: 1,
+    padding: 10,
+  },
 })
 export default HomeScreen2
 

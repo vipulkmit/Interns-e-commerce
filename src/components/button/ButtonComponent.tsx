@@ -1,5 +1,6 @@
 import { Image, Text, TouchableOpacity, View, StyleSheet } from "react-native"
 import { ButtonProps } from "../../models/HomePage.type"
+import { Typography } from "../../theme/Colors"
 
 const ButtonComponent = ({
     id,
@@ -41,9 +42,9 @@ const styles = StyleSheet.create({
         marginLeft: 5,
     },
     textstyle: {
-        color: "#272727",
+        color: Typography.Colors.lightblack,
         fontSize: 14,
-        fontFamily: 'SFPRODISPLAYREGULAR'
+        fontFamily: Typography.font.regular
     },
 })
 export default ButtonComponent;

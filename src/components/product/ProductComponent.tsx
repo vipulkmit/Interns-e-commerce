@@ -2,6 +2,7 @@ import React from 'react'
 import { FlatList, Image, ImageBackground, ImageSourcePropType, Pressable, StyleSheet, Text, Touchable, TouchableOpacity, View } from 'react-native'
 
 import { ProductProps } from '../../models/HomePage.type'
+import { Typography } from '../../theme/Colors'
 
 
 
@@ -86,8 +87,8 @@ const styles = StyleSheet.create({
     },
   
     numberText: {
-        color: '#ffffff',
-        fontFamily: 'SFPRODISPLAYBOLD',
+        color: Typography.Colors.white,
+        fontFamily: Typography.font.bold,
         fontSize: 33,
         // alignSelf: 'center',
         textAlign: 'center',
@@ -96,7 +97,7 @@ const styles = StyleSheet.create({
     },
 
     overlay:{
-        backgroundColor: '#272727',
+        backgroundColor: Typography.Colors.lightblack,
         opacity: 0.7,
         height: '100%',
         width: '100%',
@@ -113,31 +114,31 @@ const styles = StyleSheet.create({
     productName: {
         paddingTop: 16,
         fontSize: 20,
-        fontFamily: 'SFPRODISPLAYMEDIUM',
-        color: '#272727'
+        fontFamily:  Typography.font.medium,
+        color: Typography.Colors.lightblack
     },
     brandName: {
         fontSize: 18,
-        fontFamily: 'SFPRODISPLAYREGULAR',
-        color: '#272727',
+        fontFamily:  Typography.font.regular,
+        color: Typography.Colors.lightblack
     },
     initialRate: {
         fontSize: 14,
         alignSelf: 'center',
-        fontFamily: 'SFPRODISPLAYREGULAR',
-        color: '#848484',
+        fontFamily: Typography.font.regular,
+        color: Typography.Colors.lightgrey,
         textDecorationLine: 'line-through'
     },
     rate: {
         fontSize: 20,
         paddingLeft: 17,
-        fontFamily: 'SFPRODISPLAYREGULAR',
-        color: '#272727'
+        fontFamily: Typography.font.regular,
+        color: Typography.Colors.lightblack
     },
     discount: {
         fontSize: 14,
-        fontFamily: 'SFPRODISPLAYREGULAR',
-        color: '#0EB000',
+        fontFamily:Typography.font.regular,
+        color: Typography.Colors.lightgreen,
         paddingLeft: 10,
         alignSelf: 'center'
     },
