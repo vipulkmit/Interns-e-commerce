@@ -4,7 +4,7 @@ import HeaderComponent from '../../components/header/HeaderComponent'
 import { assets } from '../../../assets/images'
 import { useNavigation } from '@react-navigation/native'
 import { ProductData } from '../../constant'
-import { ProductProps } from '../../models/homePage.type'
+import { ProductProps } from '../../models/HomePage.type'
 import ProductComponent from '../../components/product/ProductComponent'
 import ButtonComponent from '../../components/button/ButtonComponent'
 

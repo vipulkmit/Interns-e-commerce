@@ -1,5 +1,5 @@
 import { Image, Text, TouchableOpacity, View, StyleSheet } from "react-native"
-import { ButtonProps } from "../../models/homePage.type"
+import { ButtonProps } from "../../models/HomePage.type"
 
 
 

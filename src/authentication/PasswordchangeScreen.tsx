@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
-import CustomTextInput from "../components/TextInput/customTextInput";
-import CustomButton from "../components/button/customButton";
+import CustomTextInput from "../components/textInput/CustomTextInput";
+import CustomButton from "../components/button/CustomButton";
 import { Typography } from "../theme/Colors";
 import { assets } from "../../assets/images";
 import useAuthStore from "../stores/useAuthStore";

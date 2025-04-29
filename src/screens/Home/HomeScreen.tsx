@@ -1,7 +1,7 @@
 import { Animated, Dimensions, FlatList, Image, ImageBackground, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useRef, useState } from 'react'
 import { assets } from '../../../assets/images'
-import { CategoryProps, BannerProps, TrendingProps, ProductProps } from '../../models/homePage.type';
+import { CategoryProps, BannerProps, TrendingProps, ProductProps } from '../../models/HomePage.type';
 import { useFonts } from 'expo-font';
 import { fonts } from '../../../assets/fonts';
 import { BannerData, CardData, categoryData, DealData, ProductData ,HeaderData} from '../../constant';

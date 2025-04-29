@@ -1,6 +1,6 @@
 
 import { Image, StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native"
-import { HeaderProps } from "../../models/userInfo.type"
+import { HeaderProps } from "../../models/UserInfo.type"
 
 
 

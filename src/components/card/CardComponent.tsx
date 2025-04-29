@@ -1,6 +1,6 @@
 import React from "react";
 import { Image, Text, View, StyleSheet, Dimensions } from "react-native";
-import { TrendingProps } from "../../models/homePage.type";
+import { TrendingProps } from "../../models/HomePage.type";
 
 
 const { width } = Dimensions.get("window");

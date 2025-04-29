@@ -1,49 +1,39 @@
 import React from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
-import CustomTextInput from "../components/TextInput/customTextInput";
-import CustomButton from "../components/button/customButton";
+import CustomTextInput from "../components/textInput/CustomTextInput";
+import CustomButton from "../components/button/CustomButton";
 import { Typography } from "../theme/Colors";
 import { assets } from "../../assets/images";
-import useAuthStore from "../stores/useAuthStore";
 import { useNavigation } from "@react-navigation/native";
 
-export default function ForgetpasswordScreen() {
+export default function VerifyotpScreen() {
   const Navigation = useNavigation();
 
   const Sendverification = () => {
-    Navigation.navigate("Verifyotp");
+    Navigation.navigate("Passwordchange");
   };
 
   return (
     <View style={styles.container}>
-      <View style={styles.logoContainer}>
-        <View style={styles.containerlogo}>
-          <View style={styles.diamond}>
-            <Image source={assets.logofirst} style={styles.diamond} />
-          </View>
-        </View>
-      </View>
-
+      {/* <View style={{marginBottom:10}}> */}
       <View style={styles.welcomeandsignup}>
-        <Text style={styles.welcomeText}>Forgot Password</Text>
+        <Text style={styles.welcomeText}>Enter Verification Code</Text>
         <Text style={styles.subText}>
-          We will send you a message to set or reset your new{" "}
+          We will send you a message to set or reset your new
         </Text>
-        <Text style={styles.subsubText}>password</Text>
+        <Text style={styles.subsubtext}>password</Text>
       </View>
+      {/* </View> */}
 
       <CustomTextInput
         // value={email}
         // onChangeText={setEmail}
-        placeholder="Your Email / Phone Number"
-        keyboardType="email-address"
-        iconname="mail"
-        iconsize={25}
-        iconcolor={Typography.Colors.lightgrey}
+        placeholder="Enter OTP here"
+        keyboardType="number-pad"
       />
 
       <CustomButton
-        title="Send Verification"
+        title="Confirm"
         onPress={Sendverification}
         buttonStyle={styles.buttonstyle}
       />
@@ -53,6 +43,8 @@ export default function ForgetpasswordScreen() {
 
 const styles = StyleSheet.create({
   container: {
+    paddingTop: 200,
+    // marginBottom:60,
     flex: 1,
     paddingHorizontal: 20,
     backgroundColor: Typography.Colors.white,
@@ -61,7 +53,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontFamily: Typography.font.heavy,
     color: Typography.Colors.primary,
-    marginTop: 20,
+    marginTop: 10,
     marginBottom: 5,
   },
   subText: {
@@ -69,11 +61,10 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: Typography.Colors.lightgrey,
   },
-  subsubText: {
+  subsubtext: {
     fontFamily: Typography.font.regular,
     fontSize: 15,
     color: Typography.Colors.lightgrey,
-    // alignItems: "center",
     marginBottom: 30,
   },
   containerlogo: {
@@ -102,20 +93,3 @@ const styles = StyleSheet.create({
     height: 52,
   },
 });
-
-// useEffect(() => {
-//   const backHandler = BackHandler.addEventListener(
-//     'hardwareBackPress',
-//     () => {
-//       if (isSignUp === 'true') {
-//         navigation.navigate(SCREEN_URLS.signUp);
-//       } else {
-//         navigation.navigate(SCREEN_URLS.login);
-//       }
-
-//       return true;
-//     }
-//   );
-
-//   return () => backHandler.remove();
-// }, []);

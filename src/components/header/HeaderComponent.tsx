@@ -1,6 +1,6 @@
 
 import { Image, Pressable, StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native"
-import { MainHeaderProps } from "../../models/homePage.type"
+import { MainHeaderProps } from "../../models/HomePage.type"
 import { assets } from "../../../assets/images"
 
 

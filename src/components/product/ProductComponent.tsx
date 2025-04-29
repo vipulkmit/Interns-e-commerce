@@ -1,7 +1,7 @@
 import React from 'react'
 import { FlatList, Image, ImageBackground, ImageSourcePropType, Pressable, StyleSheet, Text, Touchable, TouchableOpacity, View } from 'react-native'
 
-import { ProductProps } from '../../models/homePage.type'
+import { ProductProps } from '../../models/HomePage.type'
 
 
 

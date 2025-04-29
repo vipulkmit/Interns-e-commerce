@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
-import CustomTextInput from "../components/TextInput/customTextInput";
-import CustomButton from "../components/button/customButton";
+import CustomTextInput from "../components/textInput/CustomTextInput";
+import CustomButton from "../components/button/CustomButton";
 import { TouchableOpacity } from "react-native";
 import { Typography } from "../theme/Colors";
 import { assets } from "../../assets/images";
@@ -39,7 +39,7 @@ export default function SignupScreen() {
         // value={name}
         // onChangeText={setName}
         placeholder="Name"
-        keyboardType="email-address"
+        keyboardType="default"
         iconname="person"
         iconsize={25}
         iconcolor={Typography.Colors.lightgrey}
@@ -113,9 +113,9 @@ export default function SignupScreen() {
 
       <Text style={styles.socialText}>Login using</Text>
       <View style={styles.socialButtons}>
-        <TouchableOpacity onPress={() => handleSocialLoginPress()}>
+        {/* <TouchableOpacity onPress={() => handleSocialLoginPress()}>
           <Image source={assets.applelogo} style={styles.socialIconApple} />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <TouchableOpacity onPress={() => handleSocialLoginPress()}>
           <Image
             source={assets.facebooklogo}
@@ -123,7 +123,7 @@ export default function SignupScreen() {
           />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => handleSocialLoginPress()}>
-          <Image source={assets.googlelogo} style={styles.socialIcongoogle} />
+          <Image source={assets.googlelogo} style={styles.socialIconfacebook} />
         </TouchableOpacity>
       </View>
 
@@ -198,10 +198,10 @@ const styles = StyleSheet.create({
     width: 35,
     height: 35,
   },
-  socialIcongoogle: {
-    width: 35.31,
-    height: 35,
-  },
+  // socialIcongoogle: {
+  //   width: 35.31,
+  //   height: 35,
+  // },
 
   registerContainer: {
     alignSelf: "center",
