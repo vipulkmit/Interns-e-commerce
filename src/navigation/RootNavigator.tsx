@@ -1,21 +1,21 @@
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import useAuthStore from "../stores/useAuthStore";
+import React from "react";
 import BottomTabs from "./BottomTabs";
 import AuthNavigator from "./AuthNavigator";
-
-
-const Stack = createNativeStackNavigator();
+import useAuthStore from "../stores/useAuthStore";
 
 export default function RootNavigator() {
-    const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
-    return (
-    // @ts-ignore: Suppress TypeScript error for 'id'
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-    {isLoggedIn ? (
-      <Stack.Screen name="Main" component={BottomTabs} />
-    ) : (
-      <Stack.Screen name="Auth" component={AuthNavigator} />
-    )}
-  </Stack.Navigator>
-    )
+  interface AuthStoreState {
+    isLoggedIn: boolean;
+  }
+
+  const isLoggedIn: boolean = useAuthStore(
+    (state: AuthStoreState) => state.isLoggedIn
+  );
+
+  return (
+    <>
+      {/* @ts-ignore: Suppress TypeScript error for 'id' */}
+      {isLoggedIn ? <BottomTabs /> : <AuthNavigator />}
+    </>
+  );
 }

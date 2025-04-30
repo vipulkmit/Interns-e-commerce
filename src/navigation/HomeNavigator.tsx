@@ -9,10 +9,11 @@ const Stack = createNativeStackNavigator();
 
 const HomeNavigator = () => {
   return (
-    <Stack.Navigator 
-    // @ts-ignore: Suppress TypeScript error for 'id'
-    id="HomeNavigator" 
-    screenOptions={{ headerShown: false }}>
+    <Stack.Navigator
+      // @ts-ignore: Suppress TypeScript error for 'id'
+      id="HomeNavigator"
+      screenOptions={{ headerShown: false }}
+    >
       <Stack.Screen name="HomeScreen" component={HomeScreen} />
       <Stack.Screen name="HomeScreen1" component={HomeScreen1} />
       <Stack.Screen name="HomeScreen2" component={HomeScreen2} />

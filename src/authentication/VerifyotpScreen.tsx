@@ -1,16 +1,37 @@
-import React from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
-import CustomTextInput from "../components/textInput/CustomTextInput";
-import CustomButton from "../components/button/CustomButton";
+import React, { useState } from "react";
+import { View, Text, StyleSheet, Image, Alert } from "react-native";
+
 import { Typography } from "../theme/Colors";
 import { assets } from "../../assets/images";
 import { useNavigation } from "@react-navigation/native";
+import { verifyOtpService } from "../services/api/apiServices";
+import CustomButton from "../components/button/CustomButton";
+import CustomTextInput from "../components/textInput/CustomTextInput";
 
 export default function VerifyotpScreen() {
+  // const [email, setemail] = useState("");
+  const [otp, setotp] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const Navigation = useNavigation();
 
-  const Sendverification = () => {
+  const Sendverification = async () => {
     Navigation.navigate("Passwordchange");
+    if (!otp.trim()) {
+      Alert.alert("Error", "Please enter both email and OTP.");
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const response = await verifyOtpService({ otp });
+      Alert.alert("Success", "OTP verified successfully!");
+      console.log("Verify OTP Response:", response);
+    } catch (error: any) {
+      console.error("Verify OTP Error:", error.message);
+      Alert.alert("Error", error.message || "Failed to verify OTP.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -26,14 +47,14 @@ export default function VerifyotpScreen() {
       {/* </View> */}
 
       <CustomTextInput
-        // value={email}
-        // onChangeText={setEmail}
+        value={otp}
+        onChangeText={setotp}
         placeholder="Enter OTP here"
         keyboardType="number-pad"
       />
 
       <CustomButton
-        title="Confirm"
+        title={isLoading ? "Verifying..." : "Confirm"}
         onPress={Sendverification}
         buttonStyle={styles.buttonstyle}
       />
