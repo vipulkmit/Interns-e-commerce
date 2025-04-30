@@ -6,13 +6,14 @@ import { assets } from "../../../assets/images";
 import HeaderComponent from "../../components/header/HeaderComponent";
 import { useNavigation } from "@react-navigation/native";
 import { Typography } from "../../theme/Colors";
+import Collapsible from "react-native-collapsible";
 // import { TextInput } from "react-native-gesture-handler";
 
 const width = Dimensions.get("window").width;
 
 const HomeScreen2 = () => {
-    const navigation = useNavigation();
-  
+  const navigation = useNavigation();
+
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const animations = useRef(BannerData.map(() => new Animated.Value(8))).current;
@@ -31,7 +32,7 @@ const HomeScreen2 = () => {
 
   const animateDot = (index: number, isActive: boolean) => {
     Animated.timing(animations[index], {
-      toValue: isActive ? 8 : 8,  
+      toValue: isActive ? 8 : 8,
       duration: 200,
       useNativeDriver: false,
     }).start();
@@ -43,14 +44,20 @@ const HomeScreen2 = () => {
     animateDot(index, true);          // Expand new active dot
     setCurrentIndex(index);
   };
-  
-const handleBackButton=()=>{navigation.goBack()}
 
+  const handleBackButton = () => { navigation.goBack() }
+
+
+  const [collapsed, setCollapsed] = useState(true);
+
+  const toggleExpanded = () => {
+    setCollapsed(!collapsed);
+  };
 
   return (
     <ScrollView>
       <View style={styles.header}>
-        <HeaderComponent back={assets.ArrowLeft} icon={assets.MainSearch} icon1={assets.HeartBlack} icon2={assets.BagBlack} onClick={handleBackButton}/>
+        <HeaderComponent back={assets.ArrowLeft} icon={assets.MainSearch} icon1={assets.HeartBlack} icon2={assets.BagBlack} onClick={handleBackButton} />
       </View>
       <Carousel
         loop
@@ -72,7 +79,7 @@ const handleBackButton=()=>{navigation.goBack()}
                 {
 
                   width: animations[index],
-              
+
                   backgroundColor: currentIndex === index ? Typography.Colors.primary : Typography.Colors.offwhite
                 },
               ]}
@@ -113,7 +120,7 @@ const handleBackButton=()=>{navigation.goBack()}
       </View>
       <View style={styles.size}>
         <View style={styles.sizeView}>
-          <Text style={[styles.brandName,{fontFamily:Typography.font.medium}]}>Select Size</Text>
+          <Text style={[styles.brandName, { fontFamily: Typography.font.medium }]}>Select Size</Text>
           <TouchableOpacity>
             <Text style={styles.textStyle}>Size Chart</Text>
           </TouchableOpacity>
@@ -135,6 +142,27 @@ const handleBackButton=()=>{navigation.goBack()}
             <Text style={styles.sizeText}>XL</Text>
           </View>
         </View>
+      </View>
+      <View >
+        <TouchableOpacity onPress={toggleExpanded} style={styles.header1}>
+          <View>
+            {collapsed ? 
+            <View style={styles.accordionHeading}>
+              <Text style={styles.accordionTitle}>Product Details</Text>
+              <Image source={assets.Down} style={styles.accordionIcon} />
+            </View> :
+              <View style={styles.accordionHeading}>
+                <Text>Product Details</Text>
+                <Image source={assets.Up} style={styles.accordionIcon} />
+              </View>}
+          </View>
+        </TouchableOpacity>
+
+        <Collapsible collapsed={collapsed}>
+          <View style={styles.content}>
+            <Text>This is the content inside the collapsible accordion.</Text>
+          </View>
+        </Collapsible>
       </View>
     </ScrollView>
   )
@@ -177,7 +205,7 @@ const styles = StyleSheet.create({
   brandName: {
     fontSize: 18,
     fontFamily: Typography.font.regular,
-    color:  Typography.Colors.lightblack
+    color: Typography.Colors.lightblack
   },
   initialRate: {
     fontSize: 14,
@@ -247,9 +275,9 @@ const styles = StyleSheet.create({
     width: 42,
     borderRadius: 20,
     borderWidth: 2,
-    alignItems:'center',
-    justifyContent:'center',
-    borderColor:'#C1C1C1'
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderColor: '#C1C1C1'
   },
   colorCircle1: {
     height: 28,
@@ -281,7 +309,7 @@ const styles = StyleSheet.create({
     // alignItems:'center',
     // justifyContent:'center',
     // borderWidth:1,
-    backgroundColor:Typography.Colors.white,
+    backgroundColor: Typography.Colors.white,
 
   },
   colorCircle5: {
@@ -309,44 +337,44 @@ const styles = StyleSheet.create({
     marginHorizontal: 4,
     // transitionDuration: '300ms',
   },
-  size:{
-    padding:20,
+  size: {
+    padding: 20,
   },
-  sizeView:{
-    flexDirection:'row',
-    alignItems:'center',
-    justifyContent:'space-between'
+  sizeView: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between'
   },
-  textStyle:{
-    fontSize:12,
-    fontFamily:Typography.font.regular,
-    color:Typography.Colors.primary
+  textStyle: {
+    fontSize: 12,
+    fontFamily: Typography.font.regular,
+    color: Typography.Colors.primary
   },
-  sizeBox:{
-    backgroundColor:Typography.Colors.white,
-    height:42,
-    width:42,
-    borderWidth:1,
-    borderColor:Typography.Colors.white,
+  sizeBox: {
+    backgroundColor: Typography.Colors.white,
+    height: 42,
+    width: 42,
+    borderWidth: 1,
+    borderColor: Typography.Colors.white,
     // paddingRight:17,
-    alignItems:'center',
-    justifyContent:'center',
+    alignItems: 'center',
+    justifyContent: 'center',
     // flex:1
     // gap:17
   },
-  sizeText:{
-    color:Typography.Colors.lightblack,
-    fontSize:12,
-    fontFamily:Typography.font.regular,
+  sizeText: {
+    color: Typography.Colors.lightblack,
+    fontSize: 12,
+    fontFamily: Typography.font.regular,
     // textAlign:'center'
     // alignSelf:'center'
     // paddingLeft:8
     // alignSelf:'center'
   },
-  sizeData:{
-    flexDirection:'row',
-    gap:17,
-    paddingTop:7
+  sizeData: {
+    flexDirection: 'row',
+    gap: 17,
+    paddingTop: 7
   },
   input: {
     height: 40,
@@ -354,6 +382,54 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
   },
+
+
+
+
+  accordionContainer: {
+    // flex: 1,
+    // paddingTop: 24,
+    // justifyContent: 'flex-start',
+    // backgroundColor: '#f9f9f9',
+    // backgroundColor:'red'
+  },
+  header1: {
+    // backgroundColor: '#ddd',
+    // backgroundColor:'red',
+    // padding: 10,
+    // borderRadius: 8,
+    paddingHorizontal:20
+  },
+  headerText: {
+    // fontSize: 18,
+    // fontFamily:Typography.font.medium,
+    // color:Typography.Colors.lightgrey
+  },
+  content: {
+    padding: 15,
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    marginTop: 10,
+  },
+  accordionHeading:{
+    flexDirection:'row',
+    justifyContent:'space-between'
+  },
+  accordionTitle:{
+    fontSize:18,
+    fontFamily:Typography.font.medium,
+    color:Typography.Colors.lightblack,
+    paddingVertical:10
+  },
+  accordionIcon:{
+    height:21,
+    width:21,
+    // paddingVertical:10,
+    justifyContent:'center',
+    backgroundColor:'red'
+  }
 })
 export default HomeScreen2
 
