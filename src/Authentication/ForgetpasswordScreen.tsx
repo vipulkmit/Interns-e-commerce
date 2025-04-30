@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, Image, Alert } from "react-native";
-import CustomTextInput from "../components/TextInput/customTextInput";
-import CustomButton from "../components/Buttons/customButton";
+
 import { Typography } from "../theme/Colors";
 import { assets } from "../../assets/images";
 import { useNavigation } from "@react-navigation/native";
 import { forgotPasswordService } from "../services/api/apiServices";
+import CustomTextInput from "../components/TextInput/CustomTextInput";
+import CustomButton from "../components/button/CustomButton";
 
 export default function ForgetpasswordScreen() {
   const [email, setEmail] = useState("");

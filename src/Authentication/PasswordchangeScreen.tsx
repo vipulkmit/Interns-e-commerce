@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, Image, Alert } from "react-native";
-import CustomTextInput from "../components/TextInput/customTextInput";
-import CustomButton from "../components/Buttons/customButton";
 import { Typography } from "../theme/Colors";
 import { assets } from "../../assets/images";
 import useAuthStore from "../stores/useAuthStore";
 import { useNavigation } from "@react-navigation/native";
 import { changePasswordService } from "../services/api/apiServices";
+import CustomTextInput from "../components/TextInput/CustomTextInput";
+import CustomButton from "../components/button/CustomButton";
 
 export default function PasswordchangeScreen() {
   const [newPassword, setNewPassword] = useState("");

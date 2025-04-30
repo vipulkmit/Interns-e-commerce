@@ -4,8 +4,8 @@ import {
   forgetpassword,
   loginUser,
   verifyotp,
-} from "../../Authentication/authApi";
-import { registerUser } from "../../Authentication/authApi";
+} from "../../authentication/AuthApi";
+import { registerUser } from "../../authentication/AuthApi";
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -107,11 +107,9 @@ const changePasswordSchema = z
     newPassword: z
       .string()
       .min(8, { message: "New password must be at least 8 characters long." }),
-    confirmNewPassword: z
-      .string()
-      .min(8, {
-        message: "Confirm password must be at least 8 characters long.",
-      }),
+    confirmNewPassword: z.string().min(8, {
+      message: "Confirm password must be at least 8 characters long.",
+    }),
   })
   .refine((data) => data.newPassword === data.confirmNewPassword, {
     message: "New passwords do not match.",
