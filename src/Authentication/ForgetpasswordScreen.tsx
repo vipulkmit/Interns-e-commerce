@@ -1,17 +1,39 @@
-import React from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
+import React, { useState } from "react";
+import { View, Text, StyleSheet, Image, Alert } from "react-native";
 import CustomTextInput from "../components/TextInput/customTextInput";
 import CustomButton from "../components/Buttons/customButton";
 import { Typography } from "../theme/Colors";
 import { assets } from "../../assets/images";
-import useAuthStore from "../stores/useAuthStore";
 import { useNavigation } from "@react-navigation/native";
+import { forgotPasswordService } from "../services/api/apiServices";
 
 export default function ForgetpasswordScreen() {
+  const [email, setEmail] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const Navigation = useNavigation();
 
-  const Sendverification = () => {
-    Navigation.navigate("Verifyotp");
+  const Sendverification = async () => {
+    if (!email.trim()) {
+      Alert.alert("Error", "Please enter your email address");
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const response = await forgotPasswordService({ email });
+      Alert.alert("Success", "Verification email sent successfully!");
+      console.log("Forgot Password Response:", response);
+
+      Navigation.navigate("Verifyotp");
+    } catch (error: any) {
+      console.error("Forgot Password Error:", error.message);
+      Alert.alert(
+        "Error",
+        error.message || "Failed to send verification email."
+      );
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -33,8 +55,8 @@ export default function ForgetpasswordScreen() {
       </View>
 
       <CustomTextInput
-        // value={email}
-        // onChangeText={setEmail}
+        value={email}
+        onChangeText={setEmail}
         placeholder="Your Email / Phone Number"
         keyboardType="email-address"
         iconname="mail"
@@ -43,7 +65,7 @@ export default function ForgetpasswordScreen() {
       />
 
       <CustomButton
-        title="Send Verification"
+        title={isLoading ? "Sending..." : "Send Verification"}
         onPress={Sendverification}
         buttonStyle={styles.buttonstyle}
       />

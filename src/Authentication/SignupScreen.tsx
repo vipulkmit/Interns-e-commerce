@@ -1,5 +1,5 @@
-import React from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
+import React, { useState } from "react";
+import { View, Text, StyleSheet, Image, Alert } from "react-native";
 import CustomTextInput from "../components/TextInput/customTextInput";
 import CustomButton from "../components/Buttons/customButton";
 import { TouchableOpacity } from "react-native";
@@ -7,11 +7,54 @@ import { Typography } from "../theme/Colors";
 import { assets } from "../../assets/images";
 import useAuthStore from "../stores/useAuthStore";
 import { useNavigation } from "@react-navigation/native";
+import { registerUser } from "./authApi";
 
 export default function SignupScreen() {
   const login = useAuthStore((state) => state.login);
+  const [name, setName] = useState("");
+  const [email, setemail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const Navigation = useNavigation();
 
+  const validateInputs = () => {
+    if (!name.trim()) {
+      Alert.alert("Error", "Name is Required.");
+      return false;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      Alert.alert("Error", "Please enter a valid email address");
+      return false;
+    }
+
+    if (password.length < 8) {
+      Alert.alert("Error", "Password must be at least 8 characters.");
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleSignupPress = async () => {
+    if (!validateInputs()) {
+      return;
+    }
+    setIsLoading(true);
+    try {
+      const response = await registerUser({ name, email, password });
+      Alert.alert("Success", "Account Created Successfully");
+      console.log("Signup Response:", response);
+      Navigation.navigate("LoginScreen");
+    } catch (error: any) {
+      console.error("Signup Error:", error.message);
+      Alert.alert("Error", error.message || "Signup failed please try again");
+    } finally {
+      setIsLoading(false);
+    }
+  };
   const handleLogInPress = () => {
     Navigation.goBack();
   };
@@ -36,8 +79,8 @@ export default function SignupScreen() {
       </View>
 
       <CustomTextInput
-        // value={name}
-        // onChangeText={setName}
+        value={name}
+        onChangeText={setName}
         placeholder="Name"
         keyboardType="email-address"
         iconname="person"
@@ -46,8 +89,8 @@ export default function SignupScreen() {
       />
 
       <CustomTextInput
-        // value={email}
-        // onChangeText={setEmail}
+        value={email}
+        onChangeText={setemail}
         placeholder="Your Email / Phone Number"
         keyboardType="email-address"
         iconname="mail"
@@ -56,8 +99,8 @@ export default function SignupScreen() {
       />
 
       <CustomTextInput
-        // value={password}
-        // onChangeText={setPassword}
+        value={password}
+        onChangeText={setPassword}
         placeholder="Password"
         secureTextEntry
         iconname="lock"
@@ -66,8 +109,8 @@ export default function SignupScreen() {
       />
 
       <CustomTextInput
-        // value={password}
-        // onChangeText={setPassword}
+        value={confirmPassword}
+        onChangeText={setConfirmPassword}
         placeholder="Confirm Password"
         secureTextEntry
         iconname="lock"
@@ -77,7 +120,7 @@ export default function SignupScreen() {
 
       <CustomButton
         title="Login"
-        onPress={login}
+        onPress={handleSignupPress}
         buttonStyle={styles.buttonstyle}
       />
 

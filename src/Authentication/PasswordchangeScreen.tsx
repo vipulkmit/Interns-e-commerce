@@ -1,17 +1,39 @@
-import React from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
+import React, { useState } from "react";
+import { View, Text, StyleSheet, Image, Alert } from "react-native";
 import CustomTextInput from "../components/TextInput/customTextInput";
 import CustomButton from "../components/Buttons/customButton";
 import { Typography } from "../theme/Colors";
 import { assets } from "../../assets/images";
 import useAuthStore from "../stores/useAuthStore";
 import { useNavigation } from "@react-navigation/native";
+import { changePasswordService } from "../services/api/apiServices";
 
 export default function PasswordchangeScreen() {
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmNewPassword, setConfirmNewPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const Navigation = useNavigation();
 
-  const Sendverification = () => {
+  const Passwordchangesuccess = async () => {
+    if (!newPassword.trim() || !confirmNewPassword.trim()) {
+      Alert.alert("Error", "Please fill in all fields.");
+      return;
+    }
     Navigation.navigate("LoginScreen");
+    setIsLoading(true);
+    try {
+      const response = await changePasswordService({
+        newPassword,
+        confirmNewPassword,
+      });
+      Alert.alert("Success", "Password changed successfully!");
+      console.log("Change Password Response:", response);
+    } catch (error: any) {
+      console.error("Change Password Error:", error.message);
+      Alert.alert("Error", error.message || "Failed to change password.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -31,8 +53,8 @@ export default function PasswordchangeScreen() {
       </View>
 
       <CustomTextInput
-        // value={password}
-        // onChangeText={setPassword}
+        value={newPassword}
+        onChangeText={setNewPassword}
         placeholder="Password"
         secureTextEntry
         iconname="lock"
@@ -41,8 +63,8 @@ export default function PasswordchangeScreen() {
       />
 
       <CustomTextInput
-        // value={password}
-        // onChangeText={setPassword}
+        value={confirmNewPassword}
+        onChangeText={setConfirmNewPassword}
         placeholder="Confirm Password"
         secureTextEntry
         iconname="lock"
@@ -51,8 +73,8 @@ export default function PasswordchangeScreen() {
       />
 
       <CustomButton
-        title="Send Verification"
-        onPress={Sendverification}
+        title={isLoading ? "Changing..." : "Change Password"}
+        onPress={Passwordchangesuccess}
         buttonStyle={styles.buttonstyle}
       />
     </View>
