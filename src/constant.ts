@@ -9,34 +9,6 @@ export const HeaderData =
 }
 
 
-export const categoryData = [
-    {
-        id: '2',
-        image: assets.men,
-        name: 'Men',
-    },
-    {
-        id: '3',
-        image: assets.women,
-        name: 'Women',
-    },
-    {
-        id: '4',
-        image: assets.kids,
-        name: 'Kids',
-    },
-    {
-        id: '5',
-        image: assets.Western,
-        name: 'Western wear',
-    },
-    {
-        id: '6',
-        image: assets.kids,
-        name: 'Traditional Wear',
-    },
-];
-
 
 
 export const BannerData = [

@@ -48,7 +48,7 @@ export default function SignupScreen() {
     try {
       const response = await registerUser({ name, email, password });
       Alert.alert("Success", "Account Created Successfully");
-      console.log("Signup Response:", response);
+      // console.log("Signup Response:", response);
       Navigation.navigate("LoginScreen");
     } catch (error: any) {
       console.error("Signup Error:", error.message);
