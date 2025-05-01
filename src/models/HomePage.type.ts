@@ -51,8 +51,9 @@ export type MainHeaderProps={
     id?:string,
     productType?:string,
     onClick:()=> void,
-    back:ImageSourcePropType,
-    icon:ImageSourcePropType,
-    icon1:ImageSourcePropType,
-    icon2:ImageSourcePropType,
+    Title?:string
+    // back:ImageSourcePropType,
+    // icon:ImageSourcePropType,
+    // icon1:ImageSourcePropType,
+    // icon2:ImageSourcePropType,
 }

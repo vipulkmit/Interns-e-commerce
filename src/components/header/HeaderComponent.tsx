@@ -2,48 +2,48 @@
 import { Image, Pressable, StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native"
 import { MainHeaderProps } from "../../models/HomePage.type"
 import { assets } from "../../../assets/images"
+import { Typography } from "../../theme/Colors"
 
 
 
 const HeaderComponent = ({
     id,
-    back,
-    icon,
-    icon1,
-    icon2,
     onClick,
+    Title,
     productType
 }: MainHeaderProps) => {
-// console.log(onClick);
+    // console.log(onClick);
 
     return (
-        <>
+        <View>
             <View style={styles.container} >
                 <View style={styles.UserContainer}>
                     <Pressable onPress={onClick}>
-                        <Image source={back} style={styles.backIcon}  />
+                        <Image source={assets.ArrowLeft} style={styles.backIcon} />
                     </Pressable>
-                    {/* <Text numberOfLines={1} style={styles.productType}>Tops </Text> */}
+                    <Text numberOfLines={1} style={styles.productType}>{Title} </Text>
                 </View>
+                
                 <View style={styles.iconContainer}>
                     <TouchableWithoutFeedback >
-                        <Image source={icon} style={styles.icon} />
+                        <Image source={assets.MainSearch} style={styles.icon} />
                     </TouchableWithoutFeedback>
                     <TouchableWithoutFeedback >
-                        <Image source={icon1} style={styles.icon} />
+                        <Image source={assets.HeartBlack} style={styles.icon} />
                     </TouchableWithoutFeedback>
                     <TouchableWithoutFeedback >
-                        <Image source={icon2} style={styles.icon} />
+                        <Image source={assets.BagBlack} style={styles.icon} />
                     </TouchableWithoutFeedback>
                 </View>
             </View>
             <View style={styles.subContainer}>
                 <Text style={styles.text}>Sort By</Text>
                 <TouchableWithoutFeedback>
-                    <Image source={assets.DownArray} style={styles.SubIcon}/>
+                    <Image source={assets.DownArray} style={styles.SubIcon} />
                 </TouchableWithoutFeedback>
             </View>
-        </>
+        </View>
+
     )
 
 }
@@ -52,19 +52,21 @@ const HeaderComponent = ({
 const styles = StyleSheet.create(
     {
         container: {
-            flexDirection: 'row'
+            flexDirection: 'row',
+            // paddingHorizontal:5
         },
-        subContainer:{
-            flexDirection:'row',
-            alignItems:'flex-end',
-            justifyContent:'flex-end',
-            paddingTop:15,
-            paddingRight:10
+        subContainer: {
+            flexDirection: 'row',
+            alignItems: 'flex-end',
+            justifyContent: 'flex-end',
+            paddingTop: 15,
+            paddingRight: 10,
+            // backgroundColor:'red'
         },
         productType: {
-            fontSize: 20,
-            fontFamily: 'SFPRODISPLAYMEDIUM',
-            color: '#000000',
+            fontSize: 18,
+            fontFamily: Typography.font.medium,
+            color: Typography.Colors.black,
             paddingLeft: 13,
             // alignSelf:'center'
         },
@@ -76,9 +78,9 @@ const styles = StyleSheet.create(
             // backgroundColor:'red'
         },
         icon: {
-            height: 24,
-            width: 24,
-            color: '#272727',
+            height: 20,
+            width: 20,
+            color: Typography.Colors.lightblack,
             // backgroundColor:'#272727'
         },
         UserContainer: {
@@ -88,16 +90,16 @@ const styles = StyleSheet.create(
             // alignItems: 'center',
         },
         backIcon: {
-            height: 32,
-            width: 32
+            height: 28,
+            width: 28
         },
-        text:{
-            fontSize:14,
-            fontFamily:'SFPRODISPLAYREGULAR'
+        text: {
+            fontSize: 14,
+            fontFamily: Typography.font.regular
         },
-        SubIcon:{
-            height:17,
-            width:17
+        SubIcon: {
+            height: 17,
+            width: 17
         }
     }
 )

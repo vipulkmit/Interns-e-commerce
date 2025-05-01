@@ -1,6 +1,7 @@
 import React from "react";
 import { Image, Text, View, StyleSheet, Dimensions } from "react-native";
 import { TrendingProps } from "../../models/HomePage.type";
+import { Typography } from "../../theme/Colors";
 
 
 const { width } = Dimensions.get("window");
@@ -80,12 +81,13 @@ const styles = StyleSheet.create({
     },
     offerStyle: {
         fontSize: 16.5,
-        fontFamily: 'SFPRODISPLAYMEDIUM'
+        fontFamily: Typography.font.medium,
+        color: Typography.Colors.lightblack,
     },
     productTypeStyle: {
         fontSize: 14,
-        fontFamily: 'SFPRODISPLAYREGULAR',
-        color: '#272727',
+        fontFamily: Typography.font.regular,
+        color: Typography.Colors.lightblack,
         paddingVertical: 4
     }
 })

@@ -1,17 +1,68 @@
-import React from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
-import CustomTextInput from "../components/textInput/CustomTextInput";
-import CustomButton from "../components/button/CustomButton";
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  Alert,
+  SafeAreaView,
+  ScrollView,
+} from "react-native";
 import { TouchableOpacity } from "react-native";
 import { Typography } from "../theme/Colors";
 import { assets } from "../../assets/images";
 import useAuthStore from "../stores/useAuthStore";
 import { useNavigation } from "@react-navigation/native";
+import { registerUser } from "./AuthApi";
+import CustomButton from "../components/button/CustomButton";
+import CustomTextInput from "../components/textInput/CustomTextInput";
 
 export default function SignupScreen() {
   const login = useAuthStore((state) => state.login);
+  const [name, setName] = useState("");
+  const [email, setemail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const Navigation = useNavigation();
 
+  const validateInputs = () => {
+    if (!name.trim()) {
+      Alert.alert("Error", "Name is Required.");
+      return false;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      Alert.alert("Error", "Please enter a valid email address");
+      return false;
+    }
+
+    if (password.length < 8) {
+      Alert.alert("Error", "Password must be at least 8 characters.");
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleSignupPress = async () => {
+    if (!validateInputs()) {
+      return;
+    }
+    setIsLoading(true);
+    try {
+      const response = await registerUser({ name, email, password });
+      Alert.alert("Success", "Account Created Successfully");
+      // console.log("Signup Response:", response);
+      Navigation.navigate("LoginScreen");
+    } catch (error: any) {
+      console.error("Signup Error:", error.message);
+      Alert.alert("Error", error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
   const handleLogInPress = () => {
     Navigation.goBack();
   };
@@ -21,123 +72,131 @@ export default function SignupScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.logoContainer}>
-        <View style={styles.containerlogo}>
-          <View style={styles.diamond}>
-            <Image source={assets.logofirst} style={styles.diamond} />
+    <ScrollView style={styles.scrollviewcontainer}>
+      <View style={styles.container}>
+        <View style={styles.logoContainer}>
+          <View style={styles.containerlogo}>
+            <View style={styles.diamond}>
+              <Image source={assets.logofirst} style={styles.diamond} />
+            </View>
           </View>
         </View>
-      </View>
 
-      <View style={styles.welcomeandsignup}>
-        <Text style={styles.welcomeText}>Welcome to E-Com!</Text>
-        <Text style={styles.subText}>Let's make your account.</Text>
-      </View>
+        <View style={styles.welcomeandsignup}>
+          <Text style={styles.welcomeText}>Welcome to E-Com!</Text>
+          <Text style={styles.subText}>Let's make your account.</Text>
+        </View>
 
-      <CustomTextInput
-        // value={name}
-        // onChangeText={setName}
-        placeholder="Name"
-        keyboardType="default"
-        iconname="person"
-        iconsize={25}
-        iconcolor={Typography.Colors.lightgrey}
-      />
+        <CustomTextInput
+          value={name}
+          onChangeText={setName}
+          placeholder="Name"
+          keyboardType="default"
+          iconname="person"
+          iconsize={25}
+          iconcolor={Typography.Colors.lightgrey}
+        />
 
-      <CustomTextInput
-        // value={email}
-        // onChangeText={setEmail}
-        placeholder="Your Email / Phone Number"
-        keyboardType="email-address"
-        iconname="mail"
-        iconsize={25}
-        iconcolor={Typography.Colors.lightgrey}
-      />
+        <CustomTextInput
+          value={email}
+          onChangeText={setemail}
+          placeholder="Your Email / Phone Number"
+          keyboardType="email-address"
+          iconname="mail"
+          iconsize={25}
+          iconcolor={Typography.Colors.lightgrey}
+        />
 
-      <CustomTextInput
-        // value={password}
-        // onChangeText={setPassword}
-        placeholder="Password"
-        secureTextEntry
-        iconname="lock"
-        iconsize={25}
-        iconcolor={Typography.Colors.lightgrey}
-      />
+        <CustomTextInput
+          value={password}
+          onChangeText={setPassword}
+          placeholder="Password"
+          secureTextEntry
+          iconname="lock"
+          iconsize={25}
+          iconcolor={Typography.Colors.lightgrey}
+        />
 
-      <CustomTextInput
-        // value={password}
-        // onChangeText={setPassword}
-        placeholder="Confirm Password"
-        secureTextEntry
-        iconname="lock"
-        iconsize={25}
-        iconcolor={Typography.Colors.lightgrey}
-      />
+        <CustomTextInput
+          value={confirmPassword}
+          onChangeText={setConfirmPassword}
+          placeholder="Confirm Password"
+          secureTextEntry
+          iconname="lock"
+          iconsize={25}
+          iconcolor={Typography.Colors.lightgrey}
+        />
 
-      <CustomButton
-        title="Login"
-        onPress={login}
-        buttonStyle={styles.buttonstyle}
-      />
+        <CustomButton
+          title="Login"
+          onPress={handleSignupPress}
+          buttonStyle={styles.buttonstyle}
+        />
 
-      <View
-        style={{
-          alignSelf: "center",
-          marginTop: 36,
-          flexDirection: "row",
-          gap: 10,
-          paddingBottom: 22,
-        }}
-      >
         <View
           style={{
             alignSelf: "center",
-            height: 0.1,
-            borderWidth: 0.2,
-            width: 150,
-            borderColor: Typography.Colors.lightgrey,
+            marginTop: 36,
+            flexDirection: "row",
+            gap: 10,
+            paddingBottom: 22,
           }}
-        ></View>
-        <Text style={styles.orText}>OR</Text>
-        <View
-          style={{
-            alignSelf: "center",
-            borderWidth: 0.2,
-            height: 0.1,
-            width: 150,
-            borderColor: Typography.Colors.lightgrey,
-          }}
-        ></View>
-      </View>
+        >
+          <View
+            style={{
+              alignSelf: "center",
+              height: 0.1,
+              borderWidth: 0.2,
+              width: 150,
+              borderColor: Typography.Colors.lightgrey,
+            }}
+          ></View>
+          <Text style={styles.orText}>OR</Text>
+          <View
+            style={{
+              alignSelf: "center",
+              borderWidth: 0.2,
+              height: 0.1,
+              width: 150,
+              borderColor: Typography.Colors.lightgrey,
+            }}
+          ></View>
+        </View>
 
-      <Text style={styles.socialText}>Login using</Text>
-      <View style={styles.socialButtons}>
-        {/* <TouchableOpacity onPress={() => handleSocialLoginPress()}>
+        <Text style={styles.socialText}>Login using</Text>
+        <View style={styles.socialButtons}>
+          {/* <TouchableOpacity onPress={() => handleSocialLoginPress()}>
           <Image source={assets.applelogo} style={styles.socialIconApple} />
         </TouchableOpacity> */}
-        <TouchableOpacity onPress={() => handleSocialLoginPress()}>
-          <Image
-            source={assets.facebooklogo}
-            style={styles.socialIconfacebook}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => handleSocialLoginPress()}>
-          <Image source={assets.googlelogo} style={styles.socialIconfacebook} />
-        </TouchableOpacity>
-      </View>
+          <TouchableOpacity onPress={() => handleSocialLoginPress()}>
+            <Image
+              source={assets.facebooklogo}
+              style={styles.socialIconfacebook}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => handleSocialLoginPress()}>
+            <Image
+              source={assets.googlelogo}
+              style={styles.socialIconfacebook}
+            />
+          </TouchableOpacity>
+        </View>
 
-      <View style={styles.registerContainer}>
-        <Text style={styles.registerText}>Already have an account? </Text>
-        <TouchableOpacity onPress={handleLogInPress}>
-          <Text style={styles.registerLink}>Log In</Text>
-        </TouchableOpacity>
+        <View style={styles.registerContainer}>
+          <Text style={styles.registerText}>Already have an account? </Text>
+          <TouchableOpacity onPress={handleLogInPress}>
+            <Text style={styles.registerLink}>Log In</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
+  scrollviewcontainer: {
+    backgroundColor: Typography.Colors.white,
+  },
   container: {
     flex: 1,
     paddingHorizontal: 20,
