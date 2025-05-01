@@ -1,6 +1,7 @@
 
 import { Image, StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native"
 import { HeaderProps } from "../../models/UserInfo.type"
+import { Typography } from "../../theme/Colors"
 
 
 
@@ -38,7 +39,7 @@ const styles = StyleSheet.create(
         },
         userName: {
             fontSize: 20,
-            fontFamily: 'SFPRODISPLAYMEDIUM'
+            fontFamily: Typography.font.medium
         },
         iconContainer: {
             flex: 1,
@@ -48,7 +49,7 @@ const styles = StyleSheet.create(
         icon: {
             height: 22,
             width: 22,
-            color: '#272727'
+            color: Typography.Colors.lightblack
         },
         UserContainer: {
             flex: 2,

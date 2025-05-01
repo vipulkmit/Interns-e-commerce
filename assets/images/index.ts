@@ -42,4 +42,6 @@ export const assets = {
     logofirst:require('./firstlogo.png'),
     googlelogo:require('./Google.png'),
     facebooklogo:require('./Facebook.png'),
+    Down:require('./down.png'),
+    Up: require('./Up.png')
 }  

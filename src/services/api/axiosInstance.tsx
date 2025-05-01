@@ -1,5 +1,6 @@
 import axios from "axios";
 import API_CONFIG from "../config/appConfig";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 // import API_CONFIG from "../config/appconfig";
 
 const axiosInstance = axios.create({
@@ -11,22 +12,43 @@ const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use(
-  (config) => {
-    console.log("[Request]", config.method?.toUpperCase(), config.url);
+  async (config) => {
+    const token = await AsyncStorage.getItem("token");
+    if (token) config.headers.Authorization = `Bearer ${token}`;
     return config;
   },
   (error) => Promise.reject(error)
 );
 
 axiosInstance.interceptors.response.use(
-  (response) => {
-    console.log("[Response]", response.status, response.config.url);
-    return response;
-  },
+  (response) => response,
   (error) => {
-    console.log("[Error]", error.response?.status, error.message);
+    console.log("API Error", error.response?.data || error.message);
     return Promise.reject(error);
   }
 );
 
 export default axiosInstance;
+
+// async function registerUser(data: { email?: string; password?: string; name?: string; confirmPassword?: string; }) {
+//   const response = await fetch("/api/register", {
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//     body: JSON.stringify({
+//       email: data.email,
+//       password: data.password,
+//       name: data.name,
+//     }),
+//   });
+
+//   if (!response.ok) {
+//     const errorData = await response.json();
+//     throw new Error(errorData.message || "Failed to register user");
+//   }
+
+//   return await response.json();
+// }
+
+// export default {registerUser, axiosInstance}

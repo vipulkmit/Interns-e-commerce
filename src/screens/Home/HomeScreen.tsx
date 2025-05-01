@@ -1,10 +1,8 @@
 import { Animated, Dimensions, FlatList, Image, ImageBackground, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useRef, useState } from 'react'
+import React, {  useEffect, useRef, useState } from 'react'
 import { assets } from '../../../assets/images'
 import { CategoryProps, BannerProps, TrendingProps, ProductProps } from '../../models/HomePage.type';
-import { useFonts } from 'expo-font';
-import { fonts } from '../../../assets/fonts';
-import { BannerData, CardData, categoryData, DealData, ProductData ,HeaderData} from '../../constant';
+import { BannerData, CardData, categoryData, DealData, ProductData, HeaderData } from '../../constant';
 import Carousel from 'react-native-reanimated-carousel';
 import CardComponent from '../../components/card/CardComponent';
 import ProductComponent from '../../components/product/ProductComponent';
@@ -12,6 +10,9 @@ import ButtonComponent from '../../components/button/ButtonComponent';
 import TopHeaderComponent from '../../components/header/TopHeaderComponent';
 import { useNavigation } from '@react-navigation/native';
 import useAuthStore from '../../stores/useAuthStore'
+import { Typography } from '../../theme/Colors';
+import { Categories } from '../../services/api/apiServices';
+import Category from './Category';
 
 
 const { width } = Dimensions.get("window");
@@ -19,28 +20,23 @@ const { width } = Dimensions.get("window");
 
 const HomeScreen = () => {
   const logout = useAuthStore((state) => state.logout)
+    const navigation = useNavigation();
+    const animations = useRef(BannerData.map(() => new Animated.Value(17))).current;
 
-  const navigation = useNavigation();
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const animations = useRef(BannerData.map(() => new Animated.Value(17))).current;
-
-  const font = useFonts({
-    'SFPRODISPLAYBLACKITALIC': fonts.SFPRODISPLAYBLACKITALIC,
-    'SFPRODISPLAYBOLD': fonts.SFPRODISPLAYBOLD,
-    'SFPRODISPLAYHEAVYITALIC': fonts.SFPRODISPLAYHEAVYITALIC,
-    'SFPRODISPLAYMEDIUM': fonts.SFPRODISPLAYMEDIUM,
-    'SFPRODISPLAYREGULAR': fonts.SFPRODISPLAYREGULAR,
-  });
-
-
+    const renderCategoryPage=(name)=>{
+      // console.log(item,"ghfffgfghfghfghfghfghfhg")
+      navigation.navigate('Category',{name:name})
+    }
   // Category Render Item
 
-  const renderItem = ({ item }: { item: CategoryProps }) => (
-    <View style={styles.subContainer}>
-      <Image source={item.image} style={styles.flatlistImage} />
+  const renderItem = ({ item }: { item: CategoryProps }) => {
+    // console.log(item,"scvd vyusf b");
+    return(
+    <Pressable style={styles.subContainer} onPress={()=>renderCategoryPage(item.name)}>
+      <Image source={{uri: item.image}} style={styles.flatlistImage} />
       <Text style={styles.text} numberOfLines={1}>{item.name}</Text>
-    </View>
-  );
+    </Pressable>
+  )};
 
   // Carousel Render Item
 
@@ -71,11 +67,11 @@ const HomeScreen = () => {
   };
 
 
-  const handleSnap = (index: number) => {
-    animateDot(currentIndex, false); 
-    animateDot(index, true);          
-    setCurrentIndex(index);
-  };
+  // const handleSnap = (index: number) => {
+  //   animateDot(currentIndex, false);
+  //   animateDot(index, true);
+  //   setCurrentIndex(index);
+  // };
 
 
   // Trending Render Item
@@ -94,9 +90,11 @@ const HomeScreen = () => {
   const DealRenderItem = ({ item }: { item: TrendingProps }) => {
 
     return (
-      <Pressable style={styles.dealView} onPress={()=>{navigation.navigate('HomeScreen1')}}>
-        <CardComponent staticContainer={styles.staticContainer} img={item.img} amount={item.amount} productType={item.productType} productImgStyle={styles.productImage} />
-      </Pressable>
+      // <View style={{paddingLeft:20}}>
+        <Pressable style={styles.dealView} onPress={() => { navigation.navigate('HomeScreen1') }}>
+          <CardComponent staticContainer={styles.staticContainer} img={item.img} amount={item.amount} productType={item.productType} productImgStyle={styles.productImage} />
+        </Pressable>
+
     )
 
   }
@@ -108,126 +106,148 @@ const HomeScreen = () => {
 
     return (
       <View style={styles.container}>
-        <ProductComponent images={item.images} productName={item.productName} brandName={item.brandName} initialRate={item.initialRate} rate={item.rate} discount={item.discount}/>
+        <ProductComponent images={item.images} productName={item.productName} brandName={item.brandName} initialRate={item.initialRate} rate={item.rate} discount={item.discount} />
         <View style={styles.buttonView}>
           <ButtonComponent icon={assets.HeartBlack} buttonText='Whislist' buttonStyle={styles.buttonStyle} />
-          <ButtonComponent icon={assets.WhiteBag} buttonText='Add to Bag' TextStyle={styles.textStyle} buttonStyle={[styles.buttonStyle, { backgroundColor: '#002482' }]} />
+          <ButtonComponent icon={assets.WhiteBag} buttonText='Add to Bag' TextStyle={styles.textStyle} buttonStyle={[styles.buttonStyle, { backgroundColor: Typography.Colors.primary }]} />
         </View>
       </View>
     )
   }
 
+  const ListHeader = () => { 
+    const [currentIndex, setCurrentIndex] = useState(0);
 
-  return (
-    <ScrollView style={styles.container}>
+    const [Category,setCategory]=useState();
 
+   useEffect(()=>{Categories().then(data=>{
+    setCategory(data?.data)
+    }).catch((e)=>{console.log('no data');
+    })},[])
 
-      {/* Header View */}
-      <View style={styles.HeaderStyle}>
-        <TopHeaderComponent userImage={HeaderData.userImage} userName={HeaderData.userName} icon={HeaderData.icon} />
-      </View>
+    return (
+      <>
 
-
-      {/* Category View */}
-      <View style={styles.cateoryContainer}>
-        <View style={styles.mainImage}>
-          <View style={styles.categoryImageContainer}>
-            <Image source={assets.category} style={styles.categoryImage} resizeMode='contain' />
-          </View>
-          <Text numberOfLines={1} style={[styles.text, { paddingTop: 8 }]}>Categories</Text>
+        {/* Header View */}
+        <View style={styles.HeaderStyle}>
+          <TopHeaderComponent userImage={HeaderData.userImage} userName={HeaderData.userName} icon={HeaderData.icon} />
         </View>
-        <View style={styles.categorySubContainer}>
+
+
+        {/* Category View */}
+        <View style={styles.cateoryContainer}>
+          <View style={styles.mainImage}>
+            <View style={styles.categoryImageContainer}>
+              <Image source={assets.category} style={styles.categoryImage} resizeMode='contain' />
+            </View>
+            <Text numberOfLines={1} style={[styles.text, { paddingTop: 8 }]}>Categories</Text>
+          </View>
+          <View style={styles.categorySubContainer}>
+            <FlatList
+              data={Category}
+              renderItem={renderItem}
+              // keyExtractor={(item) => item?.id?.toString()}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+            />
+          </View>
+        </View>
+
+
+        {/* Carousel */}
+        <View style={styles.carousel}>
+          <View style={{ position: 'relative' }}>
+            <Carousel
+              loop
+              autoPlay
+              autoPlayInterval={3000}
+              width={width}
+              height={344.67}
+              onSnapToItem={(index)=>{setCurrentIndex(index)}}
+              data={BannerData}
+              scrollAnimationDuration={1000}
+              renderItem={({ item }) => CarouselRenderItem(item)}
+            />
+            <View style={styles.paginationContainer}>
+              {BannerData.map((_, index) => (
+                <Animated.View
+                  key={index}
+                  style={[
+                    styles.dot,
+                    {
+                      width: animations[index],
+                      backgroundColor: currentIndex === index ? Typography.Colors.lightblack : Typography.Colors.offwhite,
+                    },
+                  ]}
+                />
+              ))}
+            </View>
+          </View>
+        </View>
+
+
+
+        {/* Trending Cards */}
+        <View style={styles.trendContainer}>
+          <Text numberOfLines={1} style={[styles.TrendingText, { paddingLeft: 10 }]}>Trending Offers</Text>
+          {/* <FlatList/> */}
           <FlatList
-            data={categoryData}
-            renderItem={renderItem}
+            data={CardData}
+            renderItem={TrendingRenderItem}
             keyExtractor={(item) => item.id.toString()}
             horizontal
             showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{ gap: 20 }}
           />
         </View>
-      </View>
 
-
-      {/* Carousel */}
-      <View style={styles.carousel}>
-        <View style={{ position: 'relative' }}>
-          <Carousel
-            loop
-            autoPlay
-            autoPlayInterval={3000}
-            width={width}
-            height={344.67}
-            onSnapToItem={handleSnap}
-            data={BannerData}
-            scrollAnimationDuration={1000}
-            renderItem={({ item }) => CarouselRenderItem(item)}
-          />
-          <View style={styles.paginationContainer}>
-            {BannerData.map((_, index) => (
-              <Animated.View
-                key={index}
-                style={[
-                  styles.dot,
-                  {
-                    width: animations[index],
-                    backgroundColor: currentIndex === index ? '#272727' : '#C4C4C4',
-                  },
-                ]}
-              />
-            ))}
-          </View>
+        <View style={styles.dealContainer}>
+          <Text numberOfLines={1} style={[styles.TrendingText,{paddingLeft:5}]} >Deals Of The Day</Text>
         </View>
-      </View>
+      </>
+    )
+  }
+
+  const listFooter = () => {
+    return (
+      <>
+        <View style={styles.dealContainer}>
+          <Text style={styles.TrendingText}>Our Collection</Text>
+          <FlatList
+            data={ProductData}
+            renderItem={ProductRenderItem}
+            keyExtractor={(item) => item.id}
+          />
+        </View>
 
 
 
-      {/* Trending Cards */}
-      <View style={styles.trendContainer}>
-        <Text numberOfLines={1} style={[styles.TrendingText, { paddingLeft: 10 }]}>Trending Offers</Text>
-        {/* <FlatList/> */}
-        <FlatList
-          data={CardData}
-          renderItem={TrendingRenderItem}
-          keyExtractor={(item) => item.id.toString()}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={{ gap: 20 }}
-        />
-      </View>
-
-      {/* Deal of the Day card */}
-      <View style={styles.dealContainer}>
-        <Text numberOfLines={1} style={[styles.TrendingText,{paddingBottom:10}]} >Deals Of The Day</Text>
-        <FlatList
-          data={DealData.slice(0, 4)}
-          renderItem={DealRenderItem}
-          keyExtractor={(item) => item.id.toString()}
-          numColumns={2}
-          contentContainerStyle={{ gap: 10 }}
-          columnWrapperStyle={styles.row}
-          showsVerticalScrollIndicator={false}
-        />
-      </View>
-
-      {/* Product card */}
-      <View style={styles.dealContainer}>
-        <Text style={styles.TrendingText}>Our Collection</Text>
-        <FlatList
-          data={ProductData}
-          renderItem={ProductRenderItem}
-          keyExtractor={(item) => item.id}
-        />
-      </View>
-
-
-
-      <View style={styles.container}>
-        <TouchableOpacity style={styles.buttonstyle}onPress={logout}>
-          <Text style={styles.textstyle}>Go Back to LoginScreen</Text>
+        <View style={styles.container}>
+          <TouchableOpacity style={styles.buttonstyle} onPress={logout}>
+            <Text style={styles.textstyle}>Go Back to LoginScreen</Text>
           </TouchableOpacity>
-      </View>
+        </View>
+      </>
+    )
+  }
 
-    </ScrollView>
+  return (
+    // <View style={styles.container}>
+      <FlatList
+        data={DealData.slice(0, 4)}
+        renderItem={DealRenderItem}
+        keyExtractor={(item) => item.id.toString()}
+        numColumns={2}
+        contentContainerStyle={{ gap: 10,backgroundColor:'#FFFFFF' }}
+        columnWrapperStyle={styles.row}
+        showsVerticalScrollIndicator={false}
+        ListHeaderComponent={ListHeader}
+        ListHeaderComponentStyle={{ flex: 1, backgroundColor: Typography.Colors.white }}
+        ListFooterComponent={listFooter}
+        ListFooterComponentStyle={{ flex: 1, backgroundColor: Typography.Colors.white }}
+
+      />
+    // </View>
   )
 }
 
@@ -236,14 +256,14 @@ const styles = StyleSheet.create({
 
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF'
+    backgroundColor: Typography.Colors.white
   },
 
   //HeaderStyle
 
   HeaderStyle: {
 
-    backgroundColor: '#FFFFFF',
+    backgroundColor: Typography.Colors.white,
     paddingHorizontal: 20,
 
   },
@@ -256,7 +276,7 @@ const styles = StyleSheet.create({
   categoryImageContainer: {
     height: 65,
     width: 65,
-    backgroundColor: '#E2EAFF',
+    backgroundColor: Typography.Colors.skyblue,
     alignItems: 'center',
     borderRadius: 40,
     justifyContent: 'center'
@@ -281,8 +301,8 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 14,
     paddingTop: 10,
-    fontFamily: 'SFPRODISPLAYREGULAR',
-    color: '#272727'
+    fontFamily: Typography.font.regular,
+    color: Typography.Colors.lightblack
   },
   subContainer: {
     width: 90,
@@ -299,7 +319,7 @@ const styles = StyleSheet.create({
   },
   imagestyle: {
     borderWidth: 2,
-    borderColor: '#FFFFFF',
+    borderColor: Typography.Colors.white,
   },
   overlay: {
     height: "100%",
@@ -312,15 +332,15 @@ const styles = StyleSheet.create({
     height: 29,
   },
   text1: {
-    color: "#FFFFFF",
+    color: Typography.Colors.white,
     fontSize: 24,
-    fontFamily: 'SFPRODISPLAYBOLD',
+    fontFamily: Typography.font.bold,
     textAlign: "center",
     paddingTop: 18
   },
   button: {
     backgroundColor: "transparent",
-    borderColor: "#FFFFFF",
+    borderColor: Typography.Colors.white,
     borderWidth: 2,
     borderRadius: 10,
     marginTop: 27,
@@ -329,9 +349,9 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   buttonText: {
-    color: "#FFFFFF",
+    color: Typography.Colors.white,
     fontSize: 18,
-    fontFamily: "SFPRODISPLAYREGULAR"
+    fontFamily: Typography.font.regular
   },
 
   //TrendingStyle
@@ -341,20 +361,24 @@ const styles = StyleSheet.create({
 
   },
   TrendingText: {
-    fontFamily: 'SFPRODISPLAYMEDIUM',
+    fontFamily: Typography.font.medium,
     fontSize: 20,
-    color: '#272727',
+    color: Typography.Colors.lightblack,
 
   },
 
   //Deal of the day
-  staticContainer:{
-    flex:1,
-    paddingTop:10
+  staticContainer: {
+    flex: 1,
+    paddingTop: 10,
+    // width: 170,
+    // backgroundColor:'pink'
   },
   dealView: {
     height: 251,
     width: '47%',
+    // backgroundColor:'red',
+    // paddingLeft:20
   },
   productImage: {
     width: "100%",
@@ -362,20 +386,23 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 5,
     borderTopRightRadius: 5,
 
-  
   },
   dealContainer: {
     paddingHorizontal: 20,
     justifyContent: 'center',
     paddingTop: 20,
+    // backgroundColor:'green',
+    flex: 1
   },
   row: {
+    alignSelf:'center',
     gap: 20,
+    marginHorizontal:20
   },
   buttonStyle: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: Typography.Colors.white,
     borderWidth: 1,
-    borderColor: '#002482'
+    borderColor: Typography.Colors.primary
   },
   buttonView: {
     flex: 1,
@@ -384,11 +411,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row'
   },
   textStyle: {
-    color: "#FFFFFF"
+    color: Typography.Colors.white
   },
   paginationContainer: {
     position: 'absolute',
-    bottom: 20,                  
+    bottom: 20,
     left: 0,
     right: 0,
     flexDirection: 'row',
@@ -403,15 +430,15 @@ const styles = StyleSheet.create({
   },
   textstyle: {
     fontSize: 14,
-    color: 'black',
+    color: Typography.Colors.black,
     fontWeight: 'bold',
     padding: 10,
     textAlign: 'center',
   },
-  buttonstyle:{
+  buttonstyle: {
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: '#002482',
+    borderColor: Typography.Colors.primary,
     justifyContent: 'center',
     alignItems: 'center',
   }

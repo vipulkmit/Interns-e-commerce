@@ -1,16 +1,22 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
-import CustomTextInput from "../components/textInput/CustomTextInput";
-import CustomButton from "../components/button/CustomButton";
+import { View, Text, StyleSheet, Image, Alert } from "react-native";
 import { TouchableOpacity } from "react-native";
 import { Typography } from "../theme/Colors";
 import { assets } from "../../assets/images";
 import useAuthStore from "../stores/useAuthStore";
 import { AdvancedCheckbox } from "react-native-advanced-checkbox";
 import { useNavigation } from "@react-navigation/native";
+import { loginService } from "../services/api/apiServices";
+import CustomTextInput from "../components/textInput/CustomTextInput";
+import CustomButton from "../components/button/CustomButton";
 
 export default function LoginScreen() {
   const login = useAuthStore((state) => state.login);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isSelected, setSelection] = useState(false);
   const Navigation = useNavigation();
 
@@ -24,6 +30,51 @@ export default function LoginScreen() {
 
   const handleSocialLoginPress = () => {
     console.log("login pressed");
+  };
+
+  const validateInputs = () => {
+    let isvalid = true;
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setEmailError("Please enter a valid email address");
+      isvalid = false;
+    } else {
+      setEmailError("");
+    }
+
+    if (password.length < 8) {
+      setPasswordError("Password must be at least 8 characters.");
+      isvalid = false;
+    } else {
+      setPasswordError("");
+    }
+
+    return isvalid;
+  };
+
+  const handleLoginPress = async () => {
+    if (!validateInputs()) {
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const response = await loginService({ email, password });
+      Alert.alert("Success", "Login successful");
+      console.log("Login Response:", response);
+
+      useAuthStore.setState({ isLoggedIn: true });
+      Navigation.reset({
+        index: 0,
+        routes: [{ name: "BottomTabs" }],
+      });
+    } catch (error: any) {
+      console.error("Login Error:", error.message);
+      Alert.alert("Error", error.message || "Login failed. Please try again");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -42,8 +93,8 @@ export default function LoginScreen() {
       </View>
 
       <CustomTextInput
-        // value={email}
-        // onChangeText={setEmail}
+        value={email}
+        onChangeText={setEmail}
         placeholder="Your Email / Phone Number"
         keyboardType="email-address"
         iconname="person"
@@ -51,15 +102,20 @@ export default function LoginScreen() {
         iconcolor={Typography.Colors.lightgrey}
       />
 
+      {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
+
       <CustomTextInput
-        // value={password}
-        // onChangeText={setPassword}
+        value={password}
+        onChangeText={setPassword}
         placeholder="Password"
         secureTextEntry
         iconname="lock"
         iconsize={25}
         iconcolor={Typography.Colors.lightgrey}
       />
+      {passwordError ? (
+        <Text style={styles.errorText}>{passwordError}</Text>
+      ) : null}
 
       <View
         style={{
@@ -88,8 +144,8 @@ export default function LoginScreen() {
       </View>
 
       <CustomButton
-        title="Login"
-        onPress={login}
+        title={isLoading ? "Logging in...." : "Login"}
+        onPress={handleLoginPress}
         buttonStyle={styles.buttonstyle}
       />
 
@@ -216,7 +272,7 @@ const styles = StyleSheet.create({
   },
   registerText: {
     fontSize: 14,
-    color: Typography.Colors.black,
+    color: Typography.Colors.greydark,
   },
   registerLink: {
     fontSize: 14,
@@ -258,5 +314,9 @@ const styles = StyleSheet.create({
   },
   buttonstyle: {
     height: 52,
+  },
+  errorText: {
+    color: Typography.Colors.red,
+    fontSize: 14,
   },
 });
