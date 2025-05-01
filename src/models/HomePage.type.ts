@@ -2,7 +2,7 @@ import { ImageProps, ImageSourcePropType, ImageStyle, StyleProp, TextProps, Text
 
 export type CategoryProps = {
     id: string;
-    image: ImageSourcePropType;
+    image: string;
     name: string
 }
 
@@ -29,13 +29,14 @@ export type TrendingProps={
 
 export type ProductProps = {
     id?: string,
-    images?: ImageSourcePropType[],
+    images?: ImageSourcePropType,
     productName?: string,
     brandName?: string,
     initialRate?: number,
     rate?: number,
-    discount?: string,
+    discount?: number,
     onClick:()=> void,
+
 }
 
 

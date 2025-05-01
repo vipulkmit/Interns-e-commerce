@@ -144,3 +144,7 @@ export const Categories = () =>
 export const SubCategories = (name) =>
 {
   return axiosInstance.get(`${ENDPOINTS.SUBCATEGORY}${name}`);}
+
+  export const Products = (name,category) =>
+    {
+      return axiosInstance.get(`${ENDPOINTS.PRODUCTS}${name}/${category}`);}

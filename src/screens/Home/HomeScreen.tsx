@@ -2,7 +2,7 @@ import { Animated, Dimensions, FlatList, Image, ImageBackground, Pressable, Scro
 import React, {  useEffect, useRef, useState } from 'react'
 import { assets } from '../../../assets/images'
 import { CategoryProps, BannerProps, TrendingProps, ProductProps } from '../../models/HomePage.type';
-import { BannerData, CardData, categoryData, DealData, ProductData, HeaderData } from '../../constant';
+import { BannerData, CardData, DealData, ProductData, HeaderData } from '../../constant';
 import Carousel from 'react-native-reanimated-carousel';
 import CardComponent from '../../components/card/CardComponent';
 import ProductComponent from '../../components/product/ProductComponent';
@@ -30,7 +30,7 @@ const HomeScreen = () => {
   // Category Render Item
 
   const renderItem = ({ item }: { item: CategoryProps }) => {
-    // console.log(item,"scvd vyusf b");
+    // console.log(item.image,"scvd vyusf b");
     return(
     <Pressable style={styles.subContainer} onPress={()=>renderCategoryPage(item.name)}>
       <Image source={{uri: item.image}} style={styles.flatlistImage} />
@@ -91,7 +91,7 @@ const HomeScreen = () => {
 
     return (
       // <View style={{paddingLeft:20}}>
-        <Pressable style={styles.dealView} onPress={() => { navigation.navigate('HomeScreen1') }}>
+        <Pressable style={styles.dealView} >
           <CardComponent staticContainer={styles.staticContainer} img={item.img} amount={item.amount} productType={item.productType} productImgStyle={styles.productImage} />
         </Pressable>
 

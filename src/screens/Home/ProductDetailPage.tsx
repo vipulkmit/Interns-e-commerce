@@ -1,17 +1,18 @@
 import Carousel from "react-native-reanimated-carousel";
 import { View, Text, ScrollView, StyleSheet, Dimensions, ImageBackground, Image, Animated, TouchableOpacity, TextInput, Pressable } from 'react-native'
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { BannerData } from "../../constant";
 import { assets } from "../../../assets/images";
 import HeaderComponent from "../../components/header/HeaderComponent";
 import { useNavigation } from "@react-navigation/native";
 import { Typography } from "../../theme/Colors";
 import Collapsible from "react-native-collapsible";
+import { Products } from "../../services/api/apiServices";
 // import { TextInput } from "react-native-gesture-handler";
 
 const width = Dimensions.get("window").width;
 
-const HomeScreen2 = () => {
+const ProductDetailPage = () => {
   const navigation = useNavigation();
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -20,6 +21,9 @@ const HomeScreen2 = () => {
 
   const [text, onChangeText] = React.useState('Useless Text');
   const [number, onChangeNumber] = React.useState('');
+
+  // const { category,categoryName } = route.params;
+
 
   const CarouselRenderItem = () => (
     <ImageBackground
@@ -57,8 +61,9 @@ const HomeScreen2 = () => {
   return (
     <ScrollView>
       <View style={styles.header}>
-        <HeaderComponent back={assets.ArrowLeft} icon={assets.MainSearch} icon1={assets.HeartBlack} icon2={assets.BagBlack} onClick={handleBackButton} />
+        <HeaderComponent onClick={handleBackButton} />
       </View>
+      
       <Carousel
         loop
         autoPlay
@@ -143,17 +148,20 @@ const HomeScreen2 = () => {
           </View>
         </View>
       </View>
+
+
+
       <View >
         <TouchableOpacity onPress={toggleExpanded} style={styles.header1}>
           <View>
-            {collapsed ? 
-            <View style={styles.accordionHeading}>
-              <Text style={styles.accordionTitle}>Product Details</Text>
-              <Image source={assets.Down} style={styles.accordionIcon} />
-            </View> :
+            {collapsed ?
               <View style={styles.accordionHeading}>
-                <Text>Product Details</Text>
-                <Image source={assets.Up} style={styles.accordionIcon} />
+                <Text style={styles.accordionTitle}>Product Details</Text>
+                <Image source={assets.Down} style={styles.accordionIcon} />
+              </View> :
+              <View style={styles.accordionHeading}>
+                 <Text style={styles.accordionTitle}>Product Details</Text>
+                 <Image source={assets.Up} style={styles.accordionIcon} />
               </View>}
           </View>
         </TouchableOpacity>
@@ -164,6 +172,8 @@ const HomeScreen2 = () => {
           </View>
         </Collapsible>
       </View>
+
+
     </ScrollView>
   )
 }
@@ -398,7 +408,7 @@ const styles = StyleSheet.create({
     // backgroundColor:'red',
     // padding: 10,
     // borderRadius: 8,
-    paddingHorizontal:20
+    paddingHorizontal: 20
   },
   headerText: {
     // fontSize: 18,
@@ -411,27 +421,30 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ccc',
     borderRadius: 8,
-    marginTop: 10,
+    // marginTop: 10,
   },
-  accordionHeading:{
-    flexDirection:'row',
-    justifyContent:'space-between'
+  accordionHeading: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems:'center',
+    borderBottomWidth:1
   },
-  accordionTitle:{
-    fontSize:18,
-    fontFamily:Typography.font.medium,
-    color:Typography.Colors.lightblack,
-    paddingVertical:10
+  accordionTitle: {
+    fontSize: 18,
+    fontFamily: Typography.font.medium,
+    color: Typography.Colors.lightblack,
+    paddingVertical: 10,
+    textAlign:'center'
   },
-  accordionIcon:{
-    height:21,
-    width:21,
+  accordionIcon: {
+    height: 21,
+    width: 21,
     // paddingVertical:10,
-    justifyContent:'center',
-    backgroundColor:'red'
+    justifyContent: 'center',
+    backgroundColor: 'red'
   }
 })
-export default HomeScreen2
+export default ProductDetailPage
 
 
 

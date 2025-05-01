@@ -9,7 +9,8 @@ const ENDPOINTS = {
   GOOGLE_SIGNUP: "/user/google",
   GOOGLE_OAUTH: "/user/google/callback",
   CATEGORY: '/categories/all',
-  SUBCATEGORY :'/categories/'
+  SUBCATEGORY :'/categories/',
+  PRODUCTS :'/categories/'
 };
 
 export default ENDPOINTS;

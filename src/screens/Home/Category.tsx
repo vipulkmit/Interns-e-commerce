@@ -12,10 +12,16 @@ import { useNavigation } from '@react-navigation/native'
 const Category = ({ route }) => {
   const { name } = route.params;
   const navigation = useNavigation()
+
+ const renderProductPage=(category)=>{
+      navigation.navigate('ProductsPage',{category:category,categoryName:name})
+    }
+
   const renderItem = (({ item }: { item: CategoryProps }) => {
     // console.log(item);
+   
     return (
-      <Pressable style={styles.backgroundContainer} >
+      <Pressable style={styles.backgroundContainer} onPress={()=>renderProductPage(item)}>
         <ImageBackground source={{ uri: item.image }} style={styles.subConatiner}  >
           <Text style={styles.numberText}>{item.name}</Text>
           <View style={styles.overlay} />
@@ -33,14 +39,14 @@ const Category = ({ route }) => {
   }, [])
 
 
-  
-  const goback=()=>{
+
+  const goback = () => {
     navigation.goBack()
   }
 
   return (
     <View style={styles.container}>
-      <HeaderComponent onClick= {goback} Title={name}/>
+      <HeaderComponent onClick={goback} Title={name} />
 
       {/* <Text style={styles.text}>Categories</Text> */}
       <FlatList
@@ -49,7 +55,7 @@ const Category = ({ route }) => {
         renderItem={renderItem}
         // keyExtractor={(index) => index.toString()}
         contentContainerStyle={{ marginHorizontal: 10 }}
-        columnWrapperStyle={{gap:15}}
+        columnWrapperStyle={{ gap: 15 }}
       />
     </View>
   )
@@ -60,7 +66,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: Typography.Colors.white,
     flex: 1,
-    paddingHorizontal:5
+    paddingHorizontal: 5
   },
   text: {
     fontFamily: Typography.font.heavy,
@@ -96,13 +102,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 10
   },
-  backgroundContainer:{
-    flex:1,
-    borderRadius:30,
-    height:140,
-    paddingTop:15
+  backgroundContainer: {
+    flex: 1,
+    borderRadius: 30,
+    height: 140,
+    paddingTop: 15
     // paddingRight:10
-}
+  }
 })
 
 export default Category
