@@ -1,4 +1,5 @@
 // import apiCall from "../services/api/apiServices";
+import axios from "axios";
 import axiosInstance from "../services/api/axiosInstance";
 import ENDPOINTS from "../utils/endpoints";
 
@@ -37,6 +38,6 @@ export const verifyotp = (data: any) =>
 export const changepassword = (data: any) =>
   axiosInstance.post(ENDPOINTS.CHANGE_PASSWORD, data);
 export const googlelogin = (data: any) =>
-  axiosInstance.get(ENDPOINTS.GOOGLE_SIGNUP, data);
+  axiosInstance.get(ENDPOINTS.GOOGLE_OAUTH, data);
 export const googleoauth = (data: any) =>
   axiosInstance.get(ENDPOINTS.GOOGLE_OAUTH, data);

@@ -1,36 +1,37 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, Image, Alert } from "react-native";
+
 import { Typography } from "../theme/Colors";
 import { assets } from "../../assets/images";
-import useAuthStore from "../stores/useAuthStore";
 import { useNavigation } from "@react-navigation/native";
-import { changePasswordService } from "../services/api/apiServices";
-import CustomTextInput from "../components/textInput/CustomTextInput";
+import { forgotPasswordService } from "../services/api/apiServices";
+import CustomTextInput from "../components/TextInput/CustomTextInput";
 import CustomButton from "../components/button/CustomButton";
 
-export default function PasswordchangeScreen() {
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmNewPassword, setConfirmNewPassword] = useState("");
+export default function ForgetpasswordScreen() {
+  const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const Navigation = useNavigation();
 
-  const Passwordchangesuccess = async () => {
-    if (!newPassword.trim() || !confirmNewPassword.trim()) {
-      Alert.alert("Error", "Please fill in all fields.");
+  const Sendverification = async () => {
+    if (!email.trim()) {
+      Alert.alert("Error", "Please enter your email address");
       return;
     }
-    Navigation.navigate("LoginScreen");
+
     setIsLoading(true);
     try {
-      const response = await changePasswordService({
-        newPassword,
-        confirmNewPassword,
-      });
-      Alert.alert("Success", "Password changed successfully!");
-      console.log("Change Password Response:", response);
+      const response = await forgotPasswordService({ email });
+      Alert.alert("Success", "Verification email sent successfully!");
+      console.log("Forgot Password Response:", response);
+
+      Navigation.navigate("Verifyotp");
     } catch (error: any) {
-      console.error("Change Password Error:", error.message);
-      Alert.alert("Error", error.message || "Failed to change password.");
+      console.error("Forgot Password Error:", error.message);
+      Alert.alert(
+        "Error",
+        error.message || "Failed to send verification email."
+      );
     } finally {
       setIsLoading(false);
     }
@@ -47,34 +48,26 @@ export default function PasswordchangeScreen() {
       </View>
 
       <View style={styles.welcomeandsignup}>
-        <Text style={styles.welcomeText}>New Password</Text>
-        <Text style={styles.subText}>Set new password for your account</Text>
-        {/* <Text style={styles.subsubText}>password</Text> */}
+        <Text style={styles.welcomeText}>Forgot Password</Text>
+        <Text style={styles.subText}>
+          We will send you a message to set or reset your new{" "}
+        </Text>
+        <Text style={styles.subsubText}>password</Text>
       </View>
 
       <CustomTextInput
-        value={newPassword}
-        onChangeText={setNewPassword}
-        placeholder="Password"
-        secureTextEntry
-        iconname="lock"
-        iconsize={25}
-        iconcolor={Typography.Colors.lightgrey}
-      />
-
-      <CustomTextInput
-        value={confirmNewPassword}
-        onChangeText={setConfirmNewPassword}
-        placeholder="Confirm Password"
-        secureTextEntry
-        iconname="lock"
+        value={email}
+        onChangeText={setEmail}
+        placeholder="Your Email / Phone Number"
+        keyboardType="email-address"
+        iconname="mail"
         iconsize={25}
         iconcolor={Typography.Colors.lightgrey}
       />
 
       <CustomButton
-        title={isLoading ? "Changing..." : "Change Password"}
-        onPress={Passwordchangesuccess}
+        title={isLoading ? "Sending..." : "Send Verification"}
+        onPress={Sendverification}
         buttonStyle={styles.buttonstyle}
       />
     </View>
@@ -98,15 +91,14 @@ const styles = StyleSheet.create({
     fontFamily: Typography.font.regular,
     fontSize: 15,
     color: Typography.Colors.lightgrey,
+  },
+  subsubText: {
+    fontFamily: Typography.font.regular,
+    fontSize: 15,
+    color: Typography.Colors.lightgrey,
+    // alignItems: "center",
     marginBottom: 30,
   },
-  // subsubText: {
-  //   fontFamily: Typography.font.regular,
-  //   fontSize: 15,
-  //   color: Typography.Colors.lightgrey,
-  //   // alignItems: "center",
-
-  // },
   containerlogo: {
     width: 72,
     height: 72,
@@ -133,3 +125,20 @@ const styles = StyleSheet.create({
     height: 52,
   },
 });
+
+// useEffect(() => {
+//   const backHandler = BackHandler.addEventListener(
+//     'hardwareBackPress',
+//     () => {
+//       if (isSignUp === 'true') {
+//         navigation.navigate(SCREEN_URLS.signUp);
+//       } else {
+//         navigation.navigate(SCREEN_URLS.login);
+//       }
+
+//       return true;
+//     }
+//   );
+
+//   return () => backHandler.remove();
+// }, []);

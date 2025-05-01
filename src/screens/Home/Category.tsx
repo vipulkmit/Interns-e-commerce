@@ -5,11 +5,13 @@ import { assets } from '../../../assets/images'
 import { SubCategories } from '../../services/api/apiServices'
 import { CategoryProps } from '../../models/HomePage.type'
 import { Typography } from '../../theme/Colors'
+import { useNavigation } from '@react-navigation/native'
 
 
 
 const Category = ({ route }) => {
   const { name } = route.params;
+  const navigation = useNavigation()
   const renderItem = (({ item }: { item: CategoryProps }) => {
     // console.log(item);
     return (
@@ -22,8 +24,6 @@ const Category = ({ route }) => {
     )
   });
   const [Category, setCategory] = useState([]);
-  // console.log(Category, "cyhl geua aaaa");
-
   useEffect(() => {
     SubCategories(name).then(data => {
       setCategory(data?.data)
@@ -32,9 +32,15 @@ const Category = ({ route }) => {
     })
   }, [])
 
+
+  
+  const goback=()=>{
+    navigation.goBack()
+  }
+
   return (
     <View style={styles.container}>
-      <HeaderComponent back={assets.ArrowLeft} icon={assets.MainSearch} icon1={assets.HeartBlack} icon2={assets.BagBlack} />
+      <HeaderComponent onClick= {goback} Title={name}/>
 
       {/* <Text style={styles.text}>Categories</Text> */}
       <FlatList
@@ -54,6 +60,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: Typography.Colors.white,
     flex: 1,
+    paddingHorizontal:5
   },
   text: {
     fontFamily: Typography.font.heavy,
