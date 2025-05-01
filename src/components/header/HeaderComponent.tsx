@@ -23,6 +23,7 @@ const HeaderComponent = ({
                     </Pressable>
                     <Text numberOfLines={1} style={styles.productType}>{Title} </Text>
                 </View>
+                
                 <View style={styles.iconContainer}>
                     <TouchableWithoutFeedback >
                         <Image source={assets.MainSearch} style={styles.icon} />
