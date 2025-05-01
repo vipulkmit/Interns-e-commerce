@@ -5,7 +5,7 @@ import { assets } from "../../assets/images";
 import useAuthStore from "../stores/useAuthStore";
 import { useNavigation } from "@react-navigation/native";
 import { changePasswordService } from "../services/api/apiServices";
-import CustomTextInput from "../components/TextInput/CustomTextInput";
+import CustomTextInput from "../components/textInput/CustomTextInput";
 import CustomButton from "../components/button/CustomButton";
 
 export default function PasswordchangeScreen() {

@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, Image, Alert } from "react-native";
 import { Typography } from "../theme/Colors";
-import { assets } from "../../assets/images";
 import { useNavigation } from "@react-navigation/native";
 import { verifyOtpService } from "../services/api/apiServices";
-import CustomTextInput from "../components/TextInput/CustomTextInput";
+import CustomTextInput from "../components/textInput/CustomTextInput";
 import CustomButton from "../components/button/CustomButton";
 
 export default function VerifyotpScreen() {

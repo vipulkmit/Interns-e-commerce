@@ -1,7 +1,13 @@
-import React from 'react';
-import { TouchableOpacity, Text, StyleSheet, GestureResponderEvent, ViewStyle, TextStyle, } from 'react-native';
-import { Typography } from '../../theme/Colors';
-
+import React from "react";
+import {
+  TouchableOpacity,
+  Text,
+  StyleSheet,
+  GestureResponderEvent,
+  ViewStyle,
+  TextStyle,
+} from "react-native";
+import { Typography } from "../../theme/Colors";
 
 type CustomButtonProps = {
   title: string;
@@ -9,7 +15,7 @@ type CustomButtonProps = {
   disabled?: boolean;
   buttonStyle?: ViewStyle;
   textStyle?: TextStyle;
-}
+};
 
 const CustomButton: React.FC<CustomButtonProps> = ({
   title,
@@ -17,11 +23,11 @@ const CustomButton: React.FC<CustomButtonProps> = ({
   disabled = false,
   buttonStyle,
   textStyle,
-  }) => {
+}) => {
   return (
     <TouchableOpacity
       onPress={onPress}
-      style={[styles.button,buttonStyle,disabled && styles.disabledButton]}
+      style={[styles.button, buttonStyle, disabled && styles.disabledButton]}
       disabled={disabled}
     >
       <Text style={[styles.text, textStyle]}>{title}</Text>
@@ -34,10 +40,10 @@ const styles = StyleSheet.create({
     backgroundColor: Typography.Colors.primary,
     paddingVertical: 14,
     borderRadius: 8,
-    alignItems: 'center',
+    alignItems: "center",
   },
   disabledButton: {
-    backgroundColor:Typography.Colors.lightgrey,
+    backgroundColor: Typography.Colors.lightgrey,
   },
   text: {
     color: Typography.Colors.white,
