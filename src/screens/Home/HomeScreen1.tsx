@@ -31,7 +31,7 @@ const renderProduct=()=>{
 
 const ListHeader=()=>{
   return(
-    <HeaderComponent back={assets.ArrowLeft} icon={assets.MainSearch} icon1={assets.HeartBlack} icon2={assets.BagBlack} onClick={handleBackButton}  />
+    <HeaderComponent onClick={handleBackButton}  />
   )
 }
 
