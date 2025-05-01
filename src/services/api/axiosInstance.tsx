@@ -1,8 +1,6 @@
 import axios from "axios";
 import API_CONFIG from "../config/appConfig";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-// import API_CONFIG from "../config/appconfig";
-
+import useAuthStore from "../../stores/useAuthStore";
 const axiosInstance = axios.create({
   baseURL: API_CONFIG.BASE_URL,
   timeout: 10000,
@@ -13,7 +11,8 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   async (config) => {
-    const token = await AsyncStorage.getItem("token");
+    const { token } = useAuthStore.getState();
+
     if (token) config.headers.Authorization = `Bearer ${token}`;
     return config;
   },
@@ -23,7 +22,7 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
-    console.log("API Error", error.response?.data || error.message);
+    console.log("API Error", error.response?.message || error.message);
     return Promise.reject(error);
   }
 );

@@ -5,7 +5,6 @@ import ForgetpasswordScreen from "../authentication/ForgetpasswordScreen";
 import VerifyotpScreen from "../authentication/VerifyotpScreen";
 import PasswordchangeScreen from "../authentication/PasswordchangeScreen";
 
-
 const Stack = createNativeStackNavigator();
 
 export default function AuthNavigator() {

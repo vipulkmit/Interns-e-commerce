@@ -1,12 +1,10 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, Image, Alert } from "react-native";
-
 import { Typography } from "../theme/Colors";
-import { assets } from "../../assets/images";
 import { useNavigation } from "@react-navigation/native";
 import { verifyOtpService } from "../services/api/apiServices";
-import CustomButton from "../components/button/CustomButton";
 import CustomTextInput from "../components/textInput/CustomTextInput";
+import CustomButton from "../components/button/CustomButton";
 
 export default function VerifyotpScreen() {
   // const [email, setemail] = useState("");

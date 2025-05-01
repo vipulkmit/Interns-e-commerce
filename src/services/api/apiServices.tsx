@@ -1,4 +1,4 @@
-import {z} from 'zod'
+import { z } from "zod";
 import {
   changepassword,
   forgetpassword,
@@ -25,6 +25,7 @@ export const loginService = async (FormData: any) => {
   }
   try {
     const response = await loginUser(parsed.data);
+    // console.log(response, "fdgvfdvfdv");
     return response.data;
   } catch (error) {
     console.error("Login Service Error:", error);
@@ -109,11 +110,9 @@ const changePasswordSchema = z
     newPassword: z
       .string()
       .min(8, { message: "New password must be at least 8 characters long." }),
-    confirmNewPassword: z
-      .string()
-      .min(8, {
-        message: "Confirm password must be at least 8 characters long.",
-      }),
+    confirmNewPassword: z.string().min(8, {
+      message: "Confirm password must be at least 8 characters long.",
+    }),
   })
   .refine((data) => data.newPassword === data.confirmNewPassword, {
     message: "New passwords do not match.",
