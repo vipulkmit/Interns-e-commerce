@@ -1,5 +1,5 @@
 import { Animated, Dimensions, FlatList, Image, ImageBackground, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useRef, useState } from 'react'
+import React, {  useEffect, useRef, useState } from 'react'
 import { assets } from '../../../assets/images'
 import { CategoryProps, BannerProps, TrendingProps, ProductProps } from '../../models/HomePage.type';
 import { BannerData, CardData, categoryData, DealData, ProductData, HeaderData } from '../../constant';
@@ -11,6 +11,8 @@ import TopHeaderComponent from '../../components/header/TopHeaderComponent';
 import { useNavigation } from '@react-navigation/native';
 import useAuthStore from '../../stores/useAuthStore'
 import { Typography } from '../../theme/Colors';
+import { Categories } from '../../services/api/apiServices';
+import Category from './Category';
 
 
 const { width } = Dimensions.get("window");
@@ -21,14 +23,20 @@ const HomeScreen = () => {
     const navigation = useNavigation();
     const animations = useRef(BannerData.map(() => new Animated.Value(17))).current;
 
+    const renderCategoryPage=(name)=>{
+      // console.log(item,"ghfffgfghfghfghfghfghfhg")
+      navigation.navigate('Category',{name:name})
+    }
   // Category Render Item
 
-  const renderItem = ({ item }: { item: CategoryProps }) => (
-    <View style={styles.subContainer}>
-      <Image source={item.image} style={styles.flatlistImage} />
+  const renderItem = ({ item }: { item: CategoryProps }) => {
+    // console.log(item,"scvd vyusf b");
+    return(
+    <Pressable style={styles.subContainer} onPress={()=>renderCategoryPage(item.name)}>
+      <Image source={{uri: item.image}} style={styles.flatlistImage} />
       <Text style={styles.text} numberOfLines={1}>{item.name}</Text>
-    </View>
-  );
+    </Pressable>
+  )};
 
   // Carousel Render Item
 
@@ -107,9 +115,15 @@ const HomeScreen = () => {
     )
   }
 
-  const ListHeader = () => {
-    
+  const ListHeader = () => { 
     const [currentIndex, setCurrentIndex] = useState(0);
+
+    const [Category,setCategory]=useState();
+
+   useEffect(()=>{Categories().then(data=>{
+    setCategory(data?.data)
+    }).catch((e)=>{console.log('no data');
+    })},[])
 
     return (
       <>
@@ -130,9 +144,9 @@ const HomeScreen = () => {
           </View>
           <View style={styles.categorySubContainer}>
             <FlatList
-              data={categoryData}
+              data={Category}
               renderItem={renderItem}
-              keyExtractor={(item) => item.id.toString()}
+              // keyExtractor={(item) => item?.id?.toString()}
               horizontal
               showsHorizontalScrollIndicator={false}
             />

@@ -6,6 +6,8 @@ import {
   verifyotp,
 } from "../../authentication/AuthApi";
 import { registerUser } from "../../authentication/AuthApi";
+import axiosInstance from './axiosInstance';
+import ENDPOINTS from '../../utils/endpoints';
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -130,3 +132,15 @@ export const changePasswordService = async (FormData: any) => {
     throw error;
   }
 };
+
+
+
+
+
+export const Categories = () =>
+  axiosInstance.get(ENDPOINTS.CATEGORY);
+
+
+export const SubCategories = (name) =>
+{
+  return axiosInstance.get(`${ENDPOINTS.SUBCATEGORY}${name}`);}
