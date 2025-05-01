@@ -32,6 +32,8 @@ const Category = ({ route }) => {
     })
   }, [])
 
+
+  
   const goback=()=>{
     navigation.goBack()
   }
