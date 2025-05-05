@@ -8,9 +8,11 @@ const ENDPOINTS = {
   DELETE: "/user/",
   GOOGLE_SIGNUP: "/user/google",
   GOOGLE_OAUTH: "/user/google/callback",
-  CATEGORY: '/categories/all',
+  CATEGORY: '/categories/all-categories',
   SUBCATEGORY :'/categories/',
-  PRODUCTS :'/categories/'
+  PRODUCTS :'/categories/',
+  CAROUSAL:'/product/get-carousel',
+  WISHLIST:'/wishlist'
 };
 
 export default ENDPOINTS;

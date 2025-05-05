@@ -48,7 +48,7 @@ const Category = ({ route }) => {
     <View style={styles.container}>
       <HeaderComponent onClick={goback} Title={name} />
 
-      {/* <Text style={styles.text}>Categories</Text> */}
+      <Text style={styles.text}>Shop by Category: {name}</Text>
       <FlatList
         data={Category}
         numColumns={2}
@@ -70,8 +70,10 @@ const styles = StyleSheet.create({
   },
   text: {
     fontFamily: Typography.font.heavy,
-    fontSize: 30,
-    padding: 20,
+    fontSize: 25,
+    paddingVertical: 20,
+    textAlign:'center',
+    textDecorationLine:'underline'
   },
   subConatiner: {
     height: '100%',

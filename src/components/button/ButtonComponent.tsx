@@ -8,10 +8,11 @@ const ButtonComponent = ({
   buttonText,
   buttonStyle,
   TextStyle,
+  onClick
 }: ButtonProps) => {
   return (
     <View style={styles.buttonData}>
-      <TouchableOpacity style={[styles.button, buttonStyle]}>
+      <TouchableOpacity style={[styles.button, buttonStyle]} onPress={onClick}>
         <Text style={[styles.textstyle, TextStyle]}>{buttonText}</Text>
         <Image source={icon} style={styles.cartIcon} resizeMode="contain" />
       </TouchableOpacity>

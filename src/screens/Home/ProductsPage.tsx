@@ -3,45 +3,43 @@ import React, { useEffect, useState } from 'react'
 import HeaderComponent from '../../components/header/HeaderComponent'
 import { assets } from '../../../assets/images'
 import { useNavigation } from '@react-navigation/native'
-import { ProductData } from '../../constant'
-import { ProductProps } from '../../models/HomePage.type'
 import ProductComponent from '../../components/product/ProductComponent'
 import ButtonComponent from '../../components/button/ButtonComponent'
 import { Typography } from '../../theme/Colors'
 import { Products } from '../../services/api/apiServices'
 
 
-const ProductsPage = ({route}) => {
+const ProductsPage = ({ route }) => {
   const navigation = useNavigation()
   const handleBackButton = () => { navigation.goBack() }
-  const { category,categoryName } = route.params;
-// console.log(category,"yfgyufg",categoryName);
+  const { category, categoryName } = route.params;
 
 
-  
-    const [Category, setCategory] = useState();
-  
-    useEffect(() => {
-      Products(categoryName,category.name).
+  const [Category, setCategory] = useState();
+
+  useEffect(() => {
+    Products(categoryName, category.name).
       then(data => {
         setCategory(data?.data)
       }).
       catch((e) => {
         console.log('no data');
       })
-    }, [])
+  }, [])
+  // console.log(item,'categhorebgheru');
 
-const renderProduct=(item)=>{
+  const renderProduct = (data) => {
+    // console.log(data, "item");
 
-  navigation.navigate('ProductDetailPage',{item:item})
-}
-  const ProductRenderItem = ({ item }: { item: ProductProps }) => {
-    // console.log(item.brand.name,"item badfgeyuf")
-    
+    return (
+      navigation.navigate('ProductDetailPage',{data:data}))
+  }
+  const ProductRenderItem = ({ item }) => {
+
     return (
       <View style={styles.container}>
-        <ProductComponent onClick={renderProduct} images={item.images} productName={item.title} brandName={item.brand.name} initialRate={item.price} discount={item.discountPercentage} rate={item.discountPrice}/> 
-         <View style={styles.buttonView}>
+        <ProductComponent onClick={() => renderProduct(item)} images={item.images} productName={item.title} brandName={item.brand.name} initialRate={item.price} discount={item.discountPercentage} rate={item.discountPrice} />
+        <View style={styles.buttonView}>
           <ButtonComponent icon={assets.HeartBlack} buttonText='Whislist' buttonStyle={styles.buttonStyle} />
           <ButtonComponent icon={assets.WhiteBag} buttonText='Add to Bag' TextStyle={styles.textStyle} buttonStyle={[styles.buttonStyle, { backgroundColor: Typography.Colors.primary }]} />
         </View>
@@ -49,21 +47,21 @@ const renderProduct=(item)=>{
     )
   }
 
-const ListHeader=()=>{
-  return(
-    <HeaderComponent onClick={handleBackButton} Title={category.name} />
-  )
-}
+  const ListHeader = () => {
+    return (
+      <HeaderComponent onClick={handleBackButton} Title={category.name} />
+    )
+  }
 
   return (
-        <FlatList
-          data={Category}
-          renderItem={ProductRenderItem}
-          keyExtractor={(item) => item.id}
-          ListHeaderComponent={ListHeader}
-          ListHeaderComponentStyle={styles.header}
-          // contentContainerStyle={{backgroundColor:'green'}}
-        />
+    <FlatList
+      data={Category}
+      renderItem={ProductRenderItem}
+      keyExtractor={(item) => item.id}
+      ListHeaderComponent={ListHeader}
+      ListHeaderComponentStyle={styles.header}
+    // contentContainerStyle={{backgroundColor:'green'}}
+    />
 
   )
 }
@@ -76,8 +74,8 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    paddingHorizontal:20,
-    backgroundColor:Typography.Colors.white
+    paddingHorizontal: 20,
+    backgroundColor: Typography.Colors.white
   },
   buttonView: {
     flex: 1,
@@ -93,14 +91,12 @@ const styles = StyleSheet.create({
   textStyle: {
     color: Typography.Colors.white
   },
-  product:{
-    paddingHorizontal:20
+  product: {
+    paddingHorizontal: 20
   },
-  mainContainer:{
+  mainContainer: {
     backgroundColor: Typography.Colors.white,
-    flex:1
+    flex: 1
   }
-
-
 })
 export default ProductsPage

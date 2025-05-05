@@ -1,4 +1,5 @@
 import { ImageProps, ImageSourcePropType, ImageStyle, StyleProp, TextProps, TextStyle } from "react-native";
+import { boolean } from "zod";
 
 export type CategoryProps = {
     id: string;
@@ -6,24 +7,24 @@ export type CategoryProps = {
     name: string
 }
 
-export type BannerProps={
+export type BannerProps = {
     id: string,
     image: ImageSourcePropType,
     logoImage: ImageSourcePropType,
-    brand:string,
-    event:string,
-    discount:string
+    brand: string,
+    event: string,
+    discount: string
 }
 
-export type TrendingProps={
+export type TrendingProps = {
     id?: string,
     img?: ImageSourcePropType,
     logo?: ImageSourcePropType,
-    offer?:number,
-    productType?:string,
+    offer?: number,
+    productType?: string,
     amount?: number,
-    productImgStyle?:StyleProp<ImageStyle>,
-    staticContainer?:StyleProp<ImageStyle>
+    productImgStyle?: StyleProp<ImageStyle>,
+    staticContainer?: StyleProp<ImageStyle>
 }
 
 
@@ -35,26 +36,33 @@ export type ProductProps = {
     initialRate?: number,
     rate?: number,
     discount?: number,
-    onClick:()=> void,
+    onClick: () => void,
 
 }
 
 
-export type ButtonProps={
-    id?:string,
-    icon:ImageSourcePropType,
-    buttonText?:string,
-    buttonStyle?:StyleProp<ImageStyle>,
-    TextStyle?:StyleProp<ImageStyle>
+export type ButtonProps = {
+    id?: string,
+    icon: ImageSourcePropType,
+    buttonText?: string,
+    buttonStyle?: StyleProp<ImageStyle>,
+    TextStyle?: StyleProp<ImageStyle>,
+    onClick: () => void,
+
 }
 
-export type MainHeaderProps={
-    id?:string,
-    productType?:string,
-    onClick:()=> void,
-    Title?:string
+export type MainHeaderProps = {
+    id?: string,
+    productType?: string,
+    onClick: () => void,
+    Title?: string
     // back:ImageSourcePropType,
     // icon:ImageSourcePropType,
     // icon1:ImageSourcePropType,
     // icon2:ImageSourcePropType,
+}
+export type sizeProps = {
+    size: string, 
+    onClick: () => void,
+    selectedSize: boolean
 }

@@ -135,8 +135,6 @@ export const changePasswordService = async (FormData: any) => {
 
 
 
-
-
 export const Categories = () =>
   axiosInstance.get(ENDPOINTS.CATEGORY);
 
@@ -145,6 +143,17 @@ export const SubCategories = (name) =>
 {
   return axiosInstance.get(`${ENDPOINTS.SUBCATEGORY}${name}`);}
 
-  export const Products = (name,category) =>
-    {
-      return axiosInstance.get(`${ENDPOINTS.PRODUCTS}${name}/${category}`);}
+  
+export const Products = (name,category) =>
+  {
+    return axiosInstance.get(`${ENDPOINTS.PRODUCTS}${name}/${category}`);}
+
+export const CarousalData = ()=>
+  axiosInstance.get(ENDPOINTS.CAROUSAL);
+
+export const AddToWishlist = (id: string) => {
+  // console.log(id,"dfhuifgkerghr")
+  return (
+  axiosInstance.post(ENDPOINTS.WISHLIST, {id})
+  )
+}
