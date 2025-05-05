@@ -52,4 +52,5 @@ export const assets = {
   Payment: require("./payment.png"),
   heart: require("./smallheart.png"),
   tote: require("./tote.png"),
+  rightarrow: require("./Vector.png"),
 };
