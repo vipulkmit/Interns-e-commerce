@@ -1,13 +1,5 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  Alert,
-  SafeAreaView,
-  ScrollView,
-} from "react-native";
+import { View, Text, StyleSheet, Image, Alert, ScrollView } from "react-native";
 import { TouchableOpacity } from "react-native";
 import { Typography } from "../theme/Colors";
 import { assets } from "../../assets/images";
@@ -52,12 +44,10 @@ export default function SignupScreen() {
     }
     setIsLoading(true);
     try {
-      const response = await registerUser({ name, email, password });
+      await registerUser({ name, email, password });
       Alert.alert("Success", "Account Created Successfully");
-      // console.log("Signup Response:", response);
       Navigation.navigate("LoginScreen");
     } catch (error: any) {
-      console.error("Signup Error:", error.message);
       Alert.alert("Error", error.message);
     } finally {
       setIsLoading(false);
@@ -165,9 +155,6 @@ export default function SignupScreen() {
 
         <Text style={styles.socialText}>Login using</Text>
         <View style={styles.socialButtons}>
-          {/* <TouchableOpacity onPress={() => handleSocialLoginPress()}>
-          <Image source={assets.applelogo} style={styles.socialIconApple} />
-        </TouchableOpacity> */}
           <TouchableOpacity onPress={() => handleSocialLoginPress()}>
             <Image
               source={assets.facebooklogo}

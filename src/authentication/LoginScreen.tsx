@@ -1,13 +1,5 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  Alert,
-  SafeAreaView,
-  ScrollView,
-} from "react-native";
+import { View, Text, StyleSheet, Image, Alert, ScrollView } from "react-native";
 import { TouchableOpacity } from "react-native";
 import { Typography } from "../theme/Colors";
 import { assets } from "../../assets/images";
@@ -19,7 +11,6 @@ import CustomButton from "../components/button/CustomButton";
 import CustomTextInput from "../components/textInput/CustomTextInput";
 
 export default function LoginScreen() {
-  // const login = useAuthStore((state) => state.login);?
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
@@ -89,7 +80,6 @@ export default function LoginScreen() {
   };
 
   return (
-    // <SafeAreaView>
     <ScrollView style={styles.scrollviewcontainer}>
       <View style={styles.container}>
         <View style={styles.logoContainer}>
@@ -213,7 +203,6 @@ export default function LoginScreen() {
         </View>
       </View>
     </ScrollView>
-    /* </SafeAreaView> */
   );
 }
 

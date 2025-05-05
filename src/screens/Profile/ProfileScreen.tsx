@@ -5,6 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 import useAuthStore from "../../stores/useAuthStore";
 
 const ProfileScreen = () => {
+  const { name, email } = useAuthStore();
   const Navigation = useNavigation();
   const logout = useAuthStore((state) => state.logout);
   const handleEditProfileScreen = () => {
@@ -134,7 +135,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 17,
     flexDirection: "row",
-    // alignSelf:'center'
     justifyContent: "space-between",
   },
   textcontainer: {
@@ -172,12 +172,10 @@ const styles = StyleSheet.create({
   },
   logocontainer: {
     alignSelf: "center",
-    // justifyContent: "center",
     flexDirection: "row",
     gap: 20,
   },
   textlist: {
-    // paddingVertical: 6,
     alignSelf: "center",
     fontSize: 16,
     fontWeight: "600",
@@ -192,8 +190,6 @@ const styles = StyleSheet.create({
     color: Typography.Colors.red,
   },
   textlistpayment: {
-    // marginBottom: 5,
-    // paddingVertical: 1,
     alignSelf: "center",
     fontSize: 16,
     fontWeight: "600",

@@ -18,17 +18,15 @@ export default function ChangePasswordScreen() {
       Alert.alert("Error", "Please fill in all fields.");
       return;
     }
-    Navigation.goBack();
     setIsLoading(true);
     try {
-      const response = await changePasswordService({
+      await changePasswordService({
         newPassword,
         confirmNewPassword,
       });
       Alert.alert("Success", "Password changed successfully!");
-      console.log("Change Password Response:", response);
+      Navigation.goBack();
     } catch (error: any) {
-      console.error("Change Password Error:", error.message);
       Alert.alert("Error", error.message || "Failed to change password.");
     } finally {
       setIsLoading(false);
@@ -48,7 +46,6 @@ export default function ChangePasswordScreen() {
       <View style={styles.welcomeandsignup}>
         <Text style={styles.welcomeText}>New Password</Text>
         <Text style={styles.subText}>Set new password for your account</Text>
-        {/* <Text style={styles.subsubText}>password</Text> */}
       </View>
 
       <CustomTextInput
@@ -99,13 +96,6 @@ const styles = StyleSheet.create({
     color: Typography.Colors.lightgrey,
     marginBottom: 30,
   },
-  // subsubText: {
-  //   fontFamily: Typography.font.regular,
-  //   fontSize: 15,
-  //   color: Typography.Colors.lightgrey,
-  //   // alignItems: "center",
-
-  // },
   containerlogo: {
     width: 72,
     height: 72,

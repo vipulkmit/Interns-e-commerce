@@ -19,18 +19,16 @@ export default function PasswordchangeScreen({ route }) {
       Alert.alert("Error", "Please fill in all fields.");
       return;
     }
-    Navigation.navigate("LoginScreen");
     setIsLoading(true);
     try {
-      const response = await changePasswordService({
+      await changePasswordService({
         email,
         password: newPassword,
         confirmPassword: confirmNewPassword,
       });
       Alert.alert("Success", "Password changed successfully!");
-      console.log("Change Password Response:", response);
+      Navigation.navigate("LoginScreen");
     } catch (error: any) {
-      console.error("Change Password Error:", error.message);
       Alert.alert("Error", error.message || "Failed to change password.");
     } finally {
       setIsLoading(false);
