@@ -6,23 +6,24 @@ import { verifyOtpService } from "../services/api/apiServices";
 import CustomTextInput from "../components/textInput/CustomTextInput";
 import CustomButton from "../components/button/CustomButton";
 
-export default function VerifyotpScreen() {
+export default function VerifyotpScreen({ route }) {
+  const { email } = route.params;
   // const [email, setemail] = useState("");
   const [otp, setotp] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const Navigation = useNavigation();
 
   const Sendverification = async () => {
-    Navigation.navigate("Passwordchange");
     if (!otp.trim()) {
-      Alert.alert("Error", "Please enter both email and OTP.");
+      Alert.alert("Error", "Please enter OTP.");
       return;
     }
 
     setIsLoading(true);
     try {
-      const response = await verifyOtpService({ otp });
+      const response = await verifyOtpService({ email, OTP: otp });
       Alert.alert("Success", "OTP verified successfully!");
+      Navigation.navigate("Passwordchange", { email: email });
       console.log("Verify OTP Response:", response);
     } catch (error: any) {
       console.error("Verify OTP Error:", error.message);
