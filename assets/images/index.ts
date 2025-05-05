@@ -53,4 +53,8 @@ export const assets = {
   heart: require("./smallheart.png"),
   tote: require("./tote.png"),
   rightarrow: require("./Vector.png"),
+  left: require("./Left.png"),
+  name: require("./Name.png"),
+  message: require("./Message.png"),
+  password: require("./Password.png"),
 };

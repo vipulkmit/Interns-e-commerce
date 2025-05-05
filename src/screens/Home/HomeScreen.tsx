@@ -40,7 +40,6 @@ import Category from "./Category";
 const { width } = Dimensions.get("window");
 
 const HomeScreen = () => {
-  const logout = useAuthStore((state) => state.logout);
   const navigation = useNavigation();
   const animations = useRef(
     BannerData.map(() => new Animated.Value(17))
@@ -302,11 +301,11 @@ const HomeScreen = () => {
           />
         </View>
 
-        <View style={styles.container}>
+        {/* <View style={styles.container}>
           <TouchableOpacity style={styles.buttonstyle} onPress={logout}>
             <Text style={styles.textstyle}>Go Back to LoginScreen</Text>
           </TouchableOpacity>
-        </View>
+        </View> */}
       </>
     );
   };

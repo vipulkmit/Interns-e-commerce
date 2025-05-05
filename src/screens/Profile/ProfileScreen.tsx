@@ -1,11 +1,18 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Typography } from "../../theme/Colors";
 import { assets } from "../../../assets/images";
+import { useNavigation } from "@react-navigation/native";
+import useAuthStore from "../../stores/useAuthStore";
 
 const ProfileScreen = () => {
+  const Navigation = useNavigation();
+  const logout = useAuthStore((state) => state.logout);
+  const handleEditProfileScreen = () => {
+    Navigation.navigate("EditProfileScreen");
+  };
   return (
     <View style={styles.container}>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={handleEditProfileScreen}>
         <View style={styles.firstsection}>
           <Image source={assets.kids} style={styles.profilepic}></Image>
           <View style={styles.textcontainer}>
@@ -91,11 +98,11 @@ const ProfileScreen = () => {
           </View>
         </View>
       </TouchableOpacity>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={logout}>
         <View style={styles.secondsection}>
           <View style={styles.logocontainer}>
             <Image source={assets.Logout} style={styles.logostyle} />
-            <Text style={styles.textlist}>Log Out</Text>
+            <Text style={styles.textlistlogout}>Log Out</Text>
           </View>
         </View>
       </TouchableOpacity>
@@ -176,6 +183,13 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     fontFamily: Typography.font.medium,
     color: Typography.Colors.blackdim,
+  },
+  textlistlogout: {
+    alignSelf: "center",
+    fontSize: 16,
+    fontWeight: "600",
+    fontFamily: Typography.font.medium,
+    color: Typography.Colors.red,
   },
   textlistpayment: {
     // marginBottom: 5,
