@@ -1,14 +1,13 @@
+import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import { View, Text, StyleSheet, Image, Alert } from "react-native";
-import { Typography } from "../theme/Colors";
-import { assets } from "../../assets/images";
-import { useNavigation } from "@react-navigation/native";
-import { changePasswordService } from "../services/api/apiServices";
-import CustomTextInput from "../components/textInput/CustomTextInput";
-import CustomButton from "../components/button/CustomButton";
+import { assets } from "../../../assets/images";
+import { Typography } from "../../theme/Colors";
+import CustomButton from "../../components/button/CustomButton";
+import CustomTextInput from "../../components/textInput/CustomTextInput";
+import { changePasswordService } from "../../services/api/apiServices";
 
-export default function PasswordchangeScreen({ route }) {
-  const { email } = route.params;
+export default function ChangePasswordScreen() {
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -19,13 +18,12 @@ export default function PasswordchangeScreen({ route }) {
       Alert.alert("Error", "Please fill in all fields.");
       return;
     }
-    Navigation.navigate("LoginScreen");
+    Navigation.goBack();
     setIsLoading(true);
     try {
       const response = await changePasswordService({
-        email,
-        password: newPassword,
-        confirmPassword: confirmNewPassword,
+        newPassword,
+        confirmNewPassword,
       });
       Alert.alert("Success", "Password changed successfully!");
       console.log("Change Password Response:", response);
@@ -101,6 +99,13 @@ const styles = StyleSheet.create({
     color: Typography.Colors.lightgrey,
     marginBottom: 30,
   },
+  // subsubText: {
+  //   fontFamily: Typography.font.regular,
+  //   fontSize: 15,
+  //   color: Typography.Colors.lightgrey,
+  //   // alignItems: "center",
+
+  // },
   containerlogo: {
     width: 72,
     height: 72,

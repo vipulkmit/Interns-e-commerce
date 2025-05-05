@@ -6,8 +6,8 @@ import {
   verifyotp,
 } from "../../authentication/AuthApi";
 import { registerUser } from "../../authentication/AuthApi";
-import axiosInstance from './axiosInstance';
-import ENDPOINTS from '../../utils/endpoints';
+import axiosInstance from "./axiosInstance";
+import ENDPOINTS from "../../utils/endpoints";
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -92,12 +92,12 @@ const verifyOtpSchema = z.object({
 });
 
 export const verifyOtpService = async (FormData: any) => {
-  const parsed = verifyOtpSchema.safeParse(FormData);
-  if (!parsed.success) {
-    throw new Error("Validation Failed:" + JSON.stringify(parsed.error.errors));
-  }
+  // const parsed = verifyOtpSchema.safeParse(FormData);
+  // if (!parsed.success) {
+  //   throw new Error("Validation Failed:" + JSON.stringify(parsed.error.errors));
+  // }
   try {
-    const response = await verifyotp(parsed.data);
+    const response = await verifyotp(FormData);
     return response.data;
   } catch (error) {
     console.log("Verify OTP Service Error", error.message);
@@ -120,12 +120,12 @@ const changePasswordSchema = z
   });
 
 export const changePasswordService = async (FormData: any) => {
-  const parsed = changePasswordSchema.safeParse(FormData);
-  if (!parsed.success) {
-    throw new Error("Validation Failed:" + JSON.stringify(parsed.error.errors));
-  }
+  // const parsed = changePasswordSchema.safeParse(FormData);
+  // if (!parsed.success) {
+  //   throw new Error("Validation Failed:" + JSON.stringify(parsed.error.errors));
+  // }
   try {
-    const response = await changepassword(parsed.data);
+    const response = await changepassword(FormData);
     return response.data;
   } catch (error) {
     console.error("Change Password");

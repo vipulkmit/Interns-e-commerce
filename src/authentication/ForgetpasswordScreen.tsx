@@ -4,11 +4,8 @@ import { Typography } from "../theme/Colors";
 import { assets } from "../../assets/images";
 import { useNavigation } from "@react-navigation/native";
 import { forgotPasswordService } from "../services/api/apiServices";
-// import CustomTextInput from "../components/textInput/CustomTextInput";
 import CustomButton from "../components/button/CustomButton";
 import CustomTextInput from "../components/textInput/CustomTextInput";
-// import CustomTextInput from "../components/textInput/CustomTextInput";
-// import CustomButton from "../components/button/CustomButton";
 
 export default function ForgetpasswordScreen() {
   const [email, setEmail] = useState("");
@@ -27,7 +24,7 @@ export default function ForgetpasswordScreen() {
       Alert.alert("Success", "Verification email sent successfully!");
       console.log("Forgot Password Response:", response);
 
-      Navigation.navigate("Verifyotp");
+      Navigation.navigate("Verifyotp", { email: email });
     } catch (error: any) {
       console.error("Forgot Password Error:", error.message);
       Alert.alert(
