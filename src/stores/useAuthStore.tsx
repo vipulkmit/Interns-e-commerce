@@ -2,28 +2,31 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 
-type AuthStore = {
+type User = {
   name: string;
   email: string;
+  number: string;
+};
+
+type AuthStore = {
   isLoggedIn: boolean;
   token: string | null;
   login: () => void;
   logout: () => void;
+  user: User | null;
   setToken: (newtoken: string | null) => void;
-  setUser: (user: { name: string; email: string }) => void;
+  setUser: (user: User) => void;
   clearUser: () => void;
 };
 
 const useAuthStore = create<AuthStore>()(
   persist(
     (set) => ({
-      name: "",
-      email: "",
+      user: null,
       token: null,
       isLoggedIn: false,
 
-      setUser: (user: { name: string; email: string }) =>
-        set({ name: user.name, email: user.email }),
+      setUser: (user) => set({ user }),
 
       setToken: (newtoken) => set({ token: newtoken }),
 
@@ -31,7 +34,7 @@ const useAuthStore = create<AuthStore>()(
 
       logout: () => set({ isLoggedIn: false }),
 
-      clearUser: () => set({ name: "", email: "" }),
+      clearUser: () => set({ user: null }),
     }),
     {
       name: "auth-storage",
@@ -40,24 +43,3 @@ const useAuthStore = create<AuthStore>()(
   )
 );
 export default useAuthStore;
-
-// type AuthStore = {
-//   email: string;
-//   setUser: (user: { [key: string]: any }) => void;
-//   clearUser: () => void;
-// };
-// const useAuthStore = create<AuthStore>()(
-//   persist(
-//     (set) => ({
-//       email: '',
-//       setUser: (user) => set({ email: user.email }),
-//       clearUser: () => set({ email: '' }),
-//     }),
-//     {
-//       name: 'auth-storage',
-//       storage: createJSONStorage(() => AsyncStorage),
-//     }
-//   )
-// );
-// export default useAuthStore;
-// const setUser = useAuthStore((state) => state.setUser);

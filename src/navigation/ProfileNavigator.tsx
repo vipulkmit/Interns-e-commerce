@@ -15,10 +15,7 @@ const ProfileNavigator = () => {
     >
       <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
       <Stack.Screen name="EditProfileScreen" component={EditProfileScreen} />
-      <Stack.Screen
-        name="ChangePasswordScreen"
-        component={ChangePasswordScreen}
-      />
+      <Stack.Screen name="ChangePasswordScreen" component={ChangePasswordScreen} />
     </Stack.Navigator>
   );
 };

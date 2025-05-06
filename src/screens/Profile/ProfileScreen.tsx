@@ -5,7 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 import useAuthStore from "../../stores/useAuthStore";
 
 const ProfileScreen = () => {
-  const { name, email } = useAuthStore();
+  const user = useAuthStore((state) => state.user);
   const Navigation = useNavigation();
   const logout = useAuthStore((state) => state.logout);
   const handleEditProfileScreen = () => {
@@ -17,8 +17,8 @@ const ProfileScreen = () => {
         <View style={styles.firstsection}>
           <Image source={assets.kids} style={styles.profilepic}></Image>
           <View style={styles.textcontainer}>
-            <Text style={styles.textname}> Saurav Gupta</Text>
-            <Text style={styles.mailcontainer}> gsaurav641@gmail.com</Text>
+            <Text style={styles.textname}>{user?.name}</Text>
+            <Text style={styles.mailcontainer}>{user?.email}</Text>
           </View>
         </View>
       </TouchableOpacity>

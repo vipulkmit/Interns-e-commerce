@@ -97,11 +97,8 @@ const styles = StyleSheet.create({
   },
   arrowstyle: {
     paddingVertical: 2,
-    // paddingHorizontal: 2.5,
-    // color: Typography.Colors.lightgrey,
     height: 35,
     width: 35,
-    // alignSelf: "center",
   },
   textstyle: {
     fontSize: 20,
@@ -112,7 +109,6 @@ const styles = StyleSheet.create({
     color: Typography.Colors.primary,
   },
   viewaccount: {
-    // paddingHorizontal: 10,
     flexDirection: "row",
     justifyContent: "flex-start",
     gap: 20,

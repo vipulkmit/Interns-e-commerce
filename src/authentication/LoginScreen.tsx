@@ -18,7 +18,7 @@ export default function LoginScreen() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isSelected, setSelection] = useState(false);
   const Navigation = useNavigation();
-  const { setToken } = useAuthStore();
+  const { setToken, setUser } = useAuthStore();
 
   const handleForgotPasswordPress = () => {
     Navigation.navigate("Forgetpassword");
@@ -61,8 +61,16 @@ export default function LoginScreen() {
     setIsLoading(true);
     try {
       const response = await loginService({ email, password });
+
       if (response.access_token) {
+        const userData = {
+          name: response.name,
+          email: response.email,
+          number: response.number,
+        };
+
         useAuthStore.setState({ isLoggedIn: true });
+        setUser(userData);
         setToken(response.access_token);
         Navigation.reset({
           index: 0,
