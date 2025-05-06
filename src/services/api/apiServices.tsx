@@ -133,27 +133,35 @@ export const changePasswordService = async (FormData: any) => {
   }
 };
 
+export const Categories = () => axiosInstance.get(ENDPOINTS.CATEGORY);
 
+export const SubCategories = (name) => {
+  return axiosInstance.get(`${ENDPOINTS.SUBCATEGORY}${name}`);
+};
 
-export const Categories = () =>
-  axiosInstance.get(ENDPOINTS.CATEGORY);
+export const Products = (name, category) => {
+  return axiosInstance.get(`${ENDPOINTS.PRODUCTS}${name}/${category}`);
+};
 
-
-export const SubCategories = (name) =>
-{
-  return axiosInstance.get(`${ENDPOINTS.SUBCATEGORY}${name}`);}
-
-  
-export const Products = (name,category) =>
-  {
-    return axiosInstance.get(`${ENDPOINTS.PRODUCTS}${name}/${category}`);}
-
-export const CarousalData = ()=>
-  axiosInstance.get(ENDPOINTS.CAROUSAL);
+export const CarousalData = () => axiosInstance.get(ENDPOINTS.CAROUSAL);
 
 export const AddToWishlist = (id: string) => {
   // console.log(id,"dfhuifgkerghr")
-  return (
-  axiosInstance.post(ENDPOINTS.WISHLIST, {id})
-  )
-}
+  return axiosInstance.post(ENDPOINTS.WISHLISTPOST, { productId: id });
+};
+
+export const WishlistData = () => {
+  return axiosInstance.get(ENDPOINTS.WISHLISTGET);
+};
+
+export const WishlistDelete = (productId: string) => {
+ return axiosInstance.delete(ENDPOINTS.WISHLIST, {
+    data:{
+      productId
+    },
+  });
+  // console.log(a,"aaaaaaaaaaaaaaaaaaaaa")
+};
+
+export const WishlistDeleteAll = () =>
+  axiosInstance.delete(ENDPOINTS.WISHLISTDELETE);

@@ -14,6 +14,7 @@ axiosInstance.interceptors.request.use(
     const { token } = useAuthStore.getState();
 
     if (token) config.headers.Authorization = `Bearer ${token}`;
+    // console.log(config,'configconfigconfigconfigconfigconfig')
     return config;
   },
   (error) => Promise.reject(error)

@@ -23,7 +23,7 @@ const HeaderComponent = ({
                     </Pressable>
                     <Text numberOfLines={1} style={styles.productType}>{Title} </Text>
                 </View>
-                
+
                 <View style={styles.iconContainer}>
                     <TouchableWithoutFeedback >
                         <Image source={assets.MainSearch} style={styles.icon} />
@@ -37,10 +37,18 @@ const HeaderComponent = ({
                 </View>
             </View>
             <View style={styles.subContainer}>
-                <Text style={styles.text}>Sort By</Text>
-                <TouchableWithoutFeedback>
-                    <Image source={assets.DownArray} style={styles.SubIcon} />
-                </TouchableWithoutFeedback>
+                <View style={styles.subContainer}>
+                    <Text style={styles.text}>Filters</Text>
+                    <TouchableWithoutFeedback>
+                        <Image source={assets.Filter} style={styles.SubIcon} />
+                    </TouchableWithoutFeedback>
+                </View>
+                <View style={styles.subContainer}>
+                    <Text style={styles.text}>Sort By</Text>
+                    <TouchableWithoutFeedback>
+                        <Image source={assets.DownArray} style={styles.SubIcon} />
+                    </TouchableWithoutFeedback>
+                </View>
             </View>
         </View>
 
@@ -59,7 +67,7 @@ const styles = StyleSheet.create(
             flexDirection: 'row',
             alignItems: 'flex-end',
             justifyContent: 'flex-end',
-            paddingTop: 15,
+            paddingTop: 10,
             paddingRight: 10,
             // backgroundColor:'red'
         },
