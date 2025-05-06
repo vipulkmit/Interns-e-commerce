@@ -19,6 +19,7 @@ export default function LoginScreen() {
   const [isSelected, setSelection] = useState(false);
   const Navigation = useNavigation();
   const { setToken, setUser } = useAuthStore();
+  // console.log(setUser, "dsfdsnfdsf");
 
   const handleForgotPasswordPress = () => {
     Navigation.navigate("Forgetpassword");
@@ -61,16 +62,16 @@ export default function LoginScreen() {
     setIsLoading(true);
     try {
       const response = await loginService({ email, password });
-
       if (response.access_token) {
-        const userData = {
-          name: response.name,
-          email: response.email,
-          number: response.number,
-        };
-
+        // const userData = {
+        //   name: response.userDetail.name,
+        //   email: response.userDetail.email,
+        //   number: response.userDetail.number,
+        // };
+        // console.log(response, "nigsfgnrsf");
+        // console.log(userData, "dusvndsivud");
         useAuthStore.setState({ isLoggedIn: true });
-        setUser(userData);
+        setUser(response.data);
         setToken(response.access_token);
         Navigation.reset({
           index: 0,
@@ -106,7 +107,7 @@ export default function LoginScreen() {
         <CustomTextInput
           value={email}
           onChangeText={setEmail}
-          placeholder="Your Email / Phone Number"
+          placeholder="Enter Your Email"
           keyboardType="email-address"
           iconname="person"
           iconsize={25}

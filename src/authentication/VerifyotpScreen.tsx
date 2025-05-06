@@ -23,6 +23,7 @@ export default function VerifyotpScreen({ route }) {
     try {
       await verifyOtpService({ email, OTP: otp });
       Alert.alert("Success", "OTP verified successfully!");
+      console.log(email, "fdbyjybfduiyf");
       Navigation.navigate("Passwordchange", { email: email });
     } catch (error: any) {
       Alert.alert("Error", error.message || "Failed to verify OTP.");

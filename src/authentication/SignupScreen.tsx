@@ -10,7 +10,8 @@ import CustomButton from "../components/button/CustomButton";
 import CustomTextInput from "../components/textInput/CustomTextInput";
 
 export default function SignupScreen() {
-  const login = useAuthStore((state) => state.login);
+  // const login = useAuthStore((state) => state.login);
+  const { setUser } = useAuthStore();
   const [name, setName] = useState("");
   const [email, setemail] = useState("");
   const [password, setPassword] = useState("");
@@ -44,8 +45,11 @@ export default function SignupScreen() {
     }
     setIsLoading(true);
     try {
-      await registerUser({ name, email, password });
+      const response = await registerUser({ name, email, password });
       Alert.alert("Success", "Account Created Successfully");
+      console.log(response, "res");
+      setUser(response.data);
+      console.log(response.data, "dskufcbhefue");
       Navigation.navigate("LoginScreen");
     } catch (error: any) {
       Alert.alert("Error", error.message);
@@ -90,7 +94,7 @@ export default function SignupScreen() {
         <CustomTextInput
           value={email}
           onChangeText={setemail}
-          placeholder="Your Email / Phone Number"
+          placeholder="Enter Your Email"
           keyboardType="email-address"
           iconname="mail"
           iconsize={25}

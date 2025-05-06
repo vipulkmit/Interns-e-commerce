@@ -1,93 +1,69 @@
-import {
-  Animated,
-  Dimensions,
-  FlatList,
-  Image,
-  ImageBackground,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import React, { useEffect, useRef, useState } from "react";
-import { assets } from "../../../assets/images";
-import {
-  CategoryProps,
-  BannerProps,
-  TrendingProps,
-  ProductProps,
-} from "../../models/HomePage.type";
-import {
-  BannerData,
-  CardData,
-  DealData,
-  ProductData,
-  HeaderData,
-} from "../../constant";
-import Carousel from "react-native-reanimated-carousel";
-import CardComponent from "../../components/card/CardComponent";
-import ProductComponent from "../../components/product/ProductComponent";
-import ButtonComponent from "../../components/button/ButtonComponent";
-import TopHeaderComponent from "../../components/header/TopHeaderComponent";
-import { useNavigation } from "@react-navigation/native";
-import useAuthStore from "../../stores/useAuthStore";
-import { Typography } from "../../theme/Colors";
-import { Categories } from "../../services/api/apiServices";
-import Category from "./Category";
+import { Animated, Dimensions, FlatList, Image, ImageBackground, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React, { useEffect, useRef, useState } from 'react'
+import { assets } from '../../../assets/images'
+import { CategoryProps, BannerProps, TrendingProps, ProductProps } from '../../models/HomePage.type';
+import { BannerData, CardData, DealData, ProductData, HeaderData } from '../../constant';
+import Carousel from 'react-native-reanimated-carousel';
+import CardComponent from '../../components/card/CardComponent';
+import ProductComponent from '../../components/product/ProductComponent';
+import ButtonComponent from '../../components/button/ButtonComponent';
+import TopHeaderComponent from '../../components/header/TopHeaderComponent';
+import { useNavigation } from '@react-navigation/native';
+import useAuthStore from '../../stores/useAuthStore'
+import { Typography } from '../../theme/Colors';
+import { CarousalData, Categories } from '../../services/api/apiServices';
+import Category from './Category';
+import ContentLoader from 'react-native-easy-content-loader';
+
 
 const { width } = Dimensions.get("window");
 
 const HomeScreen = () => {
+  const logout = useAuthStore((state) => state.logout)
   const navigation = useNavigation();
-  const animations = useRef(
-    BannerData.map(() => new Animated.Value(17))
-  ).current;
+  const animations = useRef(BannerData.map(() => new Animated.Value(17))).current;
 
   const renderCategoryPage = (name) => {
     // console.log(item,"ghfffgfghfghfghfghfghfhg")
-    navigation.navigate("Category", { name: name });
-  };
+    navigation.navigate('Category', { name: name })
+  }
   // Category Render Item
 
-  const renderItem = ({ item }: { item: CategoryProps }) => {
-    // console.log(item,"scvd vyusf b");
+  const renderItem = ({ item }) => {
+    // console.log(item.image,'imageeeeeeeeee');
+
     return (
-      <Pressable
-        style={styles.subContainer}
-        onPress={() => renderCategoryPage(item.name)}
-      >
+      <Pressable style={styles.subContainer} onPress={() => renderCategoryPage(item.name)}>
         <Image source={{ uri: item.image }} style={styles.flatlistImage} />
-        <Text style={styles.text} numberOfLines={1}>
-          {item.name}
-        </Text>
+        <Text style={styles.text} numberOfLines={1}>{item.name}</Text>
       </Pressable>
-    );
+    )
   };
 
   // Carousel Render Item
 
-  const CarouselRenderItem = (item: BannerProps) => (
-    <ImageBackground
-      source={item.image}
-      style={styles.imageBackground}
-      imageStyle={styles.imagestyle}
-    >
-      <View style={styles.overlay}>
-        <Image
-          style={styles.logostyle}
-          source={item.logoImage}
-          resizeMode="contain"
-        />
-        <Text style={styles.text1}>{item.event}</Text>
-        <Text style={styles.text1}>{item.discount}</Text>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Explore</Text>
-        </TouchableOpacity>
-      </View>
-    </ImageBackground>
-  );
+
+  const CarouselRenderItem = ({ item }) => {
+    // console.log(item.image,'item');
+
+    return (
+      // <Text>jdcfgsdyu  </Text>
+      <ImageBackground
+        source={{ uri: item.image }}
+        style={styles.imageBackground}
+        imageStyle={styles.imagestyle}>
+        <View style={styles.overlay}>
+          <Image style={styles.logostyle} source={{ uri: item.logoURL }} resizeMode='contain' />
+          <Text style={styles.text1}>{item.description}</Text>
+          <Text style={styles.text1}>{item.offer}</Text>
+          <TouchableOpacity style={styles.button}>
+            <Text style={styles.buttonText}>Explore</Text>
+          </TouchableOpacity>
+        </View>
+      </ImageBackground>
+    )
+  };
+
 
   const animateDot = (index: number, isActive: boolean) => {
     Animated.timing(animations[index], {
@@ -122,22 +98,15 @@ const HomeScreen = () => {
   const DealRenderItem = ({ item }: { item: TrendingProps }) => {
     return (
       // <View style={{paddingLeft:20}}>
-      <Pressable
-        style={styles.dealView}
-        onPress={() => {
-          navigation.navigate("HomeScreen1");
-        }}
-      >
-        <CardComponent
-          staticContainer={styles.staticContainer}
-          img={item.img}
-          amount={item.amount}
-          productType={item.productType}
-          productImgStyle={styles.productImage}
-        />
+      <Pressable style={styles.dealView} >
+        <CardComponent staticContainer={styles.staticContainer} img={item.img} amount={item.amount} productType={item.productType} productImgStyle={styles.productImage} />
       </Pressable>
-    );
-  };
+
+    )
+
+  }
+
+
 
   //Product Render item
   const ProductRenderItem = ({ item }: { item: ProductProps }) => {
@@ -175,26 +144,39 @@ const HomeScreen = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
 
     const [Category, setCategory] = useState();
+    const [CarouselData, setCarouselData] = useState();
+    // console.log(Category,'cteguhsuliegcf ');
+    const [loading, setLoading] = useState(true);
+
+    // useEffect(() => {
+    //   setTimeout(() => setLoading(false), 3000); // Simulate loading delay
+    // }, []);
 
     useEffect(() => {
-      Categories()
-        .then((data) => {
-          setCategory(data?.data);
-        })
-        .catch((e) => {
-          console.log("no data");
-        });
-    }, []);
+      Categories().then(data => {
+        setCategory(data?.data)
+      }).catch((e) => {
+        console.log('no data');
+      })
+    }, [])
+
+
+    useEffect(() => {
+      CarousalData().then(data => {
+        setCarouselData(data?.data.data)
+        // console.log(data.data.data);
+
+      }).catch((e) => {
+        console.log('no data');
+      })
+    }, [])
 
     return (
       <>
         {/* Header View */}
         <View style={styles.HeaderStyle}>
-          <TopHeaderComponent
-            userImage={HeaderData.userImage}
-            userName={HeaderData.userName}
-            icon={HeaderData.icon}
-          />
+
+          <TopHeaderComponent userImage={HeaderData.userImage} userName={HeaderData.userName} icon={HeaderData.icon} />
         </View>
 
         {/* Category View */}
@@ -212,6 +194,7 @@ const HomeScreen = () => {
             </Text>
           </View>
           <View style={styles.categorySubContainer}>
+
             <FlatList
               data={Category}
               renderItem={renderItem}
@@ -231,15 +214,13 @@ const HomeScreen = () => {
               autoPlayInterval={3000}
               width={width}
               height={344.67}
-              onSnapToItem={(index) => {
-                setCurrentIndex(index);
-              }}
-              data={BannerData}
+              onSnapToItem={(index) => { setCurrentIndex(index) }}
+              data={CarouselData}
               scrollAnimationDuration={1000}
-              renderItem={({ item }) => CarouselRenderItem(item)}
+              renderItem={CarouselRenderItem}
             />
             <View style={styles.paginationContainer}>
-              {BannerData.map((_, index) => (
+              {CarouselData?.map((_, index) => (
                 <Animated.View
                   key={index}
                   style={[
@@ -278,12 +259,7 @@ const HomeScreen = () => {
         </View>
 
         <View style={styles.dealContainer}>
-          <Text
-            numberOfLines={1}
-            style={[styles.TrendingText, { paddingLeft: 5 }]}
-          >
-            Deals Of The Day
-          </Text>
+          <Text numberOfLines={1} style={[styles.TrendingText, { paddingLeft: 5 }]} >Deals Of The Day</Text>
         </View>
       </>
     );
@@ -317,23 +293,19 @@ const HomeScreen = () => {
       renderItem={DealRenderItem}
       keyExtractor={(item) => item.id.toString()}
       numColumns={2}
-      contentContainerStyle={{ gap: 10, backgroundColor: "#FFFFFF" }}
+      contentContainerStyle={{ gap: 10, backgroundColor: '#FFFFFF' }}
       columnWrapperStyle={styles.row}
       showsVerticalScrollIndicator={false}
       ListHeaderComponent={ListHeader}
-      ListHeaderComponentStyle={{
-        flex: 1,
-        backgroundColor: Typography.Colors.white,
-      }}
+      ListHeaderComponentStyle={{ flex: 1, backgroundColor: Typography.Colors.white }}
       ListFooterComponent={listFooter}
-      ListFooterComponentStyle={{
-        flex: 1,
-        backgroundColor: Typography.Colors.white,
-      }}
+      ListFooterComponentStyle={{ flex: 1, backgroundColor: Typography.Colors.white }}
+
     />
     // </View>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {
@@ -404,6 +376,8 @@ const styles = StyleSheet.create({
     height: "100%",
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: Typography.Colors.lightblack,
+    opacity: 0.8
   },
   logostyle: {
     width: 175,
@@ -470,9 +444,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   row: {
-    alignSelf: "center",
+    alignSelf: 'center',
     gap: 20,
-    marginHorizontal: 20,
+    marginHorizontal: 20
   },
   buttonStyle: {
     backgroundColor: Typography.Colors.white,

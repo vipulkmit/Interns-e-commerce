@@ -57,4 +57,5 @@ export const assets = {
   name: require("./Name.png"),
   message: require("./Message.png"),
   password: require("./Password.png"),
+  Demo: require("./demo.png"),
 };

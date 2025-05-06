@@ -15,7 +15,14 @@ const ProfileScreen = () => {
     <View style={styles.container}>
       <TouchableOpacity onPress={handleEditProfileScreen}>
         <View style={styles.firstsection}>
-          <Image source={assets.kids} style={styles.profilepic}></Image>
+          <Image
+            source={
+              user?.userDetails?.profilePicture
+                ? { uri: user?.userDetails?.profilePicture }
+                : assets.Demo
+            }
+            style={styles.profilepic}
+          />
           <View style={styles.textcontainer}>
             <Text style={styles.textname}>{user?.name}</Text>
             <Text style={styles.mailcontainer}>{user?.email}</Text>
@@ -26,7 +33,7 @@ const ProfileScreen = () => {
         <View style={styles.secondsection}>
           <View style={styles.logocontainer}>
             <Image source={assets.tote} style={styles.logostyle} />
-            <Text style={styles.textlist}> My Orders</Text>
+            <Text style={styles.textlist}>My Orders</Text>
           </View>
           <View style={styles.arrowstyleview}>
             <Image source={assets.rightarrow} style={styles.arrowstyle} />
@@ -145,7 +152,7 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     height: 62,
     width: 62,
-    backgroundColor: "red",
+    // backgroundColor: "red",
   },
   textname: {
     fontSize: 18,
