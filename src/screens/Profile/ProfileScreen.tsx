@@ -5,6 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 import useAuthStore from "../../stores/useAuthStore";
 
 const ProfileScreen = () => {
+  const user = useAuthStore((state) => state.user);
   const Navigation = useNavigation();
   const logout = useAuthStore((state) => state.logout);
   const handleEditProfileScreen = () => {
@@ -14,10 +15,17 @@ const ProfileScreen = () => {
     <View style={styles.container}>
       <TouchableOpacity onPress={handleEditProfileScreen}>
         <View style={styles.firstsection}>
-          <Image source={assets.kids} style={styles.profilepic}></Image>
+          <Image
+            source={
+              user?.userDetails?.profilePicture
+                ? { uri: user?.userDetails?.profilePicture }
+                : assets.Demo
+            }
+            style={styles.profilepic}
+          />
           <View style={styles.textcontainer}>
-            <Text style={styles.textname}> Saurav Gupta</Text>
-            <Text style={styles.mailcontainer}> gsaurav641@gmail.com</Text>
+            <Text style={styles.textname}>{user?.name}</Text>
+            <Text style={styles.mailcontainer}>{user?.email}</Text>
           </View>
         </View>
       </TouchableOpacity>
@@ -25,7 +33,7 @@ const ProfileScreen = () => {
         <View style={styles.secondsection}>
           <View style={styles.logocontainer}>
             <Image source={assets.tote} style={styles.logostyle} />
-            <Text style={styles.textlist}> My Orders</Text>
+            <Text style={styles.textlist}>My Orders</Text>
           </View>
           <View style={styles.arrowstyleview}>
             <Image source={assets.rightarrow} style={styles.arrowstyle} />
@@ -134,7 +142,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 17,
     flexDirection: "row",
-    // alignSelf:'center'
     justifyContent: "space-between",
   },
   textcontainer: {
@@ -145,7 +152,7 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     height: 62,
     width: 62,
-    backgroundColor: "red",
+    // backgroundColor: "red",
   },
   textname: {
     fontSize: 18,
@@ -172,12 +179,10 @@ const styles = StyleSheet.create({
   },
   logocontainer: {
     alignSelf: "center",
-    // justifyContent: "center",
     flexDirection: "row",
     gap: 20,
   },
   textlist: {
-    // paddingVertical: 6,
     alignSelf: "center",
     fontSize: 16,
     fontWeight: "600",
@@ -192,8 +197,6 @@ const styles = StyleSheet.create({
     color: Typography.Colors.red,
   },
   textlistpayment: {
-    // marginBottom: 5,
-    // paddingVertical: 1,
     alignSelf: "center",
     fontSize: 16,
     fontWeight: "600",

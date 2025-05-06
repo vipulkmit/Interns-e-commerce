@@ -2,13 +2,14 @@ import React, { useState } from "react";
 import { View, Text, StyleSheet, Image, Alert } from "react-native";
 import { Typography } from "../theme/Colors";
 import { assets } from "../../assets/images";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useNavigationState } from "@react-navigation/native";
 import { changePasswordService } from "../services/api/apiServices";
 import CustomTextInput from "../components/textInput/CustomTextInput";
 import CustomButton from "../components/button/CustomButton";
 
 export default function PasswordchangeScreen({ route }) {
   const { email } = route.params;
+  const state = useNavigationState((state) => state);
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -19,18 +20,20 @@ export default function PasswordchangeScreen({ route }) {
       Alert.alert("Error", "Please fill in all fields.");
       return;
     }
-    Navigation.navigate("LoginScreen");
     setIsLoading(true);
     try {
-      const response = await changePasswordService({
+      await changePasswordService({
         email,
         password: newPassword,
         confirmPassword: confirmNewPassword,
       });
       Alert.alert("Success", "Password changed successfully!");
-      console.log("Change Password Response:", response);
+      if (state.routes[1].name == "EditProfileScreen") {
+        Navigation.goBack();
+      } else {
+        Navigation.navigate("LoginScreen");
+      }
     } catch (error: any) {
-      console.error("Change Password Error:", error.message);
       Alert.alert("Error", error.message || "Failed to change password.");
     } finally {
       setIsLoading(false);
@@ -50,7 +53,6 @@ export default function PasswordchangeScreen({ route }) {
       <View style={styles.welcomeandsignup}>
         <Text style={styles.welcomeText}>New Password</Text>
         <Text style={styles.subText}>Set new password for your account</Text>
-        {/* <Text style={styles.subsubText}>password</Text> */}
       </View>
 
       <CustomTextInput

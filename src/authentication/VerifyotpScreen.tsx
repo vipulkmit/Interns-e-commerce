@@ -21,12 +21,11 @@ export default function VerifyotpScreen({ route }) {
 
     setIsLoading(true);
     try {
-      const response = await verifyOtpService({ email, OTP: otp });
+      await verifyOtpService({ email, OTP: otp });
       Alert.alert("Success", "OTP verified successfully!");
+      console.log(email, "fdbyjybfduiyf");
       Navigation.navigate("Passwordchange", { email: email });
-      console.log("Verify OTP Response:", response);
     } catch (error: any) {
-      console.error("Verify OTP Error:", error.message);
       Alert.alert("Error", error.message || "Failed to verify OTP.");
     } finally {
       setIsLoading(false);
@@ -35,7 +34,6 @@ export default function VerifyotpScreen({ route }) {
 
   return (
     <View style={styles.container}>
-      {/* <View style={{marginBottom:10}}> */}
       <View style={styles.welcomeandsignup}>
         <Text style={styles.welcomeText}>Enter Verification Code</Text>
         <Text style={styles.subText}>
@@ -43,7 +41,6 @@ export default function VerifyotpScreen({ route }) {
         </Text>
         <Text style={styles.subsubtext}>password</Text>
       </View>
-      {/* </View> */}
 
       <CustomTextInput
         value={otp}
@@ -64,7 +61,6 @@ export default function VerifyotpScreen({ route }) {
 const styles = StyleSheet.create({
   container: {
     paddingTop: 200,
-    // marginBottom:60,
     flex: 1,
     paddingHorizontal: 20,
     backgroundColor: Typography.Colors.white,

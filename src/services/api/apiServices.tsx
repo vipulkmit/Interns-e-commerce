@@ -3,11 +3,13 @@ import {
   changepassword,
   forgetpassword,
   loginUser,
+  userUpdate,
   verifyotp,
 } from "../../authentication/AuthApi";
 import { registerUser } from "../../authentication/AuthApi";
 import axiosInstance from "./axiosInstance";
 import ENDPOINTS from "../../utils/endpoints";
+import useAuthStore from "../../stores/useAuthStore";
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -129,6 +131,18 @@ export const changePasswordService = async (FormData: any) => {
     return response.data;
   } catch (error) {
     console.error("Change Password");
+    throw error;
+  }
+};
+
+export const updateUserdata = async (FormData: any) => {
+  try {
+    const response = await userUpdate(FormData);
+    const updatedUser = response.data;
+    useAuthStore.getState().setUser(updatedUser);
+    return updatedUser;
+  } catch (error) {
+    console.error("Update User Data Error:", error);
     throw error;
   }
 };

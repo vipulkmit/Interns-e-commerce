@@ -59,4 +59,5 @@ export const assets = {
   password: require("./Password.png"),
   Filter: require("./filter.png"),
 
+  Demo: require("./demo.png"),
 };

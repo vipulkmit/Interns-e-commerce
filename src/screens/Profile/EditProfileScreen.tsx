@@ -1,16 +1,67 @@
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Alert, Image, Linking, StyleSheet, Text, View } from "react-native";
 import { Typography } from "../../theme/Colors";
 import { TouchableOpacity } from "react-native";
 import { assets } from "../../../assets/images";
 import { useNavigation } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/AntDesign";
+import useAuthStore from "../../stores/useAuthStore";
+import { launchCamera, launchImageLibrary } from "react-native-image-picker";
+import RNFS from "react-native-fs";
 
 const EditProfileScreen = () => {
   const Navigation = useNavigation();
-
+  const user = useAuthStore((state) => state.user);
   const handlepasswordchange = () => {
-    Navigation.navigate("ChangePasswordScreen");
+    Navigation.navigate("Passwordchange", { email: user?.email });
   };
+
+  const handleImageChange = () => {
+    Alert.alert("Choose Image", "Select image from:", [
+      { text: "Cancel", style: "cancel" },
+      { text: "Gallery", onPress: handleGallery },
+      { text: "Camera", onPress: handleCamera },
+    ]);
+  };
+
+  const handleImage = async (uri: string) => {
+    try {
+      const base64 = await RNFS.readFile(uri.replace("file://", ""), "base64");
+      const base64DataUri = `data:image/jpeg;base64,${base64}`;
+      const currentUser = useAuthStore.getState().user;
+      useAuthStore.getState().setUser({
+        ...currentUser,
+        userDetails: {
+          ...currentUser.userDetails,
+          profilePicture: base64DataUri,
+        },
+      });
+    } catch (err) {
+      console.error("Error converting to base64:", err);
+    }
+  };
+
+  const handleCamera = () => {
+    launchCamera({ mediaType: "photo", includeBase64: false }, (response) => {
+      console.log(response);
+      if (response.assets && response.assets[0]) {
+        const uri = response.assets[0].uri || "";
+        handleImage(uri);
+      }
+    });
+  };
+
+  const handleGallery = () => {
+    launchImageLibrary(
+      { mediaType: "photo", includeBase64: false },
+      (response) => {
+        if (response.assets && response.assets[0]) {
+          const uri = response.assets[0].uri || "";
+          handleImage(uri);
+        }
+      }
+    );
+  };
+
   const gobacknav = () => {
     Navigation.goBack();
   };
@@ -23,22 +74,29 @@ const EditProfileScreen = () => {
         <Text style={styles.textstyle}>My Account</Text>
       </View>
       <View style={styles.firstsection}>
-        <TouchableOpacity>
-          <Image source={assets.kids} style={styles.profilepic}></Image>
+        <TouchableOpacity onPress={handleImageChange}>
+          <Image
+            source={
+              user?.userDetails?.profilePicture
+                ? { uri: user.userDetails.profilePicture }
+                : assets.Demo
+            }
+            style={styles.profilepic}
+          />
         </TouchableOpacity>
+
         <View style={styles.textcontainer}>
-          <Text style={styles.textname}> Saurav Gupta</Text>
-          <Text style={styles.mailcontainer}> gsaurav641@gmail.com</Text>
+          <Text style={styles.textname}>{user?.name}</Text>
+          <Text style={styles.mailcontainer}>{user?.email}</Text>
         </View>
       </View>
-
       <View>
         <View style={styles.detailcontainer}>
           <View style={styles.mindetailstyle}>
             <Image source={assets.name} style={styles.imgstyle} />
             <Text style={styles.staticstyle}>Name</Text>
           </View>
-          <Text style={styles.dynamicstyle}>Saurav Gupta</Text>
+          <Text style={styles.dynamicstyle}>{user?.name}</Text>
         </View>
 
         <View style={styles.detailcontainer}>
@@ -46,7 +104,7 @@ const EditProfileScreen = () => {
             <Image source={assets.message} style={styles.imgstyle} />
             <Text style={styles.staticstyle}>Email</Text>
           </View>
-          <Text style={styles.dynamicstyle}>gsaurav641@gmail.com</Text>
+          <Text style={styles.dynamicstyle}>{user?.email}</Text>
         </View>
 
         <TouchableOpacity onPress={handlepasswordchange}>
@@ -63,6 +121,16 @@ const EditProfileScreen = () => {
   );
 };
 
+// launchCamera(options?, callback);
+
+// // You can also use as a promise without 'callback':
+// const result = await launchCamera(options?);
+
+// launchImageLibrary(options?, callback)
+
+// // You can also use as a promise without 'callback':
+// const result = await launchImageLibrary(options?);
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -78,7 +146,7 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     height: 62,
     width: 62,
-    backgroundColor: "red",
+    // backgroundColor: "red",
   },
   textcontainer: {
     paddingHorizontal: 12,
@@ -97,11 +165,8 @@ const styles = StyleSheet.create({
   },
   arrowstyle: {
     paddingVertical: 2,
-    // paddingHorizontal: 2.5,
-    // color: Typography.Colors.lightgrey,
     height: 35,
     width: 35,
-    // alignSelf: "center",
   },
   textstyle: {
     fontSize: 20,
@@ -112,7 +177,6 @@ const styles = StyleSheet.create({
     color: Typography.Colors.primary,
   },
   viewaccount: {
-    // paddingHorizontal: 10,
     flexDirection: "row",
     justifyContent: "flex-start",
     gap: 20,
@@ -148,3 +212,6 @@ const styles = StyleSheet.create({
 });
 
 export default EditProfileScreen;
+function setSelectedImage(arg0: string) {
+  throw new Error("Function not implemented.");
+}
