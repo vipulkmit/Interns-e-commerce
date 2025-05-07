@@ -52,6 +52,30 @@ export const BannerData = [
         event: "Sports Fashion Sale",
         discount: "70% - 80% off",
     },
+    // {
+    //     id: '6',
+    //     image: assets.BannerCarousel,
+    //     logoImage: assets.LogoFor21,
+    //     brand: "Forever 21",
+    //     event: "Big Fashion Festival",
+    //     discount: "70%-80% off",
+    // },
+    // {
+    //     id: '7',
+    //     image: assets.BannerCarousel,
+    //     logoImage: assets.LogoFor21,
+    //     brand: "Forever 21",
+    //     event: "Big Fashion Festival",
+    //     discount: "70%-80% off",
+    // },
+    // {
+    //     id: '8',
+    //     image: assets.BannerCarousel,
+    //     logoImage: assets.LogoFor21,
+    //     brand: "Forever 21",
+    //     event: "Big Fashion Festival",
+    //     discount: "70%-80% off",
+    // },
 ];
 
 

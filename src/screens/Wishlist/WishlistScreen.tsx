@@ -327,7 +327,7 @@ const WishlistScreen = () => {
   const WishlistApi = async () => {
     try {
       const data = await WishlistData();
-      // console.log(data, "dataaaaaa");
+      console.log(data, "dataaaaaa");
       setWislist(data?.data?.data);
     } catch (e) {
       console.log("no data");
@@ -342,6 +342,8 @@ const WishlistScreen = () => {
     // console.log(item.id,"vasdjhcfgus u");
     
     const response = await WishlistDelete(item.id).then((r) => {
+        console.log(r.data);
+        
       if (r.data) {
         WishlistApi();
       }
@@ -350,11 +352,15 @@ const WishlistScreen = () => {
 
 const DeleteAll=async ()=>{
   const response = await WishlistDeleteAll().then((r) => {
-    if (r.data.message) {
-      WishlistApi();
+    console.log(r.data,"response");
+    
+    if (r?.data?.status==200) {
+        // console.log("cfjdvsgjcfs",Wishlist);
+        
+    //   WishlistApi();
+    setWislist(null)
     }
   })
-
 }
 
 
