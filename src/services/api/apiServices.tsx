@@ -161,20 +161,21 @@ export const CarousalData = () => axiosInstance.get(ENDPOINTS.CAROUSAL);
 
 export const AddToWishlist = (id: string) => {
   // console.log(id,"dfhuifgkerghr")
-  return axiosInstance.post(ENDPOINTS.WISHLIST, { id });
+  return axiosInstance.post(ENDPOINTS.WISHLISTPOST, { productId: id });
 };
 
-// export const updateUserdata = async (FormData: any) => {
-//   try {
-//     const response = await userUpdate(FormData);
+export const WishlistData = () => {
+  return axiosInstance.get(ENDPOINTS.WISHLISTGET);
+};
 
-//     const updatedUser = response.data;
+export const WishlistDelete = (productId: string) => {
+ return axiosInstance.delete(ENDPOINTS.WISHLIST, {
+    data:{
+      productId
+    },
+  });
+  // console.log(a,"aaaaaaaaaaaaaaaaaaaaa")
+};
 
-//     useAuthStore.getState().setUser(updatedUser);
-
-//     return updatedUser;
-//   } catch (error) {
-//     console.error("Update User Data Error:", error);
-//     throw error;
-//   }
-// };
+export const WishlistDeleteAll = () =>
+  axiosInstance.delete(ENDPOINTS.WISHLISTDELETE);
