@@ -6,10 +6,19 @@ import useAuthStore from "../../stores/useAuthStore";
 
 const ProfileScreen = () => {
   const user = useAuthStore((state) => state.user);
+  // console.log(user, "reiugrugn");
   const Navigation = useNavigation();
   const logout = useAuthStore((state) => state.logout);
   const handleEditProfileScreen = () => {
-    Navigation.navigate("EditProfileScreen");
+    Navigation.navigate("EditProfile");
+  };
+
+  const handlePrivacyPolicy = () => {
+    Navigation.navigate("PrivacyPolicy");
+  };
+
+  const handleTermsnConditions = () => {
+    Navigation.navigate("TermsnConditions");
   };
   return (
     <View style={styles.container}>
@@ -17,9 +26,7 @@ const ProfileScreen = () => {
         <View style={styles.firstsection}>
           <Image
             source={
-              user?.userDetails?.profilePicture
-                ? { uri: user?.userDetails?.profilePicture }
-                : assets.Demo
+              user?.profilePicture ? { uri: user?.profilePicture } : assets.Demo
             }
             style={styles.profilepic}
           />
@@ -116,11 +123,11 @@ const ProfileScreen = () => {
       </TouchableOpacity>
 
       <View style={styles.tncstyle}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={handlePrivacyPolicy}>
           <Text style={styles.policystyle}>Privacy Policy</Text>
         </TouchableOpacity>
         <View style={styles.line}></View>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={handleTermsnConditions}>
           <Text style={styles.conditionstyle}>Terms and Conditions</Text>
         </TouchableOpacity>
       </View>

@@ -48,7 +48,7 @@ export default function SignupScreen() {
       const response = await registerUser({ name, email, password });
       Alert.alert("Success", "Account Created Successfully");
       console.log(response, "res");
-      setUser(response.data);
+      setUser(response.data.userDetails);
       console.log(response.data, "dskufcbhefue");
       Navigation.navigate("LoginScreen");
     } catch (error: any) {
