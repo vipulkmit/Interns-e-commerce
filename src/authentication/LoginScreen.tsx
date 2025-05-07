@@ -68,10 +68,10 @@ export default function LoginScreen() {
         //   email: response.userDetail.email,
         //   number: response.userDetail.number,
         // };
-        // console.log(response, "nigsfgnrsf");
         // console.log(userData, "dusvndsivud");
         useAuthStore.setState({ isLoggedIn: true });
-        setUser(response.data);
+        setUser(response.userDetail);
+        // console.log(response.userDetail, "nigsfgnrsf");
         setToken(response.access_token);
         Navigation.reset({
           index: 0,

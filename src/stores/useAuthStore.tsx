@@ -32,7 +32,7 @@ const useAuthStore = create<AuthStore>()(
 
       login: () => set({ isLoggedIn: true }),
 
-      logout: () => set({ isLoggedIn: false }),
+      logout: () => set({ isLoggedIn: false, token: null }),
 
       clearUser: () => set({ user: null }),
     }),
