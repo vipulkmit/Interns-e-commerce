@@ -327,7 +327,7 @@ const WishlistScreen = () => {
   const WishlistApi = async () => {
     try {
       const data = await WishlistData();
-      console.log(data, "dataaaaaa");
+    //   console.log(data, "dataaaaaa");
       setWislist(data?.data?.data);
     } catch (e) {
       console.log("no data");
