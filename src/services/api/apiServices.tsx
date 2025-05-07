@@ -148,6 +148,8 @@ export const updateUserdata = async (FormData: any) => {
 };
 
 export const Categories = () => axiosInstance.get(ENDPOINTS.CATEGORY);
+export const Collection = () => axiosInstance.get(ENDPOINTS.COLLECTION);
+
 
 export const SubCategories = (name) => {
   return axiosInstance.get(`${ENDPOINTS.SUBCATEGORY}${name}`);

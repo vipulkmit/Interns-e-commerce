@@ -11,7 +11,7 @@ import TopHeaderComponent from '../../components/header/TopHeaderComponent';
 import { useNavigation } from '@react-navigation/native';
 import useAuthStore from '../../stores/useAuthStore'
 import { Typography } from '../../theme/Colors';
-import { CarousalData, Categories } from '../../services/api/apiServices';
+import { CarousalData, Categories, Collection } from '../../services/api/apiServices';
 import Category from './Category';
 import ContentLoader from 'react-native-easy-content-loader';
 import HeaderComponent from '../../components/header/HeaderComponent';
@@ -71,21 +71,13 @@ const HomeScreen = () => {
     }).start();
   };
 
-  // const handleSnap = (index: number) => {
-  //   animateDot(currentIndex, false);
-  //   animateDot(index, true);
-  //   setCurrentIndex(index);
-  // };
-
-  // Trending Render Item
-
-  const TrendingRenderItem = ({ item }: { item: TrendingProps }) => {
+  const TrendingRenderItem = ({ item }) => {
     return (
       <View style={styles.container}>
         <CardComponent
-          img={item.img}
-          logo={item.logo}
-          offer={item.offer}
+          img={{uri : item.images[0]}}
+          logo={{uri: item.brand.logo}}
+          offer={item.discountPrice}
           productType={item.productType}
         />
       </View>
@@ -105,50 +97,52 @@ const HomeScreen = () => {
   }
 
 
+  const renderProductPage=(data)=>{
+    console.log(data,"datttttttaaaaa");
+    
+      navigation.navigate('ProductDetailPage',{data:data})
+    
+  }
+
 
   //Product Render item
-  const ProductRenderItem = ({ item }: { item: ProductProps }) => {
+  const ProductRenderItem = ({ item }) => {
+    // console.log(item,"itemmmmmm");
+    
     return (
       <View style={styles.container}>
         <ProductComponent
           images={item.images}
-          productName={item.productName}
-          brandName={item.brandName}
-          initialRate={item.initialRate}
-          rate={item.rate}
-          discount={item.discount}
-        />
-        <View style={styles.buttonView}>
-          <ButtonComponent
-            icon={assets.HeartBlack}
-            buttonText="Whislist"
-            buttonStyle={styles.buttonStyle}
-          />
-          <ButtonComponent
-            icon={assets.WhiteBag}
-            buttonText="Add to Bag"
-            TextStyle={styles.textStyle}
-            buttonStyle={[
-              styles.buttonStyle,
-              { backgroundColor: Typography.Colors.primary },
-            ]}
-          />
-        </View>
+          productName={item.title}
+          brandName={item.brand.name}
+          initialRate={item.discountPrice}
+          rate={item.price}
+          discount={item.discountPercentage} 
+          onClick={()=>renderProductPage(item)} />
       </View>
     );
   };
+
+
 
   const ListHeader = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
 
     const [Category, setCategory] = useState();
-    const [CarouselData, setCarouselData] = useState();
+
+    const [CarouselData, setCarouselData] = useState([]);
     // console.log(Category,'cteguhsuliegcf ');
     const [loading, setLoading] = useState(true);
-
-    // useEffect(() => {
-    //   setTimeout(() => setLoading(false), 3000); // Simulate loading delay
-    // }, []);
+    const [ourCollection, setOurCollection] = useState([]);
+    // console.log(ourCollection,"ourCollectionj");
+    
+    useEffect(() => {
+      Collection().then(data => {
+        setOurCollection(data?.data)
+      }).catch((e) => {
+        console.log('no data');
+      })
+    }, [])
 
     useEffect(() => {
       Categories().then(data => {
@@ -169,12 +163,14 @@ const HomeScreen = () => {
       })
     }, [])
 
+
+
     return (
       <>
         {/* Header View */}
         <View style={styles.HeaderStyle}>
 
-          <TopHeaderComponent userImage={HeaderData.userImage} userName={HeaderData.userName} icon={HeaderData.icon} />
+          <TopHeaderComponent />
         </View>
 
         {/* Category View */}
@@ -247,7 +243,7 @@ const HomeScreen = () => {
           </Text>
           {/* <FlatList/> */}
           <FlatList
-            data={CardData}
+            data={ourCollection.slice(4,10)}
             renderItem={TrendingRenderItem}
             keyExtractor={(item) => item.id.toString()}
             horizontal
@@ -264,22 +260,27 @@ const HomeScreen = () => {
   };
 
   const listFooter = () => {
+    const [ourCollection, setOurCollection] = useState([]);
+    // console.log(ourCollection,"ourCollectionj");
+    
+    useEffect(() => {
+      Collection().then(data => {
+        setOurCollection(data?.data)
+      }).catch((e) => {
+        console.log('no data');
+      })
+    }, [])
+
     return (
       <>
         <View style={styles.dealContainer}>
           <Text style={styles.TrendingText}>Our Collection</Text>
           <FlatList
-            data={ProductData}
+            data={ourCollection?.slice(0,10)}
             renderItem={ProductRenderItem}
             keyExtractor={(item) => item.id}
           />
         </View>
-
-        {/* <View style={styles.container}>
-          <TouchableOpacity style={styles.buttonstyle} onPress={logout}>
-            <Text style={styles.textstyle}>Go Back to LoginScreen</Text>
-          </TouchableOpacity>
-        </View> */}
       </>
     );
   };

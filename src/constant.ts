@@ -1,12 +1,12 @@
 import { assets } from "../assets/images";
 
 
-export const HeaderData =
-{
-    userName: 'Anna Doe ',
-    userImage: assets.UserImage,
-    icon: assets.MainSearch,
-}
+// export const HeaderData =
+// {
+//     userName: 'Anna Doe ',
+//     // userImage: assets.UserImage,
+//     icon: assets.MainSearch,
+// }
 
 
 
