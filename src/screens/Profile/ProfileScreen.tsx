@@ -237,3 +237,19 @@ const styles = StyleSheet.create({
 });
 
 export default ProfileScreen;
+
+// ImagePicker.openPicker({
+//   width: 300,
+//   height: 400,
+//   cropping: true
+// }).then(image => {
+//   console.log(image);
+// });
+
+// ImagePicker.openCamera({
+//   width: 300,
+//   height: 400,
+//   cropping: true,
+// }).then(image => {
+//   console.log(image);
+// });
