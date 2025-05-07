@@ -12,7 +12,10 @@ const ENDPOINTS = {
   SUBCATEGORY :'/categories/',
   PRODUCTS :'/categories/',
   CAROUSAL:'/product/get-carousel',
-  WISHLIST:'/wishlist'
+  WISHLIST:'/wishlist',
+  WISHLISTGET:'/wishlist/get-wishlist',
+  WISHLISTPOST:'/wishlist/create',
+  WISHLISTDELETE:'/wishlist/wishlist-delete'
 };
 
 export default ENDPOINTS;

@@ -1,6 +1,19 @@
 import Carousel from "react-native-reanimated-carousel";
-import { View, Text, ScrollView, StyleSheet, Dimensions, ImageBackground, Image, Animated, TouchableOpacity, TextInput, Pressable, FlatList } from 'react-native'
-import React, { useEffect, useRef, useState } from 'react'
+import {
+  View,
+  Text,
+  ScrollView,
+  StyleSheet,
+  Dimensions,
+  ImageBackground,
+  Image,
+  Animated,
+  TouchableOpacity,
+  TextInput,
+  Pressable,
+  FlatList,
+} from "react-native";
+import React, { useEffect, useRef, useState } from "react";
 import { BannerData } from "../../constant";
 import { assets } from "../../../assets/images";
 import HeaderComponent from "../../components/header/HeaderComponent";
@@ -22,12 +35,14 @@ const ProductDetailPage = ({ route }) => {
   const { data } = route.params;
   const [selectedSize, setSelectedSize] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
-// console.log(data.id,'dataaaaaaaaaaaa');
+  // console.log(data.id,'dataaaaaaaaaaaa');
 
-  const animations = useRef(BannerData.map(() => new Animated.Value(8))).current;
+  const animations = useRef(
+    BannerData.map(() => new Animated.Value(8))
+  ).current;
 
-  const [text, onChangeText] = React.useState('Useless Text');
-  const [number, onChangeNumber] = React.useState('');
+  const [text, onChangeText] = React.useState("Useless Text");
+  const [number, onChangeNumber] = React.useState("");
 
   // const { category,categoryName } = route.params;
   const CarouselRenderItem = (item) => {
@@ -36,10 +51,10 @@ const ProductDetailPage = ({ route }) => {
         resizeMode="cover"
         source={{ uri: item.item }}
         style={styles.imageBackground}
-        imageStyle={styles.imagestyle}>
-      </ImageBackground>
-    )
-  }
+        imageStyle={styles.imagestyle}
+      ></ImageBackground>
+    );
+  };
 
   const animateDot = (index: number, isActive: boolean) => {
     Animated.timing(animations[index], {
@@ -49,15 +64,15 @@ const ProductDetailPage = ({ route }) => {
     }).start();
   };
 
-
   const handleSnap = (index: number) => {
     animateDot(currentIndex, false); // Shrink previous active dot
-    animateDot(index, true);          // Expand new active dot
+    animateDot(index, true); // Expand new active dot
     setCurrentIndex(index);
   };
 
-  const handleBackButton = () => { navigation.goBack() }
-
+  const handleBackButton = () => {
+    navigation.goBack();
+  };
 
   const [collapsed, setCollapsed] = useState(true);
 
@@ -65,13 +80,11 @@ const ProductDetailPage = ({ route }) => {
     setCollapsed(!collapsed);
   };
 
-
   const [collapsed1, setCollapsed1] = useState(true);
 
   const toggleExpanded1 = () => {
     setCollapsed1(!collapsed1);
   };
-
 
   const [collapsed2, setCollapsed2] = useState(true);
 
@@ -80,19 +93,16 @@ const ProductDetailPage = ({ route }) => {
   };
 
   const SpecificationRenderItem = ({ item }) => {
-
     return (
-      <View style={styles.specificContainer} >
+      <View style={styles.specificContainer}>
         <Text style={styles.specificationName}>{item.name}</Text>
         <Text style={styles.specificationValue}>{item.value}</Text>
         <View style={styles.line} />
       </View>
-    )
-  }
-
+    );
+  };
 
   const [selectedColorIndex, setSelectedColorIndex] = useState(0);
-
 
   const renderStars = (rating) => {
     const numRating = Number(rating);
@@ -102,31 +112,16 @@ const ProductDetailPage = ({ route }) => {
     for (let i = 1; i <= totalStars; i++) {
       if (i <= numRating) {
         // Filled star
-        stars.push(
-          <Icon
-            key={i}
-            name="star"
-            size={28}
-            style={styles.icon}
-          />
-        );
+        stars.push(<Icon key={i} name="star" size={28} style={styles.icon} />);
       } else {
         // Empty star
         stars.push(
-          <Icon
-            key={i}
-            name="star-o"
-            size={28}
-            style={styles.icon}
-          />
+          <Icon key={i} name="star-o" size={28} style={styles.icon} />
         );
       }
     }
-    return stars
-  }
-
-
-
+    return stars;
+  };
 
   const renderYellowStars = (rating) => {
     const numRating = Number(rating);
@@ -147,18 +142,12 @@ const ProductDetailPage = ({ route }) => {
       } else {
         // Empty star
         stars.push(
-          <Icon
-            key={i}
-            name="star-o"
-            size={17}
-            style={styles.icon1}
-          />
+          <Icon key={i} name="star-o" size={17} style={styles.icon1} />
         );
       }
     }
-    return stars
-  }
-
+    return stars;
+  };
 
   const ratingData = ({ item }) => {
     // console.log(item, 'itemmmmm');
@@ -170,27 +159,29 @@ const ProductDetailPage = ({ route }) => {
           <Text style={styles.Reviews}>{item.rating}</Text>
         </View>
         <Text style={styles.reviewsComment}>{item.comment}</Text>
-        <View style={{flexDirection:'row',gap:9}}>
-        {item.images.map((img, index) => (
-          <Image
-            key={index}
-            source={{ uri: img }}
-            style={styles.reviewImage}
-          />
-        ))}
+        <View style={{ flexDirection: "row", gap: 9 }}>
+          {item.images.map((img, index) => (
+            <Image
+              key={index}
+              source={{ uri: img }}
+              style={styles.reviewImage}
+            />
+          ))}
         </View>
       </>
-    )
-  }
+    );
+  };
+  const [wishlistToggle, setWislistToggle] = useState(false);
 
-  const handleAddToWishlist=async()=>{
-   const response = await AddToWishlist(data.id).then((e)=>console.log(e));
-  //  console.log(response);
-  }
+  const handleAddToWishlist = async () => {
+    const response = await AddToWishlist(data.id).then(() => {
+      setWislistToggle(!wishlistToggle);
+    });
+    //  console.log(response);
+  };
 
   return (
     <ScrollView style={styles.container}>
-
       <View style={styles.header}>
         <HeaderComponent onClick={handleBackButton} />
       </View>
@@ -204,7 +195,8 @@ const ProductDetailPage = ({ route }) => {
         height={width * 1.2}
         data={data.images}
         scrollAnimationDuration={1000}
-        renderItem={(item) => CarouselRenderItem(item)} />
+        renderItem={(item) => CarouselRenderItem(item)}
+      />
       <View style={styles.paginationContainer}>
         {data.images.map((_, index) => {
           return (
@@ -214,7 +206,10 @@ const ProductDetailPage = ({ route }) => {
                 styles.dot,
                 {
                   width: animations[index],
-                  backgroundColor: currentIndex === index ? Typography.Colors.primary : Typography.Colors.offwhite
+                  backgroundColor:
+                    currentIndex === index
+                      ? Typography.Colors.primary
+                      : Typography.Colors.offwhite,
                 },
               ]}
             />
@@ -223,15 +218,23 @@ const ProductDetailPage = ({ route }) => {
       </View>
       <View style={styles.dataContainer}>
         <View style={styles.shareContainer}>
-          <Text numberOfLines={1} style={styles.productName}>{data.title}</Text>
+          <Text numberOfLines={1} style={styles.productName}>
+            {data.title}
+          </Text>
           <Image source={assets.Share} style={styles.ShareIcon} />
         </View>
-        <Text numberOfLines={1} style={styles.brandName}>{data.brand.name}</Text>
+        <Text numberOfLines={1} style={styles.brandName}>
+          {data.brand.name}
+        </Text>
         <View style={styles.amountTimer}>
           <View style={styles.Amount}>
             <Text style={styles.initialRate}>{data.price}</Text>
-            <Text numberOfLines={1} style={styles.rate}>Rs. {data.discountPrice}</Text>
-            <Text numberOfLines={1} style={styles.discount}>({data.discountPercentage}% Off)</Text>
+            <Text numberOfLines={1} style={styles.rate}>
+              Rs. {data.discountPrice}
+            </Text>
+            <Text numberOfLines={1} style={styles.discount}>
+              ({data.discountPercentage}% Off)
+            </Text>
           </View>
           <View style={styles.timer}>
             <Image source={assets.Clock} style={styles.clockIcon} />
@@ -240,23 +243,21 @@ const ProductDetailPage = ({ route }) => {
         </View>
       </View>
 
-
-
       <View style={styles.colour}>
         <Text style={styles.productName}>Color</Text>
-        <Text style={styles.colorText}>{data.colors[selectedColorIndex]?.name}</Text>
+        <Text style={styles.colorText}>
+          {data.colors[selectedColorIndex]?.name}
+        </Text>
 
         <View style={styles.circle}>
           {data.colors.map((colorItem, index) => (
-            <Pressable
-              key={index}
-              onPress={() => setSelectedColorIndex(index)}>
+            <Pressable key={index} onPress={() => setSelectedColorIndex(index)}>
               {selectedColorIndex === index ? (
                 <View style={styles.colorCircle}>
                   <View
                     style={[
                       styles.colorCircle1,
-                      { backgroundColor: colorItem.hexCode }
+                      { backgroundColor: colorItem.hexCode },
                     ]}
                   />
                 </View>
@@ -264,7 +265,7 @@ const ProductDetailPage = ({ route }) => {
                 <View
                   style={[
                     styles.colorCircle1,
-                    { backgroundColor: colorItem.hexCode }
+                    { backgroundColor: colorItem.hexCode },
                   ]}
                 />
               )}
@@ -273,19 +274,17 @@ const ProductDetailPage = ({ route }) => {
         </View>
       </View>
 
-
-
-
-
       <View style={styles.size}>
         <View style={styles.sizeView}>
-          <Text style={[styles.brandName, { fontFamily: Typography.font.medium }]}>Select Size</Text>
+          <Text
+            style={[styles.brandName, { fontFamily: Typography.font.medium }]}
+          >
+            Select Size
+          </Text>
           <TouchableOpacity>
             <Text style={styles.textStyle}>Size Chart</Text>
           </TouchableOpacity>
         </View>
-
-
 
         <View style={styles.sizeData}>
           {data.sizes.map((sizeItem, index) => (
@@ -302,44 +301,84 @@ const ProductDetailPage = ({ route }) => {
       </View>
 
       <View style={styles.buttonView}>
-          <ButtonComponent icon={assets.HeartBlack} buttonText='Whislist' buttonStyle={styles.buttonStyle} onClick={handleAddToWishlist} />
-          <ButtonComponent icon={assets.WhiteBag} buttonText='Add to Bag' TextStyle={styles.textStyle} buttonStyle={[styles.buttonStyle, { backgroundColor: Typography.Colors.primary }]} />
-        </View>
-      <View style={{paddingTop:10}}>
+        <ButtonComponent
+        icon={wishlistToggle ? assets.HeartBlue : assets.heart}
+          buttonText="Whislist"
+          buttonStyle={[
+            styles.buttonStyle,
+            {
+              backgroundColor: wishlistToggle
+                ? Typography.Colors.offwhite
+                : Typography.Colors.white,
+            },
+          ]}
+          TextStyle={{
+            color:wishlistToggle
+            ?Typography.Colors.primary:
+            Typography.Colors.black
+          }}
+          onClick={handleAddToWishlist}
+        />
+        <ButtonComponent
+          icon={assets.WhiteBag}
+          buttonText="Add to Bag"
+          TextStyle={styles.textStyle}
+          buttonStyle={[
+            styles.buttonStyle,
+            { backgroundColor: Typography.Colors.primary },
+          ]}
+        />
+      </View>
+      <View style={{ paddingTop: 10 }}>
         <Pressable onPress={toggleExpanded} style={styles.header1}>
           <View>
-            {collapsed ?
-              <View style={[styles.accordionHeading, { borderBottomWidth: 1, borderBottomColor: '#EAEAEA' }]}>
+            {collapsed ? (
+              <View
+                style={[
+                  styles.accordionHeading,
+                  { borderBottomWidth: 1, borderBottomColor: "#EAEAEA" },
+                ]}
+              >
                 <Text style={styles.accordionTitle}>Product Details</Text>
                 <Image source={assets.Down} style={styles.accordionIcon} />
-              </View> :
+              </View>
+            ) : (
               <View style={styles.accordionHeading}>
                 <Text style={styles.accordionTitle}>Product Details</Text>
                 <Image source={assets.Up} style={styles.accordionIcon} />
-              </View>}
+              </View>
+            )}
           </View>
         </Pressable>
 
         <Collapsible collapsed={collapsed}>
           <View style={styles.content}>
-            <Text numberOfLines={4} style={styles.accordionText}>{data.description}</Text>
+            <Text numberOfLines={4} style={styles.accordionText}>
+              {data.description}
+            </Text>
           </View>
         </Collapsible>
       </View>
 
-
       <View>
         <Pressable onPress={toggleExpanded1} style={styles.header1}>
           <View>
-            {collapsed1 ?
-              <View style={[styles.accordionHeading, { borderBottomWidth: 1.5, borderBottomColor: '#EAEAEA' }]}>
+            {collapsed1 ? (
+              <View
+                style={[
+                  styles.accordionHeading,
+                  { borderBottomWidth: 1.5, borderBottomColor: "#EAEAEA" },
+                ]}
+              >
                 <Text style={styles.accordionTitle}>Specifications</Text>
                 <Image source={assets.Down} style={styles.accordionIcon} />
-              </View> :
+              </View>
+            ) : (
               <View style={styles.accordionHeading}>
                 <Text style={styles.accordionTitle}>Specifications</Text>
                 <Image source={assets.Up} style={styles.accordionIcon} />
-              </View>}
+              </View>
+            )}
           </View>
         </Pressable>
 
@@ -349,27 +388,33 @@ const ProductDetailPage = ({ route }) => {
               data={data.specifications}
               renderItem={SpecificationRenderItem}
               numColumns={2}
-            // ListHeaderComponent={ListHeader}
-            // ListHeaderComponentStyle={styles.header}
-            // contentContainerStyle={{backgroundColor:'green'}}
+              // ListHeaderComponent={ListHeader}
+              // ListHeaderComponentStyle={styles.header}
+              // contentContainerStyle={{backgroundColor:'green'}}
             />
           </View>
         </Collapsible>
       </View>
 
-
       <View>
         <Pressable onPress={toggleExpanded2} style={styles.header1}>
           <View>
-            {collapsed2 ?
-              <View style={[styles.accordionHeading, { borderBottomWidth: 1.5, borderBottomColor: '#EAEAEA' }]}>
+            {collapsed2 ? (
+              <View
+                style={[
+                  styles.accordionHeading,
+                  { borderBottomWidth: 1.5, borderBottomColor: "#EAEAEA" },
+                ]}
+              >
                 <Text style={styles.accordionTitle}>Ratings & Reviews</Text>
                 <Image source={assets.Down} style={styles.accordionIcon} />
-              </View> :
+              </View>
+            ) : (
               <View style={styles.accordionHeading}>
                 <Text style={styles.accordionTitle}>Ratings & Reviews</Text>
                 <Image source={assets.Up} style={styles.accordionIcon} />
-              </View>}
+              </View>
+            )}
           </View>
         </Pressable>
 
@@ -379,30 +424,27 @@ const ProductDetailPage = ({ route }) => {
               <Text style={styles.averageRating}>{data.averageRating}</Text>
               {renderStars(data.averageRating)}
             </View>
-            <FlatList
-              data={data.reviews}
-              renderItem={ratingData} />
+            <FlatList data={data.reviews} renderItem={ratingData} />
           </View>
         </Collapsible>
       </View>
-
     </ScrollView>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Typography.Colors.white
+    backgroundColor: Typography.Colors.white,
   },
   header: {
     backgroundColor: Typography.Colors.white,
     paddingVertical: 20,
-    paddingHorizontal: 14
+    paddingHorizontal: 14,
   },
   imageBackground: {
-    width: '100%',
-    height: '100%',
+    width: "100%",
+    height: "100%",
   },
   imagestyle: {
     borderWidth: 2,
@@ -417,7 +459,7 @@ const styles = StyleSheet.create({
     // backgroundColor: 'pink'
   },
   Amount: {
-    flexDirection: 'row',
+    flexDirection: "row",
     paddingTop: 7,
     flex: 2,
     // backgroundColor:'red'
@@ -426,90 +468,90 @@ const styles = StyleSheet.create({
     // paddingTop: 12,
     fontSize: 20,
     fontFamily: Typography.font.medium,
-    color: Typography.Colors.lightblack
+    color: Typography.Colors.lightblack,
   },
   brandName: {
     fontSize: 18,
     fontFamily: Typography.font.regular,
-    color: Typography.Colors.lightblack
+    color: Typography.Colors.lightblack,
   },
   initialRate: {
     fontSize: 14,
-    alignSelf: 'center',
+    alignSelf: "center",
     fontFamily: Typography.font.regular,
-    color: '#848484',
-    textDecorationLine: 'line-through'
+    color: "#848484",
+    textDecorationLine: "line-through",
   },
   rate: {
     fontSize: 20,
     paddingLeft: 17,
     fontFamily: Typography.font.regular,
-    color: Typography.Colors.lightblack
+    color: Typography.Colors.lightblack,
   },
   discount: {
     fontSize: 14,
     fontFamily: Typography.font.regular,
     color: Typography.Colors.lightgreen,
     paddingLeft: 10,
-    alignSelf: 'center'
+    alignSelf: "center",
   },
   shareContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     // alignItems:'center',
     // backgroundColor: 'red',
   },
   ShareIcon: {
     height: 24,
     width: 24,
-    alignSelf: 'center'
+    alignSelf: "center",
   },
   timer: {
-    flexDirection: 'row',
+    flexDirection: "row",
     flex: 1,
     paddingTop: 7,
     // backgroundColor:'green',
-    justifyContent: 'flex-end',
-    gap: 6
+    justifyContent: "flex-end",
+    gap: 6,
   },
   clockIcon: {
     height: 14,
     width: 14,
   },
   timerText: {
-    color: '#FF4646',
+    color: "#FF4646",
     fontSize: 12,
-    fontFamily: Typography.font.medium
+    fontFamily: Typography.font.medium,
   },
   amountTimer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    flex: 1
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    flex: 1,
   },
   colour: {
-    paddingHorizontal: 20
+    paddingHorizontal: 20,
   },
   circle: {
-    flexDirection: 'row',
+    flexDirection: "row",
     gap: 17,
     paddingTop: 7,
-    alignItems: 'center'
+    alignItems: "center",
   },
   colorCircle: {
     height: 42,
     width: 42,
     borderRadius: 20,
     borderWidth: 2,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderColor: '#C1C1C1'
+    alignItems: "center",
+    justifyContent: "center",
+    borderColor: "#C1C1C1",
   },
   colorCircle1: {
     height: 28,
     width: 28,
     borderRadius: 20,
-    elevation: 5
+    elevation: 5,
     // borderWidth:1,
     // backgroundColor: '#FFCFB5'
   },
@@ -518,16 +560,14 @@ const styles = StyleSheet.create({
     width: 28,
     borderRadius: 20,
     // borderWidth:1,
-    backgroundColor: '#96F9FF'
-
+    backgroundColor: "#96F9FF",
   },
   colorCircle3: {
     height: 28,
     width: 28,
     borderRadius: 20,
     // borderWidth:1,
-    backgroundColor: '#FEC8FF'
-
+    backgroundColor: "#FEC8FF",
   },
   colorCircle4: {
     height: 28,
@@ -537,15 +577,13 @@ const styles = StyleSheet.create({
     // justifyContent:'center',
     // borderWidth:1,
     backgroundColor: Typography.Colors.white,
-
   },
   colorCircle5: {
     height: 28,
     width: 28,
     borderRadius: 20,
     // borderWidth:1,
-    backgroundColor: '#FEFFC1'
-
+    backgroundColor: "#FEFFC1",
   },
   colorText: {
     color: Typography.Colors.lightblack,
@@ -553,9 +591,9 @@ const styles = StyleSheet.create({
     fontFamily: Typography.font.regular,
   },
   paginationContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
     marginTop: 10,
   },
   dot: {
@@ -568,14 +606,14 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   sizeView: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between'
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
   textStyle: {
     fontSize: 12,
     fontFamily: Typography.font.regular,
-    color: Typography.Colors.primary
+    color: Typography.Colors.primary,
   },
   sizeBox: {
     backgroundColor: Typography.Colors.white,
@@ -584,8 +622,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Typography.Colors.white,
     // paddingRight:17,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     // flex:1
     // gap:17
   },
@@ -599,9 +637,9 @@ const styles = StyleSheet.create({
     // alignSelf:'center'
   },
   sizeData: {
-    flexDirection: 'row',
+    flexDirection: "row",
     gap: 17,
-    paddingTop: 7
+    paddingTop: 7,
   },
   input: {
     height: 40,
@@ -614,17 +652,15 @@ const styles = StyleSheet.create({
     flex: 1,
     gap: 13,
     paddingHorizontal: 13,
-    flexDirection: 'row'
+    flexDirection: "row",
   },
   buttonStyle: {
-    backgroundColor: Typography.Colors.white,
     borderWidth: 1,
-    borderColor: Typography.Colors.primary
+    borderColor: Typography.Colors.primary,
   },
   textStyle: {
-    color: Typography.Colors.white
+    color: Typography.Colors.white,
   },
-
 
   accordionContainer: {
     // flex: 1,
@@ -638,7 +674,7 @@ const styles = StyleSheet.create({
     // backgroundColor:'red',
     // padding: 10,
     // borderRadius: 8,
-    paddingHorizontal: 20
+    paddingHorizontal: 20,
   },
   headerText: {
     // fontSize: 18,
@@ -655,9 +691,9 @@ const styles = StyleSheet.create({
     // marginTop: 10,
   },
   accordionHeading: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     // borderBottomWidth: 0.5
   },
   accordionTitle: {
@@ -665,29 +701,28 @@ const styles = StyleSheet.create({
     fontFamily: Typography.font.medium,
     color: Typography.Colors.lightblack,
     paddingVertical: 10,
-    textAlign: 'center'
+    textAlign: "center",
   },
   accordionIcon: {
     height: 21,
     width: 21,
     // paddingVertical:10,
-    justifyContent: 'center',
-
+    justifyContent: "center",
   },
   accordionText: {
     fontFamily: Typography.font.regular,
     fontSize: 14,
-    color: Typography.Colors.black
+    color: Typography.Colors.black,
   },
   specificationName: {
     fontFamily: Typography.font.regular,
     color: Typography.Colors.lightgrey,
-    fontSize: 14
+    fontSize: 14,
   },
   specificContainer: {
-    justifyContent: 'space-between',
+    justifyContent: "space-between",
     // backgroundColor:'red',
-    flex: 1
+    flex: 1,
   },
   specificationValue: {
     fontFamily: Typography.font.regular,
@@ -698,36 +733,36 @@ const styles = StyleSheet.create({
   },
   line: {
     height: 1.5,
-    width: '70%',
-    backgroundColor: '#EAEAEA',
-    marginVertical: 7
+    width: "70%",
+    backgroundColor: "#EAEAEA",
+    marginVertical: 7,
   },
   icon: {
     paddingTop: 3,
-    paddingLeft: 5
+    paddingLeft: 5,
   },
   icon1: {
     paddingTop: 3,
-    paddingRight: 5
+    paddingRight: 5,
   },
   rating: {
-    flexDirection: 'row',
+    flexDirection: "row",
     paddingVertical: 15,
-    alignItems: 'center',
+    alignItems: "center",
     // justifyContent:'center'
   },
   averageRating: {
     fontFamily: Typography.font.medium,
     fontSize: 28,
-    color: Typography.Colors.lightblack
+    color: Typography.Colors.lightblack,
   },
   ratingContainer: {
-    paddingHorizontal: 20
+    paddingHorizontal: 20,
   },
   reviews: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal:9,
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 9,
     // backgroundColor:'red'
   },
   Reviews: {
@@ -736,22 +771,17 @@ const styles = StyleSheet.create({
     color: Typography.Colors.black,
     // paddingLeft: 4,
   },
-  reviewImage:{
-    height:91,
-    width:95,
-    borderRadius:10,
-    marginVertical:9
+  reviewImage: {
+    height: 91,
+    width: 95,
+    borderRadius: 10,
+    marginVertical: 9,
   },
-  reviewsComment:{
-    fontFamily:Typography.font.regular,
-    color:Typography.Colors.lightblack,
-    fontSize:14,
-    paddingTop:9
-  }
-})
-export default ProductDetailPage
-
-
-
-
-
+  reviewsComment: {
+    fontFamily: Typography.font.regular,
+    color: Typography.Colors.lightblack,
+    fontSize: 14,
+    paddingTop: 9,
+  },
+});
+export default ProductDetailPage;

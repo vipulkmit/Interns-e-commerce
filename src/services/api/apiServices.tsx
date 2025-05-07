@@ -3,11 +3,13 @@ import {
   changepassword,
   forgetpassword,
   loginUser,
+  userUpdate,
   verifyotp,
 } from "../../authentication/AuthApi";
 import { registerUser } from "../../authentication/AuthApi";
 import axiosInstance from "./axiosInstance";
 import ENDPOINTS from "../../utils/endpoints";
+import useAuthStore from "../../stores/useAuthStore";
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -133,27 +135,47 @@ export const changePasswordService = async (FormData: any) => {
   }
 };
 
+export const updateUserdata = async (FormData: any) => {
+  try {
+    const response = await userUpdate(FormData);
+    const updatedUser = response.data;
+    useAuthStore.getState().setUser(updatedUser);
+    return updatedUser;
+  } catch (error) {
+    console.error("Update User Data Error:", error);
+    throw error;
+  }
+};
 
+export const Categories = () => axiosInstance.get(ENDPOINTS.CATEGORY);
 
-export const Categories = () =>
-  axiosInstance.get(ENDPOINTS.CATEGORY);
+export const SubCategories = (name) => {
+  return axiosInstance.get(`${ENDPOINTS.SUBCATEGORY}${name}`);
+};
 
+export const Products = (name, category) => {
+  return axiosInstance.get(`${ENDPOINTS.PRODUCTS}${name}/${category}`);
+};
 
-export const SubCategories = (name) =>
-{
-  return axiosInstance.get(`${ENDPOINTS.SUBCATEGORY}${name}`);}
-
-  
-export const Products = (name,category) =>
-  {
-    return axiosInstance.get(`${ENDPOINTS.PRODUCTS}${name}/${category}`);}
-
-export const CarousalData = ()=>
-  axiosInstance.get(ENDPOINTS.CAROUSAL);
+export const CarousalData = () => axiosInstance.get(ENDPOINTS.CAROUSAL);
 
 export const AddToWishlist = (id: string) => {
   // console.log(id,"dfhuifgkerghr")
-  return (
-  axiosInstance.post(ENDPOINTS.WISHLIST, {id})
-  )
-}
+  return axiosInstance.post(ENDPOINTS.WISHLISTPOST, { productId: id });
+};
+
+export const WishlistData = () => {
+  return axiosInstance.get(ENDPOINTS.WISHLISTGET);
+};
+
+export const WishlistDelete = (productId: string) => {
+ return axiosInstance.delete(ENDPOINTS.WISHLIST, {
+    data:{
+      productId
+    },
+  });
+  // console.log(a,"aaaaaaaaaaaaaaaaaaaaa")
+};
+
+export const WishlistDeleteAll = () =>
+  axiosInstance.delete(ENDPOINTS.WISHLISTDELETE);

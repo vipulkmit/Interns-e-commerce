@@ -1,13 +1,5 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  Alert,
-  SafeAreaView,
-  ScrollView,
-} from "react-native";
+import { View, Text, StyleSheet, Image, Alert, ScrollView } from "react-native";
 import { TouchableOpacity } from "react-native";
 import { Typography } from "../theme/Colors";
 import { assets } from "../../assets/images";
@@ -19,7 +11,6 @@ import CustomButton from "../components/button/CustomButton";
 import CustomTextInput from "../components/textInput/CustomTextInput";
 
 export default function LoginScreen() {
-  // const login = useAuthStore((state) => state.login);?
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
@@ -27,7 +18,8 @@ export default function LoginScreen() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isSelected, setSelection] = useState(false);
   const Navigation = useNavigation();
-  const { setToken } = useAuthStore();
+  const { setToken, setUser } = useAuthStore();
+  // console.log(setUser, "dsfdsnfdsf");
 
   const handleForgotPasswordPress = () => {
     Navigation.navigate("Forgetpassword");
@@ -71,7 +63,15 @@ export default function LoginScreen() {
     try {
       const response = await loginService({ email, password });
       if (response.access_token) {
+        // const userData = {
+        //   name: response.userDetail.name,
+        //   email: response.userDetail.email,
+        //   number: response.userDetail.number,
+        // };
+        // console.log(response, "nigsfgnrsf");
+        // console.log(userData, "dusvndsivud");
         useAuthStore.setState({ isLoggedIn: true });
+        setUser(response.data);
         setToken(response.access_token);
         Navigation.reset({
           index: 0,
@@ -89,7 +89,6 @@ export default function LoginScreen() {
   };
 
   return (
-    // <SafeAreaView>
     <ScrollView style={styles.scrollviewcontainer}>
       <View style={styles.container}>
         <View style={styles.logoContainer}>
@@ -108,7 +107,7 @@ export default function LoginScreen() {
         <CustomTextInput
           value={email}
           onChangeText={setEmail}
-          placeholder="Your Email / Phone Number"
+          placeholder="Enter Your Email"
           keyboardType="email-address"
           iconname="person"
           iconsize={25}
@@ -213,7 +212,6 @@ export default function LoginScreen() {
         </View>
       </View>
     </ScrollView>
-    /* </SafeAreaView> */
   );
 }
 

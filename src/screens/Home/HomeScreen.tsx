@@ -14,23 +14,21 @@ import { Typography } from '../../theme/Colors';
 import { CarousalData, Categories } from '../../services/api/apiServices';
 import Category from './Category';
 import ContentLoader from 'react-native-easy-content-loader';
+import HeaderComponent from '../../components/header/HeaderComponent';
 
 
 const { width } = Dimensions.get("window");
 
 const HomeScreen = () => {
-  const logout = useAuthStore((state) => state.logout)
   const navigation = useNavigation();
   const animations = useRef(BannerData.map(() => new Animated.Value(17))).current;
 
   const renderCategoryPage = (name) => {
-    // console.log(item,"ghfffgfghfghfghfghfghfhg")
     navigation.navigate('Category', { name: name })
   }
   // Category Render Item
 
   const renderItem = ({ item }) => {
-    // console.log(item.image,'imageeeeeeeeee');
 
     return (
       <Pressable style={styles.subContainer} onPress={() => renderCategoryPage(item.name)}>
