@@ -108,7 +108,7 @@ const EditProfileScreen = () => {
             <Image source={assets.name} style={styles.imgstyle} />
             <Text style={styles.staticstyle}>Name</Text>
           </View>
-          <Text style={styles.dynamicstyle}>{user?.userDetail?.name}</Text>
+          <Text style={styles.dynamicstyle}>{user?.name}</Text>
         </View>
 
         <View style={styles.detailcontainer}>
@@ -116,7 +116,7 @@ const EditProfileScreen = () => {
             <Image source={assets.message} style={styles.imgstyle} />
             <Text style={styles.staticstyle}>Email</Text>
           </View>
-          <Text style={styles.dynamicstyle}>{user?.userDetail?.email}</Text>
+          <Text style={styles.dynamicstyle}>{user?.email}</Text>
         </View>
 
         <TouchableOpacity onPress={handlepasswordchange}>

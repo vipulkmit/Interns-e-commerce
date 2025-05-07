@@ -7,83 +7,74 @@ const TermsnConditionScreen = () => {
       <View style={styles.container}>
         <Text style={styles.titlestyle}>Terms and Conditions</Text>
         <Text style={styles.contentstyle}>
-          At Snapshop, we are fully committed to respecting and protecting your
-          privacy because we understand the importance of safeguarding your
-          personal information when you use our mobile application, website, or
-          related services. This Privacy Policy outlines in clear terms how we
-          collect, use, store, share, and protect your data when you engage with
-          our platform, and by continuing to use our services, you explicitly
-          agree to the practices described herein. When you register for an
-          account, place an order, subscribe to our newsletter, contact customer
-          service, participate in promotions, or interact with any features
-          within the app or website, we may collect a wide range of personally
-          identifiable information, including but not limited to your full name,
-          email address, mobile number, billing and shipping addresses, payment
-          method details, date of birth, gender, and demographic preferences.
-          Additionally, we automatically collect device and technical
-          information such as your IP address, geolocation data (if permitted),
-          operating system, browser type, screen resolution, access time, page
-          views, session duration, crash logs, app activity, and referral URLs
-          to help us optimize your experience and ensure system integrity. All
-          payment transactions are securely processed via third-party gateways
-          that comply with industry standards such as PCI-DSS and do not store
-          full credit or debit card details on our servers. We use your data to
-          process orders, facilitate delivery, confirm payments, offer customer
-          support, personalize product recommendations, conduct internal
-          analytics, improve our app interface and website functionality, detect
-          and prevent fraud, send updates and service notifications, run
-          advertising campaigns, and comply with any applicable legal or
-          regulatory requirements. We may send promotional messages,
-          newsletters, or special offers via email, SMS, or push notifications,
-          which you can opt out of at any time. We never sell or rent your
-          personal information to third parties. However, we may share your data
-          with trusted third-party service providers such as logistics
-          companies, cloud hosting partners, marketing and advertising platforms
-          (like Google Ads or Facebook Pixel), and data analytics tools who help
-          us in the operation of our business, all under strict confidentiality
-          and data processing agreements. We may also disclose your data to law
-          enforcement or government agencies where required by law, legal
-          process, or in response to valid requests related to criminal
-          investigations or national security. Our platform uses cookies, web
-          beacons, and similar tracking technologies to recognize repeat users,
-          save login preferences, analyze traffic patterns, and display relevant
-          advertisements, and you may control cookie settings through your
-          browser or device. We take data security seriously and use advanced
-          security measures including SSL encryption, firewalls, access control
-          policies, regular vulnerability assessments, and secure server
-          environments to protect your information; however, no online service
-          can guarantee absolute security, so we urge users to create strong
-          passwords and not share login credentials. If you choose to log in via
-          third-party services like Google or Apple ID, we may receive limited
-          data as permitted under their policies and only use it for account
-          creation and authentication purposes. You have full rights over your
-          data, including the right to access, correct, download, restrict,
-          object to, or delete your personal information, which can be done
-          through your account settings or by contacting our privacy officer. If
-          you reside in the European Economic Area (EEA), you have rights under
-          the General Data Protection Regulation (GDPR), and if you live in
-          California, USA, you may exercise your rights under the California
-          Consumer Privacy Act (CCPA), including the right to know what data we
-          collect, the right to delete your data, and the right to opt-out of
-          the sale of personal information, even though we do not engage in such
-          practices. Our services are intended only for users aged 13 years and
-          older; we do not knowingly collect or process personal data from
-          minors without parental consent, and if we learn that we have
-          inadvertently obtained such information, we will immediately delete it
-          from our records. Our privacy practices may evolve over time due to
-          changes in technology, legal requirements, or business operations, and
-          we reserve the right to update this Privacy Policy at our discretion.
-          When changes occur, we will update the “Effective Date” at the top of
-          this page and may notify users through in-app alerts, emails, or
-          platform announcements as appropriate. Your continued use of our
-          services after such modifications constitutes your acceptance of the
-          updated policy. If you have any questions about this Privacy Policy,
-          your rights, or our data handling practices, or if you wish to file a
-          complaint, please do not hesitate to contact our Data Protection
-          Officer or support team at gsaurav641@gmail.com or , call us at
-          +91-7376811531, We are committed to resolving any issues promptly and
-          transparently to ensure that your data and privacy are always treated
-          with the highest level of care and respect.
+          By accessing and using Snapshop, including all services, products,
+          content, and features made available through our mobile application
+          and website, you agree to be bound by these Terms and Conditions,
+          which constitute a legally binding agreement between user and
+          KeymouseIT Pvt. Ltd. These terms govern your access to and use of our
+          platform, including account creation, browsing, purchasing, payments,
+          delivery, returns, customer support, and all related functionalities.
+          You represent that you are at least 18 years old or the age of legal
+          majority in your jurisdiction, and that you have the legal authority
+          to enter into this agreement. If you are using the platform on behalf
+          of a company, organization, or other legal entity, you confirm that
+          you have the authority to bind that entity to these terms. You agree
+          to provide accurate, current, and complete information when creating
+          your user account and to keep your login credentials secure and
+          confidential. You are solely responsible for all activities that occur
+          under your account and must notify us immediately of any unauthorized
+          use or breach of security. The content, logos, images, product
+          listings, designs, trademarks, and other intellectual property
+          displayed on the platform are the sole property of KeymouseIT Pvt Ltd
+          or its licensors, and may not be copied, reproduced, distributed,
+          modified, or used in any form without our prior written consent. You
+          agree not to misuse the platform, upload malicious code, interfere
+          with normal operation, engage in fraudulent transactions, or violate
+          any applicable laws while using our services. All product
+          descriptions, prices, and availability are subject to change without
+          notice. While we strive for accuracy, we do not guarantee that product
+          descriptions or other content on the app is error-free. Orders may be
+          refused or canceled at our sole discretion, especially in cases of
+          pricing errors, suspected fraud, or stock unavailability. By placing
+          an order, you authorize us to charge your selected payment method for
+          the total amount including taxes, shipping, and handling fees where
+          applicable. Delivery times are estimates and may vary based on
+          location, courier service, and external factors beyond our control.
+          You may request returns or refunds in accordance with our Return &
+          Refund Policy, which is incorporated by reference into these Terms. We
+          reserve the right to change or discontinue any part of the service at
+          any time, temporarily or permanently, with or without notice, and we
+          are not liable to you or any third party for any such modification,
+          suspension, or discontinuation. From time to time, we may provide
+          discount codes, vouchers, or promotional offers, all of which may be
+          subject to additional terms and restrictions and may be withdrawn at
+          any time without prior notice. Our services may include links or
+          integrations to third-party websites or services, and we are not
+          responsible for the availability, content, or privacy practices of
+          those external sites. To the fullest extent permitted by law, we
+          disclaim all warranties, express or implied, related to the use of our
+          platform, including but not limited to merchantability, fitness for a
+          particular purpose, and non-infringement. Under no circumstances shall
+          KeymouseIT Pvt Ltd, its affiliates, directors, employees, or agents be
+          liable for any indirect, incidental, punitive, or consequential
+          damages arising out of your use or inability to use the platform, even
+          if we have been advised of the possibility of such damages. Your sole
+          and exclusive remedy for dissatisfaction is to stop using the service
+          and delete your account. You agree to indemnify and hold harmless
+          KeymouseIT Pvt Ltd and its affiliates from any claims, damages, or
+          expenses resulting from your use of the platform, your violation of
+          these terms, or your infringement of any third-party rights. These
+          Terms shall be governed by and construed in accordance with the laws
+          of Punjab,India, and any disputes shall be subject to the exclusive
+          jurisdiction of the courts in Indian Jurisdiction. We may revise these
+          Terms at any time by updating this page or notifying users through the
+          app, and your continued use of the platform after such changes
+          constitutes your acceptance of the updated terms. If any provision of
+          these Terms is held invalid or unenforceable, the remaining provisions
+          will remain in full force and effect. For any questions, concerns, or
+          legal notices regarding these Terms and Conditions, please contact us
+          at gsaurav641@gmail.com, goyalsneha089@gmail.com, call +91-7376811531.
+          We appreciate your trust in Snapshop and look forward to serving you.
         </Text>
       </View>
     </ScrollView>
@@ -106,6 +97,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   contentstyle: {
+    // alignSelf: "center",
     textAlign: "center",
     color: Typography.Colors.lightgrey,
     fontFamily: Typography.font.regular,
