@@ -33,6 +33,8 @@ const width = Dimensions.get("window").width;
 const ProductDetailPage = ({ route }) => {
   const navigation = useNavigation();
   const { data } = route.params;
+  // console.log(data,"dataaaaaaaaaaa");
+  
   const [selectedSize, setSelectedSize] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   // console.log(data.id,'dataaaaaaaaaaaa');
@@ -160,7 +162,7 @@ const ProductDetailPage = ({ route }) => {
         </View>
         <Text style={styles.reviewsComment}>{item.comment}</Text>
         <View style={{ flexDirection: "row", gap: 9 }}>
-          {item.images.map((img, index) => (
+          {item?.images?.map((img, index) => (
             <Image
               key={index}
               source={{ uri: img }}
@@ -193,12 +195,12 @@ const ProductDetailPage = ({ route }) => {
         width={width}
         onSnapToItem={handleSnap}
         height={width * 1.2}
-        data={data.images}
+        data={data?.images}
         scrollAnimationDuration={1000}
         renderItem={(item) => CarouselRenderItem(item)}
       />
       <View style={styles.paginationContainer}>
-        {data.images.map((_, index) => {
+        {data?.images?.map((_, index) => {
           return (
             <Animated.View
               key={index}

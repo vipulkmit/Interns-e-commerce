@@ -50,7 +50,7 @@ const EditProfileScreen = () => {
 
   const handleCamera = () => {
     launchCamera({ mediaType: "photo", includeBase64: false }, (response) => {
-      console.log(response);
+      // console.log(response);
       if (response.assets && response.assets[0]) {
         const uri = response.assets[0].uri || "";
         setImage(uri);
