@@ -7,6 +7,8 @@ import EditProfileScreen from "../screens/Profile/EditProfileScreen";
 import PasswordchangeScreen from "../authentication/PasswordchangeScreen";
 import PrivacyPolicyScreen from "../screens/Profile/PrivacyPolicyScreen";
 import TermsnConditionScreen from "../screens/Profile/Terms&ConditionScreen";
+import AboutScreen from "../screens/Profile/AboutScreen";
+import HelpScreen from "../screens/Profile/HelpScreen";
 
 const Stack = createNativeStackNavigator();
 const ProfileNavigator = () => {
@@ -22,6 +24,8 @@ const ProfileNavigator = () => {
       <Stack.Screen name="Passwordchange" component={PasswordchangeScreen} />
       <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicyScreen} />
       <Stack.Screen name="TermsnConditions" component={TermsnConditionScreen} />
+      <Stack.Screen name="AboutSection" component={AboutScreen} />
+      <Stack.Screen name="HelpScreen" component={HelpScreen} />
     </Stack.Navigator>
   );
 };

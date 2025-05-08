@@ -1,4 +1,11 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { Typography } from "../../theme/Colors";
 import { assets } from "../../../assets/images";
 import { useNavigation } from "@react-navigation/native";
@@ -20,118 +27,133 @@ const ProfileScreen = () => {
   const handleTermsnConditions = () => {
     Navigation.navigate("TermsnConditions");
   };
-  return (
-    <View style={styles.container}>
-      <TouchableOpacity onPress={handleEditProfileScreen}>
-        <View style={styles.firstsection}>
-          <Image
-            source={
-              user?.profilePicture ? { uri: user?.profilePicture } : assets.Demo
-            }
-            style={styles.profilepic}
-          />
-          <View style={styles.textcontainer}>
-            <Text style={styles.textname}>{user?.name}</Text>
-            <Text style={styles.mailcontainer}>{user?.email}</Text>
-          </View>
-        </View>
-      </TouchableOpacity>
-      <TouchableOpacity>
-        <View style={styles.secondsection}>
-          <View style={styles.logocontainer}>
-            <Image source={assets.tote} style={styles.logostyle} />
-            <Text style={styles.textlist}>My Orders</Text>
-          </View>
-          <View style={styles.arrowstyleview}>
-            <Image source={assets.rightarrow} style={styles.arrowstyle} />
-          </View>
-        </View>
-      </TouchableOpacity>
-      <TouchableOpacity>
-        <View style={styles.secondsection}>
-          <View style={styles.logocontainer}>
-            <Image source={assets.heart} style={styles.logostyle} />
-            <Text style={styles.textlist}>Wishlist</Text>
-          </View>
-          <View style={styles.arrowstyleview}>
-            <Image source={assets.rightarrow} style={styles.arrowstyle} />
-          </View>
-        </View>
-      </TouchableOpacity>
-      <TouchableOpacity>
-        <View style={styles.secondsection}>
-          <View style={styles.logocontainer}>
-            <Image source={assets.Location} style={styles.logodelivery} />
-            <Text style={styles.textlist}>Delivery Address</Text>
-          </View>
-          <View style={styles.arrowstyleview}>
-            <Image source={assets.rightarrow} style={styles.arrowstyle} />
-          </View>
-        </View>
-      </TouchableOpacity>
-      <TouchableOpacity>
-        <View style={styles.secondsection}>
-          <View style={styles.logocontainer}>
-            <Image source={assets.Payment} style={styles.logo} />
-            <Text style={styles.textlistpayment}>Payment Methods</Text>
-          </View>
-          <View style={styles.arrowstyleview}>
-            <Image source={assets.rightarrow} style={styles.arrowstyle} />
-          </View>
-        </View>
-      </TouchableOpacity>
-      <TouchableOpacity>
-        <View style={styles.secondsection}>
-          <View style={styles.logocontainer}>
-            <Image source={assets.Offers} style={styles.logostyle} />
-            <Text style={styles.textlist}>Offers</Text>
-          </View>
-          <View style={styles.arrowstyleview}>
-            <Image source={assets.rightarrow} style={styles.arrowstyle} />
-          </View>
-        </View>
-      </TouchableOpacity>
-      <TouchableOpacity>
-        <View style={styles.secondsection}>
-          <View style={styles.logocontainer}>
-            <Image source={assets.help} style={styles.logostyle} />
-            <Text style={styles.textlist}>Help</Text>
-          </View>
-          <View style={styles.arrowstyleview}>
-            <Image source={assets.rightarrow} style={styles.arrowstyle} />
-          </View>
-        </View>
-      </TouchableOpacity>
-      <TouchableOpacity>
-        <View style={styles.secondsection}>
-          <View style={styles.logocontainer}>
-            <Image source={assets.about} style={styles.logostyle} />
-            <Text style={styles.textlist}>About</Text>
-          </View>
-          <View style={styles.arrowstyleview}>
-            <Image source={assets.rightarrow} style={styles.arrowstyle} />
-          </View>
-        </View>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={logout}>
-        <View style={styles.secondsection}>
-          <View style={styles.logocontainer}>
-            <Image source={assets.Logout} style={styles.logostyle} />
-            <Text style={styles.textlistlogout}>Log Out</Text>
-          </View>
-        </View>
-      </TouchableOpacity>
+  const handleaboutsection = () => {
+    Navigation.navigate("AboutSection");
+  };
 
-      <View style={styles.tncstyle}>
-        <TouchableOpacity onPress={handlePrivacyPolicy}>
-          <Text style={styles.policystyle}>Privacy Policy</Text>
+  const handlehelpsection = () => {
+    Navigation.navigate("HelpScreen");
+  };
+  const handlewishlist = () => {
+    Navigation.navigate("WishlistNavigator", { screen: "WishlistScreen" });
+  };
+
+  return (
+    <ScrollView style={{ flex: 1, backgroundColor: Typography.Colors.white }}>
+      <View style={styles.container}>
+        <TouchableOpacity onPress={handleEditProfileScreen}>
+          <View style={styles.firstsection}>
+            <Image
+              source={
+                user?.profilePicture
+                  ? { uri: user?.profilePicture }
+                  : assets.Demo
+              }
+              style={styles.profilepic}
+            />
+            <View style={styles.textcontainer}>
+              <Text style={styles.textname}>{user?.name}</Text>
+              <Text style={styles.mailcontainer}>{user?.email}</Text>
+            </View>
+          </View>
         </TouchableOpacity>
-        <View style={styles.line}></View>
-        <TouchableOpacity onPress={handleTermsnConditions}>
-          <Text style={styles.conditionstyle}>Terms and Conditions</Text>
+        <TouchableOpacity>
+          <View style={styles.secondsection}>
+            <View style={styles.logocontainer}>
+              <Image source={assets.tote} style={styles.logostyle} />
+              <Text style={styles.textlist}>My Orders</Text>
+            </View>
+            <View style={styles.arrowstyleview}>
+              <Image source={assets.rightarrow} style={styles.arrowstyle} />
+            </View>
+          </View>
         </TouchableOpacity>
+        <TouchableOpacity onPress={handlewishlist}>
+          <View style={styles.secondsection}>
+            <View style={styles.logocontainer}>
+              <Image source={assets.heart} style={styles.logostyle} />
+              <Text style={styles.textlist}>Wishlist</Text>
+            </View>
+            <View style={styles.arrowstyleview}>
+              <Image source={assets.rightarrow} style={styles.arrowstyle} />
+            </View>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <View style={styles.secondsection}>
+            <View style={styles.logocontainer}>
+              <Image source={assets.Location} style={styles.logodelivery} />
+              <Text style={styles.textlist}>Delivery Address</Text>
+            </View>
+            <View style={styles.arrowstyleview}>
+              <Image source={assets.rightarrow} style={styles.arrowstyle} />
+            </View>
+          </View>
+        </TouchableOpacity>
+        {/* <TouchableOpacity>
+          <View style={styles.secondsection}>
+            <View style={styles.logocontainer}>
+              <Image source={assets.Payment} style={styles.logo} />
+              <Text style={styles.textlistpayment}>Payment Methods</Text>
+            </View>
+            <View style={styles.arrowstyleview}>
+              <Image source={assets.rightarrow} style={styles.arrowstyle} />
+            </View>
+          </View>
+        </TouchableOpacity> */}
+        <TouchableOpacity>
+          <View style={styles.secondsection}>
+            <View style={styles.logocontainer}>
+              <Image source={assets.Offers} style={styles.logostyle} />
+              <Text style={styles.textlist}>Offers</Text>
+            </View>
+            <View style={styles.arrowstyleview}>
+              <Image source={assets.rightarrow} style={styles.arrowstyle} />
+            </View>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={handlehelpsection}>
+          <View style={styles.secondsection}>
+            <View style={styles.logocontainer}>
+              <Image source={assets.help} style={styles.logostyle} />
+              <Text style={styles.textlist}>Help</Text>
+            </View>
+            <View style={styles.arrowstyleview}>
+              <Image source={assets.rightarrow} style={styles.arrowstyle} />
+            </View>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={handleaboutsection}>
+          <View style={styles.secondsection}>
+            <View style={styles.logocontainer}>
+              <Image source={assets.about} style={styles.logostyle} />
+              <Text style={styles.textlist}>About</Text>
+            </View>
+            <View style={styles.arrowstyleview}>
+              <Image source={assets.rightarrow} style={styles.arrowstyle} />
+            </View>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={logout}>
+          <View style={styles.secondsection}>
+            <View style={styles.logocontainer}>
+              <Image source={assets.Logout} style={styles.logostyle} />
+              <Text style={styles.textlistlogout}>Log Out</Text>
+            </View>
+          </View>
+        </TouchableOpacity>
+
+        <View style={styles.tncstyle}>
+          <TouchableOpacity onPress={handlePrivacyPolicy}>
+            <Text style={styles.policystyle}>Privacy Policy</Text>
+          </TouchableOpacity>
+          <View style={styles.line}></View>
+          <TouchableOpacity onPress={handleTermsnConditions}>
+            <Text style={styles.conditionstyle}>Terms and Conditions</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -146,6 +168,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   secondsection: {
+    // marginBottom: 7,
+    // marginTop: 10,
     paddingHorizontal: 14,
     paddingVertical: 17,
     flexDirection: "row",
@@ -173,19 +197,22 @@ const styles = StyleSheet.create({
     color: Typography.Colors.lightgrey,
   },
   logostyle: {
+    marginTop: 5,
     height: 20,
     width: 20,
   },
   logo: {
+    marginTop: 5,
     height: 14,
     width: 20,
   },
   logodelivery: {
+    marginTop: 5,
     height: 25,
     width: 21.5,
   },
   logocontainer: {
-    alignSelf: "center",
+    // alignSelf: "center",
     flexDirection: "row",
     gap: 20,
   },
@@ -204,13 +231,16 @@ const styles = StyleSheet.create({
     color: Typography.Colors.red,
   },
   textlistpayment: {
-    alignSelf: "center",
+    // paddingVertical: 10,
+    // marginBottom: 10,
+    // alignSelf: "flex-start",
     fontSize: 16,
     fontWeight: "600",
     fontFamily: Typography.font.medium,
     color: Typography.Colors.blackdim,
   },
   arrowstyle: {
+    // marginTop: 5,
     paddingVertical: 8.5,
     height: 14,
     width: 10,
@@ -236,6 +266,7 @@ const styles = StyleSheet.create({
   },
   policystyle: {
     color: Typography.Colors.darksilver,
+    paddingVertical: 1.5,
   },
   conditionstyle: {
     color: Typography.Colors.darksilver,
