@@ -35,7 +35,7 @@ const ProfileScreen = () => {
     Navigation.navigate("HelpScreen");
   };
   const handlewishlist = () => {
-    // Navigation.navigate("WishlistNavigator", { screen: "WishlistScreen" });
+    Navigation.navigate("WishlistNavigator", { screen: "WishlistScreen" });
   };
 
   return (
