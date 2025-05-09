@@ -37,7 +37,7 @@
 
 //   const deleteitem = async (item) => {
 //     // console.log(item.id,"vasdjhcfgus u");
-    
+
 //     const response = await WishlistDelete(item.id).then((r) => {
 //       if (r.data) {
 //         WishlistApi();
@@ -300,7 +300,6 @@
 
 // export default WishlistScreen;
 
-
 import {
   View,
   Text,
@@ -316,7 +315,11 @@ import { assets } from "../../../assets/images";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import Delete from "react-native-vector-icons/MaterialCommunityIcons";
 import Ionicons from "react-native-vector-icons/Ionicons"; // Add this import
-import { WishlistData, WishlistDelete, WishlistDeleteAll } from "../../services/api/apiServices";
+import {
+  WishlistData,
+  WishlistDelete,
+  WishlistDeleteAll,
+} from "../../services/api/apiServices";
 import CustomButton from "../../components/button/CustomButton";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 
@@ -327,7 +330,7 @@ const WishlistScreen = () => {
   const WishlistApi = async () => {
     try {
       const data = await WishlistData();
-    //   console.log(data, "dataaaaaa");
+      //   console.log(data, "dataaaaaa");
       setWislist(data?.data?.data);
     } catch (e) {
       console.log("no data");
@@ -340,29 +343,28 @@ const WishlistScreen = () => {
 
   const deleteitem = async (item) => {
     // console.log(item.id,"vasdjhcfgus u");
-    
+
     const response = await WishlistDelete(item.id).then((r) => {
-        console.log(r.data);
-        
+      console.log(r.data);
+
       if (r.data) {
         WishlistApi();
       }
     });
   };
 
-const DeleteAll=async ()=>{
-  const response = await WishlistDeleteAll().then((r) => {
-    console.log(r.data,"response");
-    
-    if (r?.data?.status==200) {
-        // console.log("cfjdvsgjcfs",Wishlist);
-        
-    //   WishlistApi();
-    setWislist(null)
-    }
-  })
-}
+  const DeleteAll = async () => {
+    const response = await WishlistDeleteAll().then((r) => {
+      console.log(r.data, "response");
 
+      if (r?.data?.status == 200) {
+        // console.log("cfjdvsgjcfs",Wishlist);
+
+        //   WishlistApi();
+        setWislist(null);
+      }
+    });
+  };
 
   const wishlistData = ({ item }) => {
     // console.log(item, "itemmmm");
@@ -370,7 +372,7 @@ const DeleteAll=async ()=>{
     return (
       <Pressable style={[styles.subContainer]}>
         <View style={styles.imageConatiner}>
-          <Image source={{uri : item.images[0]}} style={styles.Image} />
+          <Image source={{ uri: item.images[0] }} style={styles.Image} />
         </View>
         <View style={styles.productAmount}>
           <Text numberOfLines={2} style={styles.title}>
@@ -415,7 +417,11 @@ const DeleteAll=async ()=>{
         {Wishlist && Wishlist.length > 0 && (
           <Pressable style={styles.deleteAll} onPress={DeleteAll}>
             <Text style={styles.deleteAllText}>Delete All</Text>
-            <Icon name="delete-sweep" size={20} style={{color:Typography.Colors.primary}}/>
+            <Icon
+              name="delete-sweep"
+              size={20}
+              style={{ color: Typography.Colors.primary }}
+            />
           </Pressable>
         )}
       </View>
@@ -609,13 +615,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 10,
-    backgroundColor: '#ffe5e8',
+    backgroundColor: "#ffe5e8",
     padding: 10,
     borderRadius: 10,
   },
   deleteAllText: {
-    color:Typography.Colors.primary,
-    fontFamily:Typography.font.heavy
+    color: Typography.Colors.primary,
+    fontFamily: Typography.font.heavy,
   },
 });
 

@@ -135,9 +135,9 @@ export const changePasswordService = async (FormData: any) => {
   }
 };
 
-export const updateUserdata = async (FormData: any) => {
+export const updateUserdata = async (FormData: any, userId: any) => {
   try {
-    const response = await userUpdate(FormData);
+    const response = await userUpdate(userId, FormData);
     const updatedUser = response.data;
     useAuthStore.getState().setUser(updatedUser);
     return updatedUser;
@@ -147,9 +147,11 @@ export const updateUserdata = async (FormData: any) => {
   }
 };
 
+export const promocode = () =>
+  axiosInstance.get("http://192.168.1.58:5000/promocode");
+
 export const Categories = () => axiosInstance.get(ENDPOINTS.CATEGORY);
 export const Collection = () => axiosInstance.get(ENDPOINTS.COLLECTION);
-
 
 export const SubCategories = (name) => {
   return axiosInstance.get(`${ENDPOINTS.SUBCATEGORY}${name}`);
@@ -171,9 +173,9 @@ export const WishlistData = () => {
 };
 
 export const WishlistDelete = (productId: string) => {
- return axiosInstance.delete(ENDPOINTS.WISHLIST, {
-    data:{
-      productId
+  return axiosInstance.delete(ENDPOINTS.WISHLIST, {
+    data: {
+      productId,
     },
   });
   // console.log(a,"aaaaaaaaaaaaaaaaaaaaa")

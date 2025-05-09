@@ -9,6 +9,10 @@ import PrivacyPolicyScreen from "../screens/Profile/PrivacyPolicyScreen";
 import TermsnConditionScreen from "../screens/Profile/Terms&ConditionScreen";
 import AboutScreen from "../screens/Profile/AboutScreen";
 import HelpScreen from "../screens/Profile/HelpScreen";
+import DeliveryAddress from "../screens/Profile/DeliverAddressScreen";
+import AddAdressList from "../screens/Profile/AddAddressListScreen";
+import PromoCodeScreen from "../screens/Profile/OffersScreen";
+// import PromoCodeScreen from "../screens/Profile/offersScreen";
 
 const Stack = createNativeStackNavigator();
 const ProfileNavigator = () => {
@@ -26,6 +30,9 @@ const ProfileNavigator = () => {
       <Stack.Screen name="TermsnConditions" component={TermsnConditionScreen} />
       <Stack.Screen name="AboutSection" component={AboutScreen} />
       <Stack.Screen name="HelpScreen" component={HelpScreen} />
+      <Stack.Screen name="DeliveryAddress" component={DeliveryAddress} />
+      <Stack.Screen name="AddAddressList" component={AddAdressList} />
+      <Stack.Screen name="PromoCodeScreen" component={PromoCodeScreen} />
     </Stack.Navigator>
   );
 };

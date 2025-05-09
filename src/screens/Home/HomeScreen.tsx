@@ -40,7 +40,6 @@ const HomeScreen = () => {
     navigation.navigate("Category", { name: name });
   };
 
-
   // Category Render Item
 
   const renderItem = ({ item }) => {
@@ -442,7 +441,6 @@ const styles = StyleSheet.create({
   staticContainer: {
     flex: 1,
     paddingTop: 10,
-
   },
   dealView: {
     height: 251,
