@@ -149,7 +149,10 @@ export const updateUserdata = async (FormData: any) => {
 
 export const Categories = () => axiosInstance.get(ENDPOINTS.CATEGORY);
 export const Collection = () => axiosInstance.get(ENDPOINTS.COLLECTION);
-
+export const Filters = (category, size, color, initialPrice,finalPrice,discount,finalDiscount) =>{
+  return axiosInstance.get(
+    `${ENDPOINTS.FILTERS}/${category}/${size}/${color}/${initialPrice}/${finalPrice}/${discount}/${finalDiscount}`
+  );}
 
 export const SubCategories = (name) => {
   return axiosInstance.get(`${ENDPOINTS.SUBCATEGORY}${name}`);
@@ -171,9 +174,9 @@ export const WishlistData = () => {
 };
 
 export const WishlistDelete = (productId: string) => {
- return axiosInstance.delete(ENDPOINTS.WISHLIST, {
-    data:{
-      productId
+  return axiosInstance.delete(ENDPOINTS.WISHLIST, {
+    data: {
+      productId,
     },
   });
   // console.log(a,"aaaaaaaaaaaaaaaaaaaaa")

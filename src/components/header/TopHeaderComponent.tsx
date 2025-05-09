@@ -1,18 +1,20 @@
 import {
   Image,
+  Pressable,
   StyleSheet,
   Text,
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import { HeaderProps } from "../../models/UserInfo.type";
 import { Typography } from "../../theme/Colors";
 import useAuthStore from "../../stores/useAuthStore";
 import { assets } from "../../../assets/images";
+import { useNavigation } from "@react-navigation/native";
 
 const TopHeaderComponent = () => {
   const { user } = useAuthStore();
 //   console.log(user);
+  const navigation = useNavigation();
 
   return (
     <View style={styles.container}>
@@ -29,9 +31,9 @@ const TopHeaderComponent = () => {
         </Text>
       </View>
       <View style={styles.iconContainer}>
-        <TouchableWithoutFeedback>
+        <Pressable >
           <Image source={assets.MainSearch} style={styles.icon} resizeMode="cover" />
-        </TouchableWithoutFeedback>
+        </Pressable>
       </View>
     </View>
   );
