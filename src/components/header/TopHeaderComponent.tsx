@@ -13,7 +13,7 @@ import { useNavigation } from "@react-navigation/native";
 
 const TopHeaderComponent = () => {
   const { user } = useAuthStore();
-//   console.log(user);
+  console.log(user);
   const navigation = useNavigation();
 
   return (
@@ -27,7 +27,7 @@ const TopHeaderComponent = () => {
           resizeMode="contain"
         />
         <Text numberOfLines={1} style={styles.userName}>
-          {user.name}
+          {user?.name}
         </Text>
       </View>
       <View style={styles.iconContainer}>
@@ -52,6 +52,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontFamily: Typography.font.medium,
     textAlign: "center",
+    textTransform:'capitalize'
   },
   iconContainer: {
     flex: 1,

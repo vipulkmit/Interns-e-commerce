@@ -52,7 +52,7 @@ const ProfileScreen = () => {
               style={styles.profilepic}
             />
             <View style={styles.textcontainer}>
-              <Text style={styles.textname}>{user?.name}</Text>
+              <Text style={styles.textname} >{user?.name}</Text>
               <Text style={styles.mailcontainer}>{user?.email}</Text>
             </View>
           </View>
@@ -190,6 +190,7 @@ const styles = StyleSheet.create({
     fontFamily: Typography.font.bold,
     color: Typography.Colors.black,
     fontWeight: "500",
+    textTransform:'capitalize'
   },
   mailcontainer: {
     fontSize: 14,

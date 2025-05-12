@@ -169,6 +169,7 @@ const styles = StyleSheet.create({
     fontFamily: Typography.font.bold,
     color: Typography.Colors.black,
     fontWeight: "500",
+    textTransform:"capitalize"
   },
   mailcontainer: {
     fontSize: 14,
