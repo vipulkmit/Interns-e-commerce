@@ -6,26 +6,26 @@ import { verifyOtpService } from "../services/api/apiServices";
 import CustomTextInput from "../components/textInput/CustomTextInput";
 import CustomButton from "../components/button/CustomButton";
 
-export default function VerifyotpScreen() {
+export default function VerifyotpScreen({ route }) {
+  const { email } = route.params;
   // const [email, setemail] = useState("");
   const [otp, setotp] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const Navigation = useNavigation();
 
   const Sendverification = async () => {
-    Navigation.navigate("Passwordchange");
     if (!otp.trim()) {
-      Alert.alert("Error", "Please enter both email and OTP.");
+      Alert.alert("Error", "Please enter OTP.");
       return;
     }
 
     setIsLoading(true);
     try {
-      const response = await verifyOtpService({ otp });
+      await verifyOtpService({ email, OTP: otp });
       Alert.alert("Success", "OTP verified successfully!");
-      console.log("Verify OTP Response:", response);
+      console.log(email, "fdbyjybfduiyf");
+      Navigation.navigate("Passwordchange", { email: email });
     } catch (error: any) {
-      console.error("Verify OTP Error:", error.message);
       Alert.alert("Error", error.message || "Failed to verify OTP.");
     } finally {
       setIsLoading(false);
@@ -34,7 +34,6 @@ export default function VerifyotpScreen() {
 
   return (
     <View style={styles.container}>
-      {/* <View style={{marginBottom:10}}> */}
       <View style={styles.welcomeandsignup}>
         <Text style={styles.welcomeText}>Enter Verification Code</Text>
         <Text style={styles.subText}>
@@ -42,7 +41,6 @@ export default function VerifyotpScreen() {
         </Text>
         <Text style={styles.subsubtext}>password</Text>
       </View>
-      {/* </View> */}
 
       <CustomTextInput
         value={otp}
@@ -63,7 +61,6 @@ export default function VerifyotpScreen() {
 const styles = StyleSheet.create({
   container: {
     paddingTop: 200,
-    // marginBottom:60,
     flex: 1,
     paddingHorizontal: 20,
     backgroundColor: Typography.Colors.white,

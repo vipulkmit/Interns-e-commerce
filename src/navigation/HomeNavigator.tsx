@@ -1,9 +1,10 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import HomeScreen1 from '../screens/Home/HomeScreen1';
-import HomeScreen2 from '../screens/Home/HomeScreen2';
+import ProductsPage from '../screens/Home/ProductsPage';
+import ProductDetailPage from '../screens/Home/ProductDetailPage';
 import HomeScreen from '../screens/Home/HomeScreen';
 import Categories from '../screens/Home/Category';
+import WishlistScreen from '../screens/Wishlist/WishlistScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -15,9 +16,10 @@ const HomeNavigator = () => {
       // initialRouteName='Category'
       screenOptions={{ headerShown: false }}>
       <Stack.Screen name="HomeScreen" component={HomeScreen} />
-      <Stack.Screen name="HomeScreen1" component={HomeScreen1} />
-      <Stack.Screen name="HomeScreen2" component={HomeScreen2} />
+      <Stack.Screen name="ProductsPage" component={ProductsPage} />
+      <Stack.Screen name="ProductDetailPage" component={ProductDetailPage} />
       <Stack.Screen name='Category' component={Categories}/>
+      <Stack.Screen name="WishlistScreen" component={WishlistScreen} />
     </Stack.Navigator>
   );
 };

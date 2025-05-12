@@ -13,22 +13,23 @@ const ProductComponent = ({
     initialRate,
     rate,
     discount,
-    onClick
+    onClick,
 }: ProductProps) => {
+    
     return (
         <View style={styles.mainContainer}>
             <View style={styles.photoContainer}>
                 <View style={styles.Container}>
-                    <Image source={images[0]} style={styles.Collection} />
+                    <Image source={{uri:images[0].toString()}} style={styles.Collection} />
                 </View>
                 <View style={[ styles.Container,{ gap: 15 }]}>
 
                     <View style={styles.Container}>
-                        <Image source={images[1]} style={styles.Collection} />
+                        <Image source={{uri:images[1].toString()}} style={styles.Collection} />
                     </View>
 
                     <Pressable style={styles.backgroundContainer} onPress={onClick} >
-                        <ImageBackground source={images[2]} style={styles.subConatiner}  >
+                        <ImageBackground source={{uri:images[2].toString()}} style={styles.subConatiner}  >
                             <Text style={styles.numberText}>+{images.length - 2}</Text>
                             <View style={styles.overlay} />
                         </ImageBackground>

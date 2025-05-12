@@ -4,11 +4,8 @@ import { Typography } from "../theme/Colors";
 import { assets } from "../../assets/images";
 import { useNavigation } from "@react-navigation/native";
 import { forgotPasswordService } from "../services/api/apiServices";
-// import CustomTextInput from "../components/textInput/CustomTextInput";
 import CustomButton from "../components/button/CustomButton";
 import CustomTextInput from "../components/textInput/CustomTextInput";
-// import CustomTextInput from "../components/textInput/CustomTextInput";
-// import CustomButton from "../components/button/CustomButton";
 
 export default function ForgetpasswordScreen() {
   const [email, setEmail] = useState("");
@@ -20,14 +17,12 @@ export default function ForgetpasswordScreen() {
       Alert.alert("Error", "Please enter your email address");
       return;
     }
-
     setIsLoading(true);
     try {
       const response = await forgotPasswordService({ email });
       Alert.alert("Success", "Verification email sent successfully!");
       console.log("Forgot Password Response:", response);
-
-      Navigation.navigate("Verifyotp");
+      Navigation.navigate("Verifyotp", { email: email });
     } catch (error: any) {
       console.error("Forgot Password Error:", error.message);
       Alert.alert(
@@ -98,7 +93,6 @@ const styles = StyleSheet.create({
     fontFamily: Typography.font.regular,
     fontSize: 15,
     color: Typography.Colors.lightgrey,
-    // alignItems: "center",
     marginBottom: 30,
   },
   containerlogo: {
@@ -127,20 +121,3 @@ const styles = StyleSheet.create({
     height: 52,
   },
 });
-
-// useEffect(() => {
-//   const backHandler = BackHandler.addEventListener(
-//     'hardwareBackPress',
-//     () => {
-//       if (isSignUp === 'true') {
-//         navigation.navigate(SCREEN_URLS.signUp);
-//       } else {
-//         navigation.navigate(SCREEN_URLS.login);
-//       }
-
-//       return true;
-//     }
-//   );
-
-//   return () => backHandler.remove();
-// }, []);

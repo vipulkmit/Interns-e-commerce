@@ -3,11 +3,13 @@ import {
   changepassword,
   forgetpassword,
   loginUser,
+  userUpdate,
   verifyotp,
 } from "../../authentication/AuthApi";
 import { registerUser } from "../../authentication/AuthApi";
-import axiosInstance from './axiosInstance';
-import ENDPOINTS from '../../utils/endpoints';
+import axiosInstance from "./axiosInstance";
+import ENDPOINTS from "../../utils/endpoints";
+import useAuthStore from "../../stores/useAuthStore";
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -92,12 +94,12 @@ const verifyOtpSchema = z.object({
 });
 
 export const verifyOtpService = async (FormData: any) => {
-  const parsed = verifyOtpSchema.safeParse(FormData);
-  if (!parsed.success) {
-    throw new Error("Validation Failed:" + JSON.stringify(parsed.error.errors));
-  }
+  // const parsed = verifyOtpSchema.safeParse(FormData);
+  // if (!parsed.success) {
+  //   throw new Error("Validation Failed:" + JSON.stringify(parsed.error.errors));
+  // }
   try {
-    const response = await verifyotp(parsed.data);
+    const response = await verifyotp(FormData);
     return response.data;
   } catch (error) {
     console.log("Verify OTP Service Error", error.message);
@@ -120,12 +122,12 @@ const changePasswordSchema = z
   });
 
 export const changePasswordService = async (FormData: any) => {
-  const parsed = changePasswordSchema.safeParse(FormData);
-  if (!parsed.success) {
-    throw new Error("Validation Failed:" + JSON.stringify(parsed.error.errors));
-  }
+  // const parsed = changePasswordSchema.safeParse(FormData);
+  // if (!parsed.success) {
+  //   throw new Error("Validation Failed:" + JSON.stringify(parsed.error.errors));
+  // }
   try {
-    const response = await changepassword(parsed.data);
+    const response = await changepassword(FormData);
     return response.data;
   } catch (error) {
     console.error("Change Password");
@@ -133,14 +135,51 @@ export const changePasswordService = async (FormData: any) => {
   }
 };
 
+export const updateUserdata = async (FormData: any, userId: any) => {
+  try {
+    const response = await userUpdate(userId, FormData);
+    const updatedUser = response.data;
+    useAuthStore.getState().setUser(updatedUser);
+    return updatedUser;
+  } catch (error) {
+    console.error("Update User Data Error:", error);
+    throw error;
+  }
+};
 
+export const promocode = () =>
+  axiosInstance.get("http://192.168.1.58:5000/promocode");
 
+export const Categories = () => axiosInstance.get(ENDPOINTS.CATEGORY);
+export const Collection = () => axiosInstance.get(ENDPOINTS.COLLECTION);
 
+export const SubCategories = (name) => {
+  return axiosInstance.get(`${ENDPOINTS.SUBCATEGORY}${name}`);
+};
 
-export const Categories = () =>
-  axiosInstance.get(ENDPOINTS.CATEGORY);
+export const Products = (name, category) => {
+  return axiosInstance.get(`${ENDPOINTS.PRODUCTS}${name}/${category}`);
+};
 
+export const CarousalData = () => axiosInstance.get(ENDPOINTS.CAROUSAL);
 
-export const SubCategories = (name) =>
-{
-  return axiosInstance.get(`${ENDPOINTS.SUBCATEGORY}${name}`);}
+export const AddToWishlist = (id: string) => {
+  // console.log(id,"dfhuifgkerghr")
+  return axiosInstance.post(ENDPOINTS.WISHLISTPOST, { productId: id });
+};
+
+export const WishlistData = () => {
+  return axiosInstance.get(ENDPOINTS.WISHLISTGET);
+};
+
+export const WishlistDelete = (productId: string) => {
+  return axiosInstance.delete(ENDPOINTS.WISHLIST, {
+    data: {
+      productId,
+    },
+  });
+  // console.log(a,"aaaaaaaaaaaaaaaaaaaaa")
+};
+
+export const WishlistDeleteAll = () =>
+  axiosInstance.delete(ENDPOINTS.WISHLISTDELETE);
