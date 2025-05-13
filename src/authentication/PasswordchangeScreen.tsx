@@ -28,7 +28,6 @@ export default function PasswordchangeScreen({ route }) {
         confirmPassword: confirmNewPassword,
       });
       Alert.alert("Success", "Password changed successfully!");
-
       if (state.routes[1].name == "EditProfileScreen") {
         Navigation.goBack();
       } else {

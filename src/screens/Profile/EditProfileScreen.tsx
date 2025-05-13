@@ -225,6 +225,7 @@ const styles = StyleSheet.create({
 });
 
 export default EditProfileScreen;
-function setSelectedImage(arg0: string) {
-  throw new Error("Function not implemented.");
-}
+
+// function setSelectedImage(arg0: string) {
+//   throw new Error("Function not implemented.");
+// }

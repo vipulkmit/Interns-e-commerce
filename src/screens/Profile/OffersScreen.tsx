@@ -14,7 +14,7 @@ import { promocode } from "../../services/api/apiServices";
 
 const PromoCodeScreen = () => {
   const navigation = useNavigation();
-  const [promoCodeData, setPromoCodeData] = useState(null);
+  const [promoCodeData, setPromoCodeData] = useState();
   const [loading, setLoading] = useState(true);
 
   // const handleApplyCode = () => {
@@ -93,7 +93,7 @@ const PromoCodeScreen = () => {
 
       <FlatList
         data={promoCodeData || []}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item, index) => index.toString()}
         renderItem={renderOffer}
         contentContainerStyle={{ paddingTop: 10 }}
       />

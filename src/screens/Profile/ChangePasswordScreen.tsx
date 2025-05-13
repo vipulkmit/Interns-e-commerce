@@ -1,19 +1,13 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, Image, Alert } from "react-native";
-// import { Typography } from "../theme/Colors";
-// import { assets } from "../../assets/images";
 import { useNavigation, useNavigationState } from "@react-navigation/native";
 import { changePasswordService } from "../../services/api/apiServices";
 import { assets } from "../../../assets/images";
 import CustomTextInput from "../../components/textInput/CustomTextInput";
 import { Typography } from "../../theme/Colors";
 import CustomButton from "../../components/button/CustomButton";
-// import { changePasswordService } from "../services/api/apiServices";
-// import CustomTextInput from "../components/textInput/CustomTextInput";
-// import CustomButton from "../components/button/CustomButton";
 
 export default function ChangePasswordScreen() {
-  //   const state = useNavigationState((state) => state);
   const [newPassword, setNewPassword] = useState("");
   const [oldPassword, setoldPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");

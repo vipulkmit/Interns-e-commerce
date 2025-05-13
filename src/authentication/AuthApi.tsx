@@ -10,11 +10,9 @@ export const forgetpassword = (data: any) =>
   axiosInstance.post(ENDPOINTS.FORGET_PASSWORD, data);
 export const verifyotp = (data: any) =>
   axiosInstance.post(ENDPOINTS.VERIFY_OTP, data);
-// export const changepassword = (data: any) =>
-//   axiosInstance.post(ENDPOINTS.CHANGE_PASSWORD, data);
 export const googlelogin = (data: any) =>
   axiosInstance.get(ENDPOINTS.GOOGLE_OAUTH, data);
-export const userUpdate = (userId: string, data: any) =>
-  axiosInstance.patch(`${ENDPOINTS.UPDATE}${userId}`, data);
+// export const userUpdate = (userId: string, data: any) =>
+//   axiosInstance.patch(ENDPOINTS.UPDATE(userId), data);
 export const googleoauth = (data: any) =>
   axiosInstance.get(ENDPOINTS.GOOGLE_OAUTH, data);

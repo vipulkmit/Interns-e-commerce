@@ -44,7 +44,7 @@ const ProfileScreen = () => {
   const handleOffers = () => {
     Navigation.navigate("PromoCodeScreen");
   };
-
+  // console.log(user.profilePicture, "dsfihn");
   return (
     <ScrollView style={{ flex: 1, backgroundColor: Typography.Colors.white }}>
       <View style={styles.container}>
@@ -56,6 +56,7 @@ const ProfileScreen = () => {
                   ? { uri: user?.profilePicture }
                   : assets.Demo
               }
+              // source={assets.Demo}
               style={styles.profilepic}
             />
             <View style={styles.textcontainer}>

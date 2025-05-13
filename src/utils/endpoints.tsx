@@ -4,7 +4,7 @@ const ENDPOINTS = {
   FORGET_PASSWORD: "/user/forget-password",
   VERIFY_OTP: "/user/verify-otp",
   CHANGE_PASSWORD: "/user/update-password",
-  UPDATE: "/user/",
+  UPDATE: (id: string) => `/user/${id}`,
   DELETE: "/user/",
   GOOGLE_SIGNUP: "/user/google",
   GOOGLE_OAUTH: "/user/google/callback",

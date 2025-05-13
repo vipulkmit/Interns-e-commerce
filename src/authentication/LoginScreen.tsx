@@ -71,7 +71,7 @@ export default function LoginScreen() {
         // console.log(userData, "dusvndsivud");
         useAuthStore.setState({ isLoggedIn: true });
         setUser(response.userDetails);
-        console.log(response, "nigsfgnrsf");
+        // console.log(response, "nigsfgnrsf");
         setToken(response.access_token);
         Navigation.reset({
           index: 0,
@@ -245,11 +245,13 @@ const styles = StyleSheet.create({
   },
   forgotText: {
     fontFamily: Typography.font.bold,
+    fontWeight: "700",
     fontSize: 16,
     color: Typography.Colors.primary,
   },
   orText: {
     fontFamily: Typography.font.bold,
+    fontWeight: "bold",
     textAlign: "center",
     fontSize: 15,
     color: Typography.Colors.darkgrey,
@@ -289,7 +291,7 @@ const styles = StyleSheet.create({
   },
   registerText: {
     fontSize: 14,
-    color: Typography.Colors.greydark,
+    color: Typography.Colors.lightgrey,
   },
   registerLink: {
     fontSize: 14,
