@@ -48,7 +48,6 @@ const DeliveryAddress = () => {
     };
     console.log(user.id, "fdivnfdv");
     const response = await updateUserdata(user.id, updatedAddresses);
-
     // useAuthStore.getState().setUser(response);
 
     Alert.alert("Success", "Address has been deleted.", [{ text: "OK" }]);
