@@ -107,32 +107,39 @@ export const verifyOtpService = async (FormData: any) => {
   }
 };
 
-const changePasswordSchema = z
-  .object({
-    newPassword: z
-      .string()
-      .min(8, { message: "New password must be at least 8 characters long." }),
-    confirmNewPassword: z.string().min(8, {
-      message: "Confirm password must be at least 8 characters long.",
-    }),
-  })
-  .refine((data) => data.newPassword === data.confirmNewPassword, {
-    message: "New passwords do not match.",
-    path: ["confirmNewPassword"],
-  });
+// const changePasswordSchema = z
+//   .object({
+//     newPassword: z
+//       .string()
+//       .min(8, { message: "New password must be at least 8 characters long." }),
+//     confirmNewPassword: z.string().min(8, {
+//       message: "Confirm password must be at least 8 characters long.",
+//     }),
+//   })
+//   .refine((data) => data.newPassword === data.confirmNewPassword, {
+//     message: "New passwords do not match.",
+//     path: ["confirmNewPassword"],
+//   });
 
-export const changePasswordService = async (FormData: any) => {
-  // const parsed = changePasswordSchema.safeParse(FormData);
-  // if (!parsed.success) {
-  //   throw new Error("Validation Failed:" + JSON.stringify(parsed.error.errors));
-  // }
-  try {
-    const response = await changepassword(FormData);
-    return response.data;
-  } catch (error) {
-    console.error("Change Password");
-    throw error;
-  }
+// export const changePasswordService = async (FormData: any) => {
+//   // const parsed = changePasswordSchema.safeParse(FormData);
+//   // if (!parsed.success) {
+//   //   throw new Error("Validation Failed:" + JSON.stringify(parsed.error.errors));
+//   // }
+//   try {
+//     const response = await changepassword(FormData);
+//     return response.data;
+//   } catch (error) {
+//     console.error("Change Password");
+//     throw error;
+//   }
+// };
+
+// import axiosInstance from '../utils/axiosInstance'; // or wherever it's defined
+// import { ENDPOINTS } from '../utils/constants'; // Make sure this includes CHANGE_PASSWORD
+
+export const changePasswordService = (FormData: any) => {
+  return axiosInstance.post(ENDPOINTS.CHANGE_PASSWORD, FormData);
 };
 
 export const updateUserdata = async (FormData: any, userId: any) => {
@@ -147,9 +154,7 @@ export const updateUserdata = async (FormData: any, userId: any) => {
   }
 };
 
-export const promocode = () =>
-  axiosInstance.get("http://192.168.1.58:5000/promocode");
-
+export const promocode = () => axiosInstance.get(ENDPOINTS.PROMOCODE);
 export const Categories = () => axiosInstance.get(ENDPOINTS.CATEGORY);
 export const Collection = () => axiosInstance.get(ENDPOINTS.COLLECTION);
 

@@ -3,7 +3,7 @@ const ENDPOINTS = {
   LOGIN: "/user/login",
   FORGET_PASSWORD: "/user/forget-password",
   VERIFY_OTP: "/user/verify-otp",
-  CHANGE_PASSWORD: "/user/change-password",
+  CHANGE_PASSWORD: "/user/update-password",
   UPDATE: "/user/",
   DELETE: "/user/",
   GOOGLE_SIGNUP: "/user/google",

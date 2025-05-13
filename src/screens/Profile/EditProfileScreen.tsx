@@ -16,7 +16,8 @@ const EditProfileScreen = () => {
   const user = useAuthStore((state) => state.user);
   // console.log(user, "vfbvfrjb");
   const handlepasswordchange = () => {
-    Navigation.navigate("Passwordchange", { email: user?.email });
+    // Navigation.navigate("Passwordchange", { email: user?.email });
+    Navigation.navigate("ChangePasswordScreen");
   };
 
   const handleImageChange = () => {

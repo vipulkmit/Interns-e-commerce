@@ -12,6 +12,7 @@ import HelpScreen from "../screens/Profile/HelpScreen";
 import DeliveryAddress from "../screens/Profile/DeliverAddressScreen";
 import AddAdressList from "../screens/Profile/AddAddressListScreen";
 import PromoCodeScreen from "../screens/Profile/OffersScreen";
+import ChangePasswordScreen from "../screens/Profile/ChangePasswordScreen";
 // import PromoCodeScreen from "../screens/Profile/offersScreen";
 
 const Stack = createNativeStackNavigator();
@@ -24,7 +25,10 @@ const ProfileNavigator = () => {
     >
       <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
       <Stack.Screen name="EditProfile" component={EditProfileScreen} />
-      {/* <Stack.Screen name="ChangePasswordScreen" component={ChangePasswordScreen} /> */}
+      <Stack.Screen
+        name="ChangePasswordScreen"
+        component={ChangePasswordScreen}
+      />
       <Stack.Screen name="Passwordchange" component={PasswordchangeScreen} />
       <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicyScreen} />
       <Stack.Screen name="TermsnConditions" component={TermsnConditionScreen} />

@@ -70,8 +70,8 @@ export default function LoginScreen() {
         // };
         // console.log(userData, "dusvndsivud");
         useAuthStore.setState({ isLoggedIn: true });
-        setUser(response.userDetail);
-        // console.log(response.userDetail, "nigsfgnrsf");
+        setUser(response.userDetails);
+        console.log(response, "nigsfgnrsf");
         setToken(response.access_token);
         Navigation.reset({
           index: 0,
