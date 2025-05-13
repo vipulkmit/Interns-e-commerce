@@ -13,7 +13,7 @@ import { useNavigation } from "@react-navigation/native";
 
 const TopHeaderComponent = () => {
   const { user } = useAuthStore();
-  console.log(user);
+  // console.log(user);
   const navigation = useNavigation();
 
   return (

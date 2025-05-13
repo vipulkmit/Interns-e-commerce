@@ -417,9 +417,10 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 10,
     marginTop: 27,
-    width: 118,
-    height: 34,
+    padding:6,
+    paddingHorizontal: 25,
     alignItems: "center",
+    justifyContent:'center'
   },
   buttonText: {
     color: Typography.Colors.white,
@@ -433,7 +434,8 @@ const styles = StyleSheet.create({
     paddingLeft: 11,
   },
   TrendingText: {
-    fontFamily: Typography.font.medium,
+    // fontFamily: Typography.font.bold,
+    fontWeight:'500',
     fontSize: 20,
     color: Typography.Colors.lightblack,
   },
