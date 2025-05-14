@@ -14,11 +14,7 @@ axiosInstance.interceptors.request.use(
     const { token } = useAuthStore.getState();
 
     if (token) config.headers.Authorization = `Bearer ${token}`;
-<<<<<<< HEAD
-    console.log(config, "configconfigconfigconfigconfigconfig");
-=======
-    console.log("dsifonsfjsff", config);
->>>>>>> 25fa5d60af0deab303986e9b52957823f5289d7f
+    // console.log("dsifonsfjsff", config);
     return config;
   },
   (error) => Promise.reject(error)

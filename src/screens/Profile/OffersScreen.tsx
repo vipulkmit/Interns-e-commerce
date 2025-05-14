@@ -10,11 +10,8 @@ import {
 import Icon from "react-native-vector-icons/Feather";
 import { Typography } from "../../theme/Colors";
 import { useNavigation } from "@react-navigation/native";
-<<<<<<< HEAD
 import axiosInstance from "../../services/api/axiosInstance";
-=======
 import { promocode } from "../../services/api/apiServices";
->>>>>>> 25fa5d60af0deab303986e9b52957823f5289d7f
 
 const PromoCodeScreen = () => {
   const navigation = useNavigation();
@@ -29,7 +26,6 @@ const PromoCodeScreen = () => {
     navigation.goBack();
   };
 
-<<<<<<< HEAD
   const fetchPromoCode = async () => {
     try {
       const response = await axiosInstance.get(
@@ -46,7 +42,6 @@ const PromoCodeScreen = () => {
       setLoading(false);
     }
   };
-=======
   // const fetchPromoCode = async () => {
   //   try {
   //     const response = await axiosInstance.get(ENDPOINTS.PROMOCODE);
@@ -60,7 +55,6 @@ const PromoCodeScreen = () => {
   //     setLoading(false);
   //   }
   // };
->>>>>>> 25fa5d60af0deab303986e9b52957823f5289d7f
 
   useEffect(() => {
     promocode()

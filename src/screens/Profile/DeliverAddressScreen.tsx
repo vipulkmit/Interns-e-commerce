@@ -47,7 +47,7 @@ const DeliveryAddress = () => {
       address: updatedAddresses,
     };
     console.log(user.id, "fdivnfdv");
-    const response = await updateUserdata(user.id, updatedAddresses);
+    const response = await updateUserdata(user.id, updatedUser);
     // useAuthStore.getState().setUser(response);
 
     Alert.alert("Success", "Address has been deleted.", [{ text: "OK" }]);
@@ -117,15 +117,14 @@ const DeliveryAddress = () => {
         renderItem={({ item, index }) => <Listitem item={item} index={index} />}
         ListEmptyComponent={Emptylist}
       />
-
-      <TouchableOpacity>
+      {user?.address && user?.address?.length > 0 && (
         <CustomButton
           title={"Add Address"}
           onPress={handleaddAddress}
           buttonStyle={styles.buttonstyleaddress}
           textStyle={styles.buttontextstyleaddress}
         />
-      </TouchableOpacity>
+      )}
     </View>
   );
 };
@@ -206,9 +205,10 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   buttonstyleaddress: {
+    alignSelf: "center",
     textAlign: "center",
     height: 57,
-    width: 167,
+    width: 267,
     backgroundColor: Typography.Colors.primary,
   },
   buttontextstyleaddress: {

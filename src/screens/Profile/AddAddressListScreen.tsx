@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   View,
   Text,
@@ -37,10 +37,18 @@ const AddAddressList = ({ route }) => {
   const handleAddAddresspress = async (values: any, index?: number) => {
     console.log("first");
     try {
+      console.log("suiofhnr5");
+
       const user = useAuthStore.getState().user;
+      console.log(user, "dvusdbhf");
+
+      // useEffect(() => {
+      console.log(user, "vdfhngv");
       if (!user || !user.id) {
-        throw new Error("User ID not found. Please log in again.");
+        Alert.alert("Session expired", "Please log in again.");
+        // Navigation.navigate("");
       }
+      // }, [user]);
 
       const newAddress = {
         firstName: values.firstName,
@@ -72,7 +80,8 @@ const AddAddressList = ({ route }) => {
       console.log("Payload to APII:", JSON.stringify(updatedUser, null, 2));
       console.log("payload to API:", { userID: user.id, updatedUser });
       const response = await updateUserdata(user.id, updatedUser);
-      console.log("fdvmfv", response.address);
+      // console.log("fdvmfv", response.address);
+
       useAuthStore.getState().setUser(response);
 
       Alert.alert(

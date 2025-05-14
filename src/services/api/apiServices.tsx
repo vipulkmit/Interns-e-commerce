@@ -111,14 +111,15 @@ export const changePasswordService = (FormData: any) => {
 
 export const updateUserdata = async (userId: any, FormData: any) => {
   try {
-    console.log("dsivdfgg", userId);
-    console.log("FormData being sent:", FormData);
+    // console.log("dsivdfgg", userId);
+    // console.log("FormData being sent:", FormData);
     const response = await axiosInstance.patch(
       ENDPOINTS.UPDATE(userId),
       FormData
     );
-    console.log("fdknvrrg", response);
+    // console.log("fdknvrrg", response);
     const updatedUser = response.data;
+
     useAuthStore.getState().setUser(updatedUser);
     return updatedUser;
   } catch (error: any) {
