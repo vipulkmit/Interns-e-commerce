@@ -47,9 +47,9 @@ export default function SignupScreen() {
     try {
       const response = await registerUser({ name, email, password });
       Alert.alert("Success", "Account Created Successfully");
-      console.log(response, "res");
+      // console.log(response, "res");
       setUser(response.data.userDetails);
-      console.log(response.data, "dskufcbhefue");
+      // console.log(response.data, "dskufcbhefue");
       Navigation.navigate("LoginScreen");
     } catch (error: any) {
       Alert.alert("Error", error.message);
@@ -122,7 +122,7 @@ export default function SignupScreen() {
         />
 
         <CustomButton
-          title="Login"
+          title="SignUp"
           onPress={handleSignupPress}
           buttonStyle={styles.buttonstyle}
         />

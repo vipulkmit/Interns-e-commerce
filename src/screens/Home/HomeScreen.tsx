@@ -40,10 +40,9 @@ const HomeScreen = () => {
     navigation.navigate("Category", { name: name });
   };
 
-
   // Category Render Item
-
   const renderItem = ({ item }) => {
+    // console.log(item.image);
     return (
       <Pressable
         style={styles.subContainer}
@@ -133,7 +132,7 @@ const HomeScreen = () => {
         <ProductComponent
           images={item.images}
           productName={item.title}
-          brandName={item.brand.name}
+          brandName={item?.brand?.name}
           initialRate={item.discountPrice}
           rate={item.price}
           discount={item.discountPercentage}
@@ -162,6 +161,7 @@ const HomeScreen = () => {
     useEffect(() => {
       Categories()
         .then((data) => {
+          // console.log(data.data, "eufiebfh");
           setCategory(data?.data);
         })
         .catch((e) => {
@@ -258,7 +258,7 @@ const HomeScreen = () => {
           <FlatList
             data={ourCollection.slice(5, 10)}
             renderItem={TrendingRenderItem}
-            keyExtractor={(item) => item.id.toString()}
+            keyExtractor={(item) => item?.id.toString()}
             horizontal
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={{ gap: 20 }}
@@ -444,7 +444,6 @@ const styles = StyleSheet.create({
   staticContainer: {
     flex: 1,
     paddingTop: 10,
-
   },
   dealView: {
     height: 251,

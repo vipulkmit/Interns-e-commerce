@@ -38,6 +38,13 @@ const ProfileScreen = () => {
     Navigation.navigate("WishlistNavigator", { screen: "WishlistScreen" });
   };
 
+  const handleDeliveryAddress = () => {
+    Navigation.navigate("DeliveryAddress");
+  };
+  const handleOffers = () => {
+    Navigation.navigate("PromoCodeScreen");
+  };
+  // console.log(user.profilePicture, "dsfihn");
   return (
     <ScrollView style={{ flex: 1, backgroundColor: Typography.Colors.white }}>
       <View style={styles.container}>
@@ -49,6 +56,7 @@ const ProfileScreen = () => {
                   ? { uri: user?.profilePicture }
                   : assets.Demo
               }
+              // source={assets.Demo}
               style={styles.profilepic}
             />
             <View style={styles.textcontainer}>
@@ -79,7 +87,7 @@ const ProfileScreen = () => {
             </View>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={handleDeliveryAddress}>
           <View style={styles.secondsection}>
             <View style={styles.logocontainer}>
               <Image source={assets.Location} style={styles.logodelivery} />
@@ -101,7 +109,7 @@ const ProfileScreen = () => {
             </View>
           </View>
         </TouchableOpacity> */}
-        <TouchableOpacity>
+        <TouchableOpacity onPress={handleOffers}>
           <View style={styles.secondsection}>
             <View style={styles.logocontainer}>
               <Image source={assets.Offers} style={styles.logostyle} />

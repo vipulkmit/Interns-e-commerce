@@ -3,8 +3,8 @@ const ENDPOINTS = {
   LOGIN: "/user/login",
   FORGET_PASSWORD: "/user/forget-password",
   VERIFY_OTP: "/user/verify-otp",
-  CHANGE_PASSWORD: "/user/change-password",
-  UPDATE: "/user/",
+  CHANGE_PASSWORD: "/user/update-password",
+  UPDATE: (id: string) => `/user/${id}`,
   DELETE: "/user/",
   GOOGLE_SIGNUP: "/user/google",
   GOOGLE_OAUTH: "/user/google/callback",
@@ -19,7 +19,8 @@ const ENDPOINTS = {
   COLLECTION:'/product/get-products',
   FILTERS:'/product/filter',
   CART:'/cart',
-  CARTDELETE:'cart/remove'
+  CARTDELETE:'cart/remove',
+  PROMOCODE: "/promocode",
 };
 
 export default ENDPOINTS;
