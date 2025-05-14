@@ -20,13 +20,12 @@ import HeaderComponent from "../../components/header/HeaderComponent";
 import { useNavigation } from "@react-navigation/native";
 import { Typography } from "../../theme/Colors";
 import Collapsible from "react-native-collapsible";
-import { AddToWishlist, Products } from "../../services/api/apiServices";
+import { AddToCart, AddToWishlist, Products } from "../../services/api/apiServices";
 import SizeComponent from "../../components/product/SizeComponent";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { startMapper } from "react-native-reanimated";
 import { Button } from "@react-navigation/elements";
 import ButtonComponent from "../../components/button/ButtonComponent";
-// import { TextInput } from "react-native-gesture-handler";
 
 const width = Dimensions.get("window").width;
 
@@ -34,7 +33,7 @@ const ProductDetailPage = ({ route }) => {
   const navigation = useNavigation();
   const { data } = route.params;
   // console.log(data,"dataaaaaaaaaaa");
-  
+
   const [selectedSize, setSelectedSize] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   // console.log(data.id,'dataaaaaaaaaaaa');
@@ -182,6 +181,16 @@ const ProductDetailPage = ({ route }) => {
     //  console.log(response);
   };
 
+  const [cartToggle, setCartToggle] = useState(false);
+
+  const handleAddToCart  = async () => {
+    // console.log(data.id);
+    
+    const response = await AddToCart(data.id,data.quantity=1).then(() => {
+      setCartToggle(!cartToggle);
+    });
+    //  console.log(response);
+  };
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
@@ -230,7 +239,7 @@ const ProductDetailPage = ({ route }) => {
         </Text>
         <View style={styles.amountTimer}>
           <View style={styles.Amount}>
-            <Text style={styles.initialRate}>{data.price}</Text>
+            <Text style={styles.initialRate}>Rs. {data.price}</Text>
             <Text numberOfLines={1} style={styles.rate}>
               Rs. {data.discountPrice}
             </Text>
@@ -304,7 +313,7 @@ const ProductDetailPage = ({ route }) => {
 
       <View style={styles.buttonView}>
         <ButtonComponent
-        icon={wishlistToggle ? assets.HeartBlue : assets.heart}
+          icon={wishlistToggle ? assets.HeartBlue : assets.heart}
           buttonText="Whislist"
           buttonStyle={[
             styles.buttonStyle,
@@ -315,13 +324,14 @@ const ProductDetailPage = ({ route }) => {
             },
           ]}
           TextStyle={{
-            color:wishlistToggle
-            ?Typography.Colors.primary:
-            Typography.Colors.black
+            color: wishlistToggle
+              ? Typography.Colors.primary
+              : Typography.Colors.black,
           }}
           onClick={handleAddToWishlist}
         />
         <ButtonComponent
+          onClick={handleAddToCart}
           icon={assets.WhiteBag}
           buttonText="Add to Bag"
           TextStyle={styles.textStyle}
@@ -470,6 +480,7 @@ const styles = StyleSheet.create({
     // paddingTop: 12,
     fontSize: 20,
     fontFamily: Typography.font.medium,
+    // fontWeight:'700',
     color: Typography.Colors.lightblack,
   },
   brandName: {

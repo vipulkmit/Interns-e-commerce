@@ -30,11 +30,11 @@ const TopHeaderComponent = () => {
           {user?.name}
         </Text>
       </View>
-      <View style={styles.iconContainer}>
+      {/* <View style={styles.iconContainer}>
         <Pressable >
           <Image source={assets.MainSearch} style={styles.icon} resizeMode="cover" />
         </Pressable>
-      </View>
+      </View> */}
     </View>
   );
 };

@@ -48,7 +48,7 @@ export type ProductProps = {
 
 export type ButtonProps = {
   id?: string;
-  icon: ImageSourcePropType;
+  icon?: ImageSourcePropType;
   buttonText?: string;
   buttonStyle?: StyleProp<ImageStyle>;
   TextStyle?: StyleProp<ImageStyle>;
@@ -59,6 +59,8 @@ export type MainHeaderProps = {
   id?: string;
   productType?: string;
   onClick: () => void;
+  onPress: () => void;
+
   Title?: string;
   // back:ImageSourcePropType,
   // icon:ImageSourcePropType,

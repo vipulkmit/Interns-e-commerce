@@ -17,7 +17,9 @@ const ENDPOINTS = {
   WISHLISTPOST:'/wishlist/create',
   WISHLISTDELETE:'/wishlist/wishlist-delete',
   COLLECTION:'/product/get-products',
-  FILTERS:'/product/filter'
+  FILTERS:'/product/filter',
+  CART:'/cart',
+  CARTDELETE:'cart/remove'
 };
 
 export default ENDPOINTS;

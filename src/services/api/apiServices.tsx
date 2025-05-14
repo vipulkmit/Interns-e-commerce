@@ -149,10 +149,6 @@ export const updateUserdata = async (FormData: any) => {
 
 export const Categories = () => axiosInstance.get(ENDPOINTS.CATEGORY);
 export const Collection = () => axiosInstance.get(ENDPOINTS.COLLECTION);
-export const Filters = (category, size, color, initialPrice,finalPrice,discount,finalDiscount) =>{
-  return axiosInstance.get(
-    `${ENDPOINTS.FILTERS}/${category}/${size}/${color}/${initialPrice}/${finalPrice}/${discount}/${finalDiscount}`
-  );}
 
 export const SubCategories = (name) => {
   return axiosInstance.get(`${ENDPOINTS.SUBCATEGORY}${name}`);
@@ -179,8 +175,51 @@ export const WishlistDelete = (productId: string) => {
       productId,
     },
   });
-  // console.log(a,"aaaaaaaaaaaaaaaaaaaaa")
 };
 
 export const WishlistDeleteAll = () =>
   axiosInstance.delete(ENDPOINTS.WISHLISTDELETE);
+
+export const ProductFilters = (
+  size,
+  color,
+  discountMax,
+  discountMin,
+  priceMax,
+  priceMin,
+  subcategoryName,
+  categoryName
+) => {
+  // Build query parameters the same way as your successful curl request
+  const queryParams = new URLSearchParams({
+    size: size,
+    color: color,
+    discountMax: discountMax,
+    discountMin: discountMin,
+    priceMax: priceMax,
+    priceMin: priceMin,
+    subcategoryName: subcategoryName,
+    categoryName: categoryName
+  }).toString();
+    
+  return axiosInstance.get(`${ENDPOINTS.FILTERS}?${queryParams}`);
+
+};
+
+
+export const AddToCart = (id: string,quantity: number) => {
+  // console.log(id,"dfhuifgkerghr")
+  return axiosInstance.post(ENDPOINTS.CART, { productId: id ,quantity:quantity});
+};
+
+export const CartData = () => {
+  return axiosInstance.get(ENDPOINTS.CART);
+};
+
+export const CartDelete = (productId: string) => {
+  return axiosInstance.delete(ENDPOINTS.CARTDELETE, {
+    data: {
+      productId,
+    },
+  });
+};

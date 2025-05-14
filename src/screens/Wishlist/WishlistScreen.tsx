@@ -18,6 +18,7 @@ import CustomButton from "../../components/button/CustomButton";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 
 const WishlistScreen = () => {
+  const navigation = useNavigation()
   const [Wishlist, setWislist] = useState();
   const isFocus = useIsFocused();
 
@@ -39,7 +40,7 @@ const WishlistScreen = () => {
     // console.log(item.id,"vasdjhcfgus u");
     
     const response = await WishlistDelete(item.id).then((r) => {
-        // console.log(r.data);
+    // console.log(r.data);
         
       if (r.data) {
         WishlistApi();
@@ -124,7 +125,7 @@ const DeleteAll=async ()=>{
       />
       {Wishlist && Wishlist.length > 0 && (
         <View style={styles.buttonContainer}>
-          <CustomButton title="Add All to Cart" />
+          <CustomButton title="Add All to Cart" onPress={()=>navigation.navigate("CartScreen")}/>
         </View>
       )}
     </View>

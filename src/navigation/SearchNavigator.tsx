@@ -1,7 +1,6 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import WishlistScreen from '../screens/Wishlist/WishlistScreen';
 import SearchScreen from '../screens/Search/SearchScreen';
 
 

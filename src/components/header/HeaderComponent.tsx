@@ -10,15 +10,22 @@ import { MainHeaderProps } from "../../models/HomePage.type";
 import { assets } from "../../../assets/images";
 import { Typography } from "../../theme/Colors";
 import { useNavigation } from "@react-navigation/native";
+import SearchNavigator from "../../navigation/SearchNavigator";
+import WishlistNavigator from "../../navigation/WishlistNavigator";
+import CartNavigator from "../../navigation/CartNavigator";
 
 const HeaderComponent = ({
   id,
   onClick,
+  onPress,
   Title,
   productType,
 }: MainHeaderProps) => {
-  // console.log(onClick);
   const navigation = useNavigation();
+  // const handlewishlist = () => {
+  //   navigation.navigate(SearchNavigator, { screen: “WishlistScreen” });
+  // };
+
   return (
     <View>
       <View style={styles.container}>
@@ -32,15 +39,15 @@ const HeaderComponent = ({
         </View>
 
         <View style={styles.iconContainer}>
-          <TouchableWithoutFeedback>
+          <Pressable onPress={()=>navigation.navigate(SearchNavigator,{screen:"SearchScreen"})}>
             <Image source={assets.MainSearch} style={styles.icon} />
-          </TouchableWithoutFeedback>
-          <TouchableWithoutFeedback>
+          </Pressable>
+          <Pressable onPress={()=>navigation.navigate(WishlistNavigator,{screen:"WishlistScreen"})}>
             <Image source={assets.HeartBlack} style={styles.icon} />
-          </TouchableWithoutFeedback>
-          <TouchableWithoutFeedback>
+          </Pressable>
+          <Pressable onPress={()=>navigation.navigate(CartNavigator,{screen:"CartScreen"})}>
             <Image source={assets.BagBlack} style={styles.icon} />
-          </TouchableWithoutFeedback>
+          </Pressable>
         </View>
       </View>
     </View>
@@ -61,6 +68,7 @@ const styles = StyleSheet.create({
   },
   iconContainer: {
     flex: 1,
+    
     justifyContent: "space-around",
     alignItems: "center",
     flexDirection: "row",

@@ -256,7 +256,7 @@ const HomeScreen = () => {
             Trending Offers
           </Text>
           <FlatList
-            data={ourCollection.slice(4, 10)}
+            data={ourCollection.slice(5, 10)}
             renderItem={TrendingRenderItem}
             keyExtractor={(item) => item.id.toString()}
             horizontal

@@ -58,6 +58,6 @@ export const assets = {
   message: require("./Message.png"),
   password: require("./Password.png"),
   Filter: require("./filter.png"),
-
   Demo: require("./demo.png"),
+  Razorpay: require("./Razorpay.png")
 };

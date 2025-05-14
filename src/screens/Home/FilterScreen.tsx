@@ -1,23 +1,27 @@
 import { View, Text, StyleSheet, Pressable, ScrollView } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import RangeSlider from "../../components/slider/RangeSlider";
 import { Typography } from "../../theme/Colors";
 import Icon from "react-native-vector-icons/Entypo";
 import { useNavigation } from "@react-navigation/native";
 import SizeComponent from "../../components/product/SizeComponent";
+import { ProductFilters } from "../../services/api/apiServices";
 
-const FilterScreen = () => {
-  const navigation = useNavigation();
+const FilterScreen = ({route}) => {
+  const { category, categoryName,setFilterApplied,setFilterData } = route.params;
+  // console.log(category.name,"cat",categoryName,"sdvgjawycfg");
   
-  // Global filter settings
+  const navigation = useNavigation();
+  const [applyfilter, setApplyFilter] = useState();
+  // console.log(applyfilter,"mjkmjkmjikmjikjik");
+  
+  
   const globalFilter = {
     amountMin: 0,
     amountMax: 100000,
     discountMin: 0,
     discountMax: 100,
   };
-
-  // Filter state
   const [filters, setFilters] = useState({
     amount: [
       globalFilter?.amountMin || 0,
@@ -35,40 +39,70 @@ const FilterScreen = () => {
 
   // Selection handlers
   const handleCategorySelect = (category) => {
-    setFilters(prev => ({
+    setFilters((prev) => ({
       ...prev,
-      selectedCategory: prev.selectedCategory === category ? null : category
+      selectedCategory: prev.selectedCategory === category ? null : category,
     }));
   };
 
   const handleSizeSelect = (size) => {
-    setFilters(prev => ({
+    setFilters((prev) => ({
       ...prev,
-      selectedSize: prev.selectedSize === size ? null : size
+      selectedSize: prev.selectedSize === size ? null : size,
     }));
   };
 
   const handleColorSelect = (color) => {
-    setFilters(prev => ({
+    setFilters((prev) => ({
       ...prev,
-      selectedColor: prev.selectedColor === color ? null : color
+      selectedColor: prev.selectedColor === color ? null : color,
     }));
   };
 
   // Category options
-  const categories = ["Men", "Women", "Kids", "Western Wear", "Traditional Wear"];
-  
+  const categories = [
+    "Men",
+    "Women",
+    "Kids",
+    "Western Wear",
+    "Traditional Wear",
+  ];
+
   // Size options
   const sizes = ["S", "M", "L", "XL", "XXL"];
-  
+
   // Color options
   const colors = [
     { name: "Black", hex: "#000000" },
     { name: "White", hex: "#FFFFFF" },
     { name: "Yellow", hex: "#F2C94C" },
     { name: "Red", hex: "#E90000" },
-    { name: "Green", hex: "#19B600" }
+    { name: "Green", hex: "#19B600" },
   ];
+const handleApplyFilter=()=>{
+
+
+
+    ProductFilters(
+      filters.selectedSize,
+      filters.selectedColor,
+      filters.discount[1],
+      filters.discount[0],
+      filters.amount[1],
+      filters.amount[0],
+      category?.name,
+      categoryName
+    )
+    .then((data) => {
+      setFilterApplied(true)
+      setFilterData(data?.data);
+      navigation.goBack()
+    })
+    .catch((e) => {
+      console.log("Filter API error:", e.message);
+    });
+  
+}
 
   return (
     <ScrollView style={styles.container}>
@@ -81,24 +115,24 @@ const FilterScreen = () => {
 
       <View style={styles.line} />
 
-
       <View style={styles.subContainer}>
         <Text style={styles.priceTitle}>Size</Text>
         <View style={styles.sizeContainer}>
           {sizes.map((size, index) => (
-            <Pressable 
+            <Pressable
               key={index}
               style={[
                 styles.sizeCircle,
-                filters.selectedSize === size && styles.selectedSizeCircle
+                filters.selectedSize === size && styles.selectedSizeCircle,
               ]}
               onPress={() => handleSizeSelect(size)}
             >
-              <Text 
+              <Text
                 style={[
                   styles.sizeText,
-                  filters.selectedSize === size && styles.selectedSizeText
-                ]}>
+                  filters.selectedSize === size && styles.selectedSizeText,
+                ]}
+              >
                 {size}
               </Text>
             </Pressable>
@@ -112,23 +146,24 @@ const FilterScreen = () => {
         <Text style={styles.priceTitle}>Color</Text>
         <View style={styles.colorContainer}>
           {colors.map((color, index) => (
-            <Pressable 
+            <Pressable
               key={index}
               style={[
                 styles.colorCircle,
-                filters.selectedColor === color.hex && styles.selectedColorCircle
+                filters.selectedColor === color.name &&
+                  styles.selectedColorCircle,
               ]}
-              onPress={() => handleColorSelect(color.hex)}
+              onPress={() => handleColorSelect(color.name)}
             >
               <View
                 style={[styles.colorCircle1, { backgroundColor: color.hex }]}
               />
-              {filters.selectedColor === color.hex && (
+              {filters.selectedColor === color.name && (
                 <View style={styles.colorCheckmark}>
-                  <Icon 
-                    name="check" 
-                    size={16} 
-                    color={color.hex === "#FFFFFF" ? "#000" : "#FFF"} 
+                  <Icon
+                    name="check"
+                    size={16}
+                    color={color.name === "#FFFFFF" ? "#000" : "#FFF"}
                   />
                 </View>
               )}
@@ -203,11 +238,8 @@ const FilterScreen = () => {
         </View>
       </View>
 
-
       <View style={styles.buttonContainer}>
-        <Pressable 
-          style={styles.applyButton}
-        >
+        <Pressable style={styles.applyButton} onPress={handleApplyFilter}>
           <Text style={styles.buttonText}>Apply Filters</Text>
         </Pressable>
       </View>
@@ -387,7 +419,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: Typography.font.bold,
     fontWeight: "700",
-  }
+  },
 });
 
 export default FilterScreen;

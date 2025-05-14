@@ -22,9 +22,9 @@ const ProductsPage = ({ route }) => {
     navigation.goBack();
   };
   const { category, categoryName } = route.params;
-
+  const [filterApplied, setFilterApplied] = useState(false);
   const [Category, setCategory] = useState();
-
+const[filterData,setFilterData]=useState([])
   useEffect(() => {
     Products(categoryName, category.name)
       .then((data) => {
@@ -34,7 +34,7 @@ const ProductsPage = ({ route }) => {
         console.log("no data");
       });
   }, []);
-
+const[refresh,setRefresh]=useState(false)
   const renderProduct = (data) => {
     // console.log(data, "item");
 
@@ -63,7 +63,14 @@ const ProductsPage = ({ route }) => {
         <View style={styles.subContainer}>
           <Pressable
             style={styles.subContainer}
-            onPress={() => navigation.navigate("FilterScreen")}
+            onPress={() =>
+              navigation.navigate("FilterScreen", {
+                category: category,
+                categoryName: categoryName,
+                setFilterApplied: setFilterApplied,
+                setFilterData: setFilterData
+              })
+            }
           >
             <Text style={styles.text}>Filters</Text>
             <Image source={assets.Filter} style={styles.SubIcon} />
@@ -76,8 +83,10 @@ const ProductsPage = ({ route }) => {
   return (
     <>
       <FlatList
-        data={Category}
+        data={filterApplied?filterData:Category}
         renderItem={ProductRenderItem}
+        onRefresh={()=>{setFilterApplied(false);setRefresh(false)}}
+        refreshing={refresh}
         keyExtractor={(item) => item.id}
         ListHeaderComponent={ListHeader}
         ListHeaderComponentStyle={styles.header}
