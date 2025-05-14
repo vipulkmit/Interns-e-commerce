@@ -24,7 +24,7 @@ export default function LoginScreen() {
   const handleForgotPasswordPress = () => {
     Navigation.navigate("Forgetpassword");
   };
-
+  console.log("fmbgligmg");
   const handleRegisterPress = () => {
     Navigation.navigate("Signup");
   };
@@ -50,18 +50,20 @@ export default function LoginScreen() {
     } else {
       setPasswordError("");
     }
-
+    console.log(isvalid, "yub");
     return isvalid;
   };
 
   const handleLoginPress = async () => {
     if (!validateInputs()) {
+      console.log("sdkufdsfn");
       return;
     }
-
+    console.log("helorfsubf");
     setIsLoading(true);
     try {
       const response = await loginService({ email, password });
+      console.log(response.access_token, "response.access_token");
       if (response.access_token) {
         // const userData = {
         //   name: response.userDetail.name,
@@ -78,11 +80,15 @@ export default function LoginScreen() {
           routes: [{ name: "BottomTabs" }],
         });
       } else {
-        Alert.alert("Error", response.message);
+        Alert.alert("Error7ty7", response.message);
       }
     } catch (error: any) {
       console.error("Login Error:", error.message);
-      Alert.alert("Error", error.message || "Login failed. Please try again");
+      console.log("sdcybds");
+      Alert.alert(
+        "Errorrrrr",
+        error.message || "Login failed. Please try again"
+      );
     } finally {
       setIsLoading(false);
     }
@@ -157,7 +163,7 @@ export default function LoginScreen() {
 
         <CustomButton
           title={isLoading ? "Logging in...." : "Login"}
-          onPress={handleLoginPress}
+          onPress={() => handleLoginPress()}
           buttonStyle={styles.buttonstyle}
         />
 

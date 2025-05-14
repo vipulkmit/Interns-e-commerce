@@ -10,7 +10,6 @@ import {
 import Icon from "react-native-vector-icons/Feather";
 import { Typography } from "../../theme/Colors";
 import { useNavigation } from "@react-navigation/native";
-import axios from "axios";
 import axiosInstance from "../../services/api/axiosInstance";
 
 const PromoCodeScreen = () => {
@@ -29,12 +28,7 @@ const PromoCodeScreen = () => {
   const fetchPromoCode = async () => {
     try {
       const response = await axiosInstance.get(
-        "http://192.168.1.58:5000/promocode",
-        {
-          // headers: {
-          //   Authorization: `Bearer `,
-          // },
-        }
+        "http://192.168.1.58:5000/promocode"
       );
       console.log(response.data, "response");
       setPromoCodeData(response.data);

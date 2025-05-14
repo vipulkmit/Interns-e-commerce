@@ -5,8 +5,10 @@ import ENDPOINTS from "../utils/endpoints";
 export const registerUser = (data: any) =>
   axiosInstance.post(ENDPOINTS.USERS, data);
 
-export const loginUser = (data: any) =>
-  axiosInstance.post(ENDPOINTS.LOGIN, data);
+export const loginUser = (data: any) => {
+  console.log(data, "desufsfnfu");
+  return axiosInstance.post(ENDPOINTS.LOGIN, data);
+};
 export const forgetpassword = (data: any) =>
   axiosInstance.post(ENDPOINTS.FORGET_PASSWORD, data);
 export const verifyotp = (data: any) =>

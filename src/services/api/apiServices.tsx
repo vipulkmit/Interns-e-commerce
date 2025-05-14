@@ -27,7 +27,7 @@ export const loginService = async (FormData: any) => {
   }
   try {
     const response = await loginUser(parsed.data);
-    // console.log(response, "fdgvfdvfdv");
+    console.log(response, "fdgvfdvfdv");
     return response.data;
   } catch (error) {
     console.error("Login Service Error:", error);

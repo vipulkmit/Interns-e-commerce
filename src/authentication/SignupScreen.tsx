@@ -122,7 +122,7 @@ export default function SignupScreen() {
         />
 
         <CustomButton
-          title="Login"
+          title="SignUp"
           onPress={handleSignupPress}
           buttonStyle={styles.buttonstyle}
         />
