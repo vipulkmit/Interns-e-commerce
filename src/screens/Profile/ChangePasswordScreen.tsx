@@ -1,40 +1,76 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, Image, Alert } from "react-native";
-import { Typography } from "../theme/Colors";
-import { assets } from "../../assets/images";
 import { useNavigation, useNavigationState } from "@react-navigation/native";
-import { changePasswordService } from "../services/api/apiServices";
-import CustomTextInput from "../components/textInput/CustomTextInput";
-import CustomButton from "../components/button/CustomButton";
+import { changePasswordService } from "../../services/api/apiServices";
+import { assets } from "../../../assets/images";
+import CustomTextInput from "../../components/textInput/CustomTextInput";
+import { Typography } from "../../theme/Colors";
+import CustomButton from "../../components/button/CustomButton";
 
-export default function PasswordchangeScreen({ route }) {
-  const { email } = route.params;
-  const state = useNavigationState((state) => state);
+export default function ChangePasswordScreen() {
   const [newPassword, setNewPassword] = useState("");
+  const [oldPassword, setoldPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const Navigation = useNavigation();
+
+  //   const Passwordchangesuccess = async () => {
+  //     if (!newPassword.trim() || !confirmNewPassword.trim()) {
+  //       Alert.alert("Error", "Please fill in all fields.");
+  //       return;
+  //     }
+  //     setIsLoading(true);
+  //     try {
+  //       await changePasswordService({
+  //         password: oldPassword,
+  //         newPassword,
+  //         confirmPassword,
+  //       });
+  //       Alert.alert("Success", "Password changed successfully!");
+
+  //       //   if (state.routes[1].name == "EditProfileScreen") {
+  //       Navigation.goBack();
+  //       //   } else {
+  //     //   Navigation.navigate("LoginScreen");
+  //       //   }
+  //     } catch (error: any) {
+  //       Alert.alert("Error", error.message || "Failed to change password.");
+  //     } finally {
+  //       setIsLoading(false);
+  //     }
+  //   };
 
   const Passwordchangesuccess = async () => {
     if (!newPassword.trim() || !confirmNewPassword.trim()) {
       Alert.alert("Error", "Please fill in all fields.");
       return;
     }
+
+    // if()
+
+    if (newPassword !== confirmNewPassword) {
+      Alert.alert("Error", "New password and confirm password do not match.");
+      return;
+    }
+
     setIsLoading(true);
+
     try {
       await changePasswordService({
-        email,
-        password: newPassword,
+        password: oldPassword,
+        newPassword,
         confirmPassword: confirmNewPassword,
       });
+
       Alert.alert("Success", "Password changed successfully!");
-      if (state.routes[1].name == "EditProfileScreen") {
-        Navigation.goBack();
-      } else {
-        Navigation.navigate("LoginScreen");
-      }
+      Navigation.goBack();
     } catch (error: any) {
-      Alert.alert("Error", error.message || "Failed to change password.");
+      Alert.alert(
+        "Error",
+        error.response?.data?.message ||
+          error.message ||
+          "Failed to change password."
+      );
     } finally {
       setIsLoading(false);
     }
@@ -56,9 +92,19 @@ export default function PasswordchangeScreen({ route }) {
       </View>
 
       <CustomTextInput
+        value={oldPassword}
+        onChangeText={setoldPassword}
+        placeholder="Old Password"
+        secureTextEntry
+        iconname="lock"
+        iconsize={25}
+        iconcolor={Typography.Colors.lightgrey}
+      />
+
+      <CustomTextInput
         value={newPassword}
         onChangeText={setNewPassword}
-        placeholder="Password"
+        placeholder="New Password"
         secureTextEntry
         iconname="lock"
         iconsize={25}
@@ -68,7 +114,7 @@ export default function PasswordchangeScreen({ route }) {
       <CustomTextInput
         value={confirmNewPassword}
         onChangeText={setConfirmNewPassword}
-        placeholder="Confirm Password"
+        placeholder="Confirm New Password"
         secureTextEntry
         iconname="lock"
         iconsize={25}

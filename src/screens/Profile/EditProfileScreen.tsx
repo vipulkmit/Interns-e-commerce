@@ -16,7 +16,8 @@ const EditProfileScreen = () => {
   const user = useAuthStore((state) => state.user);
   // console.log(user, "vfbvfrjb");
   const handlepasswordchange = () => {
-    Navigation.navigate("Passwordchange", { email: user?.email });
+    // Navigation.navigate("Passwordchange", { email: user?.email });
+    Navigation.navigate("ChangePasswordScreen");
   };
 
   const handleImageChange = () => {
@@ -224,6 +225,7 @@ const styles = StyleSheet.create({
 });
 
 export default EditProfileScreen;
-function setSelectedImage(arg0: string) {
-  throw new Error("Function not implemented.");
-}
+
+// function setSelectedImage(arg0: string) {
+//   throw new Error("Function not implemented.");
+// }

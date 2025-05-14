@@ -1,9 +1,7 @@
 import { z } from "zod";
 import {
-  changepassword,
   forgetpassword,
   loginUser,
-  userUpdate,
   verifyotp,
 } from "../../authentication/AuthApi";
 import { registerUser } from "../../authentication/AuthApi";
@@ -107,49 +105,34 @@ export const verifyOtpService = async (FormData: any) => {
   }
 };
 
-const changePasswordSchema = z
-  .object({
-    newPassword: z
-      .string()
-      .min(8, { message: "New password must be at least 8 characters long." }),
-    confirmNewPassword: z.string().min(8, {
-      message: "Confirm password must be at least 8 characters long.",
-    }),
-  })
-  .refine((data) => data.newPassword === data.confirmNewPassword, {
-    message: "New passwords do not match.",
-    path: ["confirmNewPassword"],
-  });
-
-export const changePasswordService = async (FormData: any) => {
-  // const parsed = changePasswordSchema.safeParse(FormData);
-  // if (!parsed.success) {
-  //   throw new Error("Validation Failed:" + JSON.stringify(parsed.error.errors));
-  // }
-  try {
-    const response = await changepassword(FormData);
-    return response.data;
-  } catch (error) {
-    console.error("Change Password");
-    throw error;
-  }
+export const changePasswordService = (FormData: any) => {
+  return axiosInstance.post(ENDPOINTS.CHANGE_PASSWORD, FormData);
 };
 
-export const updateUserdata = async (FormData: any, userId: any) => {
+export const updateUserdata = async (userId: any, FormData: any) => {
   try {
-    const response = await userUpdate(userId, FormData);
+    console.log("dsivdfgg", userId);
+    console.log("FormData being sent:", FormData);
+    const response = await axiosInstance.patch(
+      ENDPOINTS.UPDATE(userId),
+      FormData
+    );
+    console.log("fdknvrrg", response);
     const updatedUser = response.data;
     useAuthStore.getState().setUser(updatedUser);
     return updatedUser;
-  } catch (error) {
-    console.error("Update User Data Error:", error);
-    throw error;
+  } catch (error: any) {
+    console.error(
+      "Update User Data Error:",
+      error.response?.data || error.message
+    );
+    throw new Error(
+      error.response?.data?.message || "Failed to update user data"
+    );
   }
 };
 
-export const promocode = () =>
-  axiosInstance.get("http://192.168.1.58:5000/promocode");
-
+export const promocode = () => axiosInstance.get(ENDPOINTS.PROMOCODE);
 export const Categories = () => axiosInstance.get(ENDPOINTS.CATEGORY);
 export const Collection = () => axiosInstance.get(ENDPOINTS.COLLECTION);
 

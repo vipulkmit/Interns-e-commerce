@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import useAuthStore from "../../stores/useAuthStore";
@@ -17,7 +17,9 @@ import Iconarrow from "react-native-vector-icons/Feather";
 import CustomButton from "../../components/button/CustomButton";
 import CustomTextInput from "../../components/textInput/CustomTextInput";
 
-const AddAddressList = () => {
+const AddAddressList = ({ route }) => {
+  // const route = useRoute();
+  const { address, index } = route.params || {};
   const validationSchema = Yup.object().shape({
     country: Yup.string().required("Country is required"),
     firstName: Yup.string().required("First Name is required"),
@@ -25,14 +27,15 @@ const AddAddressList = () => {
     streetAddress: Yup.string().required("Street Address is required"),
     city: Yup.string().required("City is required"),
     state: Yup.string().required("State/Province/Region is required"),
-    zip: Yup.string().required("Zip Code is required"),
+    zipCode: Yup.string().required("Zip Code is required"),
     phoneNumber: Yup.string().required("Phone Number is required"),
   });
 
   const Navigation = useNavigation();
   const handlearrowbutton = () => Navigation.goBack();
 
-  const handleAddAddresspress = async (values: any) => {
+  const handleAddAddresspress = async (values: any, index?: number) => {
+    console.log("first");
     try {
       const user = useAuthStore.getState().user;
       if (!user || !user.id) {
@@ -45,25 +48,38 @@ const AddAddressList = () => {
         streetAddress: values.streetAddress,
         city: values.city,
         state: values.state,
-        zipCode: values.zip,
+        zipCode: values.zipCode,
         phoneNumber: values.phoneNumber,
         country: values.country,
       };
 
       let updatedAddresses = user.address ? [...user.address] : [];
-      updatedAddresses.push(newAddress);
+      if (typeof index === "number") {
+        updatedAddresses[index] = newAddress;
+      } else {
+        updatedAddresses.push(newAddress);
+      }
+
+      // const updatedUser = {
+      //   ...user,
+      //   address: updatedAddresses,
+      // };
 
       const updatedUser = {
-        ...user,
-        address: updatedAddresses,
+        address: [newAddress],
       };
 
+      console.log("Payload to APII:", JSON.stringify(updatedUser, null, 2));
+      console.log("payload to API:", { userID: user.id, updatedUser });
       const response = await updateUserdata(user.id, updatedUser);
+      console.log("fdvmfv", response.address);
       useAuthStore.getState().setUser(response);
 
       Alert.alert(
         "Success",
-        "Address added successfully!",
+        index !== undefined
+          ? "Address updated successfully!"
+          : "Address added successfully!",
         [{ text: "OK", onPress: () => Navigation.navigate("DeliveryAddress") }],
         { cancelable: false }
       );
@@ -78,7 +94,32 @@ const AddAddressList = () => {
   };
 
   const handleDeleteAddress = () => {
-    console.log("Delete button pressed");
+    try {
+      const user = useAuthStore.getState().user;
+      if (!user || !user.address) {
+        throw new Error("No addresses found to delete.");
+      }
+
+      let updatedAddresses = [...user.address];
+      if (typeof index === "number") {
+        updatedAddresses.splice(index, 1);
+      }
+
+      const updatedUser = {
+        ...user,
+        address: updatedAddresses,
+      };
+
+      useAuthStore.getState().setUser(updatedUser);
+
+      Alert.alert("Success", "Address deleted successfully!", [
+        { text: "OK", onPress: () => Navigation.navigate("DeliveryAddress") },
+      ]);
+    } catch (error) {
+      Alert.alert("Error", error.message || "Failed to delete address.", [
+        { text: "OK" },
+      ]);
+    }
   };
 
   return (
@@ -98,105 +139,138 @@ const AddAddressList = () => {
 
         <Formik
           initialValues={{
-            country: "",
-            firstName: "",
-            lastName: "",
-            streetAddress: "",
-            city: "",
-            state: "",
-            zip: "",
-            phoneNumber: "",
+            country: address?.country || "",
+            firstName: address?.firstName || "",
+            lastName: address?.lastName || "",
+            streetAddress: address?.streetAddress || "",
+            city: address?.city || "",
+            state: address?.state || "",
+            zipCode: address?.zipCode || "",
+            phoneNumber: address?.phoneNumber || "",
           }}
+          enableReinitialize={true}
           validationSchema={validationSchema}
-          onSubmit={handleAddAddresspress}
+          onSubmit={(values) => handleAddAddresspress(values, index)}
         >
-          {({ handleChange, values, errors, handleSubmit, touched }) => (
-            <>
-              <View style={styles.boxstyle}>
-                {renderField(
-                  "Country",
-                  "country",
-                  values,
-                  handleChange,
-                  errors,
-                  touched
-                )}
-                {renderField(
-                  "First Name",
-                  "firstName",
-                  values,
-                  handleChange,
-                  errors,
-                  touched
-                )}
-                {renderField(
-                  "Last Name",
-                  "lastName",
-                  values,
-                  handleChange,
-                  errors,
-                  touched
-                )}
-                {renderField(
-                  "Street Address",
-                  "streetAddress",
-                  values,
-                  handleChange,
-                  errors,
-                  touched
-                )}
-                {renderField(
-                  "City",
-                  "city",
-                  values,
-                  handleChange,
-                  errors,
-                  touched
-                )}
-                {renderField(
-                  "State/Province/Region",
-                  "state",
-                  values,
-                  handleChange,
-                  errors,
-                  touched
-                )}
-                {renderField(
-                  "Zip Code",
-                  "zip",
-                  values,
-                  handleChange,
-                  errors,
-                  touched,
-                  "number-pad"
-                )}
-                {renderField(
-                  "Phone Number",
-                  "phoneNumber",
-                  values,
-                  handleChange,
-                  errors,
-                  touched,
-                  "number-pad"
-                )}
-              </View>
+          {({ handleChange, values, errors, handleSubmit, touched }) => {
+            console.log("formik errors:", errors);
+            return (
+              <>
+                <View style={styles.boxstyle}>
+                  <View>
+                    <Text style={styles.textstyle}>Country</Text>
+                    {renderField(
+                      "Country",
+                      "country",
+                      values,
+                      handleChange,
+                      errors,
+                      touched
+                    )}
+                  </View>
+                  <View>
+                    <Text style={styles.textstyle}>First Name</Text>
+                    {renderField(
+                      "First Name",
+                      "firstName",
+                      values,
+                      handleChange,
+                      errors,
+                      touched
+                    )}
+                  </View>
+                  <View>
+                    <Text style={styles.textstyle}>Last Name</Text>
+                    {renderField(
+                      "Last Name",
+                      "lastName",
+                      values,
+                      handleChange,
+                      errors,
+                      touched
+                    )}
+                  </View>
+                  <View>
+                    <Text style={styles.textstyle}>Street Address</Text>
+                    {renderField(
+                      "Street Address",
+                      "streetAddress",
+                      values,
+                      handleChange,
+                      errors,
+                      touched
+                    )}
+                  </View>
+                  <View>
+                    <Text style={styles.textstyle}>City</Text>
+                    {renderField(
+                      "City",
+                      "city",
+                      values,
+                      handleChange,
+                      errors,
+                      touched
+                    )}
+                  </View>
+                  <View>
+                    <Text style={styles.textstyle}>State/Province/Region</Text>
 
-              <View style={styles.buttonviewstyle}>
-                <CustomButton
-                  title={"Delete"}
-                  onPress={handleDeleteAddress}
-                  buttonStyle={styles.buttonstyle}
-                  textStyle={styles.buttontextstyle}
-                />
-                <CustomButton
-                  title={"Add Address"}
-                  onPress={() => handleSubmit()}
-                  buttonStyle={styles.buttonstyleaddress}
-                  textStyle={styles.buttontextstyleaddress}
-                />
-              </View>
-            </>
-          )}
+                    {renderField(
+                      "State/Province/Region",
+                      "state",
+                      values,
+                      handleChange,
+                      errors,
+                      touched
+                    )}
+                  </View>
+                  <View>
+                    <Text style={styles.textstyle}>zip Code</Text>
+                    {renderField(
+                      "Zip Code",
+                      "zipCode",
+                      values,
+                      handleChange,
+                      errors,
+                      touched,
+                      "number-pad"
+                    )}
+                  </View>
+                  <View>
+                    <Text style={styles.textstyle}>Phone Number</Text>
+
+                    {renderField(
+                      "Phone Number",
+                      "phoneNumber",
+                      values,
+                      handleChange,
+                      errors,
+                      touched,
+                      "number-pad"
+                    )}
+                  </View>
+                </View>
+
+                <View style={styles.buttonviewstyle}>
+                  <CustomButton
+                    title={"Delete"}
+                    onPress={handleDeleteAddress}
+                    buttonStyle={styles.buttonstyle}
+                    textStyle={styles.buttontextstyle}
+                  />
+                  <CustomButton
+                    title={"Add Address"}
+                    onPress={() => {
+                      // console.log("first");
+                      handleSubmit();
+                    }}
+                    buttonStyle={styles.buttonstyleaddress}
+                    textStyle={styles.buttontextstyleaddress}
+                  />
+                </View>
+              </>
+            );
+          }}
         </Formik>
       </View>
     </ScrollView>
@@ -283,6 +357,14 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "700",
     fontFamily: Typography.font.bold,
+  },
+  textstyle: {
+    color: Typography.Colors.primary,
+    fontFamily: Typography.font.bold,
+    fontSize: 18,
+    fontWeight: "700",
+    paddingVertical: 5,
+    paddingHorizontal: 2,
   },
 });
 

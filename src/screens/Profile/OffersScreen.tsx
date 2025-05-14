@@ -10,21 +10,26 @@ import {
 import Icon from "react-native-vector-icons/Feather";
 import { Typography } from "../../theme/Colors";
 import { useNavigation } from "@react-navigation/native";
+<<<<<<< HEAD
 import axiosInstance from "../../services/api/axiosInstance";
+=======
+import { promocode } from "../../services/api/apiServices";
+>>>>>>> 25fa5d60af0deab303986e9b52957823f5289d7f
 
 const PromoCodeScreen = () => {
   const navigation = useNavigation();
-  const [promoCodeData, setPromoCodeData] = useState(null);
+  const [promoCodeData, setPromoCodeData] = useState();
   const [loading, setLoading] = useState(true);
 
-  const handleApplyCode = () => {
-    console.log("Apply Code");
-  };
+  // const handleApplyCode = () => {
+  //   console.log("Apply Code");
+  // };
 
   const handleBack = () => {
     navigation.goBack();
   };
 
+<<<<<<< HEAD
   const fetchPromoCode = async () => {
     try {
       const response = await axiosInstance.get(
@@ -41,9 +46,36 @@ const PromoCodeScreen = () => {
       setLoading(false);
     }
   };
+=======
+  // const fetchPromoCode = async () => {
+  //   try {
+  //     const response = await axiosInstance.get(ENDPOINTS.PROMOCODE);
+  //     setPromoCodeData(response.data);
+  //   } catch (error) {
+  //     console.error(
+  //       "Failed to fetch promo code",
+  //       error.response?.data || error
+  //     );
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+>>>>>>> 25fa5d60af0deab303986e9b52957823f5289d7f
 
   useEffect(() => {
-    fetchPromoCode();
+    promocode()
+      .then((response) => {
+        setPromoCodeData(response.data);
+      })
+      .catch((error) => {
+        console.error(
+          "Failed to fetch promo code",
+          error.response?.data || error
+        );
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, []);
 
   const renderOffer = ({ item }) => (
@@ -54,9 +86,9 @@ const PromoCodeScreen = () => {
       </Text>
       <Text style={styles.expires}>Valid until 31st Jan 2025</Text>
       {item.warning && <Text style={styles.warning}>{item.warning}</Text>}
-      <TouchableOpacity onPress={handleApplyCode}>
+      {/* <TouchableOpacity onPress={handleApplyCode}>
         <Text style={styles.applyLink}>Apply</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </View>
   );
 
@@ -84,7 +116,7 @@ const PromoCodeScreen = () => {
 
       <FlatList
         data={promoCodeData || []}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item, index) => index.toString()}
         renderItem={renderOffer}
         contentContainerStyle={{ paddingTop: 10 }}
       />
@@ -116,32 +148,29 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
-    borderColor: "#ccc",
+    borderColor: Typography.Colors.lightgrey,
     borderWidth: 1,
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 8,
   },
-  applyButton: {
-    marginLeft: 8,
-    backgroundColor: "#000",
-    paddingHorizontal: 16,
-    borderRadius: 8,
-    justifyContent: "center",
-  },
-  applyText: {
-    color: "#fff",
-    fontWeight: "600",
-  },
+  // applyButton: {
+  //   marginLeft: 8,
+  //   // backgroundColor: "#000",
+  //   paddingHorizontal: 16,
+  //   borderRadius: 8,
+  //   justifyContent: "center",
+  // },
   offerContainer: {
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderColor: "#eee",
+    // opacity: 0.4,
+    borderColor: Typography.Colors.greydark,
   },
   codeBox: {
     fontWeight: "bold",
     fontSize: 16,
-    backgroundColor: "#f1f1f1",
+    backgroundColor: Typography.Colors.fadewhite,
     padding: 6,
     alignSelf: "flex-start",
     borderRadius: 4,
@@ -152,17 +181,12 @@ const styles = StyleSheet.create({
   },
   expires: {
     fontSize: 12,
-    color: "gray",
+    color: Typography.Colors.red,
     marginTop: 4,
   },
   warning: {
     fontSize: 12,
     color: "red",
     marginTop: 2,
-  },
-  applyLink: {
-    color: "#007bff",
-    fontWeight: "600",
-    marginTop: 6,
   },
 });

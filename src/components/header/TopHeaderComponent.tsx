@@ -12,7 +12,7 @@ import { assets } from "../../../assets/images";
 
 const TopHeaderComponent = () => {
   const { user } = useAuthStore();
-//   console.log(user);
+  //   console.log(user);
 
   return (
     <View style={styles.container}>
@@ -25,12 +25,16 @@ const TopHeaderComponent = () => {
           resizeMode="contain"
         />
         <Text numberOfLines={1} style={styles.userName}>
-          {user.name}
+          {user?.name}
         </Text>
       </View>
       <View style={styles.iconContainer}>
         <TouchableWithoutFeedback>
-          <Image source={assets.MainSearch} style={styles.icon} resizeMode="cover" />
+          <Image
+            source={assets.MainSearch}
+            style={styles.icon}
+            resizeMode="cover"
+          />
         </TouchableWithoutFeedback>
       </View>
     </View>

@@ -14,7 +14,11 @@ axiosInstance.interceptors.request.use(
     const { token } = useAuthStore.getState();
 
     if (token) config.headers.Authorization = `Bearer ${token}`;
+<<<<<<< HEAD
     console.log(config, "configconfigconfigconfigconfigconfig");
+=======
+    console.log("dsifonsfjsff", config);
+>>>>>>> 25fa5d60af0deab303986e9b52957823f5289d7f
     return config;
   },
   (error) => Promise.reject(error)
@@ -29,26 +33,3 @@ axiosInstance.interceptors.response.use(
 );
 
 export default axiosInstance;
-
-// async function registerUser(data: { email?: string; password?: string; name?: string; confirmPassword?: string; }) {
-//   const response = await fetch("/api/register", {
-//     method: "POST",
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//     body: JSON.stringify({
-//       email: data.email,
-//       password: data.password,
-//       name: data.name,
-//     }),
-//   });
-
-//   if (!response.ok) {
-//     const errorData = await response.json();
-//     throw new Error(errorData.message || "Failed to register user");
-//   }
-
-//   return await response.json();
-// }
-
-// export default {registerUser, axiosInstance}
