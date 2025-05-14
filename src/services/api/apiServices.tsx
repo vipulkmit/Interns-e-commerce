@@ -108,16 +108,23 @@ export const verifyOtpService = async (FormData: any) => {
 export const changePasswordService = (FormData: any) => {
   return axiosInstance.post(ENDPOINTS.CHANGE_PASSWORD, FormData);
 };
+console.log("FormData being sent:", JSON.stringify(FormData, null, 2));
 
-export const updateUserdata = async (userId: any, FormData: any) => {
+export const updateUserdata = async (userId: any, updatedData: any) => {
   try {
     // console.log("dsivdfgg", userId);
-    // console.log("FormData being sent:", FormData);
+    // console.log("FormData being sent:", updatedData);
     const response = await axiosInstance.patch(
       ENDPOINTS.UPDATE(userId),
-      FormData
+      updatedData
     );
-    // console.log("fdknvrrg", response);
+
+    if (!userId) {
+      console.error("userId is missing!");
+      return;
+    }
+
+    console.log("fdknvrrg", response);
     const updatedUser = response.data;
 
     useAuthStore.getState().setUser(updatedUser);

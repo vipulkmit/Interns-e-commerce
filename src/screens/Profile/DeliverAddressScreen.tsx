@@ -15,9 +15,12 @@ import { Typography } from "../../theme/Colors";
 import CustomButton from "../../components/button/CustomButton";
 import { updateUserdata } from "../../services/api/apiServices";
 
+import { useState } from "react";
+
 const DeliveryAddress = () => {
   const user = useAuthStore((state) => state.user);
   const Navigation = useNavigation();
+  const [selectedIndex, setSelectedIndex] = useState(0);
 
   const onAddAddress = () => {
     Navigation.navigate("AddAddressList");
@@ -35,28 +38,49 @@ const DeliveryAddress = () => {
     Navigation.navigate("AddAddressList");
   };
 
+  const handlebutton = () => {
+    return (
+      <>
+        {user?.address && user?.address?.length > 0 && (
+          <CustomButton
+            title={"Add Address"}
+            onPress={handleaddAddress}
+            buttonStyle={styles.buttonstyleaddress}
+            textStyle={styles.buttontextstyleaddress}
+          />
+        )}
+      </>
+    );
+  };
+
   const onDeleteAddress = async (index: number) => {
-    // console.log(index, "vsdunfv");
     const updatedAddresses = [...user.address];
-    // console.log(updatedAddresses.length, "sdjknsfuj");
     updatedAddresses.splice(index, 1);
 
     const updatedUser = {
       ...user,
-      // id: user.id,
       address: updatedAddresses,
     };
-    console.log(user.id, "fdivnfdv");
     const response = await updateUserdata(user.id, updatedUser);
-    // useAuthStore.getState().setUser(response);
 
     Alert.alert("Success", "Address has been deleted.", [{ text: "OK" }]);
   };
 
-  console.log(user, "snfi");
   const Listitem = ({ item, index }: { item: any; index: number }) => {
     return (
-      <View style={styles.addressItem}>
+      <TouchableOpacity
+        onPress={() => setSelectedIndex(index)}
+        style={[
+          styles.addressItem,
+          {
+            borderColor:
+              selectedIndex === index
+                ? Typography.Colors.primary
+                : Typography.Colors.black,
+            borderWidth: selectedIndex === index ? 2 : 1,
+          },
+        ]}
+      >
         <View style={styles.addressHeader}>
           <Text style={styles.addressText}>
             {item.firstName} {item.lastName}
@@ -76,7 +100,7 @@ const DeliveryAddress = () => {
             <Icon size={20} color={Typography.Colors.black} name="delete" />
           </TouchableOpacity>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   };
 
@@ -113,22 +137,13 @@ const DeliveryAddress = () => {
     <View style={styles.container}>
       <FlatList
         data={user?.address || []}
-        // keyExtractor={(item) => item?.id?.toString()}
         renderItem={({ item, index }) => <Listitem item={item} index={index} />}
         ListEmptyComponent={Emptylist}
+        ListFooterComponent={handlebutton}
       />
-      {user?.address && user?.address?.length > 0 && (
-        <CustomButton
-          title={"Add Address"}
-          onPress={handleaddAddress}
-          buttonStyle={styles.buttonstyleaddress}
-          textStyle={styles.buttontextstyleaddress}
-        />
-      )}
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -149,6 +164,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "700",
     fontFamily: Typography.font.bold,
+    color: Typography.Colors.darkgrey,
   },
   AddressContainer: {
     marginTop: "50%",
@@ -188,7 +204,7 @@ const styles = StyleSheet.create({
   addressItem: {
     marginBottom: 12,
     padding: 10,
-    borderWidth: 1,
+    borderWidth: 2,
     borderColor: Typography.Colors.primary,
     borderRadius: 8,
     // backgroundColor: Typography.Colors.darkgrey,

@@ -75,14 +75,30 @@ const AddAddressList = ({ route }) => {
 
       const updatedUser = {
         ...user,
-        address: [newAddress],
+        address: [...updatedAddresses],
       };
 
       console.log("Payload to APII:", JSON.stringify(updatedUser, null, 2));
       console.log("payload to API:", { userID: user.id, updatedUser });
-      const response = await updateUserdata(user.id, updatedUser);
-      // console.log("fdvmfv", response.address);
+      const cleanUserPayload = (user: any) => {
+        const {
+          id,
+          Otp,
+          isAdmin,
+          createdAt,
+          updatedAt,
+          password,
+          ...safeUser
+        } = user;
 
+        return safeUser;
+      };
+
+      const response = await updateUserdata(
+        user.id,
+        cleanUserPayload(updatedUser)
+      );
+      // console.log("fdvmfv", response.address);
       const prevuser = useAuthStore.getState().user;
       useAuthStore.getState().setUser({ ...prevuser, ...response });
 
