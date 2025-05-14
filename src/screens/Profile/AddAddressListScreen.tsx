@@ -42,13 +42,13 @@ const AddAddressList = ({ route }) => {
       const user = useAuthStore.getState().user;
       console.log(user, "dvusdbhf");
 
-      // useEffect(() => {
-      console.log(user, "vdfhngv");
-      if (!user || !user.id) {
-        Alert.alert("Session expired", "Please log in again.");
-        // Navigation.navigate("");
-      }
-      // }, [user]);
+      // // useEffect(() => {
+      // console.log(user, "vdfhngv");
+      // if (!user || !user.id) {
+      //   Alert.alert("Session expired", "Please log in again.");
+      //   // Navigation.navigate("");
+      // }
+      // // }, [user]);
 
       const newAddress = {
         firstName: values.firstName,
@@ -74,6 +74,7 @@ const AddAddressList = ({ route }) => {
       // };
 
       const updatedUser = {
+        ...user,
         address: [newAddress],
       };
 
@@ -82,16 +83,24 @@ const AddAddressList = ({ route }) => {
       const response = await updateUserdata(user.id, updatedUser);
       // console.log("fdvmfv", response.address);
 
-      useAuthStore.getState().setUser(response);
+      const prevuser = useAuthStore.getState().user;
+      useAuthStore.getState().setUser({ ...prevuser, ...response });
 
-      Alert.alert(
-        "Success",
-        index !== undefined
-          ? "Address updated successfully!"
-          : "Address added successfully!",
-        [{ text: "OK", onPress: () => Navigation.navigate("DeliveryAddress") }],
-        { cancelable: false }
-      );
+      setTimeout(() => {
+        Alert.alert(
+          "Success",
+          index !== undefined
+            ? "Address updated successfully!"
+            : "Address added successfully!",
+          [
+            {
+              text: "OK",
+              onPress: () => Navigation.navigate("DeliveryAddress"),
+            },
+          ],
+          { cancelable: false }
+        );
+      }, 300); // 300ms delay ensures screen stays mounted
     } catch (error) {
       Alert.alert(
         "Error",
@@ -101,6 +110,73 @@ const AddAddressList = ({ route }) => {
       );
     }
   };
+
+  // const handleAddAddresspress = async (values: any, index?: number) => {
+  //   try {
+  //     const user = useAuthStore.getState().user;
+
+  //     if (!user || !user.id) {
+  //       Alert.alert("Session expired", "Please log in again.");
+  //       return;
+  //     }
+
+  //     const newAddress = {
+  //       firstName: values.firstName,
+  //       lastName: values.lastName,
+  //       streetAddress: values.streetAddress,
+  //       city: values.city,
+  //       state: values.state,
+  //       zipCode: values.zipCode,
+  //       phoneNumber: values.phoneNumber,
+  //       country: values.country,
+  //     };
+
+  //     const updatedAddresses = Array.isArray(user.address)
+  //       ? [...user.address]
+  //       : [];
+
+  //     if (typeof index === "number") {
+  //       updatedAddresses[index] = newAddress;
+  //     } else {
+  //       updatedAddresses.push(newAddress);
+  //     }
+
+  //     const updatedUser = {
+  //       address: updatedAddresses,
+  //     };
+
+  //     const response = await updateUserdata(user.id, updatedUser);
+
+  //     const prevUser = useAuthStore.getState().user;
+  //     useAuthStore.getState().setUser({ ...prevUser, ...response });
+
+  //     // Show alert after short delay to ensure screen is mounted
+  //     setTimeout(() => {
+  //       Alert.alert(
+  //         "Success",
+  //         index !== undefined
+  //           ? "Address updated successfully!"
+  //           : "Address added successfully!",
+  //         [
+  //           {
+  //             text: "OK",
+  //             onPress: () => Navigation.navigate("DeliveryAddress"),
+  //           },
+  //         ],
+  //         { cancelable: false }
+  //       );
+  //     }, 300); // 300ms delay
+  //   } catch (error: any) {
+  //     setTimeout(() => {
+  //       Alert.alert(
+  //         "Error",
+  //         error.message || "Failed to add address.",
+  //         [{ text: "OK" }],
+  //         { cancelable: false }
+  //       );
+  //     }, 300);
+  //   }
+  // };
 
   const handleDeleteAddress = () => {
     try {
