@@ -150,7 +150,7 @@ const AddAddressList = ({ route }) => {
           onSubmit={(values) => handleAddAddresspress(values, index)}
         >
           {({ handleChange, values, errors, handleSubmit, touched }) => {
-            console.log("formik errors:", errors);
+            // console.log("formik errors:", errors);
             return (
               <>
                 <View style={styles.boxstyle}>

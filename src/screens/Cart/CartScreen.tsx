@@ -32,7 +32,7 @@ const CartScreen = () => {
   const [cartToggle, setCartToggle] = useState(false);
 
   const handleAddToCart  = async (item) => {
-    console.log(item,"cvhgtc");
+    // console.log(item,"cvhgtc");
     
     const response = await AddToCart(item.productId,item.quantity).then(() => {
       setCartToggle(!cartToggle);

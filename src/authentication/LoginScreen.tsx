@@ -24,7 +24,7 @@ export default function LoginScreen() {
   const handleForgotPasswordPress = () => {
     Navigation.navigate("Forgetpassword");
   };
-  console.log("fmbgligmg");
+  // console.log("fmbgligmg");
   const handleRegisterPress = () => {
     Navigation.navigate("Signup");
   };
@@ -50,20 +50,20 @@ export default function LoginScreen() {
     } else {
       setPasswordError("");
     }
-    console.log(isvalid, "yub");
+    // console.log(isvalid, "yub");
     return isvalid;
   };
 
   const handleLoginPress = async () => {
     if (!validateInputs()) {
-      console.log("sdkufdsfn");
+      // console.log("sdkufdsfn");
       return;
     }
-    console.log("helorfsubf");
+    // console.log("helorfsubf");
     setIsLoading(true);
     try {
       const response = await loginService({ email, password });
-      console.log(response.access_token, "response.access_token");
+      // console.log(response.access_token, "response.access_token");
       if (response.access_token) {
         // const userData = {
         //   name: response.userDetail.name,
@@ -84,7 +84,7 @@ export default function LoginScreen() {
       }
     } catch (error: any) {
       console.error("Login Error:", error.message);
-      console.log("sdcybds");
+      // console.log("sdcybds");
       Alert.alert(
         "Errorrrrr",
         error.message || "Login failed. Please try again"
