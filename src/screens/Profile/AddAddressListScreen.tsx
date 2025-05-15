@@ -77,7 +77,7 @@ const AddAddressList = ({ route }) => {
         ...user,
         address: [...updatedAddresses],
       };
-
+      console.log("vdfffvn");
       console.log("Payload to APII:", JSON.stringify(updatedUser, null, 2));
       console.log("payload to API:", { userID: user.id, updatedUser });
       const cleanUserPayload = (user: any) => {
