@@ -25,6 +25,16 @@ const ProductsPage = ({ route }) => {
   const [filterApplied, setFilterApplied] = useState(false);
   const [Category, setCategory] = useState();
 const[filterData,setFilterData]=useState([])
+  const [cartToggle, setCartToggle] = useState(false);
+
+  const handleAddToCart  = async () => {
+    // console.log(data.id);
+    
+    const response = await AddToCart(data.id,data.quantity=1).then(() => {
+      setCartToggle(!cartToggle);
+    });
+    //  console.log(response);
+  };
   useEffect(() => {
     Products(categoryName, category.name)
       .then((data) => {
