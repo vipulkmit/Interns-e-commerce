@@ -97,7 +97,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   contentstyle: {
-    // alignSelf: "center",
     textAlign: "center",
     color: Typography.Colors.lightgrey,
     fontFamily: Typography.font.regular,

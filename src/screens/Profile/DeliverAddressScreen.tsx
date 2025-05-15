@@ -207,7 +207,6 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: Typography.Colors.primary,
     borderRadius: 8,
-    // backgroundColor: Typography.Colors.darkgrey,
   },
   addressHeader: {
     flexDirection: "row",

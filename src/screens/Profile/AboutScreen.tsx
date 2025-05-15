@@ -109,7 +109,6 @@ const styles = StyleSheet.create({
     color: Typography.Colors.black,
   },
   text: {
-    // textAlign: "left",
     fontSize: 16,
     lineHeight: 24,
     color: Typography.Colors.darkgrey,
