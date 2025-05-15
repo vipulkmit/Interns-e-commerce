@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, Text, View, StyleSheet, Dimensions } from "react-native";
+import { Image, Text, View, StyleSheet, Dimensions, Pressable } from "react-native";
 import { TrendingProps } from "../../models/HomePage.type";
 import { Typography } from "../../theme/Colors";
 
@@ -15,11 +15,12 @@ const CardComponent = ({
     offer,
     productType,
     amount,
-    staticContainer
+    staticContainer,
+    onClick
 }: TrendingProps) => {
 
     return (
-        <View style={[styles.container,staticContainer]}>
+        <Pressable style={[styles.container,staticContainer]} onPress={onClick}>
             <View style={[styles.imgView,productImgStyle]}> 
                 <Image source={img} style={styles.imgStyles} />
             </View>
@@ -37,7 +38,7 @@ const CardComponent = ({
                         style={[styles.offerStyle, { paddingTop: 7 }]}>Min {offer}% Off</Text>)
                     : (<Text style={styles.offerStyle}>Under Rs. {amount}</Text>)}
             </View>
-        </View>
+        </Pressable>
     )
 }
 

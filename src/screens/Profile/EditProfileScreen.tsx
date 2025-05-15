@@ -7,12 +7,17 @@ import Icon from "react-native-vector-icons/AntDesign";
 import useAuthStore from "../../stores/useAuthStore";
 import { launchCamera, launchImageLibrary } from "react-native-image-picker";
 import RNFS from "react-native-fs";
+import { updateUserdata } from "../../services/api/apiServices";
+import { useState } from "react";
 
 const EditProfileScreen = () => {
+  const [image, setImage] = useState();
   const Navigation = useNavigation();
   const user = useAuthStore((state) => state.user);
+  // console.log(user, "vfbvfrjb");
   const handlepasswordchange = () => {
-    Navigation.navigate("Passwordchange", { email: user?.email });
+    // Navigation.navigate("Passwordchange", { email: user?.email });
+    Navigation.navigate("ChangePasswordScreen");
   };
 
   const handleImageChange = () => {
@@ -23,29 +28,34 @@ const EditProfileScreen = () => {
     ]);
   };
 
-  const handleImage = async (uri: string) => {
-    try {
-      const base64 = await RNFS.readFile(uri.replace("file://", ""), "base64");
-      const base64DataUri = `data:image/jpeg;base64,${base64}`;
-      const currentUser = useAuthStore.getState().user;
-      useAuthStore.getState().setUser({
-        ...currentUser,
-        userDetails: {
-          ...currentUser.userDetails,
-          profilePicture: base64DataUri,
-        },
-      });
-    } catch (err) {
-      console.error("Error converting to base64:", err);
-    }
-  };
+  // const handleImage = async (uri: string) => {
+  //   console.log(uri, "iubvnvbu");
+  //   // try {
+  //   //   console.log(uri, "nucvikvreireou");
+  //   //   // const base64 = await RNFS.readFile(uri.replace("file://", ""), "base64");
+  //   //   // const base64DataUri = `data:image/jpeg;base64,${base64}`;
+  //   //   // const currentUser = useAuthStore.getState().user;
+  //   //   // const UserSave = {
+  //   //   //   id: currentUser?.id,
+  //   //   //   userDetails: {
+  //   //   //     ...currentUser.userDetails,
+  //   //   //     profilePicture: base64DataUri,
+  //   //   //   },
+  //   //   // };
+  //   //   // const updatedUser = await updateUserdata(UserSave);
+  //   //   // useAuthStore.getState().setUser(updatedUser);
+  //   // } catch (err) {
+  //   //   console.error("Error updating profile picture:", err);
+  //   // }
+  // };
 
   const handleCamera = () => {
     launchCamera({ mediaType: "photo", includeBase64: false }, (response) => {
-      console.log(response);
+      // console.log(response);
       if (response.assets && response.assets[0]) {
         const uri = response.assets[0].uri || "";
-        handleImage(uri);
+        setImage(uri);
+        // handleImage(uri);
       }
     });
   };
@@ -56,7 +66,8 @@ const EditProfileScreen = () => {
       (response) => {
         if (response.assets && response.assets[0]) {
           const uri = response.assets[0].uri || "";
-          handleImage(uri);
+          setImage(uri);
+          // handleImage(uri);
         }
       }
     );
@@ -75,12 +86,14 @@ const EditProfileScreen = () => {
       </View>
       <View style={styles.firstsection}>
         <TouchableOpacity onPress={handleImageChange}>
-          <Image
+          {/* <Image
             source={
-              user?.userDetails?.profilePicture
-                ? { uri: user.userDetails.profilePicture }
-                : assets.Demo
+              user?.profilePicture ? { uri: user?.profilePicture } : assets.Demo
             }
+            style={styles.profilepic}
+          /> */}
+          <Image
+            source={image ? { uri: image } : assets.Demo}
             style={styles.profilepic}
           />
         </TouchableOpacity>
@@ -157,6 +170,7 @@ const styles = StyleSheet.create({
     fontFamily: Typography.font.bold,
     color: Typography.Colors.black,
     fontWeight: "500",
+    textTransform:"capitalize"
   },
   mailcontainer: {
     fontSize: 14,
@@ -212,6 +226,7 @@ const styles = StyleSheet.create({
 });
 
 export default EditProfileScreen;
-function setSelectedImage(arg0: string) {
-  throw new Error("Function not implemented.");
-}
+
+// function setSelectedImage(arg0: string) {
+//   throw new Error("Function not implemented.");
+// }

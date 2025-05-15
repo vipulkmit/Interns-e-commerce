@@ -1,68 +1,74 @@
-import { ImageProps, ImageSourcePropType, ImageStyle, StyleProp, TextProps, TextStyle } from "react-native";
+import {
+  ImageProps,
+  ImageSourcePropType,
+  ImageStyle,
+  StyleProp,
+  TextProps,
+  TextStyle,
+} from "react-native";
 import { boolean } from "zod";
 
 export type CategoryProps = {
-    id: string;
-    image: string;
-    name: string
-}
+  id: string;
+  image: string;
+  name: string;
+};
 
 export type BannerProps = {
-    id: string,
-    image: ImageSourcePropType,
-    logoImage: ImageSourcePropType,
-    brand: string,
-    event: string,
-    discount: string
-}
+  id: string;
+  image: ImageSourcePropType;
+  logoImage: ImageSourcePropType;
+  brand: string;
+  event: string;
+  discount: string;
+};
 
 export type TrendingProps = {
-    id?: string,
-    img?: ImageSourcePropType,
-    logo?: ImageSourcePropType,
-    offer?: number,
-    productType?: string,
-    amount?: number,
-    productImgStyle?: StyleProp<ImageStyle>,
-    staticContainer?: StyleProp<ImageStyle>
-}
-
+  id?: string;
+  img?: ImageSourcePropType;
+  logo?: ImageSourcePropType;
+  offer?: number;
+  productType?: string;
+  amount?: number;
+  onClick: () => void;
+  productImgStyle?: StyleProp<ImageStyle>;
+  staticContainer?: StyleProp<ImageStyle>;
+};
 
 export type ProductProps = {
-    id?: string,
-    images?: ImageSourcePropType,
-    productName?: string,
-    brandName?: string,
-    initialRate?: number,
-    rate?: number,
-    discount?: number,
-    onClick: () => void,
-
-}
-
+  id?: string;
+  images?: ImageSourcePropType;
+  productName?: string;
+  brandName?: string;
+  initialRate?: number;
+  rate?: number;
+  discount?: number;
+  onClick: () => void;
+};
 
 export type ButtonProps = {
-    id?: string,
-    icon: ImageSourcePropType,
-    buttonText?: string,
-    buttonStyle?: StyleProp<ImageStyle>,
-    TextStyle?: StyleProp<ImageStyle>,
-    onClick: () => void,
-
-}
+  id?: string;
+  icon?: ImageSourcePropType;
+  buttonText?: string;
+  buttonStyle?: StyleProp<ImageStyle>;
+  TextStyle?: StyleProp<ImageStyle>;
+  onClick: () => void;
+};
 
 export type MainHeaderProps = {
-    id?: string,
-    productType?: string,
-    onClick: () => void,
-    Title?: string
-    // back:ImageSourcePropType,
-    // icon:ImageSourcePropType,
-    // icon1:ImageSourcePropType,
-    // icon2:ImageSourcePropType,
-}
+  id?: string;
+  productType?: string;
+  onClick: () => void;
+  onPress: () => void;
+
+  Title?: string;
+  // back:ImageSourcePropType,
+  // icon:ImageSourcePropType,
+  // icon1:ImageSourcePropType,
+  // icon2:ImageSourcePropType,
+};
 export type sizeProps = {
-    size: string, 
-    onClick: () => void,
-    selectedSize: boolean
-}
+  size: string;
+  onClick: () => void;
+  selectedSize: boolean;
+};

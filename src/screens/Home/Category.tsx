@@ -46,7 +46,7 @@ const Category = ({ route }) => {
 
   return (
     <View style={styles.container}>
-      <HeaderComponent onClick={goback} Title={name} />
+      <HeaderComponent onClick={goback} Title={name}/>
 
       <Text style={styles.text}>Shop by Category: {name}</Text>
       <FlatList

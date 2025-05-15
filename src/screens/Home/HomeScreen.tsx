@@ -1,57 +1,76 @@
-import { Animated, Dimensions, FlatList, Image, ImageBackground, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useEffect, useRef, useState } from 'react'
-import { assets } from '../../../assets/images'
-import { CategoryProps, BannerProps, TrendingProps, ProductProps } from '../../models/HomePage.type';
-import { BannerData, CardData, DealData, ProductData, HeaderData } from '../../constant';
-import Carousel from 'react-native-reanimated-carousel';
-import CardComponent from '../../components/card/CardComponent';
-import ProductComponent from '../../components/product/ProductComponent';
-import ButtonComponent from '../../components/button/ButtonComponent';
-import TopHeaderComponent from '../../components/header/TopHeaderComponent';
-import { useNavigation } from '@react-navigation/native';
-import useAuthStore from '../../stores/useAuthStore'
-import { Typography } from '../../theme/Colors';
-import { CarousalData, Categories } from '../../services/api/apiServices';
-import Category from './Category';
-import ContentLoader from 'react-native-easy-content-loader';
-import HeaderComponent from '../../components/header/HeaderComponent';
-
+import {
+  Animated,
+  Dimensions,
+  FlatList,
+  Image,
+  ImageBackground,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import { assets } from "../../../assets/images";
+import { TrendingProps } from "../../models/HomePage.type";
+import { BannerData, DealData } from "../../constant";
+import Carousel from "react-native-reanimated-carousel";
+import CardComponent from "../../components/card/CardComponent";
+import ProductComponent from "../../components/product/ProductComponent";
+import TopHeaderComponent from "../../components/header/TopHeaderComponent";
+import { useNavigation } from "@react-navigation/native";
+import { Typography } from "../../theme/Colors";
+import {
+  CarousalData,
+  Categories,
+  Collection,
+} from "../../services/api/apiServices";
+import ContentLoader from "react-native-easy-content-loader";
 
 const { width } = Dimensions.get("window");
 
 const HomeScreen = () => {
   const navigation = useNavigation();
-  const animations = useRef(BannerData.map(() => new Animated.Value(17))).current;
+  const animations = useRef(
+    BannerData.map(() => new Animated.Value(17))
+  ).current;
 
   const renderCategoryPage = (name) => {
-    navigation.navigate('Category', { name: name })
-  }
+    navigation.navigate("Category", { name: name });
+  };
+
   // Category Render Item
-
   const renderItem = ({ item }) => {
-
+    // console.log(item.image);
     return (
-      <Pressable style={styles.subContainer} onPress={() => renderCategoryPage(item.name)}>
+      <Pressable
+        style={styles.subContainer}
+        onPress={() => renderCategoryPage(item.name)}
+      >
         <Image source={{ uri: item.image }} style={styles.flatlistImage} />
-        <Text style={styles.text} numberOfLines={1}>{item.name}</Text>
+        <Text style={styles.text} numberOfLines={1}>
+          {item.name}
+        </Text>
       </Pressable>
-    )
+    );
   };
 
   // Carousel Render Item
 
-
   const CarouselRenderItem = ({ item }) => {
-    // console.log(item.image,'item');
-
     return (
-      // <Text>jdcfgsdyu  </Text>
       <ImageBackground
         source={{ uri: item.image }}
         style={styles.imageBackground}
-        imageStyle={styles.imagestyle}>
+        imageStyle={styles.imagestyle}
+      >
         <View style={styles.overlay}>
-          <Image style={styles.logostyle} source={{ uri: item.logoURL }} resizeMode='contain' />
+          <Image
+            style={styles.logostyle}
+            source={{ uri: item.logoURL }}
+            resizeMode="contain"
+          />
           <Text style={styles.text1}>{item.description}</Text>
           <Text style={styles.text1}>{item.offer}</Text>
           <TouchableOpacity style={styles.button}>
@@ -59,9 +78,8 @@ const HomeScreen = () => {
           </TouchableOpacity>
         </View>
       </ImageBackground>
-    )
+    );
   };
-
 
   const animateDot = (index: number, isActive: boolean) => {
     Animated.timing(animations[index], {
@@ -71,22 +89,15 @@ const HomeScreen = () => {
     }).start();
   };
 
-  // const handleSnap = (index: number) => {
-  //   animateDot(currentIndex, false);
-  //   animateDot(index, true);
-  //   setCurrentIndex(index);
-  // };
-
-  // Trending Render Item
-
-  const TrendingRenderItem = ({ item }: { item: TrendingProps }) => {
+  const TrendingRenderItem = ({ item }) => {
     return (
       <View style={styles.container}>
         <CardComponent
-          img={item.img}
-          logo={item.logo}
-          offer={item.offer}
+          img={{ uri: item.images[0] }}
+          logo={{ uri: item.brand.logo }}
+          offer={item.discountPrice}
           productType={item.productType}
+          onClick={() => renderProductPage(item)}
         />
       </View>
     );
@@ -95,86 +106,84 @@ const HomeScreen = () => {
   //Deal of the day Render item
   const DealRenderItem = ({ item }: { item: TrendingProps }) => {
     return (
-      // <View style={{paddingLeft:20}}>
-      <Pressable style={styles.dealView} >
-        <CardComponent staticContainer={styles.staticContainer} img={item.img} amount={item.amount} productType={item.productType} productImgStyle={styles.productImage} />
+      <Pressable style={styles.dealView}>
+        <CardComponent
+          staticContainer={styles.staticContainer}
+          img={item.img}
+          amount={item.amount}
+          productType={item.productType}
+          productImgStyle={styles.productImage}
+          onClick={function (): void {
+            throw new Error("Function not implemented.");
+          }}
+        />
       </Pressable>
+    );
+  };
 
-    )
-
-  }
-
-
+  const renderProductPage = (data: any) => {
+    navigation.navigate("ProductDetailPage", { data: data });
+  };
 
   //Product Render item
-  const ProductRenderItem = ({ item }: { item: ProductProps }) => {
+  const ProductRenderItem = ({ item }) => {
     return (
       <View style={styles.container}>
         <ProductComponent
           images={item.images}
-          productName={item.productName}
-          brandName={item.brandName}
-          initialRate={item.initialRate}
-          rate={item.rate}
-          discount={item.discount}
+          productName={item.title}
+          brandName={item?.brand?.name}
+          initialRate={item.discountPrice}
+          rate={item.price}
+          discount={item.discountPercentage}
+          onClick={() => renderProductPage(item)}
         />
-        <View style={styles.buttonView}>
-          <ButtonComponent
-            icon={assets.HeartBlack}
-            buttonText="Whislist"
-            buttonStyle={styles.buttonStyle}
-          />
-          <ButtonComponent
-            icon={assets.WhiteBag}
-            buttonText="Add to Bag"
-            TextStyle={styles.textStyle}
-            buttonStyle={[
-              styles.buttonStyle,
-              { backgroundColor: Typography.Colors.primary },
-            ]}
-          />
-        </View>
       </View>
     );
   };
 
   const ListHeader = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
-
-    const [Category, setCategory] = useState();
-    const [CarouselData, setCarouselData] = useState();
-    // console.log(Category,'cteguhsuliegcf ');
-    const [loading, setLoading] = useState(true);
-
-    // useEffect(() => {
-    //   setTimeout(() => setLoading(false), 3000); // Simulate loading delay
-    // }, []);
+    const [Category, setCategory] = useState([]);
+    const [CarouselData, setCarouselData] = useState([]);
+    const [ourCollection, setOurCollection] = useState([]);
 
     useEffect(() => {
-      Categories().then(data => {
-        setCategory(data?.data)
-      }).catch((e) => {
-        console.log('no data');
-      })
-    }, [])
-
+      Collection()
+        .then((data) => {
+          setOurCollection(data?.data);
+        })
+        .catch((e) => {
+          console.log("no data");
+        });
+    }, []);
 
     useEffect(() => {
-      CarousalData().then(data => {
-        setCarouselData(data?.data.data)
-        // console.log(data.data.data);
+      Categories()
+        .then((data) => {
+          // console.log(data.data, "eufiebfh");
+          setCategory(data?.data);
+        })
+        .catch((e) => {
+          console.log("no data");
+        });
+    }, []);
 
-      }).catch((e) => {
-        console.log('no data');
-      })
-    }, [])
+    useEffect(() => {
+      CarousalData()
+        .then((data) => {
+          setCarouselData(data?.data.data);
+        })
+        .catch((e) => {
+          console.log("no data");
+        });
+    }, []);
 
     return (
       <>
         {/* Header View */}
         <View style={styles.HeaderStyle}>
-
-          <TopHeaderComponent userImage={HeaderData.userImage} userName={HeaderData.userName} icon={HeaderData.icon} />
+          <TopHeaderComponent />
         </View>
 
         {/* Category View */}
@@ -192,7 +201,6 @@ const HomeScreen = () => {
             </Text>
           </View>
           <View style={styles.categorySubContainer}>
-
             <FlatList
               data={Category}
               renderItem={renderItem}
@@ -212,7 +220,9 @@ const HomeScreen = () => {
               autoPlayInterval={3000}
               width={width}
               height={344.67}
-              onSnapToItem={(index) => { setCurrentIndex(index) }}
+              onSnapToItem={(index) => {
+                setCurrentIndex(index);
+              }}
               data={CarouselData}
               scrollAnimationDuration={1000}
               renderItem={CarouselRenderItem}
@@ -245,11 +255,10 @@ const HomeScreen = () => {
           >
             Trending Offers
           </Text>
-          {/* <FlatList/> */}
           <FlatList
-            data={CardData}
+            data={ourCollection.slice(5, 10)}
             renderItem={TrendingRenderItem}
-            keyExtractor={(item) => item.id.toString()}
+            keyExtractor={(item) => item?.id.toString()}
             horizontal
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={{ gap: 20 }}
@@ -257,29 +266,39 @@ const HomeScreen = () => {
         </View>
 
         <View style={styles.dealContainer}>
-          <Text numberOfLines={1} style={[styles.TrendingText, { paddingLeft: 5 }]} >Deals Of The Day</Text>
+          <Text
+            numberOfLines={1}
+            style={[styles.TrendingText, { paddingLeft: 5 }]}
+          >
+            Deals Of The Day
+          </Text>
         </View>
       </>
     );
   };
 
   const listFooter = () => {
+    const [ourCollection, setOurCollection] = useState([]);
+    useEffect(() => {
+      Collection()
+        .then((data) => {
+          setOurCollection(data?.data);
+        })
+        .catch((e) => {
+          console.log("no data");
+        });
+    }, []);
+
     return (
       <>
         <View style={styles.dealContainer}>
           <Text style={styles.TrendingText}>Our Collection</Text>
           <FlatList
-            data={ProductData}
+            data={ourCollection?.slice(0, 10)}
             renderItem={ProductRenderItem}
             keyExtractor={(item) => item.id}
           />
         </View>
-
-        {/* <View style={styles.container}>
-          <TouchableOpacity style={styles.buttonstyle} onPress={logout}>
-            <Text style={styles.textstyle}>Go Back to LoginScreen</Text>
-          </TouchableOpacity>
-        </View> */}
       </>
     );
   };
@@ -291,19 +310,23 @@ const HomeScreen = () => {
       renderItem={DealRenderItem}
       keyExtractor={(item) => item.id.toString()}
       numColumns={2}
-      contentContainerStyle={{ gap: 10, backgroundColor: '#FFFFFF' }}
+      contentContainerStyle={{ gap: 10, backgroundColor: "#FFFFFF" }}
       columnWrapperStyle={styles.row}
       showsVerticalScrollIndicator={false}
       ListHeaderComponent={ListHeader}
-      ListHeaderComponentStyle={{ flex: 1, backgroundColor: Typography.Colors.white }}
+      ListHeaderComponentStyle={{
+        flex: 1,
+        backgroundColor: Typography.Colors.white,
+      }}
       ListFooterComponent={listFooter}
-      ListFooterComponentStyle={{ flex: 1, backgroundColor: Typography.Colors.white }}
-
+      ListFooterComponentStyle={{
+        flex: 1,
+        backgroundColor: Typography.Colors.white,
+      }}
     />
     // </View>
   );
 };
-
 
 const styles = StyleSheet.create({
   container: {
@@ -375,7 +398,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: Typography.Colors.lightblack,
-    opacity: 0.8
+    opacity: 0.8,
   },
   logostyle: {
     width: 175,
@@ -394,9 +417,10 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 10,
     marginTop: 27,
-    width: 118,
-    height: 34,
+    padding:6,
+    paddingHorizontal: 25,
     alignItems: "center",
+    justifyContent:'center'
   },
   buttonText: {
     color: Typography.Colors.white,
@@ -410,7 +434,8 @@ const styles = StyleSheet.create({
     paddingLeft: 11,
   },
   TrendingText: {
-    fontFamily: Typography.font.medium,
+    // fontFamily: Typography.font.bold,
+    fontWeight:'500',
     fontSize: 20,
     color: Typography.Colors.lightblack,
   },
@@ -419,14 +444,10 @@ const styles = StyleSheet.create({
   staticContainer: {
     flex: 1,
     paddingTop: 10,
-    // width: 170,
-    // backgroundColor:'pink'
   },
   dealView: {
     height: 251,
     width: "47%",
-    // backgroundColor:'red',
-    // paddingLeft:20
   },
   productImage: {
     width: "100%",
@@ -438,13 +459,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     justifyContent: "center",
     paddingTop: 20,
-    // backgroundColor:'green',
     flex: 1,
   },
   row: {
-    alignSelf: 'center',
+    alignSelf: "center",
     gap: 20,
-    marginHorizontal: 20
+    marginHorizontal: 20,
   },
   buttonStyle: {
     backgroundColor: Typography.Colors.white,

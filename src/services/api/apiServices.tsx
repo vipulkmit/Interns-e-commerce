@@ -1,9 +1,7 @@
 import { z } from "zod";
 import {
-  changepassword,
   forgetpassword,
   loginUser,
-  userUpdate,
   verifyotp,
 } from "../../authentication/AuthApi";
 import { registerUser } from "../../authentication/AuthApi";
@@ -107,47 +105,39 @@ export const verifyOtpService = async (FormData: any) => {
   }
 };
 
-const changePasswordSchema = z
-  .object({
-    newPassword: z
-      .string()
-      .min(8, { message: "New password must be at least 8 characters long." }),
-    confirmNewPassword: z.string().min(8, {
-      message: "Confirm password must be at least 8 characters long.",
-    }),
-  })
-  .refine((data) => data.newPassword === data.confirmNewPassword, {
-    message: "New passwords do not match.",
-    path: ["confirmNewPassword"],
-  });
-
-export const changePasswordService = async (FormData: any) => {
-  // const parsed = changePasswordSchema.safeParse(FormData);
-  // if (!parsed.success) {
-  //   throw new Error("Validation Failed:" + JSON.stringify(parsed.error.errors));
-  // }
-  try {
-    const response = await changepassword(FormData);
-    return response.data;
-  } catch (error) {
-    console.error("Change Password");
-    throw error;
-  }
+export const changePasswordService = (FormData: any) => {
+  return axiosInstance.post(ENDPOINTS.CHANGE_PASSWORD, FormData);
 };
 
-export const updateUserdata = async (FormData: any) => {
+export const updateUserdata = async (userId: any, updatedData: any) => {
   try {
-    const response = await userUpdate(FormData);
+    const response = await axiosInstance.patch(
+      ENDPOINTS.UPDATE(userId),
+      updatedData
+    );
+
+    if (!userId) {
+      console.error("userId is missing!");
+      return;
+    }
     const updatedUser = response.data;
+
     useAuthStore.getState().setUser(updatedUser);
     return updatedUser;
-  } catch (error) {
-    console.error("Update User Data Error:", error);
-    throw error;
+  } catch (error: any) {
+    console.error(
+      "Update User Data Error:",
+      error.response?.data || error.message
+    );
+    throw new Error(
+      error.response?.data?.message || "Failed to update user data"
+    );
   }
 };
 
+export const promocode = () => axiosInstance.get(ENDPOINTS.PROMOCODE);
 export const Categories = () => axiosInstance.get(ENDPOINTS.CATEGORY);
+export const Collection = () => axiosInstance.get(ENDPOINTS.COLLECTION);
 
 export const SubCategories = (name) => {
   return axiosInstance.get(`${ENDPOINTS.SUBCATEGORY}${name}`);
@@ -160,7 +150,6 @@ export const Products = (name, category) => {
 export const CarousalData = () => axiosInstance.get(ENDPOINTS.CAROUSAL);
 
 export const AddToWishlist = (id: string) => {
-  // console.log(id,"dfhuifgkerghr")
   return axiosInstance.post(ENDPOINTS.WISHLISTPOST, { productId: id });
 };
 
@@ -169,13 +158,56 @@ export const WishlistData = () => {
 };
 
 export const WishlistDelete = (productId: string) => {
- return axiosInstance.delete(ENDPOINTS.WISHLIST, {
-    data:{
-      productId
+  return axiosInstance.delete(ENDPOINTS.WISHLIST, {
+    data: {
+      productId,
     },
   });
-  // console.log(a,"aaaaaaaaaaaaaaaaaaaaa")
 };
 
 export const WishlistDeleteAll = () =>
   axiosInstance.delete(ENDPOINTS.WISHLISTDELETE);
+
+export const ProductFilters = (
+  size,
+  color,
+  discountMax,
+  discountMin,
+  priceMax,
+  priceMin,
+  subcategoryName,
+  categoryName
+) => {
+  // Build query parameters the same way as your successful curl request
+  const queryParams = new URLSearchParams({
+    size: size,
+    color: color,
+    discountMax: discountMax,
+    discountMin: discountMin,
+    priceMax: priceMax,
+    priceMin: priceMin,
+    subcategoryName: subcategoryName,
+    categoryName: categoryName
+  }).toString();
+    
+  return axiosInstance.get(`${ENDPOINTS.FILTERS}?${queryParams}`);
+
+};
+
+
+export const AddToCart = (id: string,quantity: number) => {
+  // console.log(id,"dfhuifgkerghr")
+  return axiosInstance.post(ENDPOINTS.CART, { productId: id ,quantity:quantity});
+};
+
+export const CartData = () => {
+  return axiosInstance.get(ENDPOINTS.CART);
+};
+
+export const CartDelete = (productId: string) => {
+  return axiosInstance.delete(ENDPOINTS.CARTDELETE, {
+    data: {
+      productId,
+    },
+  });
+};

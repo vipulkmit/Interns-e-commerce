@@ -1,4 +1,12 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Image,
+  FlatList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  ScrollView,
+} from "react-native";
 import { Typography } from "../../theme/Colors";
 import { assets } from "../../../assets/images";
 import { useNavigation } from "@react-navigation/native";
@@ -6,20 +14,81 @@ import useAuthStore from "../../stores/useAuthStore";
 
 const ProfileScreen = () => {
   const user = useAuthStore((state) => state.user);
-  const Navigation = useNavigation();
   const logout = useAuthStore((state) => state.logout);
-  const handleEditProfileScreen = () => {
-    Navigation.navigate("EditProfileScreen");
+  const Navigation = useNavigation();
+
+  const handleNavigation = (screen, params = {}) => {
+    if (screen) Navigation.navigate(screen, params);
   };
+
+  const menuItems = [
+    {
+      title: "My Orders",
+      icon: assets.tote,
+      onPress: () => {},
+    },
+    {
+      title: "Wishlist",
+      icon: assets.heart,
+      onPress: () =>
+        handleNavigation("WishlistNavigator", { screen: "WishlistScreen" }),
+    },
+    {
+      title: "Delivery Address",
+      icon: assets.Location,
+      iconStyle: styles.logodelivery,
+      onPress: () => handleNavigation("DeliveryAddress"),
+    },
+    {
+      title: "Offers",
+      icon: assets.Offers,
+      onPress: () => handleNavigation("PromoCodeScreen"),
+    },
+    {
+      title: "Help",
+      icon: assets.help,
+      onPress: () => handleNavigation("HelpScreen"),
+    },
+    {
+      title: "About",
+      icon: assets.about,
+      onPress: () => handleNavigation("AboutSection"),
+    },
+    {
+      title: "Log Out",
+      icon: assets.Logout,
+      textStyle: styles.textlistlogout,
+      onPress: logout,
+    },
+  ];
+
+  const renderItem = ({ item }) => (
+    <TouchableOpacity onPress={item.onPress}>
+      <View style={styles.secondsection}>
+        <View style={styles.logocontainer}>
+          <Image
+            source={item.icon}
+            style={item.iconStyle || styles.logostyle}
+          />
+          <Text style={item.textStyle || styles.textlist}>{item.title}</Text>
+        </View>
+        {item.title !== "Log Out" && (
+          <View style={styles.arrowstyleview}>
+            <Image source={assets.rightarrow} style={styles.arrowstyle} />
+          </View>
+        )}
+      </View>
+    </TouchableOpacity>
+  );
+
   return (
+    // <ScrollView style={{ flex: 1, backgroundColor: Typography.Colors.white }}>
     <View style={styles.container}>
-      <TouchableOpacity onPress={handleEditProfileScreen}>
+      <TouchableOpacity onPress={() => handleNavigation("EditProfile")}>
         <View style={styles.firstsection}>
           <Image
             source={
-              user?.userDetails?.profilePicture
-                ? { uri: user?.userDetails?.profilePicture }
-                : assets.Demo
+              user?.profilePicture ? { uri: user?.profilePicture } : assets.Demo
             }
             style={styles.profilepic}
           />
@@ -29,102 +98,26 @@ const ProfileScreen = () => {
           </View>
         </View>
       </TouchableOpacity>
-      <TouchableOpacity>
-        <View style={styles.secondsection}>
-          <View style={styles.logocontainer}>
-            <Image source={assets.tote} style={styles.logostyle} />
-            <Text style={styles.textlist}>My Orders</Text>
-          </View>
-          <View style={styles.arrowstyleview}>
-            <Image source={assets.rightarrow} style={styles.arrowstyle} />
-          </View>
-        </View>
-      </TouchableOpacity>
-      <TouchableOpacity>
-        <View style={styles.secondsection}>
-          <View style={styles.logocontainer}>
-            <Image source={assets.heart} style={styles.logostyle} />
-            <Text style={styles.textlist}>Wishlist</Text>
-          </View>
-          <View style={styles.arrowstyleview}>
-            <Image source={assets.rightarrow} style={styles.arrowstyle} />
-          </View>
-        </View>
-      </TouchableOpacity>
-      <TouchableOpacity>
-        <View style={styles.secondsection}>
-          <View style={styles.logocontainer}>
-            <Image source={assets.Location} style={styles.logodelivery} />
-            <Text style={styles.textlist}>Delivery Address</Text>
-          </View>
-          <View style={styles.arrowstyleview}>
-            <Image source={assets.rightarrow} style={styles.arrowstyle} />
-          </View>
-        </View>
-      </TouchableOpacity>
-      <TouchableOpacity>
-        <View style={styles.secondsection}>
-          <View style={styles.logocontainer}>
-            <Image source={assets.Payment} style={styles.logo} />
-            <Text style={styles.textlistpayment}>Payment Methods</Text>
-          </View>
-          <View style={styles.arrowstyleview}>
-            <Image source={assets.rightarrow} style={styles.arrowstyle} />
-          </View>
-        </View>
-      </TouchableOpacity>
-      <TouchableOpacity>
-        <View style={styles.secondsection}>
-          <View style={styles.logocontainer}>
-            <Image source={assets.Offers} style={styles.logostyle} />
-            <Text style={styles.textlist}>Offers</Text>
-          </View>
-          <View style={styles.arrowstyleview}>
-            <Image source={assets.rightarrow} style={styles.arrowstyle} />
-          </View>
-        </View>
-      </TouchableOpacity>
-      <TouchableOpacity>
-        <View style={styles.secondsection}>
-          <View style={styles.logocontainer}>
-            <Image source={assets.help} style={styles.logostyle} />
-            <Text style={styles.textlist}>Help</Text>
-          </View>
-          <View style={styles.arrowstyleview}>
-            <Image source={assets.rightarrow} style={styles.arrowstyle} />
-          </View>
-        </View>
-      </TouchableOpacity>
-      <TouchableOpacity>
-        <View style={styles.secondsection}>
-          <View style={styles.logocontainer}>
-            <Image source={assets.about} style={styles.logostyle} />
-            <Text style={styles.textlist}>About</Text>
-          </View>
-          <View style={styles.arrowstyleview}>
-            <Image source={assets.rightarrow} style={styles.arrowstyle} />
-          </View>
-        </View>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={logout}>
-        <View style={styles.secondsection}>
-          <View style={styles.logocontainer}>
-            <Image source={assets.Logout} style={styles.logostyle} />
-            <Text style={styles.textlistlogout}>Log Out</Text>
-          </View>
-        </View>
-      </TouchableOpacity>
+
+      <FlatList
+        data={menuItems}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={renderItem}
+        scrollEnabled={false}
+        showsVerticalScrollIndicator={true}
+      />
 
       <View style={styles.tncstyle}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => handleNavigation("PrivacyPolicy")}>
           <Text style={styles.policystyle}>Privacy Policy</Text>
         </TouchableOpacity>
         <View style={styles.line}></View>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => handleNavigation("TermsnConditions")}>
           <Text style={styles.conditionstyle}>Terms and Conditions</Text>
         </TouchableOpacity>
       </View>
     </View>
+    // </ScrollView>
   );
 };
 
@@ -152,13 +145,13 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     height: 62,
     width: 62,
-    // backgroundColor: "red",
   },
   textname: {
     fontSize: 18,
     fontFamily: Typography.font.bold,
     color: Typography.Colors.black,
     fontWeight: "500",
+    textTransform:'capitalize'
   },
   mailcontainer: {
     fontSize: 14,
@@ -166,19 +159,21 @@ const styles = StyleSheet.create({
     color: Typography.Colors.lightgrey,
   },
   logostyle: {
+    marginTop: 5,
     height: 20,
     width: 20,
   },
   logo: {
+    marginTop: 5,
     height: 14,
     width: 20,
   },
   logodelivery: {
+    marginTop: 5,
     height: 25,
     width: 21.5,
   },
   logocontainer: {
-    alignSelf: "center",
     flexDirection: "row",
     gap: 20,
   },
@@ -197,7 +192,6 @@ const styles = StyleSheet.create({
     color: Typography.Colors.red,
   },
   textlistpayment: {
-    alignSelf: "center",
     fontSize: 16,
     fontWeight: "600",
     fontFamily: Typography.font.medium,
@@ -229,6 +223,7 @@ const styles = StyleSheet.create({
   },
   policystyle: {
     color: Typography.Colors.darksilver,
+    paddingVertical: 1.5,
   },
   conditionstyle: {
     color: Typography.Colors.darksilver,
