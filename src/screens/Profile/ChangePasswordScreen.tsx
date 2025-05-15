@@ -14,39 +14,11 @@ export default function ChangePasswordScreen() {
   const [isLoading, setIsLoading] = useState(false);
   const Navigation = useNavigation();
 
-  //   const Passwordchangesuccess = async () => {
-  //     if (!newPassword.trim() || !confirmNewPassword.trim()) {
-  //       Alert.alert("Error", "Please fill in all fields.");
-  //       return;
-  //     }
-  //     setIsLoading(true);
-  //     try {
-  //       await changePasswordService({
-  //         password: oldPassword,
-  //         newPassword,
-  //         confirmPassword,
-  //       });
-  //       Alert.alert("Success", "Password changed successfully!");
-
-  //       //   if (state.routes[1].name == "EditProfileScreen") {
-  //       Navigation.goBack();
-  //       //   } else {
-  //     //   Navigation.navigate("LoginScreen");
-  //       //   }
-  //     } catch (error: any) {
-  //       Alert.alert("Error", error.message || "Failed to change password.");
-  //     } finally {
-  //       setIsLoading(false);
-  //     }
-  //   };
-
   const Passwordchangesuccess = async () => {
     if (!newPassword.trim() || !confirmNewPassword.trim()) {
       Alert.alert("Error", "Please fill in all fields.");
       return;
     }
-
-    // if()
 
     if (newPassword !== confirmNewPassword) {
       Alert.alert("Error", "New password and confirm password do not match.");

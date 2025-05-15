@@ -26,22 +26,22 @@ const PromoCodeScreen = () => {
     navigation.goBack();
   };
 
-  const fetchPromoCode = async () => {
-    try {
-      const response = await axiosInstance.get(
-        "http://192.168.1.58:5000/promocode"
-      );
-      console.log(response.data, "response");
-      setPromoCodeData(response.data);
-    } catch (error) {
-      console.error(
-        "Failed to fetch promo code",
-        error.response?.data || error
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const fetchPromoCode = async () => {
+  //   try {
+  //     const response = await axiosInstance.get(
+  //       "http://192.168.1.58:5000/promocode"
+  //     );
+  //     console.log(response.data, "response");
+  //     setPromoCodeData(response.data);
+  //   } catch (error) {
+  //     console.error(
+  //       "Failed to fetch promo code",
+  //       error.response?.data || error
+  //     );
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
   // const fetchPromoCode = async () => {
   //   try {
   //     const response = await axiosInstance.get(ENDPOINTS.PROMOCODE);
