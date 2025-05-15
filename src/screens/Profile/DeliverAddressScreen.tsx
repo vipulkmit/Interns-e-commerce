@@ -53,7 +53,7 @@ const DeliveryAddress = () => {
     Alert.alert("Success", "Address has been deleted.", [{ text: "OK" }]);
   };
 
-  console.log(user, "snfi");
+  // console.log(user, "snfi");
   const Listitem = ({ item, index }: { item: any; index: number }) => {
     return (
       <View style={styles.addressItem}>
