@@ -108,12 +108,9 @@ export const verifyOtpService = async (FormData: any) => {
 export const changePasswordService = (FormData: any) => {
   return axiosInstance.post(ENDPOINTS.CHANGE_PASSWORD, FormData);
 };
-console.log("FormData being sent:", JSON.stringify(FormData, null, 2));
 
 export const updateUserdata = async (userId: any, updatedData: any) => {
   try {
-    // console.log("dsivdfgg", userId);
-    // console.log("FormData being sent:", updatedData);
     const response = await axiosInstance.patch(
       ENDPOINTS.UPDATE(userId),
       updatedData
@@ -123,8 +120,6 @@ export const updateUserdata = async (userId: any, updatedData: any) => {
       console.error("userId is missing!");
       return;
     }
-
-    console.log("fdknvrrg", response);
     const updatedUser = response.data;
 
     useAuthStore.getState().setUser(updatedUser);
@@ -155,7 +150,6 @@ export const Products = (name, category) => {
 export const CarousalData = () => axiosInstance.get(ENDPOINTS.CAROUSAL);
 
 export const AddToWishlist = (id: string) => {
-  // console.log(id,"dfhuifgkerghr")
   return axiosInstance.post(ENDPOINTS.WISHLISTPOST, { productId: id });
 };
 
@@ -169,7 +163,6 @@ export const WishlistDelete = (productId: string) => {
       productId,
     },
   });
-  // console.log(a,"aaaaaaaaaaaaaaaaaaaaa")
 };
 
 export const WishlistDeleteAll = () =>

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
   View,
   Text,
@@ -33,109 +33,11 @@ const AddAddressList = ({ route }) => {
 
   const Navigation = useNavigation();
   const handlearrowbutton = () => Navigation.goBack();
-
-  const handleAddAddresspress = async (values: any, index?: number) => {
-    console.log("first");
-    try {
-      console.log("suiofhnr5");
-
-      const user = useAuthStore.getState().user;
-      console.log(user, "dvusdbhf");
-
-      // // useEffect(() => {
-      // console.log(user, "vdfhngv");
-      // if (!user || !user.id) {
-      //   Alert.alert("Session expired", "Please log in again.");
-      //   // Navigation.navigate("");
-      // }
-      // // }, [user]);
-
-      const newAddress = {
-        firstName: values.firstName,
-        lastName: values.lastName,
-        streetAddress: values.streetAddress,
-        city: values.city,
-        state: values.state,
-        zipCode: values.zipCode,
-        phoneNumber: values.phoneNumber,
-        country: values.country,
-      };
-
-      let updatedAddresses = user.address ? [...user.address] : [];
-      if (typeof index === "number") {
-        updatedAddresses[index] = newAddress;
-      } else {
-        updatedAddresses.push(newAddress);
-      }
-
-      // const updatedUser = {
-      //   ...user,
-      //   address: updatedAddresses,
-      // };
-
-      const updatedUser = {
-        ...user,
-        address: [...updatedAddresses],
-      };
-      console.log("vdfffvn");
-      console.log("Payload to APII:", JSON.stringify(updatedUser, null, 2));
-      console.log("payload to API:", { userID: user.id, updatedUser });
-      const cleanUserPayload = (user: any) => {
-        const {
-          id,
-          Otp,
-          isAdmin,
-          createdAt,
-          updatedAt,
-          password,
-          ...safeUser
-        } = user;
-
-        return safeUser;
-      };
-
-      const response = await updateUserdata(
-        user.id,
-        cleanUserPayload(updatedUser)
-      );
-      // console.log("fdvmfv", response.address);
-      const prevuser = useAuthStore.getState().user;
-      useAuthStore.getState().setUser({ ...prevuser, ...response });
-
-      setTimeout(() => {
-        Alert.alert(
-          "Success",
-          index !== undefined
-            ? "Address updated successfully!"
-            : "Address added successfully!",
-          [
-            {
-              text: "OK",
-              onPress: () => Navigation.navigate("DeliveryAddress"),
-            },
-          ],
-          { cancelable: false }
-        );
-      }, 300); // 300ms delay ensures screen stays mounted
-    } catch (error) {
-      Alert.alert(
-        "Error",
-        error.message || "Failed to add address.",
-        [{ text: "OK" }],
-        { cancelable: false }
-      );
-    }
-  };
-
+  const user = useAuthStore((state) => state.user);
+  console.log(user, "user");
   // const handleAddAddresspress = async (values: any, index?: number) => {
   //   try {
   //     const user = useAuthStore.getState().user;
-
-  //     if (!user || !user.id) {
-  //       Alert.alert("Session expired", "Please log in again.");
-  //       return;
-  //     }
-
   //     const newAddress = {
   //       firstName: values.firstName,
   //       lastName: values.lastName,
@@ -147,10 +49,7 @@ const AddAddressList = ({ route }) => {
   //       country: values.country,
   //     };
 
-  //     const updatedAddresses = Array.isArray(user.address)
-  //       ? [...user.address]
-  //       : [];
-
+  //     let updatedAddresses = user.address ? [...user.address] : [];
   //     if (typeof index === "number") {
   //       updatedAddresses[index] = newAddress;
   //     } else {
@@ -158,15 +57,32 @@ const AddAddressList = ({ route }) => {
   //     }
 
   //     const updatedUser = {
-  //       address: updatedAddresses,
+  //       ...user,
+  //       address: [...updatedAddresses],
+  //     };
+  //     console.log("Payload to APII:", JSON.stringify(updatedUser, null, 2));
+  //     console.log("payload to API:", { userID: user.id, updatedUser });
+  //     const cleanUserPayload = (user: any) => {
+  //       const {
+  //         Otp,
+  //         isAdmin,
+  //         message,
+  //         createdAt,
+  //         updatedAt,
+  //         password,
+  //         ...safeUser
+  //       } = user;
+
+  //       return safeUser;
   //     };
 
-  //     const response = await updateUserdata(user.id, updatedUser);
+  //     const response = await updateUserdata(
+  //       user.id,
+  //       cleanUserPayload(updatedUser)
+  //     );
+  //     const prevuser = useAuthStore.getState().user;
+  //     useAuthStore.getState().setUser({ ...prevuser, ...response });
 
-  //     const prevUser = useAuthStore.getState().user;
-  //     useAuthStore.getState().setUser({ ...prevUser, ...response });
-
-  //     // Show alert after short delay to ensure screen is mounted
   //     setTimeout(() => {
   //       Alert.alert(
   //         "Success",
@@ -181,18 +97,72 @@ const AddAddressList = ({ route }) => {
   //         ],
   //         { cancelable: false }
   //       );
-  //     }, 300); // 300ms delay
-  //   } catch (error: any) {
-  //     setTimeout(() => {
-  //       Alert.alert(
-  //         "Error",
-  //         error.message || "Failed to add address.",
-  //         [{ text: "OK" }],
-  //         { cancelable: false }
-  //       );
   //     }, 300);
+  //   } catch (error) {
+  //     Alert.alert(
+  //       "Error",
+  //       error.message || "Failed to add address.",
+  //       [{ text: "OK" }],
+  //       { cancelable: false }
+  //     );
   //   }
   // };
+
+  const handleAddAddresspress = async (values: any, index?: number) => {
+    try {
+      const newAddress = {
+        firstName: values.firstName,
+        lastName: values.lastName,
+        streetAddress: values.streetAddress,
+        city: values.city,
+        state: values.state,
+        zipCode: values.zipCode,
+        phoneNumber: values.phoneNumber,
+        country: values.country,
+      };
+
+      let updatedAddresses = user.address ? [...user.address] : [];
+
+      if (typeof index === "number") {
+        updatedAddresses[index] = newAddress;
+      } else {
+        updatedAddresses.push(newAddress);
+      }
+
+      const updatedUser = {
+        address: updatedAddresses,
+      };
+
+      const response = await updateUserdata(user.id, updatedUser);
+      useAuthStore
+        .getState()
+        .setUser({ ...user, ...response, id: response?.id || user.id });
+      setTimeout(() => {
+        Alert.alert(
+          "Success",
+          index !== undefined
+            ? "Address updated successfully!"
+            : "Address added successfully!",
+          [
+            {
+              text: "OK",
+              onPress: () => Navigation.navigate("DeliveryAddress"),
+            },
+          ],
+          { cancelable: false }
+        );
+      }, 300);
+    } catch (error: any) {
+      setTimeout(() => {
+        Alert.alert(
+          "Error",
+          error.message || "Failed to add address.",
+          [{ text: "OK" }],
+          { cancelable: false }
+        );
+      }, 300);
+    }
+  };
 
   const handleDeleteAddress = () => {
     try {
@@ -471,6 +441,9 @@ const styles = StyleSheet.create({
 
 export default AddAddressList;
 
+function uuidv4(): any {
+  throw new Error("Function not implemented.");
+}
 // const AddAdressList = () => {
 // //   const [Country, setCountry] = useState("");
 // //   const [firstName, setfirstName] = useState("");
