@@ -195,9 +195,8 @@ export const ProductFilters = (
 };
 
 
-export const AddToCart = (id: string,quantity: number) => {
-  // console.log(id,"dfhuifgkerghr")
-  return axiosInstance.post(ENDPOINTS.CART, { productId: id ,quantity:quantity});
+export const AddToCart = (id: string,quantity: number,productColorId: string,productSizeId: string) => {
+  return axiosInstance.post(ENDPOINTS.CART, { productId: id ,quantity:quantity,productColorId: productColorId, productSizeId:productSizeId});
 };
 
 export const CartData = () => {
@@ -206,6 +205,19 @@ export const CartData = () => {
 
 export const CartDelete = (productId: string) => {
   return axiosInstance.delete(ENDPOINTS.CARTDELETE, {
+    data: {
+      productId,
+    },
+  });
+};
+
+export const PromoCode = (promoCode: string) => {
+  return axiosInstance.post(ENDPOINTS.PROMOCODEPOST, { promoCode: promoCode });
+};
+
+
+export const QuantityDelete = (productId: string) => {
+  return axiosInstance.delete(ENDPOINTS.QUANTITYDELETE, {
     data: {
       productId,
     },

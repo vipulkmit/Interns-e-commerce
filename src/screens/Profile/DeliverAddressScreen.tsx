@@ -20,7 +20,7 @@ import { useState } from "react";
 const DeliveryAddress = () => {
   const user = useAuthStore((state) => state.user);
   const Navigation = useNavigation();
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [selectedIndex, setSelectedIndex] = useState(null);
 
   const onAddAddress = () => {
     Navigation.navigate("AddAddressList");
@@ -56,7 +56,6 @@ const DeliveryAddress = () => {
   const onDeleteAddress = async (index: number) => {
     const updatedAddresses = [...user.address];
     updatedAddresses.splice(index, 1);
-
     const updatedUser = {
       ...user,
       address: updatedAddresses,
@@ -66,11 +65,15 @@ const DeliveryAddress = () => {
     Alert.alert("Success", "Address has been deleted.", [{ text: "OK" }]);
   };
 
+  const AddressNavigate=(item,index)=>{
+    setSelectedIndex(index)
+    Navigation.navigate("OrderScreen",{item:item})
+  }
   // console.log(user, "snfi");
-  const Listitem = ({ item, index }: { item: any; index: number }) => {
+  const Listitem = ({ item, index }: { item: any; index: number }) => {    
     return (
       <TouchableOpacity
-        onPress={() => setSelectedIndex(index)}
+        onPress={()=>AddressNavigate(item,index)}
         style={[
           styles.addressItem,
           {

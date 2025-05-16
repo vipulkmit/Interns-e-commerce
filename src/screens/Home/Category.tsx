@@ -17,7 +17,7 @@ const Category = ({ route }) => {
       navigation.navigate('ProductsPage',{category:category,categoryName:name})
     }
 
-  const renderItem = (({ item }: { item: CategoryProps }) => {
+  const renderItem = (({ item }) => {
     // console.log(item);
    
     return (

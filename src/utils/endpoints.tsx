@@ -20,7 +20,9 @@ const ENDPOINTS = {
   FILTERS:'/product/filter',
   CART:'/cart',
   CARTDELETE:'cart/remove',
+  QUANTITYDELETE:'cart/quantity',
   PROMOCODE: "/promocode",
+  PROMOCODEPOST: "/promocode/apply",
 };
 
 export default ENDPOINTS;
