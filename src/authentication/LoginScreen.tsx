@@ -80,15 +80,12 @@ export default function LoginScreen() {
           routes: [{ name: "BottomTabs" }],
         });
       } else {
-        Alert.alert("Error7ty7", response.message);
+        Alert.alert("Error", response.message);
       }
     } catch (error: any) {
       console.error("Login Error:", error.message);
       // console.log("sdcybds");
-      Alert.alert(
-        "Errorrrrr",
-        error.message || "Login failed. Please try again"
-      );
+      Alert.alert("Error", error.message || "Login failed. Please try again");
     } finally {
       setIsLoading(false);
     }

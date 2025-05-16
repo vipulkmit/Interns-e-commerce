@@ -20,7 +20,11 @@ import HeaderComponent from "../../components/header/HeaderComponent";
 import { useNavigation } from "@react-navigation/native";
 import { Typography } from "../../theme/Colors";
 import Collapsible from "react-native-collapsible";
-import { AddToCart, AddToWishlist, Products } from "../../services/api/apiServices";
+import {
+  AddToCart,
+  AddToWishlist,
+  Products,
+} from "../../services/api/apiServices";
 import SizeComponent from "../../components/product/SizeComponent";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { startMapper } from "react-native-reanimated";
@@ -183,10 +187,10 @@ const ProductDetailPage = ({ route }) => {
 
   const [cartToggle, setCartToggle] = useState(false);
 
-  const handleAddToCart  = async () => {
+  const handleAddToCart = async () => {
     // console.log(data.id);
-    
-    const response = await AddToCart(data.id,data.quantity=1).then(() => {
+
+    const response = await AddToCart(data.id, (data.quantity = 1)).then(() => {
       setCartToggle(!cartToggle);
     });
     //  console.log(response);
@@ -586,9 +590,6 @@ const styles = StyleSheet.create({
     height: 28,
     width: 28,
     borderRadius: 20,
-    // alignItems:'center',
-    // justifyContent:'center',
-    // borderWidth:1,
     backgroundColor: Typography.Colors.white,
   },
   colorCircle5: {

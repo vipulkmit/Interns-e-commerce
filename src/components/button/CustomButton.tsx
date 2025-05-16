@@ -10,7 +10,7 @@ import {
 import { Typography } from "../../theme/Colors";
 
 type CustomButtonProps = {
-  title: string;
+  title?: string;
   onPress: (event: GestureResponderEvent) => void;
   disabled?: boolean;
   buttonStyle?: ViewStyle;

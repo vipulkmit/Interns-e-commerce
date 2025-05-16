@@ -1,4 +1,4 @@
-import React from "react";
+import React, { forwardRef } from "react";
 import {
   StyleSheet,
   Text,
@@ -15,6 +15,7 @@ import Icon from "react-native-vector-icons/Octicons";
 type CustomTextInputProps = {
   label?: string;
   value?: string;
+  onblur?: any;
   onChangeText?: (text: string) => void;
   placeholder?: string;
   secureTextEntry?: boolean;
@@ -30,56 +31,68 @@ type CustomTextInputProps = {
   iconname?: string;
   iconsize?: number;
   iconcolor?: string;
-};
+  selection?: any;
+} & TextInputProps; // 👈 ensure it extends base TextInput props too
 
-const CustomTextInput: React.FC<CustomTextInputProps> = ({
-  label,
-  value,
-  onChangeText,
-  placeholder,
-  secureTextEntry = false,
-  keyboardType = "default",
-  containerStyle,
-  inputStyle,
-  labelStyle,
-  autoFocus,
-  maxLength,
-  editable = true,
-  multiline = false,
-  numberOfLines = 1,
-  iconname,
-  iconsize,
-  iconcolor,
-}) => (
-  <View style={[styles.container, containerStyle]}>
-    {iconname && (
-      <Icon
-        name={iconname}
-        size={iconsize}
-        color={iconcolor}
-        style={styles.iconStyle}
+const CustomTextInput = forwardRef<TextInput, CustomTextInputProps>(
+  (
+    {
+      label,
+      value = "",
+      onChangeText,
+      onBlur,
+      placeholder,
+      secureTextEntry = false,
+      keyboardType = "default",
+      containerStyle,
+      inputStyle,
+      labelStyle,
+      autoFocus,
+      maxLength,
+      editable = true,
+      multiline = false,
+      numberOfLines = 1,
+      iconname,
+      iconsize,
+      iconcolor,
+      selection,
+      ...rest
+    },
+    ref
+  ) => (
+    <View style={[styles.container, containerStyle]}>
+      {iconname && (
+        <Icon
+          name={iconname}
+          size={iconsize}
+          color={iconcolor}
+          style={styles.iconStyle}
+        />
+      )}
+      {label && <Text style={[styles.label, labelStyle]}>{label}</Text>}
+      <TextInput
+        ref={ref}
+        value={value}
+        onChangeText={onChangeText}
+        placeholder={placeholder}
+        secureTextEntry={secureTextEntry}
+        keyboardType={keyboardType}
+        autoFocus={autoFocus}
+        maxLength={maxLength}
+        editable={editable}
+        multiline={multiline}
+        numberOfLines={numberOfLines}
+        style={[styles.input, inputStyle]}
+        selection={selection}
+        onBlur={onBlur}
+        {...rest} // 👈 passes any other props like `returnKeyType`, etc.
       />
-    )}
-    {label && <Text style={[styles.label, labelStyle]}>{label}</Text>}
-    <TextInput
-      value={value}
-      onChangeText={onChangeText}
-      placeholder={placeholder}
-      secureTextEntry={secureTextEntry}
-      keyboardType={keyboardType}
-      autoFocus={autoFocus}
-      maxLength={maxLength}
-      editable={editable}
-      multiline={multiline}
-      numberOfLines={numberOfLines}
-      style={[styles.input, inputStyle]}
-    />
-  </View>
+    </View>
+  )
 );
 
 const styles = StyleSheet.create({
   container: {
-    // width:307,
     marginBottom: 10,
     flexDirection: "row",
     alignItems: "center",
@@ -90,15 +103,12 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   label: {
-    // borderWidth:0.1,
     fontFamily: Typography.font.bold,
     marginBottom: 4,
     fontSize: 14,
   },
   input: {
-    // borderWidth: 1,
-    borderColor: Typography.Colors.lightgrey,
-    borderRadius: 6,
+    flex: 1,
     padding: 5,
     fontSize: 16,
     marginRight: 10,
