@@ -138,6 +138,7 @@ const SearchScreen = () => {
       })}
     </View>
   );
+  console.log("first");
 
   const renderHeader = () => (
     <>
@@ -186,7 +187,7 @@ const SearchScreen = () => {
               setIsSearching(false);
               setSearchResults([]);
             }
-          }, 8000);
+          }, 500);
         }}
         placeholder="Search..."
         keyboardType="default"
@@ -253,20 +254,23 @@ const SearchScreen = () => {
           ) : isSearching ? (
             renderSearchResults()
           ) : (
-            <SectionList
-              sections={sections}
-              keyExtractor={(_, index) => index.toString()}
-              ListHeaderComponent={renderHeader}
-              renderSectionHeader={({ section: { title } }) => (
-                <Text style={styles.title}>{title} Fashion</Text>
-              )}
-              renderItem={renderItem}
-              stickySectionHeadersEnabled={false}
-              keyboardShouldPersistTaps="handled"
-              keyboardDismissMode="interactive"
-              showsVerticalScrollIndicator={false}
-              contentContainerStyle={styles.sectionListContent}
-            />
+            <>
+              <View>{renderHeader()}</View>
+              <SectionList
+                sections={sections}
+                keyExtractor={(_, index) => index.toString()}
+                // ListHeaderComponent={renderHeader}
+                renderSectionHeader={({ section: { title } }) => (
+                  <Text style={styles.title}>{title} Fashion</Text>
+                )}
+                renderItem={renderItem}
+                stickySectionHeadersEnabled={false}
+                keyboardShouldPersistTaps="handled"
+                keyboardDismissMode="interactive"
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={styles.sectionListContent}
+              />
+            </>
           )}
         </View>
       </TouchableWithoutFeedback>
