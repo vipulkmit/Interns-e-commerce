@@ -8,6 +8,7 @@ import { registerUser } from "../../authentication/AuthApi";
 import axiosInstance from "./axiosInstance";
 import ENDPOINTS from "../../utils/endpoints";
 import useAuthStore from "../../stores/useAuthStore";
+import axios from "axios";
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -135,6 +136,9 @@ export const updateUserdata = async (userId: any, updatedData: any) => {
   }
 };
 
+export const searchProducts = (query: string) =>
+  axiosInstance.get(ENDPOINTS.SEARCHALL, { params: { q: query } });
+
 export const promocode = () => axiosInstance.get(ENDPOINTS.PROMOCODE);
 export const Categories = () => axiosInstance.get(ENDPOINTS.CATEGORY);
 export const Collection = () => axiosInstance.get(ENDPOINTS.COLLECTION);
@@ -144,6 +148,7 @@ export const SubCategories = (name) => {
 };
 
 export const Products = (name, category) => {
+  console.log(name, "hufdvhf"), console.log(category, "dfnbvif");
   return axiosInstance.get(`${ENDPOINTS.PRODUCTS}${name}/${category}`);
 };
 
@@ -187,11 +192,10 @@ export const ProductFilters = (
     priceMax: priceMax,
     priceMin: priceMin,
     subcategoryName: subcategoryName,
-    categoryName: categoryName
+    categoryName: categoryName,
   }).toString();
-    
-  return axiosInstance.get(`${ENDPOINTS.FILTERS}?${queryParams}`);
 
+  return axiosInstance.get(`${ENDPOINTS.FILTERS}?${queryParams}`);
 };
 
 

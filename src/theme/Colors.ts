@@ -27,7 +27,8 @@ export const Typography = {
     offwhite: "#C4C4C4",
     skyblue: "#E2EAFF",
     blackdim: "#272727",
-    nature:"#038200"
+    nature: "#038200",
+    grayy: "#F2F3F2",
   },
 
   font: {

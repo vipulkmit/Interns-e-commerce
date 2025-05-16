@@ -23,6 +23,7 @@ const ENDPOINTS = {
   QUANTITYDELETE:'cart/quantity',
   PROMOCODE: "/promocode",
   PROMOCODEPOST: "/promocode/apply",
+  SEARCHALL: "/product/search",
 };
 
 export default ENDPOINTS;

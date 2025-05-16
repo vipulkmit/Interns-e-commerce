@@ -682,9 +682,6 @@ const styles = StyleSheet.create({
     height: 28,
     width: 28,
     borderRadius: 20,
-    // alignItems:'center',
-    // justifyContent:'center',
-    // borderWidth:1,
     backgroundColor: Typography.Colors.white,
   },
   colorCircle5: {

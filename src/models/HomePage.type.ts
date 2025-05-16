@@ -15,6 +15,8 @@ export type CategoryProps = {
 };
 
 export type BannerProps = {
+  name: ReactNode;
+  empty: any;
   id: string;
   image: ImageSourcePropType;
   logoImage: ImageSourcePropType;
