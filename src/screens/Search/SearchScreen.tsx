@@ -138,7 +138,7 @@ const SearchScreen = () => {
       })}
     </View>
   );
-  console.log("first");
+  // console.log("first");
 
   const renderHeader = () => (
     <>
@@ -187,7 +187,7 @@ const SearchScreen = () => {
               setIsSearching(false);
               setSearchResults([]);
             }
-          }, 500);
+          }, 2000);
         }}
         placeholder="Search..."
         keyboardType="default"
