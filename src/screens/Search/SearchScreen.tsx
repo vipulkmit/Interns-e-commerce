@@ -186,7 +186,7 @@ const SearchScreen = () => {
               setIsSearching(false);
               setSearchResults([]);
             }
-          }, 8000);
+          }, 2000);
         }}
         placeholder="Search..."
         keyboardType="default"
@@ -218,8 +218,8 @@ const SearchScreen = () => {
           key={item.id}
           onPress={() =>
             Navigation.navigate("ProductsPage", {
-              category: item || Men,
-              categoryName: item?.name || Men,
+              category: item,
+              categoryName: "Men",
             })
           }
           style={{ marginBottom: 25 }}
@@ -253,10 +253,12 @@ const SearchScreen = () => {
           ) : isSearching ? (
             renderSearchResults()
           ) : (
+            <>
+            <View>{renderHeader()}</View>
             <SectionList
               sections={sections}
               keyExtractor={(_, index) => index.toString()}
-              ListHeaderComponent={renderHeader}
+              // ListHeaderComponent={renderHeader}
               renderSectionHeader={({ section: { title } }) => (
                 <Text style={styles.title}>{title} Fashion</Text>
               )}
@@ -267,6 +269,7 @@ const SearchScreen = () => {
               showsVerticalScrollIndicator={false}
               contentContainerStyle={styles.sectionListContent}
             />
+            </>
           )}
         </View>
       </TouchableWithoutFeedback>

@@ -148,7 +148,7 @@ export const SubCategories = (name) => {
 };
 
 export const Products = (name, category) => {
-  console.log(name, "hufdvhf"), console.log(category, "dfnbvif");
+  // console.log(name, "hufdvhf"), console.log(category, "dfnbvif");
   return axiosInstance.get(`${ENDPOINTS.PRODUCTS}${name}/${category}`);
 };
 
