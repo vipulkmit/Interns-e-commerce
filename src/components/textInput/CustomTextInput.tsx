@@ -1,4 +1,4 @@
-import React from "react";
+import React, { forwardRef } from "react";
 import {
   StyleSheet,
   Text,
@@ -30,57 +30,83 @@ type CustomTextInputProps = {
   iconname?: string;
   iconsize?: number;
   iconcolor?: string;
-};
+  selection?: any;
+  error?: string;
+  onValidate?: (val: string) => boolean;
+  setError?: (err: string) => void;
+} & TextInputProps;
 
-const CustomTextInput: React.FC<CustomTextInputProps> = ({
-  label,
-  value,
-  onChangeText,
-  placeholder,
-  secureTextEntry = false,
-  keyboardType = "default",
-  containerStyle,
-  inputStyle,
-  labelStyle,
-  autoFocus,
-  maxLength,
-  editable = true,
-  multiline = false,
-  numberOfLines = 1,
-  iconname,
-  iconsize,
-  iconcolor,
-}) => (
-  <View style={[styles.container, containerStyle]}>
-    {iconname && (
-      <Icon
-        name={iconname}
-        size={iconsize}
-        color={iconcolor}
-        style={styles.iconStyle}
-      />
-    )}
-    {label && <Text style={[styles.label, labelStyle]}>{label}</Text>}
-    <TextInput
-      value={value}
-      onChangeText={onChangeText}
-      placeholder={placeholder}
-      secureTextEntry={secureTextEntry}
-      keyboardType={keyboardType}
-      autoFocus={autoFocus}
-      maxLength={maxLength}
-      editable={editable}
-      multiline={multiline}
-      numberOfLines={numberOfLines}
-      style={[styles.input, inputStyle]}
-    />
-  </View>
+const CustomTextInput = forwardRef<TextInput, CustomTextInputProps>(
+  (
+    {
+      label,
+      value = "",
+      onChangeText,
+      placeholder,
+      secureTextEntry = false,
+      keyboardType = "default",
+      containerStyle,
+      inputStyle,
+      labelStyle,
+      autoFocus,
+      maxLength,
+      editable = true,
+      multiline = false,
+      numberOfLines = 1,
+      iconname,
+      iconsize,
+      iconcolor,
+      selection,
+      error,
+      onValidate,
+      setError,
+      ...rest
+    },
+    ref
+  ) => {
+    const handleChange = (text: string) => {
+      onChangeText?.(text);
+      if (onValidate && onValidate(text)) {
+        setError?.("");
+      }
+    };
+
+    return (
+      <View style={{ marginBottom: 16 }}>
+        <View style={[styles.container, containerStyle]}>
+          {iconname && (
+            <Icon
+              name={iconname}
+              size={iconsize}
+              color={iconcolor}
+              style={styles.iconStyle}
+            />
+          )}
+          <TextInput
+            ref={ref}
+            value={value}
+            onChangeText={handleChange}
+            placeholder={placeholder}
+            secureTextEntry={secureTextEntry}
+            keyboardType={keyboardType}
+            autoFocus={autoFocus}
+            maxLength={maxLength}
+            editable={editable}
+            multiline={multiline}
+            numberOfLines={numberOfLines}
+            style={[styles.input, inputStyle]}
+            selection={selection}
+            {...rest}
+          />
+        </View>
+        {error ? <Text style={styles.errorText}>{error}</Text> : null}
+      </View>
+    );
+  }
 );
 
 const styles = StyleSheet.create({
   container: {
-    // width:307,
-    marginBottom: 10,
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: Typography.Colors.white,
@@ -89,16 +115,8 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     padding: 10,
   },
-  label: {
-    // borderWidth:0.1,
-    fontFamily: Typography.font.bold,
-    marginBottom: 4,
-    fontSize: 14,
-  },
   input: {
-    // borderWidth: 1,
-    borderColor: Typography.Colors.lightgrey,
-    borderRadius: 6,
+    flex: 1,
     padding: 5,
     fontSize: 16,
     marginRight: 10,
@@ -108,6 +126,12 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     marginRight: 10,
     marginLeft: 18.19,
+  },
+  errorText: {
+    color: Typography.Colors.red,
+    fontSize: 14,
+    marginTop: 4,
+    marginLeft: 10,
   },
 });
 

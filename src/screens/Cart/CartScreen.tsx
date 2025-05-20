@@ -7,19 +7,25 @@ import {
   Image,
   ScrollView,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Typography } from "../../theme/Colors";
 import Icon from "react-native-vector-icons/AntDesign";
 import CustomTextInput from "../../components/textInput/CustomTextInput";
 import CustomButton from "../../components/button/CustomButton";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
-import { AddToCart, CartData, CartDelete } from "../../services/api/apiServices";
+import {
+  AddToCart,
+  CartData,
+  CartDelete,
+  QuantityDelete,
+} from "../../services/api/apiServices";
+import { CardData } from "../../constant";
 
 const CartScreen = () => {
   const navigation = useNavigation();
+  const isFocus = useIsFocused();
 
   const [cartData, setCartData] = useState([]);
-  const [quantities, setQuantities] = useState({});
   const [priceData, setpriceData] = useState({
     subtotal: 0,
     shippingPrice: 0,
@@ -28,47 +34,14 @@ const CartScreen = () => {
   });
   const [isLoading, setIsLoading] = useState(true);
 
-  const isFocus = useIsFocused();
-  const [cartToggle, setCartToggle] = useState(false);
 
-  const handleAddToCart  = async (item) => {
-    // console.log(item,"cvhgtc");
-    
-    const response = await AddToCart(item.productId,item.quantity).then(() => {
-      setCartToggle(!cartToggle);
-    });
-    //  console.log(response);
-  };
-
-  const increment = (productId) => {
-    setQuantities((prev) => ({
-      ...prev,
-      [productId]: (prev[productId] || 1) + 1,
-    }));
-  };
-
-  const decrement = (productId) => {
-    if (quantities[productId] > 1) {
-      setQuantities((prev) => ({
-        ...prev,
-        [productId]: (prev[productId] || 2) - 1,
-      }));
-    }
-  };
-
+  // Get cart data from API
   const GetCartData = async () => {
-    // setIsLoading(true);
+    setIsLoading(true);
     try {
       const data = await CartData();
       const items = data?.data?.cartDetails?.items || [];
-
-      const initialQuantities = {};
-      items.forEach((item) => {
-        initialQuantities[item.productId] = 1;
-      });
-
       setCartData(items);
-      setQuantities(initialQuantities);
       setIsLoading(false);
     } catch (e) {
       console.log("Error fetching cart data:", e);
@@ -76,14 +49,14 @@ const CartScreen = () => {
       setIsLoading(false);
     }
   };
+// console.log(priceData,"pricerData");
 
-  useEffect(() => {
-    GetCartData();
-  }, [isFocus]);
-
+  // Get cart price summary
   const GetCartPrice = async () => {
     try {
       const data = await CartData();
+
+      
       setpriceData(
         data?.data?.cartDetails?.breakdown || {
           subtotal: 0,
@@ -103,16 +76,84 @@ const CartScreen = () => {
     }
   };
 
+  // Load cart data when screen is focused
   useEffect(() => {
-    GetCartPrice();
+    if (isFocus) {
+      GetCartData();
+      GetCartPrice();
+    }
   }, [isFocus]);
 
-  const deleteitem = async (item) => {
+  // Increment quantity handler
+  const handleIncrementQuantity = async (item) => {
+    try {
+      // Optimistically update UI first for better user experience
+      const newQuantity = item.quantity + 1;
+      setCartData(prev =>
+        prev.map(cartItem =>
+          cartItem.productId === item.productId 
+            ? { ...cartItem, quantity: newQuantity } 
+            : cartItem
+        )
+      );
+      // console.log(newQuantity,"newQuantity");
+      
+      // Then call API
+      await AddToCart(
+        item.productId,
+        1,
+        item.productColorId,
+        item.productSizeId
+      );
+      
+      // Refresh cart data and price after API success
+      GetCartPrice();
+    } catch (error) {
+      console.log("Error updating quantity:", error);
+      // Revert the local state if API call fails
+      GetCartData();
+    }
+  };
+
+  // Delete item from cart
+  const deleteQuantity = async (item) => {
+    try {
+      const response = await QuantityDelete(item.productId);
+      if (response.data) {
+        // GetCartData();
+      }
+    } catch (error) {
+      console.log("Error deleting item:", error);
+    }
+  };
+
+  const handleDecrementQuantity = async (item) => {
+    try {
+
+      const newQuantity = item.quantity - 1;
+      setCartData(prev =>
+        prev.map(cartItem =>
+          cartItem.productId === item.productId 
+            ? { ...cartItem, quantity: newQuantity } 
+            : cartItem
+        )
+      );
+      // console.log(newQuantity,"newQuantity");
+      
+      await deleteQuantity(item)
+        GetCartPrice();
+    } catch (error) {
+      console.log("Error updating quantity:", error);
+      GetCartData();
+    }
+  };
+
+
+  // Delete item from cart
+  const deleteItem = async (item) => {
     try {
       const response = await CartDelete(item.productId);
       if (response.data) {
-        const newQuantities = { ...quantities };
-        setQuantities(newQuantities);
         GetCartData();
         GetCartPrice();
       }
@@ -121,69 +162,66 @@ const CartScreen = () => {
     }
   };
 
-  const handleIncrementQuantity = (item) => {
-    // handleAddToCart(item);
-    // GetCartData();
-    increment(item.productId);
-    // GetCartPrice();
-  };
-  const renderData = ({ item }) => {
-    const itemQuantity = quantities[item.productId] || 1;
-
-    return (
-      <View style={{ flex: 1 }}>
-        <Pressable style={[styles.subContainer]}>
-          <View style={styles.imageConatiner}>
-            <Image
-              source={{ uri: item.productImage[0] }}
-              style={styles.Image}
-            />
-          </View>
-          <View style={styles.dataContainer}>
-            <View style={styles.dataSubConatiner}>
-              <View style={styles.innerContainer}>
-                <Text style={styles.title} numberOfLines={2}>
-                  {item?.productName}
-                </Text>
-              </View>
-              <Pressable
-                onPress={() => {
-                  deleteitem(item);
-                }}
-                style={styles.iconContainer}
-              >
-                <Icon name="delete" size={18} />
-              </Pressable>
+  const renderData = useCallback(
+    ({ item }) => {
+      // console.log(item);
+      
+      return (
+        <View style={{ flex: 1 }}>
+          <Pressable style={[styles.subContainer]}>
+            <View style={styles.imageConatiner}>
+              <Image
+                source={{ uri: item.productImage[0] }}
+                style={styles.Image}
+              />
             </View>
-            <View style={styles.priceContainer}>
-              <View style={styles.priceSubContainer}>
-                <Text style={styles.price}>Rs. {item.price}</Text>
-              </View>
-              <View style={styles.quantityContainer}>
-                <Pressable
-                  style={styles.quantityButton}
-                  onPress={() => decrement(item.productId)}
-                >
-                  <Text style={styles.quantityText}>-</Text>
-                </Pressable>
-                <View style={[styles.quantity]}>
-                  <Text style={[styles.quantityText, { paddingHorizontal: 6 }]}>
-                    {itemQuantity}
+            <View style={styles.dataContainer}>
+              <View style={styles.dataSubConatiner}>
+                <View style={styles.innerContainer}>
+                  <Text style={styles.title} numberOfLines={2}>
+                    {item?.productName}
                   </Text>
                 </View>
                 <Pressable
-                  style={styles.quantityButton}
-                  onPress={()=>handleIncrementQuantity(item)}
+                  onPress={() => deleteItem(item)}
+                  style={styles.iconContainer}
                 >
-                  <Text style={styles.quantityText}>+</Text>
+                  <Icon name="delete" size={18} />
                 </Pressable>
               </View>
+              <View style={styles.priceContainer}>
+                <View style={styles.priceSubContainer}>
+                  <Text style={styles.price}>Rs. {item.price}</Text>
+                </View>
+                <View style={styles.quantityContainer}>
+                  <Pressable
+                    style={styles.quantityButton}
+                    onPress={() => handleDecrementQuantity(item)}
+                  >
+                    <Text style={styles.quantityText}>-</Text>
+                  </Pressable>
+                  <View style={[styles.quantity]}>
+                    <Text
+                      style={[styles.quantityText, { paddingHorizontal: 6 }]}
+                    >
+                      {item.quantity}
+                    </Text>
+                  </View>
+                  <Pressable
+                    style={styles.quantityButton}
+                    onPress={() => handleIncrementQuantity(item)}
+                  >
+                    <Text style={styles.quantityText}>+</Text>
+                  </Pressable>
+                </View>
+              </View>
             </View>
-          </View>
-        </Pressable>
-      </View>
-    );
-  };
+          </Pressable>
+        </View>
+      );
+    },
+    [cartData]
+  );
 
   const EmptyCartView = () => {
     return (
@@ -214,12 +252,14 @@ const CartScreen = () => {
       return <EmptyCartView />;
     }
 
+
     return (
+      
       <>
         <FlatList
           data={cartData}
           renderItem={renderData}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item.productId}
           showsVerticalScrollIndicator={false}
         />
         <View style={{ flexDirection: "row", paddingTop: 10 }}>
@@ -233,9 +273,14 @@ const CartScreen = () => {
             <CustomButton title="Apply" buttonStyle={styles.button} />
           </View>
         </View>
-        <View style={[styles.offers]}>
+        <Pressable
+          style={[styles.offers]}
+          onPress={() => {
+            navigation.navigate("PromoCodeScreen");
+          }}
+        >
           <Text style={styles.price}>See Offers</Text>
-        </View>
+        </Pressable>
         <View style={{ paddingLeft: 20 }}>
           <View style={styles.amountContainer}>
             <Text style={styles.text1}>Items ({cartData.length})</Text>
@@ -264,7 +309,7 @@ const CartScreen = () => {
           <CustomButton
             title={"Check Out"}
             textStyle={{ fontWeight: "800", fontSize: 18 }}
-            onPress={() => navigation.navigate("OrderScreen")}
+            onPress={() => navigation.navigate("DeliveryAddress")}
           />
         </View>
       </>

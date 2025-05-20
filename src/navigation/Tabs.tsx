@@ -7,6 +7,27 @@ import SearchNavigator from "./SearchNavigator";
 import WishlistNavigator from "./WishlistNavigator";
 import CartNavigator from "./CartNavigator";
 import ProfileNavigator from "./ProfileNavigator";
+import {
+  getFocusedRouteNameFromRoute,
+  Route,
+  useNavigationState,
+} from "@react-navigation/native";
+function getTabBarVisibility(route: any) {
+  const routeName = getFocusedRouteNameFromRoute(route) ?? "ProfileScreen";
+  const hideOnScreens = [
+    "EditProfile",
+    "ChangePasswordScreen",
+    "Passwordchange",
+    "PrivacyPolicy",
+    "TermsnConditions",
+    "AboutSection",
+    "HelpScreen",
+    "DeliveryAddress",
+    "AddAddressList",
+    "PromoCodeScreen",
+  ];
+  return hideOnScreens.includes(routeName);
+}
 
 export default function RootComponent() {
   const Tab = createBottomTabNavigator();
@@ -69,7 +90,13 @@ export default function RootComponent() {
       <Tab.Screen
         name="ProfileNavigator"
         component={ProfileNavigator}
-        options={{ headerShown: false }}
+        options={({ route }) => {
+          const isTabVisible = getTabBarVisibility(route);
+          return {
+            headerShown: false,
+            tabBarStyle: isTabVisible ? styles.tabBar : { display: "none" },
+          };
+        }}
       />
     </Tab.Navigator>
   );

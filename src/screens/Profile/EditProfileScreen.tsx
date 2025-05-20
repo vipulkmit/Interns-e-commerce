@@ -7,7 +7,7 @@ import Icon from "react-native-vector-icons/AntDesign";
 import useAuthStore from "../../stores/useAuthStore";
 import { launchCamera, launchImageLibrary } from "react-native-image-picker";
 import RNFS from "react-native-fs";
-import { updateUserdata } from "../../services/api/apiServices";
+import { profilechange, updateUserdata } from "../../services/api/apiServices";
 import { useState } from "react";
 
 const EditProfileScreen = () => {
@@ -28,49 +28,50 @@ const EditProfileScreen = () => {
     ]);
   };
 
-  // const handleImage = async (uri: string) => {
-  //   console.log(uri, "iubvnvbu");
-  //   // try {
-  //   //   console.log(uri, "nucvikvreireou");
-  //   //   // const base64 = await RNFS.readFile(uri.replace("file://", ""), "base64");
-  //   //   // const base64DataUri = `data:image/jpeg;base64,${base64}`;
-  //   //   // const currentUser = useAuthStore.getState().user;
-  //   //   // const UserSave = {
-  //   //   //   id: currentUser?.id,
-  //   //   //   userDetails: {
-  //   //   //     ...currentUser.userDetails,
-  //   //   //     profilePicture: base64DataUri,
-  //   //   //   },
-  //   //   // };
-  //   //   // const updatedUser = await updateUserdata(UserSave);
-  //   //   // useAuthStore.getState().setUser(updatedUser);
-  //   // } catch (err) {
-  //   //   console.error("Error updating profile picture:", err);
-  //   // }
-  // };
+  const uploadImage = async (uri: string) => {
+    try {
+      const formData = new FormData();
+      formData.append("files", {
+        uri,
+        name: "profile.jpg",
+        type: "image/jpeg",
+      } as any);
+
+      const uploadResponse = await profilechange(formData);
+      const imageUrl = uploadResponse?.data?.files?.[0];
+      if (!imageUrl) throw new Error("No image URL returned");
+
+      await updateUserdata(user?.id, {
+        profilePicture: imageUrl,
+      });
+
+      useAuthStore.getState().setUser({
+        ...user,
+        profilePicture: imageUrl,
+      });
+    } catch (error: any) {
+      console.error(" Upload error:", error.response?.data || error.message);
+    }
+  };
 
   const handleCamera = () => {
-    launchCamera({ mediaType: "photo", includeBase64: false }, (response) => {
-      // console.log(response);
+    launchCamera({ mediaType: "photo" }, (response) => {
       if (response.assets && response.assets[0]) {
         const uri = response.assets[0].uri || "";
         setImage(uri);
-        // handleImage(uri);
+        uploadImage(uri);
       }
     });
   };
 
   const handleGallery = () => {
-    launchImageLibrary(
-      { mediaType: "photo", includeBase64: false },
-      (response) => {
-        if (response.assets && response.assets[0]) {
-          const uri = response.assets[0].uri || "";
-          setImage(uri);
-          // handleImage(uri);
-        }
+    launchImageLibrary({ mediaType: "photo" }, (response) => {
+      if (response.assets && response.assets[0]) {
+        const uri = response.assets[0].uri || "";
+        setImage(uri);
+        uploadImage(uri);
       }
-    );
+    });
   };
 
   const gobacknav = () => {
@@ -86,18 +87,21 @@ const EditProfileScreen = () => {
       </View>
       <View style={styles.firstsection}>
         <TouchableOpacity onPress={handleImageChange}>
-          {/* <Image
+          <Image
             source={
-              user?.profilePicture ? { uri: user?.profilePicture } : assets.Demo
+              image
+                ? { uri: `${image}?t=${Date.now()}` }
+                : user?.profilePicture
+                ? { uri: `${user.profilePicture}?t=${Date.now()}` }
+                : assets.Demo
             }
             style={styles.profilepic}
-          /> */}
-          <Image
+          />
+          {/* <Image
             source={image ? { uri: image } : assets.Demo}
             style={styles.profilepic}
-          />
+          /> */}
         </TouchableOpacity>
-
         <View style={styles.textcontainer}>
           <Text style={styles.textname}>{user?.name}</Text>
           <Text style={styles.mailcontainer}>{user?.email}</Text>
@@ -126,23 +130,18 @@ const EditProfileScreen = () => {
               <Image source={assets.password} style={styles.imgstyle} />
               <Text style={styles.staticstyle}>Change Password</Text>
             </View>
-            <Icon name="right" size={25} color={Typography.Colors.lightgrey} />
+            <Icon
+              name="right"
+              size={25}
+              color={Typography.Colors.lightgrey}
+              style={styles.arrowstyle}
+            />
           </View>
         </TouchableOpacity>
       </View>
     </View>
   );
 };
-
-// launchCamera(options?, callback);
-
-// // You can also use as a promise without 'callback':
-// const result = await launchCamera(options?);
-
-// launchImageLibrary(options?, callback)
-
-// // You can also use as a promise without 'callback':
-// const result = await launchImageLibrary(options?);
 
 const styles = StyleSheet.create({
   container: {
@@ -159,7 +158,6 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     height: 62,
     width: 62,
-    // backgroundColor: "red",
   },
   textcontainer: {
     paddingHorizontal: 12,
@@ -170,7 +168,7 @@ const styles = StyleSheet.create({
     fontFamily: Typography.font.bold,
     color: Typography.Colors.black,
     fontWeight: "500",
-    textTransform:"capitalize"
+    textTransform: "capitalize",
   },
   mailcontainer: {
     fontSize: 14,
@@ -178,6 +176,7 @@ const styles = StyleSheet.create({
     color: Typography.Colors.lightgrey,
   },
   arrowstyle: {
+    fontWeight: "bold",
     paddingVertical: 2,
     height: 35,
     width: 35,
@@ -186,8 +185,8 @@ const styles = StyleSheet.create({
     fontSize: 20,
     alignSelf: "center",
     marginBottom: 5,
-    fontWeight: "600",
-    fontFamily: Typography.font.regular,
+    fontWeight: "700",
+    fontFamily: Typography.font.bold,
     color: Typography.Colors.primary,
   },
   viewaccount: {
@@ -201,16 +200,19 @@ const styles = StyleSheet.create({
   },
   detailcontainer: {
     height: 54,
-    width: 375,
+    width: 370,
     flexDirection: "row",
     justifyContent: "space-between",
-    marginRight: 8,
+    // marginRight: ,
   },
   mindetailstyle: {
-    gap: 16,
+    justifyContent: "center",
+    gap: 14,
     flexDirection: "row",
   },
   staticstyle: {
+    // backgroundColor: "black",
+    marginBottom: 5,
     color: Typography.Colors.primary,
     fontFamily: Typography.font.regular,
     fontWeight: "600",

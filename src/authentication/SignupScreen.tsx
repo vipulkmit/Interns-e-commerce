@@ -21,18 +21,23 @@ export default function SignupScreen() {
 
   const validateInputs = () => {
     if (!name.trim()) {
-      Alert.alert("Error", "Name is Required.");
+      Alert.alert("Error", "Name is required.");
       return false;
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      Alert.alert("Error", "Please enter a valid email address");
+    if (!email.trim() || !emailRegex.test(email)) {
+      Alert.alert("Error", "Please enter a valid email address.");
       return false;
     }
 
     if (password.length < 8) {
-      Alert.alert("Error", "Password must be at least 8 characters.");
+      Alert.alert("Error", "Password must be at least 8 characters long.");
+      return false;
+    }
+
+    if (password !== confirmPassword) {
+      Alert.alert("Error", "Passwords do not match.");
       return false;
     }
 
@@ -47,9 +52,7 @@ export default function SignupScreen() {
     try {
       const response = await registerUser({ name, email, password });
       Alert.alert("Success", "Account Created Successfully");
-      // console.log(response, "res");
       setUser(response.data.userDetails);
-      // console.log(response.data, "dskufcbhefue");
       Navigation.navigate("LoginScreen");
     } catch (error: any) {
       Alert.alert("Error", error.message);
@@ -120,11 +123,11 @@ export default function SignupScreen() {
           iconsize={25}
           iconcolor={Typography.Colors.lightgrey}
         />
-
         <CustomButton
-          title="SignUp"
+          title={isLoading ? "Signing up..." : "SignUp"}
           onPress={handleSignupPress}
           buttonStyle={styles.buttonstyle}
+          disabled={isLoading}
         />
 
         <View

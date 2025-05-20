@@ -8,6 +8,7 @@ import { registerUser } from "../../authentication/AuthApi";
 import axiosInstance from "./axiosInstance";
 import ENDPOINTS from "../../utils/endpoints";
 import useAuthStore from "../../stores/useAuthStore";
+import axios from "axios";
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -135,15 +136,26 @@ export const updateUserdata = async (userId: any, updatedData: any) => {
   }
 };
 
+export const searchProducts = (query: string) =>
+  axiosInstance.get(ENDPOINTS.SEARCHALL, { params: { q: query } });
+
 export const promocode = () => axiosInstance.get(ENDPOINTS.PROMOCODE);
 export const Categories = () => axiosInstance.get(ENDPOINTS.CATEGORY);
 export const Collection = () => axiosInstance.get(ENDPOINTS.COLLECTION);
+// export const profilechange = () => axiosInstance.post(ENDPOINTS.UPLOADS);
+export const profilechange = (formData: FormData) =>
+  axiosInstance.post(ENDPOINTS.UPLOADS, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
 
 export const SubCategories = (name) => {
   return axiosInstance.get(`${ENDPOINTS.SUBCATEGORY}${name}`);
 };
 
 export const Products = (name, category) => {
+  // console.log(name, "hufdvhf"), console.log(category, "dfnbvif");
   return axiosInstance.get(`${ENDPOINTS.PRODUCTS}${name}/${category}`);
 };
 
@@ -187,17 +199,15 @@ export const ProductFilters = (
     priceMax: priceMax,
     priceMin: priceMin,
     subcategoryName: subcategoryName,
-    categoryName: categoryName
+    categoryName: categoryName,
   }).toString();
-    
-  return axiosInstance.get(`${ENDPOINTS.FILTERS}?${queryParams}`);
 
+  return axiosInstance.get(`${ENDPOINTS.FILTERS}?${queryParams}`);
 };
 
 
-export const AddToCart = (id: string,quantity: number) => {
-  // console.log(id,"dfhuifgkerghr")
-  return axiosInstance.post(ENDPOINTS.CART, { productId: id ,quantity:quantity});
+export const AddToCart = (id: string,quantity: number,productColorId: string,productSizeId: string) => {
+  return axiosInstance.post(ENDPOINTS.CART, { productId: id ,quantity:quantity,productColorId: productColorId, productSizeId:productSizeId});
 };
 
 export const CartData = () => {
@@ -210,4 +220,21 @@ export const CartDelete = (productId: string) => {
       productId,
     },
   });
+};
+
+export const PromoCode = (promoCode: string) => {
+  return axiosInstance.post(ENDPOINTS.PROMOCODEPOST, { promoCode: promoCode });
+};
+
+
+export const QuantityDelete = (productId: string) => {
+  return axiosInstance.delete(ENDPOINTS.QUANTITYDELETE, {
+    data: {
+      productId,
+    },
+  });
+};
+
+export const Payment = (address: string,city: string,country: string,postalCode: string) => {
+  return axiosInstance.post(ENDPOINTS.PAYMENT, { address: address ,city:city,country: country, postalCode:postalCode});
 };

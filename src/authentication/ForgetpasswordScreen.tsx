@@ -8,21 +8,23 @@ import CustomButton from "../components/button/CustomButton";
 import CustomTextInput from "../components/textInput/CustomTextInput";
 
 export default function ForgetpasswordScreen() {
+  const [validationError, setValidationError] = useState("");
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const Navigation = useNavigation();
 
   const Sendverification = async () => {
-    if (!email.trim()) {
-      Alert.alert("Error", "Please enter your email address");
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setValidationError("Please enter a valid email address");
       return;
     }
+
+    setValidationError("");
     setIsLoading(true);
     try {
       const response = await forgotPasswordService({ email });
       Alert.alert("Success", "Verification email sent successfully!");
-      console.log("Forgot Password Response:", response);
-      Navigation.navigate("Verifyotp", { email: email });
+      Navigation.navigate("Verifyotp", { email });
     } catch (error: any) {
       console.error("Forgot Password Error:", error.message);
       Alert.alert(
@@ -51,7 +53,6 @@ export default function ForgetpasswordScreen() {
         </Text>
         <Text style={styles.subsubText}>password</Text>
       </View>
-
       <CustomTextInput
         value={email}
         onChangeText={setEmail}
@@ -60,6 +61,9 @@ export default function ForgetpasswordScreen() {
         iconname="mail"
         iconsize={25}
         iconcolor={Typography.Colors.lightgrey}
+        error={validationError}
+        setError={setValidationError}
+        onValidate={(val) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)}
       />
 
       <CustomButton
@@ -77,6 +81,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     backgroundColor: Typography.Colors.white,
   },
+  errorText: {
+    color: Typography.Colors.red,
+    fontFamily: Typography.font.regular,
+    fontSize: 13,
+    marginTop: 5,
+    marginBottom: 10,
+  },
+
   welcomeText: {
     fontSize: 18,
     fontFamily: Typography.font.heavy,

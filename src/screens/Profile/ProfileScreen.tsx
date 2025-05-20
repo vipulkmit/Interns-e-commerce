@@ -11,6 +11,7 @@ import { Typography } from "../../theme/Colors";
 import { assets } from "../../../assets/images";
 import { useNavigation } from "@react-navigation/native";
 import useAuthStore from "../../stores/useAuthStore";
+import TopHeaderComponent from "../../components/header/TopHeaderComponent";
 
 const ProfileScreen = () => {
   const user = useAuthStore((state) => state.user);
@@ -123,12 +124,16 @@ const ProfileScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
+    paddingHorizontal: 20,
     flex: 1,
     backgroundColor: Typography.Colors.white,
   },
+  HeaderStyle: {
+    backgroundColor: Typography.Colors.white,
+    paddingHorizontal: 20,
+  },
   firstsection: {
-    paddingVertical: 44,
+    paddingVertical: 35,
     flexDirection: "row",
   },
   secondsection: {
@@ -138,6 +143,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   textcontainer: {
+    marginLeft: 5,
+    marginTop: 2,
     paddingHorizontal: 12,
     paddingVertical: 8,
   },
@@ -151,7 +158,7 @@ const styles = StyleSheet.create({
     fontFamily: Typography.font.bold,
     color: Typography.Colors.black,
     fontWeight: "500",
-    textTransform:'capitalize'
+    textTransform: "capitalize",
   },
   mailcontainer: {
     fontSize: 14,

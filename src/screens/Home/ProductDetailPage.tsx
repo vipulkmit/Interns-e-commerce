@@ -12,6 +12,7 @@ import {
   TextInput,
   Pressable,
   FlatList,
+  Alert,
 } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import { BannerData } from "../../constant";
@@ -20,7 +21,11 @@ import HeaderComponent from "../../components/header/HeaderComponent";
 import { useNavigation } from "@react-navigation/native";
 import { Typography } from "../../theme/Colors";
 import Collapsible from "react-native-collapsible";
-import { AddToCart, AddToWishlist, Products } from "../../services/api/apiServices";
+import {
+  AddToCart,
+  AddToWishlist,
+  Products,
+} from "../../services/api/apiServices";
 import SizeComponent from "../../components/product/SizeComponent";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { startMapper } from "react-native-reanimated";
@@ -32,20 +37,115 @@ const width = Dimensions.get("window").width;
 const ProductDetailPage = ({ route }) => {
   const navigation = useNavigation();
   const { data } = route.params;
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const [collapsed, setCollapsed] = useState(true);
+  const [collapsed1, setCollapsed1] = useState(true);
+  const [collapsed2, setCollapsed2] = useState(true);
+
   // console.log(data,"dataaaaaaaaaaa");
 
-  const [selectedSize, setSelectedSize] = useState(null);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  // console.log(data.id,'dataaaaaaaaaaaa');
 
-  const animations = useRef(
-    BannerData.map(() => new Animated.Value(8))
-  ).current;
+  const [selectedSize, setSelectedSize] = useState(data?.productSize?.length > 0 ? 0 : null);
+  const [selectSize, setSelectSize] = useState(data?.productSize?.length > 0 ? data.productSize[0]?.id : '');
+  
+  const handleSizeAddToCart = (index, sizeId) => {
+    // console.log(sizeId, index, "sixeeee");
+    setSelectedSize(index), 
+    setSelectSize(sizeId);
+  };
 
-  const [text, onChangeText] = React.useState("Useless Text");
-  const [number, onChangeNumber] = React.useState("");
+  const [selectedColorIndex, setSelectedColorIndex] = useState(0);
+  const [selectedColor, setSelectedColor] = useState(data?.productColor?.length > 0 ? data.productColor[0]?.id : '');
 
-  // const { category,categoryName } = route.params;
+  const handleColorAddToCart = (index, colorId) => {
+    // console.log(colorId, index, "coloorrr");
+    setSelectedColorIndex(index), 
+    setSelectedColor(colorId);
+  };
+
+  useEffect(() => {
+    if (data?.productColor?.length > 0) {
+      setSelectedColor(data.productColor[0]?.id);
+    }
+    
+    if (data?.productSize?.length > 0) {
+      setSelectSize(data.productSize[0]?.id);
+    }
+  }, [data]);
+
+
+
+  const [wishlistToggle, setWislistToggle] = useState(false);
+
+  const handleAddToWishlist = async () => {
+    try {
+      const response = await AddToWishlist(data.id);
+      setWislistToggle(!wishlistToggle);
+      // console.log("Added to wishlist:", response);
+    } catch (error) {
+      // console.error("Error adding to wishlist:", error);
+      Alert.alert("Error", "Already added to wishlist");
+    }
+  };
+  const [cartToggle, setCartToggle] = useState(false);
+
+
+  const handleAddToCart = async () => {
+    try {
+      if (!selectedColor) {
+        Alert.alert("Please select a color");
+        return;
+      }
+      
+      if (!selectSize) {
+        Alert.alert("Please select a size");
+        return;
+      }
+
+      
+      const response = await AddToCart(
+        data?.id, 
+        1,  
+        selectedColor, 
+        selectSize
+      );
+      
+      setCartToggle(!cartToggle);
+      // console.log("Added to cart successfully:", response);
+      Alert.alert("Success", "Product added to cart");
+    } catch (error) {
+      console.error("Error adding to cart:", error);
+      Alert.alert("Error", "Failed to add to cart");
+    }
+  };
+
+  const handleBackButton = () => {
+    navigation.goBack();
+  };
+
+  const toggleExpanded = () => {
+    setCollapsed(!collapsed);
+  };
+
+  const toggleExpanded1 = () => {
+    setCollapsed1(!collapsed1);
+  };
+
+  const toggleExpanded2 = () => {
+    setCollapsed2(!collapsed2);
+  };
+
+  const SpecificationRenderItem = ({ item }) => {
+    return (
+      <View style={styles.specificContainer}>
+        <Text style={styles.specificationName}>{item.name}</Text>
+        <Text style={styles.specificationValue}>{item.value}</Text>
+        <View style={styles.line} />
+      </View>
+    );
+  };
+
   const CarouselRenderItem = (item) => {
     return (
       <ImageBackground
@@ -65,45 +165,15 @@ const ProductDetailPage = ({ route }) => {
     }).start();
   };
 
+  const animations = useRef(
+    BannerData.map(() => new Animated.Value(8))
+  ).current;
+
   const handleSnap = (index: number) => {
     animateDot(currentIndex, false); // Shrink previous active dot
     animateDot(index, true); // Expand new active dot
     setCurrentIndex(index);
   };
-
-  const handleBackButton = () => {
-    navigation.goBack();
-  };
-
-  const [collapsed, setCollapsed] = useState(true);
-
-  const toggleExpanded = () => {
-    setCollapsed(!collapsed);
-  };
-
-  const [collapsed1, setCollapsed1] = useState(true);
-
-  const toggleExpanded1 = () => {
-    setCollapsed1(!collapsed1);
-  };
-
-  const [collapsed2, setCollapsed2] = useState(true);
-
-  const toggleExpanded2 = () => {
-    setCollapsed2(!collapsed2);
-  };
-
-  const SpecificationRenderItem = ({ item }) => {
-    return (
-      <View style={styles.specificContainer}>
-        <Text style={styles.specificationName}>{item.name}</Text>
-        <Text style={styles.specificationValue}>{item.value}</Text>
-        <View style={styles.line} />
-      </View>
-    );
-  };
-
-  const [selectedColorIndex, setSelectedColorIndex] = useState(0);
 
   const renderStars = (rating) => {
     const numRating = Number(rating);
@@ -151,8 +221,6 @@ const ProductDetailPage = ({ route }) => {
   };
 
   const ratingData = ({ item }) => {
-    // console.log(item, 'itemmmmm');
-
     return (
       <>
         <View style={styles.reviews}>
@@ -172,30 +240,20 @@ const ProductDetailPage = ({ route }) => {
       </>
     );
   };
-  const [wishlistToggle, setWislistToggle] = useState(false);
 
-  const handleAddToWishlist = async () => {
-    const response = await AddToWishlist(data.id).then(() => {
-      setWislistToggle(!wishlistToggle);
-    });
-    //  console.log(response);
-  };
-
-  const [cartToggle, setCartToggle] = useState(false);
-
-  const handleAddToCart  = async () => {
-    // console.log(data.id);
-    
-    const response = await AddToCart(data.id,data.quantity=1).then(() => {
-      setCartToggle(!cartToggle);
-    });
-    //  console.log(response);
-  };
   return (
     <ScrollView style={styles.container}>
+      {/* heading */}
       <View style={styles.header}>
-        <HeaderComponent onClick={handleBackButton} />
+        <HeaderComponent
+          onClick={handleBackButton}
+          onPress={function (): void {
+            throw new Error("Function not implemented.");
+          }}
+        />
       </View>
+
+      {/* CAROUSAL */}
 
       <Carousel
         loop
@@ -208,6 +266,8 @@ const ProductDetailPage = ({ route }) => {
         scrollAnimationDuration={1000}
         renderItem={(item) => CarouselRenderItem(item)}
       />
+
+      {/* carousal pagination */}
       <View style={styles.paginationContainer}>
         {data?.images?.map((_, index) => {
           return (
@@ -227,6 +287,8 @@ const ProductDetailPage = ({ route }) => {
           );
         })}
       </View>
+
+      {/* details container */}
       <View style={styles.dataContainer}>
         <View style={styles.shareContainer}>
           <Text numberOfLines={1} style={styles.productName}>
@@ -254,15 +316,20 @@ const ProductDetailPage = ({ route }) => {
         </View>
       </View>
 
+      {/* color set */}
+
       <View style={styles.colour}>
         <Text style={styles.productName}>Color</Text>
         <Text style={styles.colorText}>
-          {data.colors[selectedColorIndex]?.name}
+          {data?.productColor[selectedColorIndex]?.name}
         </Text>
 
         <View style={styles.circle}>
-          {data.colors.map((colorItem, index) => (
-            <Pressable key={index} onPress={() => setSelectedColorIndex(index)}>
+          {data.productColor.map((colorItem, index) => (
+            <Pressable
+              key={index}
+              onPress={() => handleColorAddToCart(index, colorItem?.id)}
+            >
               {selectedColorIndex === index ? (
                 <View style={styles.colorCircle}>
                   <View
@@ -285,6 +352,8 @@ const ProductDetailPage = ({ route }) => {
         </View>
       </View>
 
+      {/* size set */}
+
       <View style={styles.size}>
         <View style={styles.sizeView}>
           <Text
@@ -298,18 +367,20 @@ const ProductDetailPage = ({ route }) => {
         </View>
 
         <View style={styles.sizeData}>
-          {data.sizes.map((sizeItem, index) => (
+          {data.productSize.map((sizeItem, index) => (
             <SizeComponent
               key={index}
               size={sizeItem.name}
               // Compare the current size with the selected size
-              selectedSize={selectedSize === sizeItem.name}
+              selectedSize={selectedSize === index}
               // Set this specific size as selected
-              onClick={() => setSelectedSize(sizeItem.name)}
+              onClick={() => handleSizeAddToCart(index, sizeItem?.id)}
             />
           ))}
         </View>
       </View>
+
+      {/* button  */}
 
       <View style={styles.buttonView}>
         <ButtonComponent
@@ -341,6 +412,9 @@ const ProductDetailPage = ({ route }) => {
           ]}
         />
       </View>
+
+      {/* accordian */}
+
       <View style={{ paddingTop: 10 }}>
         <Pressable onPress={toggleExpanded} style={styles.header1}>
           <View>
@@ -586,9 +660,6 @@ const styles = StyleSheet.create({
     height: 28,
     width: 28,
     borderRadius: 20,
-    // alignItems:'center',
-    // justifyContent:'center',
-    // borderWidth:1,
     backgroundColor: Typography.Colors.white,
   },
   colorCircle5: {

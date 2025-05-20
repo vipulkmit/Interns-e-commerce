@@ -24,17 +24,19 @@ const ProductsPage = ({ route }) => {
   const { category, categoryName } = route.params;
   const [filterApplied, setFilterApplied] = useState(false);
   const [Category, setCategory] = useState();
-const[filterData,setFilterData]=useState([])
+  const [filterData, setFilterData] = useState([]);
   const [cartToggle, setCartToggle] = useState(false);
 
-  const handleAddToCart  = async () => {
+  const handleAddToCart = async () => {
     // console.log(data.id);
-    
-    const response = await AddToCart(data.id,data.quantity=1).then(() => {
+
+    const response = await AddToCart(data.id, (data.quantity = 1)).then(() => {
       setCartToggle(!cartToggle);
     });
     //  console.log(response);
   };
+  // console.log(categoryName, "fdijgr");
+  // console.log(category, "fdigfmdg");
   useEffect(() => {
     Products(categoryName, category.name)
       .then((data) => {
@@ -44,7 +46,7 @@ const[filterData,setFilterData]=useState([])
         console.log("no data");
       });
   }, []);
-const[refresh,setRefresh]=useState(false)
+  const [refresh, setRefresh] = useState(false);
   const renderProduct = (data) => {
     // console.log(data, "item");
 
@@ -78,7 +80,7 @@ const[refresh,setRefresh]=useState(false)
                 category: category,
                 categoryName: categoryName,
                 setFilterApplied: setFilterApplied,
-                setFilterData: setFilterData
+                setFilterData: setFilterData,
               })
             }
           >
@@ -93,9 +95,12 @@ const[refresh,setRefresh]=useState(false)
   return (
     <>
       <FlatList
-        data={filterApplied?filterData:Category}
+        data={filterApplied ? filterData : Category}
         renderItem={ProductRenderItem}
-        onRefresh={()=>{setFilterApplied(false);setRefresh(false)}}
+        onRefresh={() => {
+          setFilterApplied(false);
+          setRefresh(false);
+        }}
         refreshing={refresh}
         keyExtractor={(item) => item.id}
         ListHeaderComponent={ListHeader}

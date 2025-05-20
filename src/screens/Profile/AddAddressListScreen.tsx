@@ -26,7 +26,7 @@ const AddAddressList = ({ route }) => {
     streetAddress: Yup.string().required("Street Address is required"),
     city: Yup.string().required("City is required"),
     state: Yup.string().required("State/Province/Region is required"),
-    zipCode: Yup.string().required("Zip Code is required"),
+    ZipCode: Yup.string().required("Zip Code is required"),
     phoneNumber: Yup.string().required("Phone Number is required"),
   });
 
@@ -58,7 +58,7 @@ const AddAddressList = ({ route }) => {
       const updatedUser = {
         address: updatedAddresses,
       };
-
+      // console.log("first");
       const response = await updateUserdata(user.id, updatedUser);
       useAuthStore
         .getState()
@@ -142,7 +142,7 @@ const AddAddressList = ({ route }) => {
             streetAddress: address?.streetAddress || "",
             city: address?.city || "",
             state: address?.state || "",
-            zipCode: address?.zipCode || "",
+            ZipCode: address?.ZipCode || "",
             phoneNumber: address?.phoneNumber || "",
           }}
           enableReinitialize={true}
@@ -225,12 +225,13 @@ const AddAddressList = ({ route }) => {
                     <Text style={styles.textstyle}>zip Code</Text>
                     {renderField(
                       "Zip Code",
-                      "zipCode",
+                      "ZipCode",
                       values,
                       handleChange,
                       errors,
                       touched,
-                      "number-pad"
+                      "number-pad",
+                      6
                     )}
                   </View>
                   <View>
@@ -243,7 +244,8 @@ const AddAddressList = ({ route }) => {
                       handleChange,
                       errors,
                       touched,
-                      "number-pad"
+                      "number-pad",
+                      10
                     )}
                   </View>
                 </View>
@@ -281,7 +283,8 @@ const renderField = (
   handleChange: any,
   errors: any,
   touched: any,
-  keyboardType: any = "default"
+  keyboardType: any = "default",
+  maxLength?: number
 ) => (
   <View style={{ marginBottom: 12 }}>
     <CustomTextInput
@@ -290,6 +293,7 @@ const renderField = (
       placeholder={label}
       keyboardType={keyboardType}
       containerStyle={styles.borderstyle}
+      maxLength={maxLength}
     />
     {touched[name] && errors[name] && (
       <Text style={{ color: "red", fontSize: 12, marginTop: 4 }}>
