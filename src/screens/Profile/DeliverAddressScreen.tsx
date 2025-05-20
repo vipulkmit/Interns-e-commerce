@@ -64,7 +64,7 @@ const DeliveryAddress = () => {
       ...user,
       address: updatedAddresses,
     };
-    const response = await updateUserdata(user.id, updatedUser);
+    await updateUserdata(user.id, updatedUser);
 
     Alert.alert("Success", "Address has been deleted.", [{ text: "OK" }]);
   };
@@ -76,39 +76,51 @@ const DeliveryAddress = () => {
   // console.log(user, "snfi");
   const Listitem = ({ item, index }: { item: any; index: number }) => {
     return (
-      <TouchableOpacity
-        onPress={() => AddressNavigate(item, index)}
-        style={[
-          styles.addressItem,
-          {
-            borderColor:
-              selectedIndex === index
-                ? Typography.Colors.primary
-                : Typography.Colors.black,
-            borderWidth: selectedIndex === index ? 2 : 1,
-          },
-        ]}
-      >
-        <View style={styles.addressHeader}>
+      <>
+        <>
+          <View style={styles.headerRow}>
+            <Pressable onPress={() => Navigation.navigate("ProfileScreen")}>
+              <Image source={assets.ArrowLeft} style={styles.backIcon} />
+            </Pressable>
+            <Text numberOfLines={1} style={styles.headerTitle}>
+              Choose Delivery Address
+            </Text>
+          </View>
+        </>
+        <TouchableOpacity
+          onPress={() => AddressNavigate(item, index)}
+          style={[
+            styles.addressItem,
+            {
+              borderColor:
+                selectedIndex === index
+                  ? Typography.Colors.primary
+                  : Typography.Colors.black,
+              borderWidth: selectedIndex === index ? 2 : 1,
+            },
+          ]}
+        >
+          <View style={styles.addressHeader}>
+            <Text style={styles.addressText}>
+              {item.firstName} {item.lastName}
+            </Text>
+          </View>
+          <Text style={styles.addressText}>{item.streetAddress}</Text>
           <Text style={styles.addressText}>
-            {item.firstName} {item.lastName}
+            {item.city}, {item.state}, {item.zipCode}
           </Text>
-        </View>
-        <Text style={styles.addressText}>{item.streetAddress}</Text>
-        <Text style={styles.addressText}>
-          {item.city}, {item.state}, {item.zipCode}
-        </Text>
-        <Text style={styles.addressText}>{item.country}</Text>
-        <Text style={styles.addressText}>Phone: {item.phoneNumber}</Text>
-        <View style={{ flexDirection: "row", gap: 10 }}>
-          <TouchableOpacity onPress={() => onEditAddress(item, index)}>
-            <Text style={styles.editText}>Edit</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => onDeleteAddress(index)}>
-            <Icon size={20} color={Typography.Colors.black} name="delete" />
-          </TouchableOpacity>
-        </View>
-      </TouchableOpacity>
+          <Text style={styles.addressText}>{item.country}</Text>
+          <Text style={styles.addressText}>Phone: {item.phoneNumber}</Text>
+          <View style={{ flexDirection: "row", gap: 10 }}>
+            <TouchableOpacity onPress={() => onEditAddress(item, index)}>
+              <Text style={styles.editText}>Edit</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => onDeleteAddress(index)}>
+              <Icon size={20} color={Typography.Colors.black} name="delete" />
+            </TouchableOpacity>
+          </View>
+        </TouchableOpacity>
+      </>
     );
   };
 
@@ -143,14 +155,14 @@ const DeliveryAddress = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.headerRow}>
+      {/* <View style={styles.headerRow}>
         <Pressable onPress={() => Navigation.goBack()}>
           <Image source={assets.ArrowLeft} style={styles.backIcon} />
         </Pressable>
         <Text numberOfLines={1} style={styles.headerTitle}>
           Choose Delivery Address
         </Text>
-      </View>
+      </View> */}
       <FlatList
         contentContainerStyle={{ paddingTop: 10, paddingBottom: 20 }}
         data={user?.address || []}
@@ -271,6 +283,7 @@ const styles = StyleSheet.create({
     color: Typography.Colors.white,
   },
   headerRow: {
+    paddingBottom: 15,
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 10,

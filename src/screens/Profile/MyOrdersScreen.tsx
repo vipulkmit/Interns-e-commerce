@@ -78,7 +78,7 @@ const MyOrdersScreen = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.header}>
-        My <Text style={styles.boldText}>Orders</Text> ({orderData.length} Item
+        <Text style={styles.boldText}>My Orders</Text> ({orderData.length} Item
         {orderData.length > 1 ? "s" : ""})
       </Text>
       <FlatList
