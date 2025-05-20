@@ -13,6 +13,7 @@ import { Typography } from "../../theme/Colors";
 import { useNavigation } from "@react-navigation/native";
 import axiosInstance from "../../services/api/axiosInstance";
 import { PromoCode, promocode } from "../../services/api/apiServices";
+import TopHeaderComponent from "../../components/header/TopHeaderComponent";
 
 const PromoCodeScreen = () => {
   const navigation = useNavigation();
@@ -82,7 +83,10 @@ const PromoCodeScreen = () => {
         <TouchableOpacity onPress={()=>handleBack()}>
           <Icon name="arrow-left" size={24} color={Typography.Colors.black} />
         </TouchableOpacity>
-        <Text style={styles.title}>Promo Code</Text>
+        {/* <View style={styles.HeaderStyle}> */}
+        <TopHeaderComponent />
+        {/* </View> */}
+        {/* <Text style={styles.title}>Promo Code</Text> */}
       </View>
 
       <FlatList
@@ -103,7 +107,13 @@ const styles = StyleSheet.create({
     backgroundColor: Typography.Colors.white,
     padding: 16,
   },
+  HeaderStyle: {
+    backgroundColor: Typography.Colors.white,
+    paddingHorizontal: 20,
+  },
   header: {
+    gap: 10,
+    // backgroundColor: "black",
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 16,

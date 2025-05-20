@@ -1,11 +1,4 @@
-import {
-  Image,
-  Pressable,
-  StyleSheet,
-  Text,
-  TouchableWithoutFeedback,
-  View,
-} from "react-native";
+import { Image, StyleSheet, Text, View } from "react-native";
 import { Typography } from "../../theme/Colors";
 import useAuthStore from "../../stores/useAuthStore";
 import { assets } from "../../../assets/images";
@@ -13,7 +6,6 @@ import { useNavigation } from "@react-navigation/native";
 
 const TopHeaderComponent = () => {
   const { user } = useAuthStore();
-  // console.log(user);
   const navigation = useNavigation();
 
   return (
@@ -24,7 +16,7 @@ const TopHeaderComponent = () => {
             user?.profilePicture ? { uri: user?.profilePicture } : assets.Demo
           }
           style={styles.userImage}
-          resizeMode="contain"
+          // resizeMode="contain"
         />
         <Text numberOfLines={1} style={styles.userName}>
           {user?.name}
@@ -46,13 +38,15 @@ const styles = StyleSheet.create({
   userImage: {
     height: 35,
     width: 35,
-    // backgroundColor:'red'
+    borderRadius: 20,
+    resizeMode: "cover",
+    overflow: "hidden",
   },
   userName: {
     fontSize: 18,
     fontFamily: Typography.font.medium,
     textAlign: "center",
-    textTransform:'capitalize'
+    textTransform: "capitalize",
   },
   iconContainer: {
     flex: 1,

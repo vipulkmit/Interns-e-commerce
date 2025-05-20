@@ -1,10 +1,14 @@
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { Typography } from "../../theme/Colors";
+import TopHeaderComponent from "../../components/header/TopHeaderComponent";
 
 const HelpScreen = () => {
   return (
     <ScrollView>
       <View style={styles.container}>
+        <View style={styles.HeaderStyle}>
+          <TopHeaderComponent />
+        </View>
         <Text style={styles.title}>🛠️ Help & Support — Snapshop</Text>
         <Text style={styles.paragraph}>
           Welcome to the Snapshop Help Center! 💬{"\n"}
@@ -103,6 +107,11 @@ const styles = StyleSheet.create({
     padding: 10,
     flex: 1,
     color: Typography.Colors.white,
+  },
+  HeaderStyle: {
+    backgroundColor: Typography.Colors.grayy,
+    marginBottom: 10,
+    // paddingHorizontal: 20,
   },
   title: {
     fontSize: 22,

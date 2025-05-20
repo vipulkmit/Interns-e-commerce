@@ -39,13 +39,27 @@ const HeaderComponent = ({
         </View>
 
         <View style={styles.iconContainer}>
-          <Pressable onPress={()=>navigation.navigate(SearchNavigator,{screen:"SearchScreen"})}>
+          <Pressable
+            onPress={() =>
+              navigation.navigate(SearchNavigator, { screen: "SearchScreen" })
+            }
+          >
             <Image source={assets.MainSearch} style={styles.icon} />
           </Pressable>
-          <Pressable onPress={()=>navigation.navigate(WishlistNavigator,{screen:"WishlistScreen"})}>
+          <Pressable
+            onPress={() =>
+              navigation.navigate(WishlistNavigator, {
+                screen: "WishlistScreen",
+              })
+            }
+          >
             <Image source={assets.HeartBlack} style={styles.icon} />
           </Pressable>
-          <Pressable onPress={()=>navigation.navigate(CartNavigator,{screen:"CartScreen"})}>
+          <Pressable
+            onPress={() =>
+              navigation.navigate(CartNavigator, { screen: "CartScreen" })
+            }
+          >
             <Image source={assets.BagBlack} style={styles.icon} />
           </Pressable>
         </View>
@@ -57,40 +71,33 @@ const HeaderComponent = ({
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    // paddingHorizontal:5
   },
   productType: {
     fontSize: 18,
     fontFamily: Typography.font.medium,
     color: Typography.Colors.black,
     paddingLeft: 13,
-    // alignSelf:'center'
   },
   iconContainer: {
     flex: 1,
-    
+
     justifyContent: "space-around",
     alignItems: "center",
     flexDirection: "row",
-    // backgroundColor:'red'
   },
   icon: {
     height: 20,
     width: 20,
     color: Typography.Colors.lightblack,
-    // backgroundColor:'#272727'
   },
   UserContainer: {
     flex: 2,
-    // backgroundColor:'green',
     flexDirection: "row",
-    // alignItems: 'center',
   },
   backIcon: {
     height: 28,
     width: 28,
   },
-
 });
 
 export default HeaderComponent;

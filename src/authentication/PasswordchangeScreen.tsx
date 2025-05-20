@@ -12,21 +12,36 @@ export default function PasswordchangeScreen({ route }) {
   const state = useNavigationState((state) => state);
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
+  const [newPasswordError, setNewPasswordError] = useState("");
+  const [confirmPasswordError, setConfirmPasswordError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const Navigation = useNavigation();
 
   const Passwordchangesuccess = async () => {
-    if (!newPassword.trim() || !confirmNewPassword.trim()) {
-      Alert.alert("Error", "Please fill in all fields.");
+    if (newPassword.length < 8) {
+      setNewPasswordError("Password must be at least 8 characters");
       return;
     }
+    if (confirmNewPassword.length < 8) {
+      setConfirmPasswordError("Password must be at least 8 characters");
+      return;
+    }
+    if (newPassword !== confirmNewPassword) {
+      setConfirmPasswordError("Passwords do not match");
+      return;
+    }
+
+    setNewPasswordError("");
+    setConfirmPasswordError("");
     setIsLoading(true);
+
     try {
       await changePasswordService({
         email,
         password: newPassword,
         confirmPassword: confirmNewPassword,
       });
+
       Alert.alert("Success", "Password changed successfully!");
       if (state.routes[1].name == "EditProfileScreen") {
         Navigation.goBack();
@@ -63,6 +78,9 @@ export default function PasswordchangeScreen({ route }) {
         iconname="lock"
         iconsize={25}
         iconcolor={Typography.Colors.lightgrey}
+        error={newPasswordError}
+        setError={setNewPasswordError}
+        onValidate={(val) => val.length >= 8}
       />
 
       <CustomTextInput
@@ -73,6 +91,9 @@ export default function PasswordchangeScreen({ route }) {
         iconname="lock"
         iconsize={25}
         iconcolor={Typography.Colors.lightgrey}
+        error={confirmPasswordError}
+        setError={setConfirmPasswordError}
+        onValidate={(val) => val.length >= 8 && val === newPassword}
       />
 
       <CustomButton

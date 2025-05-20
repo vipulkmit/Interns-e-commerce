@@ -47,6 +47,7 @@ export default function VerifyotpScreen({ route }) {
         onChangeText={setotp}
         placeholder="Enter OTP here"
         keyboardType="number-pad"
+        maxLength={8}
       />
 
       <CustomButton
