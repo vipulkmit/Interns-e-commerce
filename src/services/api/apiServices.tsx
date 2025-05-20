@@ -138,7 +138,7 @@ export const updateUserdata = async (userId: any, updatedData: any) => {
 
 export const searchProducts = (query: string) =>
   axiosInstance.get(ENDPOINTS.SEARCHALL, { params: { q: query } });
-
+export const orders = () => axiosInstance.get(ENDPOINTS.ALLORDERS);
 export const promocode = () => axiosInstance.get(ENDPOINTS.PROMOCODE);
 export const Categories = () => axiosInstance.get(ENDPOINTS.CATEGORY);
 export const Collection = () => axiosInstance.get(ENDPOINTS.COLLECTION);

@@ -69,15 +69,15 @@ const DeliveryAddress = () => {
     Alert.alert("Success", "Address has been deleted.", [{ text: "OK" }]);
   };
 
-  const AddressNavigate=(item,index)=>{
-    setSelectedIndex(index)
-    Navigation.navigate("OrderScreen",{item:item})
-  }
+  const AddressNavigate = (item, index) => {
+    setSelectedIndex(index);
+    Navigation.navigate("OrderScreen", { item: item });
+  };
   // console.log(user, "snfi");
-  const Listitem = ({ item, index }: { item: any; index: number }) => {    
+  const Listitem = ({ item, index }: { item: any; index: number }) => {
     return (
       <TouchableOpacity
-        onPress={()=>AddressNavigate(item,index)}
+        onPress={() => AddressNavigate(item, index)}
         style={[
           styles.addressItem,
           {

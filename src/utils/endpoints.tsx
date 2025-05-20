@@ -26,6 +26,7 @@ const ENDPOINTS = {
   SEARCHALL: "/product/search",
   PAYMENT:'/order/razorpay',
   UPLOADS: "/user/upload",
+  ALLORDERS: "/order",
 };
 
 export default ENDPOINTS;

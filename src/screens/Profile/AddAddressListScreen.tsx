@@ -26,7 +26,7 @@ const AddAddressList = ({ route }) => {
     streetAddress: Yup.string().required("Street Address is required"),
     city: Yup.string().required("City is required"),
     state: Yup.string().required("State/Province/Region is required"),
-    ZipCode: Yup.string().required("Zip Code is required"),
+    zipCode: Yup.string().required("Zip Code is required"),
     phoneNumber: Yup.string().required("Phone Number is required"),
   });
 
@@ -45,6 +45,7 @@ const AddAddressList = ({ route }) => {
         zipCode: values.zipCode,
         phoneNumber: values.phoneNumber,
         country: values.country,
+        addId: address?.addId,
       };
 
       let updatedAddresses = user.address ? [...user.address] : [];
@@ -63,30 +64,26 @@ const AddAddressList = ({ route }) => {
       useAuthStore
         .getState()
         .setUser({ ...user, ...response, id: response?.id || user.id });
-      setTimeout(() => {
-        Alert.alert(
-          "Success",
-          index !== undefined
-            ? "Address updated successfully!"
-            : "Address added successfully!",
-          [
-            {
-              text: "OK",
-              onPress: () => Navigation.navigate("DeliveryAddress"),
-            },
-          ],
-          { cancelable: false }
-        );
-      }, 300);
+      Alert.alert(
+        "Success",
+        index !== undefined
+          ? "Address updated successfully!"
+          : "Address added successfully!",
+        [
+          {
+            text: "OK",
+            onPress: () => Navigation.navigate("DeliveryAddress"),
+          },
+        ],
+        { cancelable: false }
+      );
     } catch (error: any) {
-      setTimeout(() => {
-        Alert.alert(
-          "Error",
-          error.message || "Failed to add address.",
-          [{ text: "OK" }],
-          { cancelable: false }
-        );
-      }, 300);
+      Alert.alert(
+        "Error",
+        error.message || "Failed to add address.",
+        [{ text: "OK" }],
+        { cancelable: false }
+      );
     }
   };
 
@@ -142,7 +139,7 @@ const AddAddressList = ({ route }) => {
             streetAddress: address?.streetAddress || "",
             city: address?.city || "",
             state: address?.state || "",
-            ZipCode: address?.ZipCode || "",
+            zipCode: address?.zipCode || "",
             phoneNumber: address?.phoneNumber || "",
           }}
           enableReinitialize={true}
@@ -222,10 +219,10 @@ const AddAddressList = ({ route }) => {
                     )}
                   </View>
                   <View>
-                    <Text style={styles.textstyle}>zip Code</Text>
+                    <Text style={styles.textstyle}>Zip Code</Text>
                     {renderField(
                       "Zip Code",
-                      "ZipCode",
+                      "zipCode",
                       values,
                       handleChange,
                       errors,
