@@ -26,7 +26,7 @@ const ProfileScreen = () => {
     {
       title: "My Orders",
       icon: assets.tote,
-      onPress: () => {},
+      onPress: () => handleNavigation("MyOrdersScreen"),
     },
     {
       title: "Wishlist",

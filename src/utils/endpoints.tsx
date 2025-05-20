@@ -23,6 +23,7 @@ const ENDPOINTS = {
   PROMOCODE: "/promocode",
   SEARCHALL: "/product/search",
   UPLOADS: "/user/upload",
+  ALLORDERS: "/order",
 };
 
 export default ENDPOINTS;
