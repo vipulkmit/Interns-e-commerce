@@ -97,13 +97,11 @@ const EditProfileScreen = () => {
             }
             style={styles.profilepic}
           />
-
           {/* <Image
             source={image ? { uri: image } : assets.Demo}
             style={styles.profilepic}
           /> */}
         </TouchableOpacity>
-
         <View style={styles.textcontainer}>
           <Text style={styles.textname}>{user?.name}</Text>
           <Text style={styles.mailcontainer}>{user?.email}</Text>
@@ -132,7 +130,12 @@ const EditProfileScreen = () => {
               <Image source={assets.password} style={styles.imgstyle} />
               <Text style={styles.staticstyle}>Change Password</Text>
             </View>
-            <Icon name="right" size={25} color={Typography.Colors.lightgrey} />
+            <Icon
+              name="right"
+              size={25}
+              color={Typography.Colors.lightgrey}
+              style={styles.arrowstyle}
+            />
           </View>
         </TouchableOpacity>
       </View>
@@ -173,6 +176,7 @@ const styles = StyleSheet.create({
     color: Typography.Colors.lightgrey,
   },
   arrowstyle: {
+    fontWeight: "bold",
     paddingVertical: 2,
     height: 35,
     width: 35,
@@ -181,8 +185,8 @@ const styles = StyleSheet.create({
     fontSize: 20,
     alignSelf: "center",
     marginBottom: 5,
-    fontWeight: "600",
-    fontFamily: Typography.font.regular,
+    fontWeight: "700",
+    fontFamily: Typography.font.bold,
     color: Typography.Colors.primary,
   },
   viewaccount: {
@@ -196,16 +200,19 @@ const styles = StyleSheet.create({
   },
   detailcontainer: {
     height: 54,
-    width: 375,
+    width: 370,
     flexDirection: "row",
     justifyContent: "space-between",
-    marginRight: 8,
+    // marginRight: ,
   },
   mindetailstyle: {
-    gap: 16,
+    justifyContent: "center",
+    gap: 14,
     flexDirection: "row",
   },
   staticstyle: {
+    // backgroundColor: "black",
+    marginBottom: 5,
     color: Typography.Colors.primary,
     fontFamily: Typography.font.regular,
     fontWeight: "600",

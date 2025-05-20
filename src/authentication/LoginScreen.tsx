@@ -36,21 +36,26 @@ export default function LoginScreen() {
   const validateInputs = () => {
     let isvalid = true;
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
+    if (!email.trim()) {
+      setEmailError("Email is required");
+      isvalid = false;
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       setEmailError("Please enter a valid email address");
       isvalid = false;
     } else {
       setEmailError("");
     }
 
-    if (password.length < 8) {
-      setPasswordError("Password must be at least 8 characters.");
+    if (!password.trim()) {
+      setPasswordError("Password is required");
+      isvalid = false;
+    } else if (password.length < 8) {
+      setPasswordError("Password must be at least 8 characters");
       isvalid = false;
     } else {
       setPasswordError("");
     }
-    // console.log(isvalid, "yub");
+
     return isvalid;
   };
 
@@ -115,9 +120,10 @@ export default function LoginScreen() {
           iconname="person"
           iconsize={25}
           iconcolor={Typography.Colors.lightgrey}
+          error={emailError}
+          setError={setEmailError}
+          onValidate={(val) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)}
         />
-
-        {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
 
         <CustomTextInput
           value={password}
@@ -127,10 +133,10 @@ export default function LoginScreen() {
           iconname="lock"
           iconsize={25}
           iconcolor={Typography.Colors.lightgrey}
+          error={passwordError}
+          setError={setPasswordError}
+          onValidate={(val) => val.length >= 8}
         />
-        {passwordError ? (
-          <Text style={styles.errorText}>{passwordError}</Text>
-        ) : null}
 
         <View
           style={{

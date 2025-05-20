@@ -1,11 +1,4 @@
-import {
-  Image,
-  Pressable,
-  StyleSheet,
-  Text,
-  TouchableWithoutFeedback,
-  View,
-} from "react-native";
+import { Image, StyleSheet, Text, View } from "react-native";
 import { Typography } from "../../theme/Colors";
 import useAuthStore from "../../stores/useAuthStore";
 import { assets } from "../../../assets/images";
@@ -13,7 +6,6 @@ import { useNavigation } from "@react-navigation/native";
 
 const TopHeaderComponent = () => {
   const { user } = useAuthStore();
-  // console.log(user);
   const navigation = useNavigation();
 
   return (

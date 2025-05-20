@@ -6,6 +6,8 @@ import {
   StyleSheet,
   TouchableOpacity,
   Alert,
+  Pressable,
+  Image,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import useAuthStore from "../../stores/useAuthStore";
@@ -17,6 +19,7 @@ import { updateUserdata } from "../../services/api/apiServices";
 
 import { useState } from "react";
 import TopHeaderComponent from "../../components/header/TopHeaderComponent";
+import { assets } from "../../../assets/images";
 
 const DeliveryAddress = () => {
   const user = useAuthStore((state) => state.user);
@@ -137,11 +140,16 @@ const DeliveryAddress = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.HeaderStyle}>
-        <TopHeaderComponent />
+      <View style={styles.headerRow}>
+        <Pressable onPress={() => Navigation.goBack()}>
+          <Image source={assets.ArrowLeft} style={styles.backIcon} />
+        </Pressable>
+        <Text numberOfLines={1} style={styles.headerTitle}>
+          Choose Delivery Address
+        </Text>
       </View>
-
       <FlatList
+        contentContainerStyle={{ paddingTop: 10, paddingBottom: 20 }}
         data={user?.address || []}
         renderItem={({ item, index }) => <Listitem item={item} index={index} />}
         ListEmptyComponent={Emptylist}
@@ -156,6 +164,9 @@ const styles = StyleSheet.create({
     padding: 15,
     backgroundColor: Typography.Colors.white,
   },
+  containerm: {
+    backgroundColor: Typography.Colors.white,
+  },
   arrow: {
     marginTop: 3,
   },
@@ -164,7 +175,21 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     // paddingHorizontal: 20,
   },
-
+  UserContainer: {
+    flex: 2,
+    flexDirection: "row",
+  },
+  backIcon: {
+    color: Typography.Colors.primary,
+    height: 28,
+    width: 28,
+  },
+  productType: {
+    fontSize: 18,
+    fontFamily: Typography.font.medium,
+    color: Typography.Colors.black,
+    paddingLeft: 13,
+  },
   mainContainer: {
     marginTop: 10,
     alignSelf: "flex-start",
@@ -241,6 +266,18 @@ const styles = StyleSheet.create({
   buttontextstyleaddress: {
     marginTop: 2,
     color: Typography.Colors.white,
+  },
+  headerRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 10,
+    gap: 13,
+  },
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: "700",
+    fontFamily: Typography.font.bold,
+    color: Typography.Colors.primary,
   },
 });
 

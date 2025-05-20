@@ -124,7 +124,7 @@ const ProfileScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
+    paddingHorizontal: 20,
     flex: 1,
     backgroundColor: Typography.Colors.white,
   },
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   firstsection: {
-    paddingVertical: 44,
+    paddingVertical: 35,
     flexDirection: "row",
   },
   secondsection: {
@@ -143,6 +143,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   textcontainer: {
+    marginLeft: 5,
+    marginTop: 2,
     paddingHorizontal: 12,
     paddingVertical: 8,
   },

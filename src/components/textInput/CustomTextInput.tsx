@@ -15,7 +15,6 @@ import Icon from "react-native-vector-icons/Octicons";
 type CustomTextInputProps = {
   label?: string;
   value?: string;
-  onblur?: any;
   onChangeText?: (text: string) => void;
   placeholder?: string;
   secureTextEntry?: boolean;
@@ -32,7 +31,10 @@ type CustomTextInputProps = {
   iconsize?: number;
   iconcolor?: string;
   selection?: any;
-} & TextInputProps; // 👈 ensure it extends base TextInput props too
+  error?: string;
+  onValidate?: (val: string) => boolean;
+  setError?: (err: string) => void;
+} & TextInputProps;
 
 const CustomTextInput = forwardRef<TextInput, CustomTextInputProps>(
   (
@@ -40,7 +42,6 @@ const CustomTextInput = forwardRef<TextInput, CustomTextInputProps>(
       label,
       value = "",
       onChangeText,
-      onBlur,
       placeholder,
       secureTextEntry = false,
       keyboardType = "default",
@@ -56,44 +57,56 @@ const CustomTextInput = forwardRef<TextInput, CustomTextInputProps>(
       iconsize,
       iconcolor,
       selection,
+      error,
+      onValidate,
+      setError,
       ...rest
     },
     ref
-  ) => (
-    <View style={[styles.container, containerStyle]}>
-      {iconname && (
-        <Icon
-          name={iconname}
-          size={iconsize}
-          color={iconcolor}
-          style={styles.iconStyle}
-        />
-      )}
-      {label && <Text style={[styles.label, labelStyle]}>{label}</Text>}
-      <TextInput
-        ref={ref}
-        value={value}
-        onChangeText={onChangeText}
-        placeholder={placeholder}
-        secureTextEntry={secureTextEntry}
-        keyboardType={keyboardType}
-        autoFocus={autoFocus}
-        maxLength={maxLength}
-        editable={editable}
-        multiline={multiline}
-        numberOfLines={numberOfLines}
-        style={[styles.input, inputStyle]}
-        selection={selection}
-        onBlur={onBlur}
-        {...rest} // 👈 passes any other props like `returnKeyType`, etc.
-      />
-    </View>
-  )
+  ) => {
+    const handleChange = (text: string) => {
+      onChangeText?.(text);
+      if (onValidate && onValidate(text)) {
+        setError?.("");
+      }
+    };
+
+    return (
+      <View style={{ marginBottom: 16 }}>
+        <View style={[styles.container, containerStyle]}>
+          {iconname && (
+            <Icon
+              name={iconname}
+              size={iconsize}
+              color={iconcolor}
+              style={styles.iconStyle}
+            />
+          )}
+          <TextInput
+            ref={ref}
+            value={value}
+            onChangeText={handleChange}
+            placeholder={placeholder}
+            secureTextEntry={secureTextEntry}
+            keyboardType={keyboardType}
+            autoFocus={autoFocus}
+            maxLength={maxLength}
+            editable={editable}
+            multiline={multiline}
+            numberOfLines={numberOfLines}
+            style={[styles.input, inputStyle]}
+            selection={selection}
+            {...rest}
+          />
+        </View>
+        {error ? <Text style={styles.errorText}>{error}</Text> : null}
+      </View>
+    );
+  }
 );
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 10,
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: Typography.Colors.white,
@@ -101,11 +114,6 @@ const styles = StyleSheet.create({
     borderColor: Typography.Colors.greydark,
     borderRadius: 6,
     padding: 10,
-  },
-  label: {
-    fontFamily: Typography.font.bold,
-    marginBottom: 4,
-    fontSize: 14,
   },
   input: {
     flex: 1,
@@ -118,6 +126,12 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     marginRight: 10,
     marginLeft: 18.19,
+  },
+  errorText: {
+    color: Typography.Colors.red,
+    fontSize: 14,
+    marginTop: 4,
+    marginLeft: 10,
   },
 });
 
