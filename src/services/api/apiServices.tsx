@@ -205,12 +205,9 @@ export const ProductFilters = (
   return axiosInstance.get(`${ENDPOINTS.FILTERS}?${queryParams}`);
 };
 
-export const AddToCart = (id: string, quantity: number) => {
-  // console.log(id,"dfhuifgkerghr")
-  return axiosInstance.post(ENDPOINTS.CART, {
-    productId: id,
-    quantity: quantity,
-  });
+
+export const AddToCart = (id: string,quantity: number,productColorId: string,productSizeId: string) => {
+  return axiosInstance.post(ENDPOINTS.CART, { productId: id ,quantity:quantity,productColorId: productColorId, productSizeId:productSizeId});
 };
 
 export const CartData = () => {
@@ -223,4 +220,21 @@ export const CartDelete = (productId: string) => {
       productId,
     },
   });
+};
+
+export const PromoCode = (promoCode: string) => {
+  return axiosInstance.post(ENDPOINTS.PROMOCODEPOST, { promoCode: promoCode });
+};
+
+
+export const QuantityDelete = (productId: string) => {
+  return axiosInstance.delete(ENDPOINTS.QUANTITYDELETE, {
+    data: {
+      productId,
+    },
+  });
+};
+
+export const Payment = (address: string,city: string,country: string,postalCode: string) => {
+  return axiosInstance.post(ENDPOINTS.PAYMENT, { address: address ,city:city,country: country, postalCode:postalCode});
 };

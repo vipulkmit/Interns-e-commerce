@@ -6,18 +6,31 @@ import {
   TouchableOpacity,
   FlatList,
   ActivityIndicator,
+  Pressable,
 } from "react-native";
 import Icon from "react-native-vector-icons/Feather";
 import { Typography } from "../../theme/Colors";
 import { useNavigation } from "@react-navigation/native";
 import axiosInstance from "../../services/api/axiosInstance";
-import { promocode } from "../../services/api/apiServices";
+import { PromoCode, promocode } from "../../services/api/apiServices";
 import TopHeaderComponent from "../../components/header/TopHeaderComponent";
 
 const PromoCodeScreen = () => {
   const navigation = useNavigation();
   const [promoCodeData, setPromoCodeData] = useState();
   const [loading, setLoading] = useState(true);
+
+  const [cartToggle, setCartToggle] = useState(false);
+
+  const handlePromoCode  = async (item) => {
+    // console.log(item,"cvhgtc");
+    
+    const response = await PromoCode(item).then(() => {
+      setCartToggle(!cartToggle);
+    });
+    //  console.log(response);
+  };
+
 
   const handleBack = () => {
     navigation.goBack();
@@ -40,18 +53,16 @@ const PromoCodeScreen = () => {
   }, []);
 
   const renderOffer = ({ item }) => (
-    <View style={styles.offerContainer}>
+    <TouchableOpacity style={styles.offerContainer} onPress={()=>handlePromoCode(item)}>
       <Text style={styles.codeBox}>{item}</Text>
       <Text style={styles.description}>
         Get extra ₹100 off on orders above ₹999.
       </Text>
       <Text style={styles.expires}>Valid until 31st Jan 2025</Text>
       {item.warning && <Text style={styles.warning}>{item.warning}</Text>}
-      {/* <TouchableOpacity onPress={handleApplyCode}>
-        <Text style={styles.applyLink}>Apply</Text>
-      </TouchableOpacity> */}
-    </View>
+    </TouchableOpacity>
   );
+
 
   if (loading) {
     return (
@@ -65,11 +76,11 @@ const PromoCodeScreen = () => {
       </View>
     );
   }
-
+  
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={handleBack}>
+        <TouchableOpacity onPress={()=>handleBack()}>
           <Icon name="arrow-left" size={24} color={Typography.Colors.black} />
         </TouchableOpacity>
         {/* <View style={styles.HeaderStyle}> */}

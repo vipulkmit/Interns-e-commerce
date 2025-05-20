@@ -54,7 +54,7 @@ const WishlistScreen = () => {
 
   const DeleteAll = async () => {
     const response = await WishlistDeleteAll().then((r) => {
-      console.log(r.data, "response");
+      // console.log(r.data, "response");
 
       if (r?.data?.status == 200) {
         // console.log("cfjdvsgjcfs",Wishlist);

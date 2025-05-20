@@ -35,8 +35,8 @@ const ProductsPage = ({ route }) => {
     });
     //  console.log(response);
   };
-  console.log(categoryName, "fdijgr");
-  console.log(category, "fdigfmdg");
+  // console.log(categoryName, "fdijgr");
+  // console.log(category, "fdigfmdg");
   useEffect(() => {
     Products(categoryName, category.name)
       .then((data) => {
