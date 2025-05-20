@@ -6,6 +6,7 @@ import { assets } from "../../../assets/images";
 import CustomTextInput from "../../components/textInput/CustomTextInput";
 import { Typography } from "../../theme/Colors";
 import CustomButton from "../../components/button/CustomButton";
+import TopHeaderComponent from "../../components/header/TopHeaderComponent";
 
 export default function ChangePasswordScreen() {
   const [newPassword, setNewPassword] = useState("");
@@ -50,6 +51,9 @@ export default function ChangePasswordScreen() {
 
   return (
     <View style={styles.container}>
+      <View style={styles.HeaderStyle}>
+        <TopHeaderComponent />
+      </View>
       <View style={styles.logoContainer}>
         <View style={styles.containerlogo}>
           <View style={styles.diamond}>
@@ -107,6 +111,11 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 20,
     backgroundColor: Typography.Colors.white,
+  },
+  HeaderStyle: {
+    marginTop: 10,
+    backgroundColor: Typography.Colors.white,
+    // paddingHorizontal: 20,
   },
   welcomeText: {
     fontSize: 18,

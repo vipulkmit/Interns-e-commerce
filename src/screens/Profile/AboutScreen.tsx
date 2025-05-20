@@ -1,12 +1,16 @@
 import { Linking, ScrollView, StyleSheet, Text, View } from "react-native";
 import { Typography } from "../../theme/Colors";
 import { TouchableOpacity } from "react-native";
+import TopHeaderComponent from "../../components/header/TopHeaderComponent";
 
 const AboutScreen = () => {
   return (
     <ScrollView>
       <View style={styles.container}>
-        <Text style={styles.title}>About Snapshop</Text>
+        <View style={styles.HeaderStyle}>
+          <TopHeaderComponent />
+        </View>
+        {/* <Text style={styles.title}>About Snapshop</Text> */}
         <Text style={styles.heading}>Introduction</Text>
         <Text style={styles.text}>
           Snapshop is a smart and user-friendly e-commerce mobile application
@@ -88,6 +92,10 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     backgroundColor: Typography.Colors.white,
+  },
+  HeaderStyle: {
+    backgroundColor: Typography.Colors.white,
+    // paddingHorizontal: 20,
   },
   title: {
     fontSize: 28,

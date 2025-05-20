@@ -16,6 +16,7 @@ import CustomButton from "../../components/button/CustomButton";
 import { updateUserdata } from "../../services/api/apiServices";
 
 import { useState } from "react";
+import TopHeaderComponent from "../../components/header/TopHeaderComponent";
 
 const DeliveryAddress = () => {
   const user = useAuthStore((state) => state.user);
@@ -136,6 +137,10 @@ const DeliveryAddress = () => {
 
   return (
     <View style={styles.container}>
+      <View style={styles.HeaderStyle}>
+        <TopHeaderComponent />
+      </View>
+
       <FlatList
         data={user?.address || []}
         renderItem={({ item, index }) => <Listitem item={item} index={index} />}
@@ -154,6 +159,12 @@ const styles = StyleSheet.create({
   arrow: {
     marginTop: 3,
   },
+  HeaderStyle: {
+    backgroundColor: Typography.Colors.white,
+    marginBottom: 10,
+    // paddingHorizontal: 20,
+  },
+
   mainContainer: {
     marginTop: 10,
     alignSelf: "flex-start",

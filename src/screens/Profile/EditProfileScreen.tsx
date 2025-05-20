@@ -7,7 +7,7 @@ import Icon from "react-native-vector-icons/AntDesign";
 import useAuthStore from "../../stores/useAuthStore";
 import { launchCamera, launchImageLibrary } from "react-native-image-picker";
 import RNFS from "react-native-fs";
-import { updateUserdata } from "../../services/api/apiServices";
+import { profilechange, updateUserdata } from "../../services/api/apiServices";
 import { useState } from "react";
 
 const EditProfileScreen = () => {
@@ -28,49 +28,50 @@ const EditProfileScreen = () => {
     ]);
   };
 
-  // const handleImage = async (uri: string) => {
-  //   console.log(uri, "iubvnvbu");
-  //   // try {
-  //   //   console.log(uri, "nucvikvreireou");
-  //   //   // const base64 = await RNFS.readFile(uri.replace("file://", ""), "base64");
-  //   //   // const base64DataUri = `data:image/jpeg;base64,${base64}`;
-  //   //   // const currentUser = useAuthStore.getState().user;
-  //   //   // const UserSave = {
-  //   //   //   id: currentUser?.id,
-  //   //   //   userDetails: {
-  //   //   //     ...currentUser.userDetails,
-  //   //   //     profilePicture: base64DataUri,
-  //   //   //   },
-  //   //   // };
-  //   //   // const updatedUser = await updateUserdata(UserSave);
-  //   //   // useAuthStore.getState().setUser(updatedUser);
-  //   // } catch (err) {
-  //   //   console.error("Error updating profile picture:", err);
-  //   // }
-  // };
+  const uploadImage = async (uri: string) => {
+    try {
+      const formData = new FormData();
+      formData.append("files", {
+        uri,
+        name: "profile.jpg",
+        type: "image/jpeg",
+      } as any);
+
+      const uploadResponse = await profilechange(formData);
+      const imageUrl = uploadResponse?.data?.files?.[0];
+      if (!imageUrl) throw new Error("No image URL returned");
+
+      await updateUserdata(user?.id, {
+        profilePicture: imageUrl,
+      });
+
+      useAuthStore.getState().setUser({
+        ...user,
+        profilePicture: imageUrl,
+      });
+    } catch (error: any) {
+      console.error(" Upload error:", error.response?.data || error.message);
+    }
+  };
 
   const handleCamera = () => {
-    launchCamera({ mediaType: "photo", includeBase64: false }, (response) => {
-      // console.log(response);
+    launchCamera({ mediaType: "photo" }, (response) => {
       if (response.assets && response.assets[0]) {
         const uri = response.assets[0].uri || "";
         setImage(uri);
-        // handleImage(uri);
+        uploadImage(uri);
       }
     });
   };
 
   const handleGallery = () => {
-    launchImageLibrary(
-      { mediaType: "photo", includeBase64: false },
-      (response) => {
-        if (response.assets && response.assets[0]) {
-          const uri = response.assets[0].uri || "";
-          setImage(uri);
-          // handleImage(uri);
-        }
+    launchImageLibrary({ mediaType: "photo" }, (response) => {
+      if (response.assets && response.assets[0]) {
+        const uri = response.assets[0].uri || "";
+        setImage(uri);
+        uploadImage(uri);
       }
-    );
+    });
   };
 
   const gobacknav = () => {
@@ -86,16 +87,21 @@ const EditProfileScreen = () => {
       </View>
       <View style={styles.firstsection}>
         <TouchableOpacity onPress={handleImageChange}>
-          {/* <Image
+          <Image
             source={
-              user?.profilePicture ? { uri: user?.profilePicture } : assets.Demo
+              image
+                ? { uri: `${image}?t=${Date.now()}` }
+                : user?.profilePicture
+                ? { uri: `${user.profilePicture}?t=${Date.now()}` }
+                : assets.Demo
             }
             style={styles.profilepic}
-          /> */}
-          <Image
+          />
+
+          {/* <Image
             source={image ? { uri: image } : assets.Demo}
             style={styles.profilepic}
-          />
+          /> */}
         </TouchableOpacity>
 
         <View style={styles.textcontainer}>
@@ -134,16 +140,6 @@ const EditProfileScreen = () => {
   );
 };
 
-// launchCamera(options?, callback);
-
-// // You can also use as a promise without 'callback':
-// const result = await launchCamera(options?);
-
-// launchImageLibrary(options?, callback)
-
-// // You can also use as a promise without 'callback':
-// const result = await launchImageLibrary(options?);
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -159,7 +155,6 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     height: 62,
     width: 62,
-    // backgroundColor: "red",
   },
   textcontainer: {
     paddingHorizontal: 12,
@@ -170,7 +165,7 @@ const styles = StyleSheet.create({
     fontFamily: Typography.font.bold,
     color: Typography.Colors.black,
     fontWeight: "500",
-    textTransform:"capitalize"
+    textTransform: "capitalize",
   },
   mailcontainer: {
     fontSize: 14,

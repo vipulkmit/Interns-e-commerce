@@ -12,49 +12,16 @@ import { Typography } from "../../theme/Colors";
 import { useNavigation } from "@react-navigation/native";
 import axiosInstance from "../../services/api/axiosInstance";
 import { promocode } from "../../services/api/apiServices";
+import TopHeaderComponent from "../../components/header/TopHeaderComponent";
 
 const PromoCodeScreen = () => {
   const navigation = useNavigation();
   const [promoCodeData, setPromoCodeData] = useState();
   const [loading, setLoading] = useState(true);
 
-  // const handleApplyCode = () => {
-  //   console.log("Apply Code");
-  // };
-
   const handleBack = () => {
     navigation.goBack();
   };
-
-  // const fetchPromoCode = async () => {
-  //   try {
-  //     const response = await axiosInstance.get(
-  //       "http://192.168.1.58:5000/promocode"
-  //     );
-  //     console.log(response.data, "response");
-  //     setPromoCodeData(response.data);
-  //   } catch (error) {
-  //     console.error(
-  //       "Failed to fetch promo code",
-  //       error.response?.data || error
-  //     );
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-  // const fetchPromoCode = async () => {
-  //   try {
-  //     const response = await axiosInstance.get(ENDPOINTS.PROMOCODE);
-  //     setPromoCodeData(response.data);
-  //   } catch (error) {
-  //     console.error(
-  //       "Failed to fetch promo code",
-  //       error.response?.data || error
-  //     );
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
 
   useEffect(() => {
     promocode()
@@ -105,7 +72,10 @@ const PromoCodeScreen = () => {
         <TouchableOpacity onPress={handleBack}>
           <Icon name="arrow-left" size={24} color={Typography.Colors.black} />
         </TouchableOpacity>
-        <Text style={styles.title}>Promo Code</Text>
+        {/* <View style={styles.HeaderStyle}> */}
+        <TopHeaderComponent />
+        {/* </View> */}
+        {/* <Text style={styles.title}>Promo Code</Text> */}
       </View>
 
       <FlatList
@@ -126,7 +96,13 @@ const styles = StyleSheet.create({
     backgroundColor: Typography.Colors.white,
     padding: 16,
   },
+  HeaderStyle: {
+    backgroundColor: Typography.Colors.white,
+    paddingHorizontal: 20,
+  },
   header: {
+    gap: 10,
+    // backgroundColor: "black",
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 16,

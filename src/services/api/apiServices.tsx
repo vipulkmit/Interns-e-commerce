@@ -142,13 +142,20 @@ export const searchProducts = (query: string) =>
 export const promocode = () => axiosInstance.get(ENDPOINTS.PROMOCODE);
 export const Categories = () => axiosInstance.get(ENDPOINTS.CATEGORY);
 export const Collection = () => axiosInstance.get(ENDPOINTS.COLLECTION);
+// export const profilechange = () => axiosInstance.post(ENDPOINTS.UPLOADS);
+export const profilechange = (formData: FormData) =>
+  axiosInstance.post(ENDPOINTS.UPLOADS, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
 
 export const SubCategories = (name) => {
   return axiosInstance.get(`${ENDPOINTS.SUBCATEGORY}${name}`);
 };
 
 export const Products = (name, category) => {
-  console.log(name, "hufdvhf"), console.log(category, "dfnbvif");
+  // console.log(name, "hufdvhf"), console.log(category, "dfnbvif");
   return axiosInstance.get(`${ENDPOINTS.PRODUCTS}${name}/${category}`);
 };
 

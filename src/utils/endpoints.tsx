@@ -22,6 +22,7 @@ const ENDPOINTS = {
   CARTDELETE: "cart/remove",
   PROMOCODE: "/promocode",
   SEARCHALL: "/product/search",
+  UPLOADS: "/user/upload",
 };
 
 export default ENDPOINTS;

@@ -24,7 +24,7 @@ const TopHeaderComponent = () => {
             user?.profilePicture ? { uri: user?.profilePicture } : assets.Demo
           }
           style={styles.userImage}
-          resizeMode="contain"
+          // resizeMode="contain"
         />
         <Text numberOfLines={1} style={styles.userName}>
           {user?.name}
@@ -46,13 +46,15 @@ const styles = StyleSheet.create({
   userImage: {
     height: 35,
     width: 35,
-    // backgroundColor:'red'
+    borderRadius: 20,
+    resizeMode: "cover",
+    overflow: "hidden",
   },
   userName: {
     fontSize: 18,
     fontFamily: Typography.font.medium,
     textAlign: "center",
-    textTransform:'capitalize'
+    textTransform: "capitalize",
   },
   iconContainer: {
     flex: 1,

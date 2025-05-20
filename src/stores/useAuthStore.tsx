@@ -11,7 +11,8 @@ type AuthStore = {
   setToken: (newtoken: string | null) => void;
   setUser: (user: any) => void;
   clearUser: () => void;
-  
+  hashydrated: boolean;
+  sethydrated: (hashydrated: boolean) => void;
 };
 
 const useAuthStore = create<AuthStore>()(
@@ -20,16 +21,21 @@ const useAuthStore = create<AuthStore>()(
       user: null,
       token: null,
       isLoggedIn: false,
+      hashydrated: false,
 
       setUser: (user) => set({ user }),
       setToken: (newtoken) => set({ token: newtoken }),
       login: () => set({ isLoggedIn: true }),
       logout: () => set({ isLoggedIn: false, token: null }),
       clearUser: () => set({ user: null }),
+      sethydrated: (hashydrated) => set({ hashydrated }),
     }),
     {
       name: "auth-storage",
       storage: createJSONStorage(() => AsyncStorage),
+      onRehydrateStorage: () => (state) => {
+        state?.sethydrated(true);
+      },
     }
   )
 );
