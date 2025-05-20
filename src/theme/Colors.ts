@@ -1,6 +1,7 @@
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import { fonts } from "../../assets/fonts";
 
+
 export const Typography = {
   Colors: {
     primary: "#002482",
