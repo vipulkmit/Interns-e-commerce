@@ -51,16 +51,16 @@ const MyOrdersScreen = () => {
               </TouchableOpacity>
             </View>
           </View>
-          <Text style={styles.brand}>Brand Name</Text>
+          {/* <Text style={styles.brand}>Brand Name</Text> */}
           <Text style={styles.price}>${product.price}</Text>
           <Text style={styles.date}>
             Order Placed on: {new Date(item.createdAt).toDateString()}
           </Text>
-          <Text style={styles.ship}>Ship To: Your Name</Text>
+          <Text style={styles.ship}>Ship To: Saurav Gupta</Text>
           <View style={styles.buttonRow}>
-            <TouchableOpacity>
+            {/* <TouchableOpacity>
               <Text style={styles.cancelText}>Cancel</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         </View>
       </View>
@@ -109,12 +109,20 @@ const styles = StyleSheet.create({
   },
   card: {
     backgroundColor: Typography.Colors.white,
+    shadowColor: Typography.Colors.black,
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
     flexDirection: "row",
     padding: 10,
     borderRadius: 8,
     elevation: 2,
     marginBottom: 15,
     gap: 12,
+    opacity: 0.9,
   },
   image: {
     width: 100,
