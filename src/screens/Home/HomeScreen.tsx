@@ -59,6 +59,8 @@ const HomeScreen = () => {
   // Carousel Render Item
 
   const CarouselRenderItem = ({ item }) => {
+    // console.log(item.image,"cvadj",item.logoURL);
+    
     return (
       <ImageBackground
         source={{ uri: item.image }}
@@ -90,10 +92,11 @@ const HomeScreen = () => {
   };
 
   const TrendingRenderItem = ({ item }) => {
+    // console.log(item.images,'item.images[0]',item.images[0])
     return (
       <View style={styles.container}>
         <CardComponent
-          img={{ uri: item.images[0] }}
+          img={{ uri: item.images[0]?item.images[0]:item.images[1] }}
           logo={{ uri: item.brand.logo }}
           offer={item.discountPrice}
           productType={item.productType}

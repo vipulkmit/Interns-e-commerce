@@ -24,6 +24,7 @@ const ENDPOINTS = {
   PROMOCODE: "/promocode",
   PROMOCODEPOST: "/promocode/apply",
   SEARCHALL: "/product/search",
+  PAYMENT:'/order/razorpay'
 };
 
 export default ENDPOINTS;

@@ -227,3 +227,7 @@ export const QuantityDelete = (productId: string) => {
     },
   });
 };
+
+export const Payment = (address: string,city: string,country: string,postalCode: string) => {
+  return axiosInstance.post(ENDPOINTS.PAYMENT, { address: address ,city:city,country: country, postalCode:postalCode});
+};

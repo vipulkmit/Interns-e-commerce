@@ -44,8 +44,7 @@ const ProductDetailPage = ({ route }) => {
   const [collapsed2, setCollapsed2] = useState(true);
 
   // console.log(data,"dataaaaaaaaaaa");
-  // const [selectedSize, setSelectedSize] = useState(null);
-  // const [selectSize, setSelectSize] = useState("");
+
 
   const [selectedSize, setSelectedSize] = useState(data?.productSize?.length > 0 ? 0 : null);
   const [selectSize, setSelectSize] = useState(data?.productSize?.length > 0 ? data.productSize[0]?.id : '');
@@ -66,7 +65,6 @@ const ProductDetailPage = ({ route }) => {
   };
 
   useEffect(() => {
-    // Initialize selections with first item when component mounts
     if (data?.productColor?.length > 0) {
       setSelectedColor(data.productColor[0]?.id);
     }
@@ -76,8 +74,7 @@ const ProductDetailPage = ({ route }) => {
     }
   }, [data]);
 
-  // const [text, onChangeText] = React.useState("Useless Text");
-  // const [number, onChangeNumber] = React.useState("");
+
 
   const [wishlistToggle, setWislistToggle] = useState(false);
 
@@ -93,19 +90,6 @@ const ProductDetailPage = ({ route }) => {
   };
   const [cartToggle, setCartToggle] = useState(false);
 
-  // const handleAddToCart = async () => {
-  //   console.log(data);
-
-  //   const response = await AddToCart(
-  //     data.id,
-  //     (data.quantity = 1),
-  //     selectedColor,
-  //     selectSize
-  //   ).then(() => {
-  //     setCartToggle(!cartToggle);
-  //   });
-  //   console.log(response, "yhhhhhh");
-  // };
 
   const handleAddToCart = async () => {
     try {
@@ -118,16 +102,10 @@ const ProductDetailPage = ({ route }) => {
         Alert.alert("Please select a size");
         return;
       }
-      
-      // console.log("Adding to cart with:", {
-      //   productId: data.id,
-      //   quantity: 1,
-      //   productColorId: selectedColor,
-      //   productSizeId: selectSize
-      // });
+
       
       const response = await AddToCart(
-        data.id, 
+        data?.id, 
         1,  
         selectedColor, 
         selectSize

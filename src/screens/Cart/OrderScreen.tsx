@@ -6,20 +6,23 @@ import {
   StyleSheet,
   Dimensions,
   FlatList,
+  Alert,
+  Linking,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { assets } from "../../../assets/images";
 import { Typography } from "../../theme/Colors";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
-import { CartData } from "../../services/api/apiServices";
-
+import { CartData, Payment } from "../../services/api/apiServices";
+import { Button } from "@react-navigation/elements";
+import ButtonComponent from "../../components/button/ButtonComponent";
+import CustomButton from "../../components/button/CustomButton";
 
 const { width } = Dimensions.get("window");
 
 const OrderScreen = ({ route }) => {
   const { item } = route.params;
   const isFocus = useIsFocused();
-  // console.log(item, "datsggtgvgbg");
 
   const [cartData, setCartData] = useState([]);
   const [priceData, setpriceData] = useState({
@@ -28,7 +31,8 @@ const OrderScreen = ({ route }) => {
     gstAmount: 0,
     totalPrice: 0,
   });
-  // console.log(priceData, "=-=-=-=-=-");
+  
+// console.log(priceData,"priceData");
 
   const GetCartData = async () => {
     try {
@@ -71,24 +75,58 @@ const OrderScreen = ({ route }) => {
   }, [isFocus]);
   const navigation = useNavigation();
 
-  const renderData = ({item}) => {
-    // console.log(item,"--------------");
-    
-    return(
+  const renderData = ({ item }) => {
 
-    <Pressable style={[styles.CartContainer]}>
-      <View style={styles.imageConatiner}>
-        <Image source={{ uri: item.productImage[0] }} style={styles.Image} />
-      </View>
-      <View style={styles.dataContainer}>
-        <Text style={styles.title} numberOfLines={1}>
-        {item?.productName}
-        </Text>
-        <Text style={styles.quantity}>Quantity: {item?.quantity}</Text>
-        <Text style={styles.particularPrice}>Rs. {item?.price * item?.quantity}</Text>
-      </View>
-    </Pressable>
-    )
+
+    return (
+      <Pressable style={[styles.CartContainer]}>
+        <View style={styles.imageConatiner}>
+          <Image source={{ uri: item.productImage[0] }} style={styles.Image} />
+        </View>
+        <View style={styles.dataContainer}>
+          <Text style={styles.title} numberOfLines={1}>
+            {item?.productName}
+          </Text>
+          <Text style={styles.quantity}>Quantity: {item?.quantity}</Text>
+          <Text style={styles.particularPrice}>
+            Rs. {item?.price * item?.quantity}
+          </Text>
+        </View>
+      </Pressable>
+    );
+  };
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [paymentToggle, setPaymentToggle] = useState(false);
+
+  const handlePayment = async () => {
+    try {
+      setIsLoading(true);
+      
+      const response = await Payment(
+        item?.streetAddress,
+        item?.city,
+        item?.country,
+        item?.zipCode
+      );
+      
+      setPaymentToggle(!paymentToggle);
+      // console.log("Payment response:", response);
+      
+      // Check if we have a payment link and redirect to it
+      if (response?.data?.paymentLink) {
+        // Opening the payment link in the device's browser
+        await Linking.openURL(response.data.paymentLink);
+      } else {
+        Alert.alert("Error", "Payment link not received");
+      }
+    } catch (error) {
+      console.error("Payment error:", error);
+      Alert.alert("Payment Error", "Failed to process payment");
+    } finally {
+      setIsLoading(false);
+    }
   };
   return (
     <View style={styles.container}>
@@ -98,46 +136,13 @@ const OrderScreen = ({ route }) => {
         </Pressable>
         <Text style={styles.headerText}>Order Summary</Text>
       </View>
-      {/* <View style={[styles.subContainer, { paddingHorizontal: 23 }]}>
-        <View style={styles.subContainer}>
-          <View>
-            <View style={styles.track}>
-              <Text style={styles.trackText}>1</Text>
-            </View>
-          </View>
-          <View style={styles.line} />
-        </View>
-        <View style={styles.subContainer}>
-          <View style={styles.track}>
-            <Text style={styles.trackText}>2</Text>
-          </View>
-          <View style={styles.line} />
-        </View>
-        <View style={styles.subContainer}>
-          <View style={styles.track}>
-            <Text style={styles.trackText}>3</Text>
-          </View>
-          <View style={styles.line} />
-        </View>
-        <View style={styles.subContainer}>
-          <View style={styles.track}>
-            <Text style={styles.trackText}>4</Text>
-          </View>
-        </View>
-      </View> */}
-      {/* <View style={[styles.subContainer, styles.text]}>
-        <Text style={styles.trackerText}>Cart</Text>
-        <Text style={[styles.trackerText, { paddingLeft: 10 }]}>Address</Text>
-        <Text style={styles.trackerText}>Payment</Text>
-        <Text style={styles.trackerText}>Summary</Text>
-      </View> */}
       <View>
-      <FlatList
-        data={cartData}
-        renderItem={renderData}
-        keyExtractor={(item) => item.productId}
-        showsVerticalScrollIndicator={false}
-      />
+        <FlatList
+          data={cartData}
+          renderItem={renderData}
+          keyExtractor={(item) => item.productId}
+          showsVerticalScrollIndicator={false}
+        />
       </View>
       <View
         style={{
@@ -155,27 +160,27 @@ const OrderScreen = ({ route }) => {
               {item?.phoneNumber}{" "}
             </Text>
           </View>
-          <Pressable style={{ flex: 0.1, justifyContent: "center" }}>
+          {/* <Pressable style={{ flex: 0.1, justifyContent: "center" }}>
             <Image
               source={assets.rightarrow}
               style={styles.arrow}
               resizeMode="contain"
             />
-          </Pressable>
+          </Pressable> */}
         </View>
       </View>
       <View style={styles.horizonLine} />
       <View style={styles.deliveryContainer}>
         <Text style={styles.heading}>Payment Method</Text>
-        <Pressable style={styles.paymentContainer}>
+        <Pressable style={styles.paymentContainer} >
           <Image source={assets.Razorpay} style={styles.paymentImage} />
           <Text style={styles.details}>Pay With Rozorpay Pay</Text>
           <View style={styles.arrowConatiner}>
-            <Image
+            {/* <Image
               source={assets.rightarrow}
               style={styles.arrow}
               resizeMode="contain"
-            />
+            /> */}
           </View>
         </Pressable>
       </View>
@@ -198,6 +203,14 @@ const OrderScreen = ({ route }) => {
           <Text style={styles.perItemAmount}>Rs.{priceData.gstAmount}</Text>
         </View>
       </View>
+      <View style={{flexDirection:'row',paddingTop:20,paddingHorizontal:20}} >
+        <View style={{flex:1,justifyContent:'center'}}>
+        <Text style={{color:Typography.Colors.primary,fontSize:20,fontWeight:'800'}}>Rs. {priceData.totalPrice} </Text>
+        </View >
+        <View style={{flex:1}}>
+        <CustomButton title="Pay Now" onPress={handlePayment} />
+        </View >
+      </View>
     </View>
   );
 };
@@ -218,7 +231,7 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: "row",
     paddingTop: 20,
-    paddingBottom:10,
+    paddingBottom: 10,
     gap: 12,
     alignItems: "center",
   },
@@ -256,7 +269,7 @@ const styles = StyleSheet.create({
     fontFamily: Typography.font.regular,
   },
   CartContainer: {
-    flex:1,
+    flex: 1,
     flexDirection: "row",
     // backgroundColor:'pink',
     // marginHorizontal: 36,
