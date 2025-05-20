@@ -136,7 +136,8 @@ const OrderScreen = ({ route }) => {
         </Pressable>
         <Text style={styles.headerText}>Order Summary</Text>
       </View>
-      <View>
+      <View style=
+      {{flex:0.55}}>
         <FlatList
           data={cartData}
           renderItem={renderData}

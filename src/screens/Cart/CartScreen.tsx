@@ -17,6 +17,8 @@ import {
   AddToCart,
   CartData,
   CartDelete,
+  promocode,
+  PromoCode,
   QuantityDelete,
 } from "../../services/api/apiServices";
 import { CardData } from "../../constant";
@@ -24,7 +26,6 @@ import { CardData } from "../../constant";
 const CartScreen = () => {
   const navigation = useNavigation();
   const isFocus = useIsFocused();
-
   const [cartData, setCartData] = useState([]);
   const [priceData, setpriceData] = useState({
     subtotal: 0,
@@ -34,6 +35,19 @@ const CartScreen = () => {
   });
   const [isLoading, setIsLoading] = useState(true);
 
+  const [cartToggle, setCartToggle] = useState(false);
+  const [coupon,setCoupon]=useState()
+// console.log(setCoupon,"coupon");
+
+    // const handlePromoCode  = async (coupon) => {
+    //   console.log(coupon,"cvhgtc");
+      
+    //   const response = await PromoCode(coupon).then(() => {
+    //     setCartToggle(!cartToggle);
+    //   });
+    //   //  console.log(response);
+    // };
+// console.log(item,"itemmmmmm");
 
   // Get cart data from API
   const GetCartData = async () => {
@@ -49,14 +63,11 @@ const CartScreen = () => {
       setIsLoading(false);
     }
   };
-// console.log(priceData,"pricerData");
 
   // Get cart price summary
   const GetCartPrice = async () => {
     try {
       const data = await CartData();
-
-      
       setpriceData(
         data?.data?.cartDetails?.breakdown || {
           subtotal: 0,
@@ -129,19 +140,25 @@ const CartScreen = () => {
 
   const handleDecrementQuantity = async (item) => {
     try {
-
-      const newQuantity = item.quantity - 1;
-      setCartData(prev =>
-        prev.map(cartItem =>
-          cartItem.productId === item.productId 
-            ? { ...cartItem, quantity: newQuantity } 
-            : cartItem
-        )
-      );
-      // console.log(newQuantity,"newQuantity");
-      
-      await deleteQuantity(item)
+      // Only decrement if quantity is greater than 1
+      if (item.quantity > 1) {
+        const newQuantity = item.quantity - 1;
+        setCartData(prev =>
+          prev.map(cartItem =>
+            cartItem.productId === item.productId 
+              ? { ...cartItem, quantity: newQuantity } 
+              : cartItem
+          )
+        );
+        // console.log(newQuantity,"newQuantity");
+        
+        await deleteQuantity(item)
         GetCartPrice();
+      } else {
+        // If quantity is 1, show confirmation or directly delete the item
+        // You can customize this behavior based on your requirements
+        deleteItem(item);
+      }
     } catch (error) {
       console.log("Error updating quantity:", error);
       GetCartData();
@@ -267,10 +284,12 @@ const CartScreen = () => {
             <CustomTextInput
               placeholder="Enter Coupon Code"
               containerStyle={styles.containerStyle}
-            />
+              // value={coupon}
+              // onChangeText={setCoupon}
+              />
           </View>
           <View>
-            <CustomButton title="Apply" buttonStyle={styles.button} />
+            <CustomButton title="Apply" buttonStyle={styles.button} onPress={()=>handlePromoCode()}/>
           </View>
         </View>
         <Pressable

@@ -28,8 +28,6 @@ import {
 } from "../../services/api/apiServices";
 import SizeComponent from "../../components/product/SizeComponent";
 import Icon from "react-native-vector-icons/FontAwesome";
-import { startMapper } from "react-native-reanimated";
-import { Button } from "@react-navigation/elements";
 import ButtonComponent from "../../components/button/ButtonComponent";
 
 const width = Dimensions.get("window").width;
@@ -149,7 +147,7 @@ const ProductDetailPage = ({ route }) => {
   const CarouselRenderItem = (item) => {
     return (
       <ImageBackground
-        resizeMode="cover"
+        resizeMode="contain"
         source={{ uri: item.item }}
         style={styles.imageBackground}
         imageStyle={styles.imagestyle}
@@ -265,6 +263,7 @@ const ProductDetailPage = ({ route }) => {
         data={data?.images}
         scrollAnimationDuration={1000}
         renderItem={(item) => CarouselRenderItem(item)}
+        
       />
 
       {/* carousal pagination */}
