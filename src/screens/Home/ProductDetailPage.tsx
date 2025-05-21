@@ -389,7 +389,7 @@ const ProductDetailPage = ({ route }) => {
             styles.buttonStyle,
             {
               backgroundColor: wishlistToggle
-                ? Typography.Colors.offwhite
+                ? Typography.Colors.lightpurple
                 : Typography.Colors.white,
             },
           ]}

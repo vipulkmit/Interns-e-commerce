@@ -6,6 +6,8 @@ import {
   Pressable,
   Image,
   ScrollView,
+  Alert,
+  TextInput,
 } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import { Typography } from "../../theme/Colors";
@@ -34,20 +36,38 @@ const CartScreen = () => {
     totalPrice: 0,
   });
   const [isLoading, setIsLoading] = useState(true);
+  const [coupon, setCoupon] = useState("");
+  const [promoData, setPromoData] = useState({ discount: 0 });
+  const handleCouponChange = (text) => {
+    // console.log("Coupon text changed:", text);
+    setCoupon(text);
+  };
+  // console.log(promoData, "=-=-=-=-=------");
 
-  const [cartToggle, setCartToggle] = useState(false);
-  const [coupon,setCoupon]=useState()
-// console.log(setCoupon,"coupon");
+  const handlePromoCode = async () => {
+    // console.log(coupon, "coupoonnnnnnn");
 
-    // const handlePromoCode  = async (coupon) => {
-    //   console.log(coupon,"cvhgtc");
-      
-    //   const response = await PromoCode(coupon).then(() => {
-    //     setCartToggle(!cartToggle);
-    //   });
-    //   //  console.log(response);
-    // };
-// console.log(item,"itemmmmmm");
+    if (!coupon.trim()) {
+      Alert.alert("Invalid Coupon", "Please enter a valid coupon code");
+      return;
+    }
+
+    try {
+      console.log("Applying coupon:", coupon);
+
+      const response = await PromoCode(coupon);
+      // console.log("Promo code response:", response);
+      setPromoData(response?.data);
+      // Refresh cart data after applying coupon
+      GetCartData();
+      GetCartPrice();
+    } catch (error) {
+      console.log("Error applying promo code:", error);
+      Alert.alert("Error", "Failed to apply promo code. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   // Get cart data from API
   const GetCartData = async () => {
@@ -55,7 +75,11 @@ const CartScreen = () => {
     try {
       const data = await CartData();
       const items = data?.data?.cartDetails?.items || [];
+      // console.log(items && coupon, "items && coupon");
+
+      // console.log(data,'datadatadatadatadatadatadata')
       setCartData(items);
+
       setIsLoading(false);
     } catch (e) {
       console.log("Error fetching cart data:", e);
@@ -76,6 +100,11 @@ const CartScreen = () => {
           totalPrice: 0,
         }
       );
+      if (data?.data?.cartDetails && coupon) {
+        const response = await PromoCode(coupon);
+        // console.log("Promo code response:", response);
+        setPromoData(response?.data);
+      }
     } catch (e) {
       console.log("Error fetching price data:", e);
       setpriceData({
@@ -100,15 +129,15 @@ const CartScreen = () => {
     try {
       // Optimistically update UI first for better user experience
       const newQuantity = item.quantity + 1;
-      setCartData(prev =>
-        prev.map(cartItem =>
-          cartItem.productId === item.productId 
-            ? { ...cartItem, quantity: newQuantity } 
+      setCartData((prev) =>
+        prev.map((cartItem) =>
+          cartItem.productId === item.productId
+            ? { ...cartItem, quantity: newQuantity }
             : cartItem
         )
       );
       // console.log(newQuantity,"newQuantity");
-      
+
       // Then call API
       await AddToCart(
         item.productId,
@@ -116,7 +145,7 @@ const CartScreen = () => {
         item.productColorId,
         item.productSizeId
       );
-      
+
       // Refresh cart data and price after API success
       GetCartPrice();
     } catch (error) {
@@ -143,16 +172,16 @@ const CartScreen = () => {
       // Only decrement if quantity is greater than 1
       if (item.quantity > 1) {
         const newQuantity = item.quantity - 1;
-        setCartData(prev =>
-          prev.map(cartItem =>
-            cartItem.productId === item.productId 
-              ? { ...cartItem, quantity: newQuantity } 
+        setCartData((prev) =>
+          prev.map((cartItem) =>
+            cartItem.productId === item.productId
+              ? { ...cartItem, quantity: newQuantity }
               : cartItem
           )
         );
         // console.log(newQuantity,"newQuantity");
-        
-        await deleteQuantity(item)
+
+        await deleteQuantity(item);
         GetCartPrice();
       } else {
         // If quantity is 1, show confirmation or directly delete the item
@@ -164,7 +193,6 @@ const CartScreen = () => {
       GetCartData();
     }
   };
-
 
   // Delete item from cart
   const deleteItem = async (item) => {
@@ -182,7 +210,7 @@ const CartScreen = () => {
   const renderData = useCallback(
     ({ item }) => {
       // console.log(item);
-      
+
       return (
         <View style={{ flex: 1 }}>
           <Pressable style={[styles.subContainer]}>
@@ -255,23 +283,23 @@ const CartScreen = () => {
       </View>
     );
   };
-
-  const CartContent = () => {
-    if (isLoading) {
-      return (
-        <View style={styles.emptyCartContainer}>
-          <Text style={styles.loadingText}>Loading your cart...</Text>
-        </View>
-      );
-    }
-
-    if (!cartData || cartData.length === 0) {
-      return <EmptyCartView />;
-    }
-
-
+  if (isLoading) {
     return (
-      
+      <View style={styles.emptyCartContainer}>
+        <Text style={styles.loadingText}>Loading your cart...</Text>
+      </View>
+    );
+  }
+
+  if (!cartData || cartData.length === 0) {
+    return <EmptyCartView />;
+  }
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.heading}>Your Cart</Text>
+      </View>
       <>
         <FlatList
           data={cartData}
@@ -284,12 +312,16 @@ const CartScreen = () => {
             <CustomTextInput
               placeholder="Enter Coupon Code"
               containerStyle={styles.containerStyle}
-              // value={coupon}
-              // onChangeText={setCoupon}
-              />
+              value={coupon}
+              onChangeText={handleCouponChange}
+            />
           </View>
           <View>
-            <CustomButton title="Apply" buttonStyle={styles.button} onPress={()=>handlePromoCode()}/>
+            <CustomButton
+              title="Apply"
+              buttonStyle={styles.button}
+              onPress={() => handlePromoCode()}
+            />
           </View>
         </View>
         <Pressable
@@ -302,26 +334,35 @@ const CartScreen = () => {
         </Pressable>
         <View style={{ paddingLeft: 20 }}>
           <View style={styles.amountContainer}>
-            <Text style={styles.text1}>Items ({cartData.length})</Text>
-            <Text style={styles.perItemAmount}>Rs.{priceData.subtotal}</Text>
+            <Text style={styles.text1}>Items ({cartData?.length})</Text>
+            <Text style={styles.perItemAmount}>
+              Rs.{priceData?.subtotal?.toFixed(2)}
+            </Text>
           </View>
           <View style={styles.amountContainer}>
             <Text style={styles.text1}>Shipping</Text>
             <Text style={styles.perItemAmount}>
-              Rs.{priceData.shippingPrice}
+              Rs.{priceData?.shippingPrice}
             </Text>
           </View>
           <View style={styles.amountContainer}>
             <Text style={styles.text1}>Promo Code</Text>
-            <Text style={styles.perItemAmount}>( - Rs.1234 )</Text>
+            <Text style={styles.perItemAmount}>
+              (- Rs. {promoData?.discount?.toFixed(2)} )
+            </Text>
           </View>
           <View style={styles.amountContainer}>
             <Text style={styles.text1}>Import Charges</Text>
-            <Text style={styles.perItemAmount}>Rs.{priceData.gstAmount}</Text>
+            <Text style={styles.perItemAmount}>Rs.{priceData?.gstAmount?.toFixed(2)}</Text>
           </View>
           <View style={styles.totalAmount}>
             <Text style={styles.totalPriceText}>Total Price</Text>
-            <Text style={styles.totalPrice}>Rs. {priceData.totalPrice}</Text>
+            <Text style={styles.totalPrice}>
+              Rs.{" "}
+              {promoData?.updatedCart?.totalPrice
+                ? promoData.updatedCart.totalPrice.toFixed(2)
+                : priceData.totalPrice.toFixed(2)}
+            </Text>
           </View>
         </View>
         <View style={{ paddingTop: 10, paddingBottom: 20 }}>
@@ -332,15 +373,6 @@ const CartScreen = () => {
           />
         </View>
       </>
-    );
-  };
-
-  return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.heading}>Your Cart</Text>
-      </View>
-      <CartContent />
     </View>
   );
 };

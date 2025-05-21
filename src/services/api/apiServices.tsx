@@ -223,6 +223,9 @@ export const CartDelete = (productId: string) => {
 };
 
 export const PromoCode = (promoCode: string) => {
+  
+  console.log(promoCode,"promoCodeeee");
+  
   return axiosInstance.post(ENDPOINTS.PROMOCODEPOST, { promoCode: promoCode });
 };
 

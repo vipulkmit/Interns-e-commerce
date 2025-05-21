@@ -22,14 +22,6 @@ const PromoCodeScreen = () => {
 
   const [cartToggle, setCartToggle] = useState(false);
 
-  // const handlePromoCode  = async (item) => {
-  //   // console.log(item,"cvhgtc");
-    
-  //   const response = await PromoCode(item).then(() => {
-  //     setCartToggle(!cartToggle);
-  //   });
-  //   //  console.log(response);
-  // };
 
 
   
