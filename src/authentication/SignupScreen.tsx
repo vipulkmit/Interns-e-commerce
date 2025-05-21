@@ -57,7 +57,17 @@ export default function SignupScreen() {
       setUser(response.data.userDetails);
       Navigation.navigate("LoginScreen");
     } catch (error: any) {
-      Alert.alert("Error", error.message);
+      if (error.response?.status === 404) {
+        Alert.alert(
+          "Invalid Email ID or Password",
+          "The Email ID or Password you entered is incorrect."
+        );
+      } else {
+        Alert.alert(
+          "Error",
+          error.message || "Failed to verify OTP. Please try again."
+        );
+      }
     } finally {
       setIsLoading(false);
     }

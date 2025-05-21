@@ -26,11 +26,11 @@ export default function ChangePasswordScreen() {
     }
 
     if (newPassword.length < 8) {
-      setNewPasswordError("Password must be at least 9 characters");
+      setNewPasswordError("Password must be at least 8 characters");
       return;
     }
     if (confirmNewPassword.length < 8) {
-      setConfirmPasswordError("Password must be at least 9 characters");
+      setConfirmPasswordError("Password must be at least 8 characters");
       return;
     }
     if (newPassword !== confirmNewPassword) {
