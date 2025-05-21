@@ -12,6 +12,7 @@ export default function VerifyotpScreen({ route }) {
   const [otp, setotp] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const Navigation = useNavigation();
+
   const SendverificationOTP = async () => {
     if (!otp.trim()) {
       Alert.alert("Error", "Please enter OTP.");

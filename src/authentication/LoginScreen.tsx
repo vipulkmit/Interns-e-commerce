@@ -72,6 +72,7 @@ export default function LoginScreen() {
     setIsLoading(true);
     try {
       const response = await loginService({ email, password });
+
       if (response.access_token) {
         useAuthStore.setState({ isLoggedIn: true });
         setUser(response.userDetails);
@@ -85,7 +86,17 @@ export default function LoginScreen() {
       }
     } catch (error: any) {
       console.error("Login Error:", error.message);
-      Alert.alert("Error", error.message || "Login failed. Please try again");
+      if (error.response?.status === 404) {
+        Alert.alert(
+          "Invalid Email ID or Password",
+          "The Email ID or Password you entered is incorrect."
+        );
+      } else {
+        Alert.alert(
+          "Error",
+          error.message || "Login failed. Please try again."
+        );
+      }
     } finally {
       setIsLoading(false);
     }

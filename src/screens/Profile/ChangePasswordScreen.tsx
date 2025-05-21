@@ -21,6 +21,14 @@ export default function ChangePasswordScreen() {
       return;
     }
 
+    if (newPassword.length < 8) {
+      setNewPasswordError("Password must be at least 8 characters");
+      return;
+    }
+    if (confirmNewPassword.length < 8) {
+      setConfirmPasswordError("Password must be at least 8 characters");
+      return;
+    }
     if (newPassword !== confirmNewPassword) {
       Alert.alert("Error", "New password and confirm password do not match.");
       return;
