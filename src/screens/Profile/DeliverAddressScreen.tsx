@@ -116,7 +116,7 @@ const DeliveryAddress = () => {
               <Text style={styles.editText}>Edit</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => onDeleteAddress(index)}>
-              <Icon size={20} color={Typography.Colors.black} name="delete" />
+              <Icon size={20} color={Typography.Colors.red} name="delete" />
             </TouchableOpacity>
           </View>
         </TouchableOpacity>

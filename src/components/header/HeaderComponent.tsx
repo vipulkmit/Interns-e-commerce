@@ -9,7 +9,7 @@ import {
 import { MainHeaderProps } from "../../models/HomePage.type";
 import { assets } from "../../../assets/images";
 import { Typography } from "../../theme/Colors";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useNavigationState } from "@react-navigation/native";
 import SearchNavigator from "../../navigation/SearchNavigator";
 import WishlistNavigator from "../../navigation/WishlistNavigator";
 import CartNavigator from "../../navigation/CartNavigator";
@@ -22,9 +22,21 @@ const HeaderComponent = ({
   productType,
 }: MainHeaderProps) => {
   const navigation = useNavigation();
+  const state = useNavigationState((state) => state);
+  // console.log(state, "state");
   // const handlewishlist = () => {
   //   navigation.navigate(SearchNavigator, { screen: “WishlistScreen” });
   // };
+
+  const onPressfunc = () => {
+    if (state.routes[1]?.name === "ProductPage") {
+      navigation.navigate(SearchNavigator, {
+        screen: "SearchScreen",
+      });
+    } else {
+      navigation.navigate("SearchScreen");
+    }
+  };
 
   return (
     <View>
@@ -39,11 +51,7 @@ const HeaderComponent = ({
         </View>
 
         <View style={styles.iconContainer}>
-          <Pressable
-            onPress={() =>
-              navigation.navigate(SearchNavigator, { screen: "SearchScreen" })
-            }
-          >
+          <Pressable onPress={() => onPressfunc()}>
             <Image source={assets.MainSearch} style={styles.icon} />
           </Pressable>
           <Pressable

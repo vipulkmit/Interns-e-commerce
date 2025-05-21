@@ -1,15 +1,32 @@
-import { Linking, ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  Image,
+  Linking,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import { Typography } from "../../theme/Colors";
 import { TouchableOpacity } from "react-native";
-import TopHeaderComponent from "../../components/header/TopHeaderComponent";
+import { Pressable } from "react-native";
+import { assets } from "../../../assets/images";
+import { useNavigation } from "@react-navigation/native";
 
 const AboutScreen = () => {
+  const navigation = useNavigation();
   return (
     <ScrollView>
       <View style={styles.container}>
-        <View style={styles.HeaderStyle}>
-          <TopHeaderComponent />
-        </View>
+        <>
+          <View style={styles.headerRow}>
+            <Pressable onPress={() => navigation.goBack()}>
+              <Image source={assets.ArrowLeft} style={styles.backIcon} />
+            </Pressable>
+            <Text numberOfLines={1} style={styles.headerTitle}>
+              About Us
+            </Text>
+          </View>
+        </>
         {/* <Text style={styles.title}>About Snapshop</Text> */}
         <Text style={styles.heading}>Introduction</Text>
         <Text style={styles.text}>
@@ -125,6 +142,24 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: Typography.Colors.primary,
     marginBottom: 5,
+  },
+  backIcon: {
+    color: Typography.Colors.primary,
+    height: 28,
+    width: 28,
+  },
+  headerRow: {
+    paddingBottom: 15,
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 10,
+    gap: 13,
+  },
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: "700",
+    fontFamily: Typography.font.bold,
+    color: Typography.Colors.primary,
   },
 });
 

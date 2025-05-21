@@ -5,13 +5,11 @@ import {
   Text,
   TouchableOpacity,
   View,
-  ScrollView,
 } from "react-native";
 import { Typography } from "../../theme/Colors";
 import { assets } from "../../../assets/images";
 import { useNavigation } from "@react-navigation/native";
 import useAuthStore from "../../stores/useAuthStore";
-import TopHeaderComponent from "../../components/header/TopHeaderComponent";
 
 const ProfileScreen = () => {
   const user = useAuthStore((state) => state.user);
@@ -51,7 +49,7 @@ const ProfileScreen = () => {
       onPress: () => handleNavigation("HelpScreen"),
     },
     {
-      title: "About",
+      title: "About Us",
       icon: assets.about,
       onPress: () => handleNavigation("AboutSection"),
     },

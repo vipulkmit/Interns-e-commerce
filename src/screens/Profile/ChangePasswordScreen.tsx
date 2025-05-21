@@ -7,13 +7,17 @@ import CustomTextInput from "../../components/textInput/CustomTextInput";
 import { Typography } from "../../theme/Colors";
 import CustomButton from "../../components/button/CustomButton";
 import TopHeaderComponent from "../../components/header/TopHeaderComponent";
+import useAuthStore from "../../stores/useAuthStore";
 
 export default function ChangePasswordScreen() {
   const [newPassword, setNewPassword] = useState("");
   const [oldPassword, setoldPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
+  const [newPasswordError, setNewPasswordError] = useState("");
+  const [confirmPasswordError, setConfirmPasswordError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const Navigation = useNavigation();
+  const logout = useAuthStore((state) => state.logout);
 
   const Passwordchangesuccess = async () => {
     if (!newPassword.trim() || !confirmNewPassword.trim()) {
@@ -21,11 +25,21 @@ export default function ChangePasswordScreen() {
       return;
     }
 
+    if (newPassword.length < 8) {
+      setNewPasswordError("Password must be at least 8 characters");
+      return;
+    }
+    if (confirmNewPassword.length < 8) {
+      setConfirmPasswordError("Password must be at least 8 characters");
+      return;
+    }
     if (newPassword !== confirmNewPassword) {
       Alert.alert("Error", "New password and confirm password do not match.");
       return;
     }
 
+    setNewPasswordError("");
+    setConfirmPasswordError("");
     setIsLoading(true);
 
     try {
@@ -35,8 +49,11 @@ export default function ChangePasswordScreen() {
         confirmPassword: confirmNewPassword,
       });
 
-      Alert.alert("Success", "Password changed successfully!");
-      Navigation.goBack();
+      Alert.alert("Success", "Password changed successfully!", [
+        { text: "OK", onPress: () => logout() },
+      ]);
+      // logout();
+      Navigation.navigate("LoginScreen");
     } catch (error: any) {
       Alert.alert(
         "Error",
@@ -84,6 +101,9 @@ export default function ChangePasswordScreen() {
         secureTextEntry
         iconname="lock"
         iconsize={25}
+        error={newPasswordError}
+        setError={setNewPasswordError}
+        onValidate={(val) => val.length > 8}
         iconcolor={Typography.Colors.lightgrey}
       />
 
@@ -94,6 +114,9 @@ export default function ChangePasswordScreen() {
         secureTextEntry
         iconname="lock"
         iconsize={25}
+        error={confirmPasswordError}
+        setError={setConfirmPasswordError}
+        onValidate={(val) => val.length > 8}
         iconcolor={Typography.Colors.lightgrey}
       />
 

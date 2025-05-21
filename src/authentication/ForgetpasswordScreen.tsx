@@ -13,7 +13,7 @@ export default function ForgetpasswordScreen() {
   const [isLoading, setIsLoading] = useState(false);
   const Navigation = useNavigation();
 
-  const Sendverification = async () => {
+  const SendverificationEmail = async () => {
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       setValidationError("Please enter a valid email address");
       return;
@@ -26,11 +26,20 @@ export default function ForgetpasswordScreen() {
       Alert.alert("Success", "Verification email sent successfully!");
       Navigation.navigate("Verifyotp", { email });
     } catch (error: any) {
-      console.error("Forgot Password Error:", error.message);
-      Alert.alert(
-        "Error",
-        error.message || "Failed to send verification email."
-      );
+      console.error("Forgot Password Error:", error);
+
+      if (error.response?.status === 404) {
+        Alert.alert(
+          "Email Not Registered",
+          "Please sign up to create an account."
+        );
+      } else {
+        Alert.alert(
+          "Error",
+          error.message ||
+            "Failed to send verification email. Please try again."
+        );
+      }
     } finally {
       setIsLoading(false);
     }
@@ -56,7 +65,7 @@ export default function ForgetpasswordScreen() {
       <CustomTextInput
         value={email}
         onChangeText={setEmail}
-        placeholder="Your Email / Phone Number"
+        placeholder="Enter your Email"
         keyboardType="email-address"
         iconname="mail"
         iconsize={25}
@@ -68,7 +77,7 @@ export default function ForgetpasswordScreen() {
 
       <CustomButton
         title={isLoading ? "Sending..." : "Send Verification"}
-        onPress={Sendverification}
+        onPress={SendverificationEmail}
         buttonStyle={styles.buttonstyle}
       />
     </View>
