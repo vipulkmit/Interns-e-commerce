@@ -7,6 +7,7 @@ import {
   FlatList,
   ActivityIndicator,
   Pressable,
+  Image,
 } from "react-native";
 import Icon from "react-native-vector-icons/Feather";
 import { Typography } from "../../theme/Colors";
@@ -14,6 +15,7 @@ import axiosInstance from "../../services/api/axiosInstance";
 import { PromoCode, promocode } from "../../services/api/apiServices";
 import TopHeaderComponent from "../../components/header/TopHeaderComponent";
 import { useNavigation } from "@react-navigation/native";
+import { assets } from "../../../assets/images";
 
 const PromoCodeScreen = () => {
   const navigation = useNavigation()
@@ -56,7 +58,6 @@ const PromoCodeScreen = () => {
     </View>
   );
 
-
   if (loading) {
     return (
       <View
@@ -69,19 +70,19 @@ const PromoCodeScreen = () => {
       </View>
     );
   }
-  
+
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={()=>handleBack()}>
-          <Icon name="arrow-left" size={24} color={Typography.Colors.black} />
-        </TouchableOpacity>
-        {/* <View style={styles.HeaderStyle}> */}
-        <TopHeaderComponent />
-        {/* </View> */}
-        {/* <Text style={styles.title}>Promo Code</Text> */}
-      </View>
-
+      <>
+        <View style={styles.headerRow}>
+          <Pressable onPress={() => navigation.goBack()}>
+            <Image source={assets.ArrowLeft} style={styles.backIcon} />
+          </Pressable>
+          <Text numberOfLines={1} style={styles.headerTitle}>
+            Offers
+          </Text>
+        </View>
+      </>
       <FlatList
         data={promoCodeData || []}
         keyExtractor={(item, index) => index.toString()}
@@ -162,5 +163,23 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "red",
     marginTop: 2,
+  },
+  backIcon: {
+    color: Typography.Colors.primary,
+    height: 28,
+    width: 28,
+  },
+  headerRow: {
+    paddingBottom: 15,
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 10,
+    gap: 13,
+  },
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: "700",
+    fontFamily: Typography.font.bold,
+    color: Typography.Colors.primary,
   },
 });

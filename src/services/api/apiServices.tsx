@@ -66,17 +66,17 @@ export const registerService = async (FormData: any) => {
   }
 };
 
-const forgotPasswordschema = z.object({
-  email: z.string().email({ message: "Please enter a valid email address." }),
-});
+// const forgotPasswordschema = z.object({
+//   email: z.string().email({ message: "Please enter a valid email address." }),
+// });
 
 export const forgotPasswordService = async (FormData: any) => {
-  const parsed = forgotPasswordschema.safeParse(FormData);
-  if (!parsed.success) {
-    throw new Error("Validation failed:" + JSON.stringify(parsed.error.errors));
-  }
+  // const parsed = forgotPasswordschema.safeParse(FormData);
+  // if (!parsed.success) {
+  //   throw new Error("Validation failed:" + JSON.stringify(parsed.error.errors));
+  // }
   try {
-    const response = await forgetpassword(parsed.data);
+    const response = await forgetpassword(FormData);
     return response.data;
   } catch (error) {
     console.error("Forget Password Service Error:", error.message);
@@ -84,13 +84,13 @@ export const forgotPasswordService = async (FormData: any) => {
   }
 };
 
-const verifyOtpSchema = z.object({
-  // email: z.string().email({ message: "Please enter a valid email address." }),
-  otp: z
-    .string()
-    .length(6, { message: "OTP must be exactly 6 digits" })
-    .regex(/^\d+$/, { message: "OTP must contain only numeric digits." }),
-});
+// const verifyOtpSchema = z.object({
+//   // email: z.string().email({ message: "Please enter a valid email address." }),
+//   otp: z
+//     .string()
+//     .length(6, { message: "OTP must be exactly 6 digits" })
+//     .regex(/^\d+$/, { message: "OTP must contain only numeric digits." }),
+// });
 
 export const verifyOtpService = async (FormData: any) => {
   // const parsed = verifyOtpSchema.safeParse(FormData);
@@ -205,9 +205,18 @@ export const ProductFilters = (
   return axiosInstance.get(`${ENDPOINTS.FILTERS}?${queryParams}`);
 };
 
-
-export const AddToCart = (id: string,quantity: number,productColorId: string,productSizeId: string) => {
-  return axiosInstance.post(ENDPOINTS.CART, { productId: id ,quantity:quantity,productColorId: productColorId, productSizeId:productSizeId});
+export const AddToCart = (
+  id: string,
+  quantity: number,
+  productColorId: string,
+  productSizeId: string
+) => {
+  return axiosInstance.post(ENDPOINTS.CART, {
+    productId: id,
+    quantity: quantity,
+    productColorId: productColorId,
+    productSizeId: productSizeId,
+  });
 };
 
 export const CartData = () => {
@@ -224,11 +233,10 @@ export const CartDelete = (productId: string) => {
 
 export const PromoCode = (promoCode: string) => {
   
-  console.log(promoCode,"promoCodeeee");
+  // console.log(promoCode,"promoCodeeee");
   
   return axiosInstance.post(ENDPOINTS.PROMOCODEPOST, { promoCode: promoCode });
 };
-
 
 export const QuantityDelete = (productId: string) => {
   return axiosInstance.delete(ENDPOINTS.QUANTITYDELETE, {
@@ -238,6 +246,16 @@ export const QuantityDelete = (productId: string) => {
   });
 };
 
-export const Payment = (address: string,city: string,country: string,postalCode: string) => {
-  return axiosInstance.post(ENDPOINTS.PAYMENT, { address: address ,city:city,country: country, postalCode:postalCode});
+export const Payment = (
+  address: string,
+  city: string,
+  country: string,
+  postalCode: string
+) => {
+  return axiosInstance.post(ENDPOINTS.PAYMENT, {
+    address: address,
+    city: city,
+    country: country,
+    postalCode: postalCode,
+  });
 };

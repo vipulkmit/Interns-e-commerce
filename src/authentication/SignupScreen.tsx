@@ -1,6 +1,15 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, Image, Alert, ScrollView } from "react-native";
-import { TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  Alert,
+  TouchableOpacity,
+  SafeAreaView,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
 import { Typography } from "../theme/Colors";
 import { assets } from "../../assets/images";
 import useAuthStore from "../stores/useAuthStore";
@@ -10,13 +19,12 @@ import CustomButton from "../components/button/CustomButton";
 import CustomTextInput from "../components/textInput/CustomTextInput";
 
 export default function SignupScreen() {
-  // const login = useAuthStore((state) => state.login);
   const { setUser } = useAuthStore();
   const [name, setName] = useState("");
   const [email, setemail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState(false);
   const Navigation = useNavigation();
 
   const validateInputs = () => {
@@ -24,34 +32,28 @@ export default function SignupScreen() {
       Alert.alert("Error", "Name is required.");
       return false;
     }
-
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!email.trim() || !emailRegex.test(email)) {
       Alert.alert("Error", "Please enter a valid email address.");
       return false;
     }
-
     if (password.length < 8) {
       Alert.alert("Error", "Password must be at least 8 characters long.");
       return false;
     }
-
     if (password !== confirmPassword) {
       Alert.alert("Error", "Passwords do not match.");
       return false;
     }
-
     return true;
   };
 
   const handleSignupPress = async () => {
-    if (!validateInputs()) {
-      return;
-    }
+    if (!validateInputs()) return;
+
     setIsLoading(true);
     try {
       const response = await registerUser({ name, email, password });
-      Alert.alert("Success", "Account Created Successfully");
       setUser(response.data.userDetails);
       Navigation.navigate("LoginScreen");
     } catch (error: any) {
@@ -60,22 +62,24 @@ export default function SignupScreen() {
       setIsLoading(false);
     }
   };
+
   const handleLogInPress = () => {
     Navigation.goBack();
   };
 
   const handleSocialLoginPress = () => {
-    console.log("login pressed");
+    console.log("Social login pressed");
   };
 
   return (
-    <ScrollView style={styles.scrollviewcontainer}>
-      <View style={styles.container}>
+    <SafeAreaView style={styles.safeContainer}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
+        style={styles.container}
+      >
         <View style={styles.logoContainer}>
           <View style={styles.containerlogo}>
-            <View style={styles.diamond}>
-              <Image source={assets.logofirst} style={styles.diamond} />
-            </View>
+            <Image source={assets.logofirst} style={styles.diamond} />
           </View>
         </View>
 
@@ -123,6 +127,7 @@ export default function SignupScreen() {
           iconsize={25}
           iconcolor={Typography.Colors.lightgrey}
         />
+
         <CustomButton
           title={isLoading ? "Signing up..." : "SignUp"}
           onPress={handleSignupPress}
@@ -130,45 +135,21 @@ export default function SignupScreen() {
           disabled={isLoading}
         />
 
-        <View
-          style={{
-            alignSelf: "center",
-            marginTop: 36,
-            flexDirection: "row",
-            gap: 10,
-            paddingBottom: 22,
-          }}
-        >
-          <View
-            style={{
-              alignSelf: "center",
-              height: 0.1,
-              borderWidth: 0.2,
-              width: 150,
-              borderColor: Typography.Colors.lightgrey,
-            }}
-          ></View>
+        <View style={styles.divider}>
+          <View style={styles.line} />
           <Text style={styles.orText}>OR</Text>
-          <View
-            style={{
-              alignSelf: "center",
-              borderWidth: 0.2,
-              height: 0.1,
-              width: 150,
-              borderColor: Typography.Colors.lightgrey,
-            }}
-          ></View>
+          <View style={styles.line} />
         </View>
 
         <Text style={styles.socialText}>Login using</Text>
         <View style={styles.socialButtons}>
-          <TouchableOpacity onPress={() => handleSocialLoginPress()}>
+          <TouchableOpacity onPress={handleSocialLoginPress}>
             <Image
               source={assets.facebooklogo}
               style={styles.socialIconfacebook}
             />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleSocialLoginPress()}>
+          <TouchableOpacity onPress={handleSocialLoginPress}>
             <Image
               source={assets.googlelogo}
               style={styles.socialIconfacebook}
@@ -182,94 +163,24 @@ export default function SignupScreen() {
             <Text style={styles.registerLink}>Log In</Text>
           </TouchableOpacity>
         </View>
-      </View>
-    </ScrollView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  scrollviewcontainer: {
+  safeContainer: {
+    flex: 1,
     backgroundColor: Typography.Colors.white,
   },
   container: {
     flex: 1,
     paddingHorizontal: 20,
-    backgroundColor: Typography.Colors.white,
+    justifyContent: "center",
   },
-  welcomeText: {
-    fontSize: 18,
-    fontFamily: Typography.font.heavy,
-    color: Typography.Colors.primary,
-    marginTop: 20,
-    // marginBottom: 5,
-  },
-  subText: {
-    fontFamily: Typography.font.regular,
-    fontSize: 18,
-    color: Typography.Colors.lightgrey,
-    marginBottom: 30,
-  },
-  forgotContainer: {
-    marginTop: 7,
-    alignSelf: "flex-end",
-    marginBottom: 20,
-  },
-  forgotText: {
-    fontFamily: Typography.font.bold,
-    fontSize: 16,
-    color: Typography.Colors.primary,
-  },
-  orText: {
-    fontFamily: Typography.font.bold,
-    textAlign: "center",
-    fontSize: 15,
-    color: Typography.Colors.darkgrey,
-    marginVertical: 10,
-  },
-  socialText: {
-    alignSelf: "center",
-    fontFamily: Typography.font.regular,
-    fontSize: 16,
-    color: Typography.Colors.black,
-    marginBottom: 20,
-  },
-  socialButtons: {
-    height: 40,
-    overflow: "hidden",
-    alignSelf: "center",
-    flexDirection: "row",
-    justifyContent: "space-around",
-    width: 230,
-    marginBottom: 32,
-  },
-
-  socialIconApple: {
-    width: 29,
-    height: 35,
-  },
-  socialIconfacebook: {
-    width: 35,
-    height: 35,
-  },
-  // socialIcongoogle: {
-  //   width: 35.31,
-  //   height: 35,
-  // },
-
-  registerContainer: {
-    alignSelf: "center",
-    flexDirection: "row",
+  logoContainer: {
     alignItems: "center",
-    marginTop: 10,
-  },
-  registerText: {
-    fontSize: 14,
-    color: Typography.Colors.greydark,
-  },
-  registerLink: {
-    fontSize: 14,
-    color: Typography.Colors.logincolor,
-    fontWeight: "bold",
+    marginBottom: 24,
   },
   containerlogo: {
     width: 72,
@@ -282,29 +193,71 @@ const styles = StyleSheet.create({
   diamond: {
     width: 32,
     height: 32,
-    transform: [{ rotate: "45deg" }],
-  },
-  logoContainer: {
-    alignItems: "center",
-    marginTop: 32,
+    transform: [{ rotate: "90deg" }],
   },
   welcomeandsignup: {
     alignItems: "center",
-    marginTop: 26,
-    paddingBottom: 25,
+    marginBottom: 24,
   },
-  labelStyle: {
+  welcomeText: {
+    fontSize: 18,
+    fontFamily: Typography.font.heavy,
+    color: Typography.Colors.primary,
+  },
+  subText: {
     fontFamily: Typography.font.regular,
-    fontSize: 16,
+    fontSize: 18,
     color: Typography.Colors.lightgrey,
-  },
-  checkBoxstyle: {
-    marginLeft: 5,
-    borderWidth: 2,
-    borderRadius: 5,
-    borderColor: Typography.Colors.lightgrey,
   },
   buttonstyle: {
     height: 52,
+    marginTop: 10,
+  },
+  divider: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 30,
+    marginBottom: 20,
+  },
+  line: {
+    flex: 1,
+    height: 1,
+    backgroundColor: Typography.Colors.lightgrey,
+  },
+  orText: {
+    marginHorizontal: 10,
+    fontSize: 15,
+    fontWeight: "bold",
+    color: Typography.Colors.darkgrey,
+  },
+  socialText: {
+    textAlign: "center",
+    fontFamily: Typography.font.regular,
+    fontSize: 16,
+    color: Typography.Colors.black,
+    marginBottom: 16,
+  },
+  socialButtons: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginBottom: 24,
+  },
+  socialIconfacebook: {
+    width: 35,
+    height: 35,
+  },
+  registerContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  registerText: {
+    fontSize: 14,
+    color: Typography.Colors.lightgrey,
+  },
+  registerLink: {
+    fontSize: 14,
+    color: Typography.Colors.primary,
+    fontWeight: "bold",
   },
 });

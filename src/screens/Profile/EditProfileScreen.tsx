@@ -21,7 +21,7 @@ const EditProfileScreen = () => {
   };
 
   const handleImageChange = () => {
-    Alert.alert("Choose Image", "Select image from:", [
+    Alert.alert("Choose Image", undefined, [
       { text: "Cancel", style: "cancel" },
       { text: "Gallery", onPress: handleGallery },
       { text: "Camera", onPress: handleCamera },

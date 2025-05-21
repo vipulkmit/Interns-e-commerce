@@ -274,7 +274,7 @@ const CartScreen = () => {
         <Icon
           name="shoppingcart"
           size={80}
-          color={Typography.Colors.lightpurple}
+          color={Typography.Colors.greydark}
         />
         <Text style={styles.emptyCartTitle}>Your cart is empty</Text>
         <Text style={styles.emptyCartText}>
