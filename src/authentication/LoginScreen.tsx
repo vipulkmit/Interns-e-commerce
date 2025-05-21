@@ -92,106 +92,95 @@ export default function LoginScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <KeyboardAvoidingView
-        style={styles.keyboardAvoidingView}
-        behavior={Platform.OS === "ios" ? "padding" : undefined}
-        keyboardVerticalOffset={Platform.OS === "ios" ? 60 : 0}
-      >
-        <View style={styles.container}>
-          <View style={styles.logoContainer}>
-            <View style={styles.containerlogo}>
-              <Image source={assets.logofirst} style={styles.diamond} />
-            </View>
-          </View>
-
-          <View style={styles.welcomeandsignup}>
-            <Text style={styles.welcomeText}>Welcome back to E-Com!</Text>
-            <Text style={styles.subText}>Sign in to continue</Text>
-          </View>
-
-          <CustomTextInput
-            value={email}
-            onChangeText={setEmail}
-            placeholder="Enter Your Email"
-            keyboardType="email-address"
-            iconname="person"
-            iconsize={25}
-            iconcolor={Typography.Colors.lightgrey}
-            error={emailError}
-            setError={setEmailError}
-            onValidate={(val) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)}
-          />
-
-          <CustomTextInput
-            value={password}
-            onChangeText={setPassword}
-            placeholder="Password"
-            secureTextEntry
-            iconname="lock"
-            iconsize={25}
-            iconcolor={Typography.Colors.lightgrey}
-            error={passwordError}
-            setError={setPasswordError}
-            onValidate={(val) => val.length >= 8}
-          />
-
-          <View style={styles.checkboxAndForgot}>
-            <AdvancedCheckbox
-              value={isSelected}
-              onValueChange={setSelection}
-              label="Remember me"
-              labelStyle={styles.labelStyle}
-              checkedColor={Typography.Colors.checkboxcolour}
-              uncheckedColor={Typography.Colors.lightgrey}
-              checkBoxStyle={styles.checkBoxstyle}
-              size={18}
-            />
-            <TouchableOpacity
-              onPress={handleForgotPasswordPress}
-              style={styles.forgotContainer}
-            >
-              <Text style={styles.forgotText}>Forgot Password?</Text>
-            </TouchableOpacity>
-          </View>
-
-          <CustomButton
-            title={isLoading ? "Logging in...." : "Login"}
-            onPress={handleLoginPress}
-            buttonStyle={styles.buttonstyle}
-          />
-
-          <View style={styles.dividerContainer}>
-            <View style={styles.divider} />
-            <Text style={styles.orText}>OR</Text>
-            <View style={styles.divider} />
-          </View>
-
-          <Text style={styles.socialText}>Login using</Text>
-          <View style={styles.socialButtons}>
-            <TouchableOpacity onPress={handleSocialLoginPress}>
-              <Image
-                source={assets.facebooklogo}
-                style={styles.socialIconfacebook}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={handleSocialLoginPress}>
-              <Image
-                source={assets.googlelogo}
-                style={styles.socialIcongoogle}
-              />
-            </TouchableOpacity>
-          </View>
-
-          <View style={styles.registerContainer}>
-            <Text style={styles.registerText}>Don't have an account? </Text>
-            <TouchableOpacity onPress={handleRegisterPress}>
-              <Text style={styles.registerLink}>Register</Text>
-            </TouchableOpacity>
-          </View>
+    <View style={styles.container}>
+      <View style={styles.logoContainer}>
+        <View style={styles.containerlogo}>
+          <Image source={assets.logofirst} style={styles.diamond} />
         </View>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+      </View>
+
+      <View style={styles.welcomeandsignup}>
+        <Text style={styles.welcomeText}>Welcome back to E-Com!</Text>
+        <Text style={styles.subText}>Sign in to continue</Text>
+      </View>
+
+      <CustomTextInput
+        value={email}
+        onChangeText={setEmail}
+        placeholder="Enter Your Email"
+        keyboardType="email-address"
+        iconname="person"
+        iconsize={25}
+        iconcolor={Typography.Colors.lightgrey}
+        error={emailError}
+        setError={setEmailError}
+        onValidate={(val) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)}
+      />
+
+      <CustomTextInput
+        value={password}
+        onChangeText={setPassword}
+        placeholder="Password"
+        secureTextEntry
+        iconname="lock"
+        iconsize={25}
+        iconcolor={Typography.Colors.lightgrey}
+        error={passwordError}
+        setError={setPasswordError}
+        onValidate={(val) => val.length >= 8}
+      />
+
+      <View style={styles.checkboxAndForgot}>
+        <AdvancedCheckbox
+          value={isSelected}
+          onValueChange={setSelection}
+          label="Remember me"
+          labelStyle={styles.labelStyle}
+          checkedColor={Typography.Colors.checkboxcolour}
+          uncheckedColor={Typography.Colors.lightgrey}
+          checkBoxStyle={styles.checkBoxstyle}
+          size={18}
+        />
+        <TouchableOpacity
+          onPress={handleForgotPasswordPress}
+          style={styles.forgotContainer}
+        >
+          <Text style={styles.forgotText}>Forgot Password?</Text>
+        </TouchableOpacity>
+      </View>
+
+      <CustomButton
+        title={isLoading ? "Logging in...." : "Login"}
+        onPress={handleLoginPress}
+        buttonStyle={styles.buttonstyle}
+      />
+
+      <View style={styles.dividerContainer}>
+        <View style={styles.divider} />
+        <Text style={styles.orText}>OR</Text>
+        <View style={styles.divider} />
+      </View>
+
+      <Text style={styles.socialText}>Login using</Text>
+      <View style={styles.socialButtons}>
+        <TouchableOpacity onPress={handleSocialLoginPress}>
+          <Image
+            source={assets.facebooklogo}
+            style={styles.socialIconfacebook}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={handleSocialLoginPress}>
+          <Image source={assets.googlelogo} style={styles.socialIcongoogle} />
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.registerContainer}>
+        <Text style={styles.registerText}>Don't have an account? </Text>
+        <TouchableOpacity onPress={handleRegisterPress}>
+          <Text style={styles.registerLink}>Register</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
   );
 }
 
@@ -224,7 +213,7 @@ const styles = StyleSheet.create({
   diamond: {
     width: 32,
     height: 32,
-    transform: [{ rotate: "45deg" }],
+    transform: [{ rotate: "90deg" }],
   },
   welcomeandsignup: {
     alignItems: "center",

@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
   diamond: {
     width: 32,
     height: 32,
-    transform: [{ rotate: "45deg" }],
+    transform: [{ rotate: "90deg" }],
   },
   welcomeandsignup: {
     alignItems: "center",

@@ -26,11 +26,11 @@ export default function ChangePasswordScreen() {
     }
 
     if (newPassword.length < 8) {
-      setNewPasswordError("Password must be at least 8 characters");
+      setNewPasswordError("Password must be at least 9 characters");
       return;
     }
     if (confirmNewPassword.length < 8) {
-      setConfirmPasswordError("Password must be at least 8 characters");
+      setConfirmPasswordError("Password must be at least 9 characters");
       return;
     }
     if (newPassword !== confirmNewPassword) {
@@ -68,9 +68,9 @@ export default function ChangePasswordScreen() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.HeaderStyle}>
+      {/* <View style={styles.HeaderStyle}>
         <TopHeaderComponent />
-      </View>
+      </View> */}
       <View style={styles.logoContainer}>
         <View style={styles.containerlogo}>
           <View style={styles.diamond}>
@@ -103,7 +103,7 @@ export default function ChangePasswordScreen() {
         iconsize={25}
         error={newPasswordError}
         setError={setNewPasswordError}
-        onValidate={(val) => val.length > 8}
+        onValidate={(val) => val.length < 8}
         iconcolor={Typography.Colors.lightgrey}
       />
 
@@ -116,7 +116,7 @@ export default function ChangePasswordScreen() {
         iconsize={25}
         error={confirmPasswordError}
         setError={setConfirmPasswordError}
-        onValidate={(val) => val.length > 8}
+        onValidate={(val) => val.length < 8}
         iconcolor={Typography.Colors.lightgrey}
       />
 

@@ -56,71 +56,71 @@ export default function PasswordchangeScreen({ route }) {
   };
 
   return (
-    <ScrollView style={{ flex: 1 }}>
-      <View style={styles.container}>
-        <View style={styles.logoContainer}>
-          <View style={styles.containerlogo}>
-            <View style={styles.diamond}>
-              <Image source={assets.logofirst} style={styles.diamond} />
-            </View>
+    // <ScrollView style={{ flex: 1 }}>
+    <View style={styles.container}>
+      <View style={styles.logoContainer}>
+        <View style={styles.containerlogo}>
+          <View style={styles.diamond}>
+            <Image source={assets.logofirst} style={styles.diamond} />
           </View>
         </View>
-
-        <View style={styles.welcomeandsignup}>
-          <Text style={styles.welcomeText}>New Password</Text>
-          <Text style={styles.subText}>Set new password for your account</Text>
-        </View>
-
-        <Formik
-          initialValues={{ newPassword: "", confirmNewPassword: "" }}
-          validationSchema={passwordSchema}
-          onSubmit={handleChangePassword}
-        >
-          {({
-            handleChange,
-            handleBlur,
-            handleSubmit,
-            values,
-            errors,
-            touched,
-            isSubmitting,
-          }) => (
-            <>
-              <CustomTextInput
-                value={values.newPassword}
-                onChangeText={handleChange("newPassword")}
-                onBlur={handleBlur("newPassword")}
-                placeholder="Password"
-                secureTextEntry
-                iconname="lock"
-                iconsize={25}
-                iconcolor={Typography.Colors.lightgrey}
-                error={touched.newPassword}
-              />
-
-              <CustomTextInput
-                value={values.confirmNewPassword}
-                onChangeText={handleChange("confirmNewPassword")}
-                onBlur={handleBlur("confirmNewPassword")}
-                placeholder="Confirm Password"
-                secureTextEntry
-                iconname="lock"
-                iconsize={25}
-                iconcolor={Typography.Colors.lightgrey}
-                error={touched.confirmNewPassword}
-              />
-
-              <CustomButton
-                title={isSubmitting ? "Changing..." : "Change Password"}
-                onPress={handleSubmit}
-                buttonStyle={styles.buttonstyle}
-                disabled={isSubmitting}
-              />
-            </>
-          )}
-        </Formik>
       </View>
-    </ScrollView>
+
+      <View style={styles.welcomeandsignup}>
+        <Text style={styles.welcomeText}>New Password</Text>
+        <Text style={styles.subText}>Set new password for your account</Text>
+      </View>
+
+      <Formik
+        initialValues={{ newPassword: "", confirmNewPassword: "" }}
+        validationSchema={passwordSchema}
+        onSubmit={handleChangePassword}
+      >
+        {({
+          handleChange,
+          handleBlur,
+          handleSubmit,
+          values,
+          errors,
+          touched,
+          isSubmitting,
+        }) => (
+          <>
+            <CustomTextInput
+              value={values.newPassword}
+              onChangeText={handleChange("newPassword")}
+              onBlur={handleBlur("newPassword")}
+              placeholder="Password"
+              secureTextEntry
+              iconname="lock"
+              iconsize={25}
+              iconcolor={Typography.Colors.lightgrey}
+              error={touched.newPassword}
+            />
+
+            <CustomTextInput
+              value={values.confirmNewPassword}
+              onChangeText={handleChange("confirmNewPassword")}
+              onBlur={handleBlur("confirmNewPassword")}
+              placeholder="Confirm Password"
+              secureTextEntry
+              iconname="lock"
+              iconsize={25}
+              iconcolor={Typography.Colors.lightgrey}
+              error={touched.confirmNewPassword}
+            />
+
+            <CustomButton
+              title={isSubmitting ? "Changing..." : "Change Password"}
+              onPress={handleSubmit}
+              buttonStyle={styles.buttonstyle}
+              disabled={isSubmitting}
+            />
+          </>
+        )}
+      </Formik>
+    </View>
+    // </ScrollView>
   );
 }
 
