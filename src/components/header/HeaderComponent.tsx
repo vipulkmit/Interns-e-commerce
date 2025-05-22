@@ -24,7 +24,6 @@ const HeaderComponent = ({
 }: MainHeaderProps) => {
   const navigation = useNavigation();
   const cartQuantity = useAuthStore((state) => state.cart);
-  // console.log(cartQuantity,"cartQuantity");
 
   const state = useNavigationState((state) => state);
 
