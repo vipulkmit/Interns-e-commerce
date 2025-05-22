@@ -15,19 +15,19 @@ import { useNavigation } from "@react-navigation/native";
 const AboutScreen = () => {
   const navigation = useNavigation();
   return (
-    <ScrollView>
-      <View style={styles.container}>
-        <>
-          <View style={styles.headerRow}>
-            <Pressable onPress={() => navigation.goBack()}>
-              <Image source={assets.ArrowLeft} style={styles.backIcon} />
-            </Pressable>
-            <Text numberOfLines={1} style={styles.headerTitle}>
-              About Us
-            </Text>
-          </View>
-        </>
-        {/* <Text style={styles.title}>About Snapshop</Text> */}
+    <View style={styles.container}>
+      <>
+        <View style={styles.headerRow}>
+          <Pressable onPress={() => navigation.goBack()}>
+            <Image source={assets.ArrowLeft} style={styles.backIcon} />
+          </Pressable>
+          <Text numberOfLines={1} style={styles.headerTitle}>
+            About Us
+          </Text>
+        </View>
+      </>
+      {/* <Text style={styles.title}>About Snapshop</Text> */}
+      <ScrollView>
         <Text style={styles.heading}>Introduction</Text>
         <Text style={styles.text}>
           Snapshop is a smart and user-friendly e-commerce mobile application
@@ -99,8 +99,8 @@ const AboutScreen = () => {
           <Text style={styles.link}>goyalsneha089@gmail.com</Text>
         </TouchableOpacity>
         <Text style={styles.text}>📞 Phone: +91-7376811531</Text>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 };
 

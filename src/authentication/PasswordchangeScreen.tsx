@@ -3,16 +3,17 @@ import { View, Text, StyleSheet, Image, Alert } from "react-native";
 import { Typography } from "../theme/Colors";
 import { assets } from "../../assets/images";
 import { useNavigation, useNavigationState } from "@react-navigation/native";
-import { forgotPasswordService } from "../services/api/apiServices";
+import {
+  forgotPasswordService,
+  PasswordChangeService,
+} from "../services/api/apiServices";
 import CustomTextInput from "../components/textInput/CustomTextInput";
 import CustomButton from "../components/button/CustomButton";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { ScrollView } from "react-native-gesture-handler";
 
 export default function PasswordchangeScreen({ route }) {
   const { email } = route.params;
-  const state = useNavigationState((state) => state);
   const Navigation = useNavigation();
 
   const passwordSchema = Yup.object().shape({
@@ -26,7 +27,7 @@ export default function PasswordchangeScreen({ route }) {
 
   const handleChangePassword = async (values, { setSubmitting, resetForm }) => {
     try {
-      await forgotPasswordService({
+      await PasswordChangeService({
         email,
         password: values.newPassword,
         confirmPassword: values.confirmNewPassword,
@@ -34,12 +35,7 @@ export default function PasswordchangeScreen({ route }) {
 
       Alert.alert("Success", "Password changed successfully!");
       resetForm();
-
-      if (state.routes[1]?.name === "EditProfileScreen") {
-        Navigation.goBack();
-      } else {
-        Navigation.navigate("LoginScreen");
-      }
+      Navigation.navigate("LoginScreen");
     } catch (error) {
       console.error(
         "Password Change Error:",

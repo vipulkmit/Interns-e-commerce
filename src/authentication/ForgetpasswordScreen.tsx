@@ -22,7 +22,7 @@ export default function ForgetpasswordScreen() {
     setValidationError("");
     setIsLoading(true);
     try {
-      const response = await forgotPasswordService({ email });
+      await forgotPasswordService({ email });
       Alert.alert("Success", "Verification email sent successfully!");
       Navigation.navigate("Verifyotp", { email });
     } catch (error: any) {

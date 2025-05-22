@@ -29,10 +29,11 @@ const HeaderComponent = ({
   const state = useNavigationState((state) => state);
 
   const onPressfunc = () => {
-    if (state.routes[1]?.name === "ProductPage") {
+    if (state.routes[1]?.name === "ProductDetailPage") {
       navigation.navigate(SearchNavigator, {
         screen: "SearchScreen",
       });
+      // navigation.navigate("SearchScreen");
     } else {
       navigation.navigate("SearchScreen");
     }
