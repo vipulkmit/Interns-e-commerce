@@ -50,7 +50,7 @@ const OrderScreen = ({ route }) => {
       const data = await CartData();
 
       setpriceData(
-        data?.data?.cartDetails?.breakdown || {
+        data?.data?.cartDetails || {
           subtotal: 0,
           shippingPrice: 0,
           gstAmount: 0,
@@ -136,7 +136,8 @@ const OrderScreen = ({ route }) => {
         </Pressable>
         <Text style={styles.headerText}>Order Summary</Text>
       </View>
-      <View>
+      <View style=
+      {{flex:0.55}}>
         <FlatList
           data={cartData}
           renderItem={renderData}
@@ -188,11 +189,11 @@ const OrderScreen = ({ route }) => {
       <View style={{ paddingHorizontal: 20 }}>
         <View style={styles.amountContainer}>
           <Text style={styles.text1}>Items (3)</Text>
-          <Text style={styles.perItemAmount}>Rs.{priceData.subtotal}</Text>
+          <Text style={styles.perItemAmount}>Rs.{priceData?.breakdown?.subtotal}</Text>
         </View>
         <View style={styles.amountContainer}>
           <Text style={styles.text1}>Shipping</Text>
-          <Text style={styles.perItemAmount}>Rs.{priceData.shippingPrice}</Text>
+          <Text style={styles.perItemAmount}>Rs.{priceData?.breakdown?.shippingPrice}</Text>
         </View>
         <View style={styles.amountContainer}>
           <Text style={styles.text1}>Promo Code</Text>
@@ -200,7 +201,7 @@ const OrderScreen = ({ route }) => {
         </View>
         <View style={styles.amountContainer}>
           <Text style={styles.text1}>Import Charges</Text>
-          <Text style={styles.perItemAmount}>Rs.{priceData.gstAmount}</Text>
+          <Text style={styles.perItemAmount}>Rs.{priceData?.breakdown?.gstAmount}</Text>
         </View>
       </View>
       <View style={{flexDirection:'row',paddingTop:20,paddingHorizontal:20}} >

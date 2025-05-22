@@ -11,28 +11,22 @@ import {
 } from "react-native";
 import Icon from "react-native-vector-icons/Feather";
 import { Typography } from "../../theme/Colors";
-import { useNavigation } from "@react-navigation/native";
 import axiosInstance from "../../services/api/axiosInstance";
 import { PromoCode, promocode } from "../../services/api/apiServices";
 import TopHeaderComponent from "../../components/header/TopHeaderComponent";
+import { useNavigation } from "@react-navigation/native";
 import { assets } from "../../../assets/images";
 
 const PromoCodeScreen = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation()
   const [promoCodeData, setPromoCodeData] = useState();
   const [loading, setLoading] = useState(true);
 
   const [cartToggle, setCartToggle] = useState(false);
 
-  const handlePromoCode = async (item) => {
-    // console.log(item,"cvhgtc");
 
-    const response = await PromoCode(item).then(() => {
-      setCartToggle(!cartToggle);
-    });
-    //  console.log(response);
-  };
 
+  
   const handleBack = () => {
     navigation.goBack();
   };
@@ -54,17 +48,14 @@ const PromoCodeScreen = () => {
   }, []);
 
   const renderOffer = ({ item }) => (
-    <TouchableOpacity
-      style={styles.offerContainer}
-      onPress={() => handlePromoCode(item)}
-    >
-      <Text style={styles.codeBox}>{item}</Text>
+    <View style={styles.offerContainer} >
+      <Text selectable={true} style={styles.codeBox}>{item}</Text>
       <Text style={styles.description}>
         Get extra ₹100 off on orders above ₹999.
       </Text>
       <Text style={styles.expires}>Valid until 31st Jan 2025</Text>
       {item.warning && <Text style={styles.warning}>{item.warning}</Text>}
-    </TouchableOpacity>
+    </View>
   );
 
   if (loading) {

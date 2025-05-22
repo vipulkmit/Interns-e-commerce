@@ -78,14 +78,14 @@ const DeliveryAddress = () => {
     return (
       <>
         <>
-          <View style={styles.headerRow}>
+          {/* <View style={styles.headerRow}>
             <Pressable onPress={() => Navigation.navigate("ProfileScreen")}>
               <Image source={assets.ArrowLeft} style={styles.backIcon} />
             </Pressable>
             <Text numberOfLines={1} style={styles.headerTitle}>
               Choose Delivery Address
             </Text>
-          </View>
+          </View> */}
         </>
         <TouchableOpacity
           onPress={() => AddressNavigate(item, index)}
@@ -127,7 +127,7 @@ const DeliveryAddress = () => {
   const Emptylist = () => {
     return (
       <>
-        <View style={styles.mainContainer}>
+        {/* <View style={styles.mainContainer}>
           <TouchableOpacity onPress={handlearrowbutton}>
             <Iconarrow
               size={35}
@@ -137,7 +137,7 @@ const DeliveryAddress = () => {
             />
           </TouchableOpacity>
           <Text style={styles.addressText}>Delivery Address</Text>
-        </View>
+        </View> */}
         <View style={styles.AddressContainer}>
           <Text style={styles.title}>🚚 No Delivery Address Found</Text>
           <Text style={styles.message}>
@@ -155,14 +155,14 @@ const DeliveryAddress = () => {
 
   return (
     <View style={styles.container}>
-      {/* <View style={styles.headerRow}>
+      <View style={styles.headerRow}>
         <Pressable onPress={() => Navigation.goBack()}>
           <Image source={assets.ArrowLeft} style={styles.backIcon} />
         </Pressable>
         <Text numberOfLines={1} style={styles.headerTitle}>
           Choose Delivery Address
         </Text>
-      </View> */}
+      </View>
       <FlatList
         contentContainerStyle={{ paddingTop: 10, paddingBottom: 20 }}
         data={user?.address || []}
