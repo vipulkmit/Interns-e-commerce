@@ -9,7 +9,6 @@ import {
   Image,
   Animated,
   TouchableOpacity,
-  TextInput,
   Pressable,
   FlatList,
   Alert,
@@ -29,6 +28,7 @@ import {
 import SizeComponent from "../../components/product/SizeComponent";
 import Icon from "react-native-vector-icons/FontAwesome";
 import ButtonComponent from "../../components/button/ButtonComponent";
+import useAuthStore from "../../stores/useAuthStore";
 
 const width = Dimensions.get("window").width;
 
@@ -41,7 +41,8 @@ const ProductDetailPage = ({ route }) => {
   const [collapsed1, setCollapsed1] = useState(true);
   const [collapsed2, setCollapsed2] = useState(true);
 
-  // console.log(data,"dataaaaaaaaaaa");
+  const { isInWishlist, toggleWishlist } = useAuthStore();
+  const wishlistToggle = isInWishlist(data.id.toString());
 
   const [selectedSize, setSelectedSize] = useState(
     data?.productSize?.length > 0 ? 0 : null
@@ -51,8 +52,8 @@ const ProductDetailPage = ({ route }) => {
   );
 
   const handleSizeAddToCart = (index, sizeId) => {
-    // console.log(sizeId, index, "sixeeee");
-    setSelectedSize(index), setSelectSize(sizeId);
+    setSelectedSize(index);
+    setSelectSize(sizeId);
   };
 
   const [selectedColorIndex, setSelectedColorIndex] = useState(0);
@@ -61,8 +62,8 @@ const ProductDetailPage = ({ route }) => {
   );
 
   const handleColorAddToCart = (index, colorId) => {
-    // console.log(colorId, index, "coloorrr");
-    setSelectedColorIndex(index), setSelectedColor(colorId);
+    setSelectedColorIndex(index);
+    setSelectedColor(colorId);
   };
 
   useEffect(() => {
@@ -75,18 +76,24 @@ const ProductDetailPage = ({ route }) => {
     }
   }, [data]);
 
-  const [wishlistToggle, setWislistToggle] = useState(false);
-
   const handleAddToWishlist = async () => {
     try {
-      const response = await AddToWishlist(data.id);
-      setWislistToggle(!wishlistToggle);
-      // console.log("Added to wishlist:", response);
+      if (!wishlistToggle) {
+        const response = await AddToWishlist(data.id);
+        console.log("API Response:", response);
+      }
+      toggleWishlist(data.id.toString());
+
+      const message = wishlistToggle
+        ? "Removed from wishlist"
+        : "Added to wishlist";
+      Alert.alert("Success", message);
     } catch (error) {
-      // console.error("Error adding to wishlist:", error);
-      Alert.alert("Error", "Already added to wishlist");
+      console.error("Error handling wishlist:", error);
+      Alert.alert("Error", "Failed to update wishlist");
     }
   };
+
   const [cartToggle, setCartToggle] = useState(false);
 
   const handleAddToCart = async () => {
@@ -104,7 +111,7 @@ const ProductDetailPage = ({ route }) => {
       const response = await AddToCart(data?.id, 1, selectedColor, selectSize);
 
       setCartToggle(!cartToggle);
-      // console.log("Added to cart successfully:", response);
+      console.log("Added to cart successfully:", response);
       Alert.alert("Success", "Product added to cart");
     } catch (error) {
       console.error("Error adding to cart:", error);
@@ -149,7 +156,7 @@ const ProductDetailPage = ({ route }) => {
     );
   };
 
-  const animateDot = (index: number, isActive: boolean) => {
+  const animateDot = (index, isActive) => {
     Animated.timing(animations[index], {
       toValue: isActive ? 8 : 8,
       duration: 200,
@@ -161,7 +168,7 @@ const ProductDetailPage = ({ route }) => {
     BannerData.map(() => new Animated.Value(8))
   ).current;
 
-  const handleSnap = (index: number) => {
+  const handleSnap = (index) => {
     animateDot(currentIndex, false);
     animateDot(index, true);
     setCurrentIndex(index);
@@ -235,14 +242,13 @@ const ProductDetailPage = ({ route }) => {
       <View style={styles.header}>
         <HeaderComponent
           onClick={handleBackButton}
-          onPress={function (): void {
+          onPress={function () {
             throw new Error("Function not implemented.");
           }}
         />
       </View>
 
-      {/* CAROUSAL */}
-
+      {/* CAROUSEL */}
       <Carousel
         loop
         autoPlay
@@ -255,7 +261,7 @@ const ProductDetailPage = ({ route }) => {
         renderItem={(item) => CarouselRenderItem(item)}
       />
 
-      {/* carousal pagination */}
+      {/* carousel pagination */}
       <View style={styles.paginationContainer}>
         {data?.images?.map((_, index) => {
           return (
@@ -305,7 +311,6 @@ const ProductDetailPage = ({ route }) => {
       </View>
 
       {/* color set */}
-
       <View style={styles.colour}>
         <Text style={styles.productName}>Color</Text>
         <Text style={styles.colorText}>
@@ -341,7 +346,6 @@ const ProductDetailPage = ({ route }) => {
       </View>
 
       {/* size set */}
-
       <View style={styles.size}>
         <View style={styles.sizeView}>
           <Text
@@ -359,21 +363,18 @@ const ProductDetailPage = ({ route }) => {
             <SizeComponent
               key={index}
               size={sizeItem.name}
-              // Compare the current size with the selected size
               selectedSize={selectedSize === index}
-              // Set this specific size as selected
               onClick={() => handleSizeAddToCart(index, sizeItem?.id)}
             />
           ))}
         </View>
       </View>
 
-      {/* button  */}
-
+      {/* button */}
       <View style={styles.buttonView}>
         <ButtonComponent
           icon={wishlistToggle ? assets.HeartBlue : assets.heart}
-          buttonText="Whislist"
+          buttonText="Wishlist"
           buttonStyle={[
             styles.buttonStyle,
             {
@@ -401,8 +402,7 @@ const ProductDetailPage = ({ route }) => {
         />
       </View>
 
-      {/* accordian */}
-
+      {/* accordion */}
       <View style={{ paddingTop: 10 }}>
         <Pressable onPress={toggleExpanded} style={styles.header1}>
           <View>
@@ -462,9 +462,6 @@ const ProductDetailPage = ({ route }) => {
               data={data.specifications}
               renderItem={SpecificationRenderItem}
               numColumns={2}
-              // ListHeaderComponent={ListHeader}
-              // ListHeaderComponentStyle={styles.header}
-              // contentContainerStyle={{backgroundColor:'green'}}
             />
           </View>
         </Collapsible>
@@ -506,6 +503,7 @@ const ProductDetailPage = ({ route }) => {
   );
 };
 
+// Styles remain same as your original code
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -525,24 +523,18 @@ const styles = StyleSheet.create({
     borderColor: Typography.Colors.white,
   },
   dataContainer: {
-    // flex: 1,
-    // paddingLeft: 8,
     paddingTop: 15,
     paddingHorizontal: 20,
     paddingBottom: 15,
-    // backgroundColor: 'pink'
   },
   Amount: {
     flexDirection: "row",
     paddingTop: 7,
     flex: 2,
-    // backgroundColor:'red'
   },
   productName: {
-    // paddingTop: 12,
     fontSize: 20,
     fontFamily: Typography.font.medium,
-    // fontWeight:'700',
     color: Typography.Colors.lightblack,
   },
   brandName: {
@@ -573,8 +565,6 @@ const styles = StyleSheet.create({
   shareContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    // alignItems:'center',
-    // backgroundColor: 'red',
   },
   ShareIcon: {
     height: 24,
@@ -585,7 +575,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flex: 1,
     paddingTop: 7,
-    // backgroundColor:'green',
     justifyContent: "flex-end",
     gap: 6,
   },
@@ -627,35 +616,6 @@ const styles = StyleSheet.create({
     width: 28,
     borderRadius: 20,
     elevation: 5,
-    // borderWidth:1,
-    // backgroundColor: '#FFCFB5'
-  },
-  colorCircle2: {
-    height: 28,
-    width: 28,
-    borderRadius: 20,
-    // borderWidth:1,
-    backgroundColor: "#96F9FF",
-  },
-  colorCircle3: {
-    height: 28,
-    width: 28,
-    borderRadius: 20,
-    // borderWidth:1,
-    backgroundColor: "#FEC8FF",
-  },
-  colorCircle4: {
-    height: 28,
-    width: 28,
-    borderRadius: 20,
-    backgroundColor: Typography.Colors.white,
-  },
-  colorCircle5: {
-    height: 28,
-    width: 28,
-    borderRadius: 20,
-    // borderWidth:1,
-    backgroundColor: "#FEFFC1",
   },
   colorText: {
     color: Typography.Colors.lightblack,
@@ -672,7 +632,6 @@ const styles = StyleSheet.create({
     height: 8,
     borderRadius: 4,
     marginHorizontal: 4,
-    // transitionDuration: '300ms',
   },
   size: {
     padding: 20,
@@ -683,43 +642,15 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   textStyle: {
-    fontSize: 12,
+    fontSize: 14,
     fontFamily: Typography.font.regular,
-    color: Typography.Colors.primary,
-  },
-  sizeBox: {
-    backgroundColor: Typography.Colors.white,
-    height: 42,
-    width: 42,
-    borderWidth: 1,
-    borderColor: Typography.Colors.white,
-    // paddingRight:17,
-    alignItems: "center",
-    justifyContent: "center",
-    // flex:1
-    // gap:17
-  },
-  sizeText: {
-    color: Typography.Colors.lightblack,
-    fontSize: 12,
-    fontFamily: Typography.font.regular,
-    // textAlign:'center'
-    // alignSelf:'center'
-    // paddingLeft:8
-    // alignSelf:'center'
+    color: Typography.Colors.white,
   },
   sizeData: {
     flexDirection: "row",
     gap: 17,
     paddingTop: 7,
   },
-  input: {
-    height: 40,
-    margin: 12,
-    borderWidth: 1,
-    padding: 10,
-  },
-
   buttonView: {
     flex: 1,
     gap: 13,
@@ -730,43 +661,17 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Typography.Colors.primary,
   },
-  textStyle: {
-    color: Typography.Colors.white,
-  },
-
-  accordionContainer: {
-    // flex: 1,
-    // paddingTop: 24,
-    // justifyContent: 'flex-start',
-    // backgroundColor: '#f9f9f9',
-    // backgroundColor:'red'
-  },
   header1: {
-    // backgroundColor: '#ddd',
-    // backgroundColor:'red',
-    // padding: 10,
-    // borderRadius: 8,
     paddingHorizontal: 20,
-  },
-  headerText: {
-    // fontSize: 18,
-    // fontFamily:Typography.font.medium,
-    // color:Typography.Colors.lightgrey
   },
   content: {
     paddingVertical: 15,
     paddingHorizontal: 20,
-    // backgroundColor: 'red',
-    // borderWidth: 1,
-    // borderColor: '#ccc',
-    // borderRadius: 8,
-    // marginTop: 10,
   },
   accordionHeading: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    // borderBottomWidth: 0.5
   },
   accordionTitle: {
     fontSize: 18,
@@ -778,7 +683,6 @@ const styles = StyleSheet.create({
   accordionIcon: {
     height: 21,
     width: 21,
-    // paddingVertical:10,
     justifyContent: "center",
   },
   accordionText: {
@@ -793,7 +697,6 @@ const styles = StyleSheet.create({
   },
   specificContainer: {
     justifyContent: "space-between",
-    // backgroundColor:'red',
     flex: 1,
   },
   specificationValue: {
@@ -801,7 +704,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: Typography.Colors.black,
     paddingVertical: 7,
-    // borderBottomWidth:1
   },
   line: {
     height: 1.5,
@@ -821,7 +723,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     paddingVertical: 15,
     alignItems: "center",
-    // justifyContent:'center'
   },
   averageRating: {
     fontFamily: Typography.font.medium,
@@ -835,13 +736,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 9,
-    // backgroundColor:'red'
   },
   Reviews: {
     fontFamily: Typography.font.regular,
     fontSize: 14,
     color: Typography.Colors.black,
-    // paddingLeft: 4,
   },
   reviewImage: {
     height: 91,
@@ -856,4 +755,5 @@ const styles = StyleSheet.create({
     paddingTop: 9,
   },
 });
+
 export default ProductDetailPage;

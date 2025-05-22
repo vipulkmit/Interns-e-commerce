@@ -12,7 +12,7 @@ import { Typography } from "../../theme/Colors";
 import { assets } from "../../../assets/images";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import Delete from "react-native-vector-icons/MaterialCommunityIcons";
-import Ionicons from "react-native-vector-icons/Ionicons"; // Add this import
+import Ionicons from "react-native-vector-icons/Ionicons";
 import {
   WishlistData,
   WishlistDelete,
@@ -20,16 +20,18 @@ import {
 } from "../../services/api/apiServices";
 import CustomButton from "../../components/button/CustomButton";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
+import useAuthStore from "../../stores/useAuthStore";
 
 const WishlistScreen = () => {
-  const navigation = useNavigation()
-  const [Wishlist, setWislist] = useState();
+  const { removeFromWishlist, clearWishlist } = useAuthStore();
+
+  const navigation = useNavigation();
+  const [Wishlist, setWislist] = useState<any[]>([]);
   const isFocus = useIsFocused();
 
   const WishlistApi = async () => {
     try {
       const data = await WishlistData();
-      //   console.log(data, "dataaaaaa");
       setWislist(data?.data?.data);
     } catch (e) {
       console.log("no data");
@@ -41,33 +43,21 @@ const WishlistScreen = () => {
   }, [isFocus]);
 
   const deleteitem = async (item) => {
-    // console.log(item.id,"vasdjhcfgus u");
-
-    const response = await WishlistDelete(item.id).then((r) => {
-    // console.log(r.data);
-        
-      if (r.data) {
-        WishlistApi();
-      }
-    });
+    const response = await WishlistDelete(item.id);
+    if (response?.data) {
+      removeFromWishlist(item.id);
+      WishlistApi();
+    }
   };
-
   const DeleteAll = async () => {
-    const response = await WishlistDeleteAll().then((r) => {
-      // console.log(r.data, "response");
-
-      if (r?.data?.status == 200) {
-        // console.log("cfjdvsgjcfs",Wishlist);
-
-        //   WishlistApi();
-        setWislist(null);
-      }
-    });
+    const response = await WishlistDeleteAll();
+    if (response?.data?.status === 200) {
+      clearWishlist();
+      setWislist([]);
+    }
   };
 
   const wishlistData = ({ item }) => {
-    // console.log(item, "itemmmm");
-
     return (
       <Pressable style={[styles.subContainer]}>
         <View style={styles.imageConatiner}>
@@ -132,7 +122,10 @@ const WishlistScreen = () => {
       />
       {Wishlist && Wishlist.length > 0 && (
         <View style={styles.buttonContainer}>
-          <CustomButton title="Add All to Cart" onPress={()=>navigation.navigate("CartScreen")}/>
+          <CustomButton
+            title="Add All to Cart"
+            onPress={() => navigation.navigate("CartScreen")}
+          />
         </View>
       )}
     </View>

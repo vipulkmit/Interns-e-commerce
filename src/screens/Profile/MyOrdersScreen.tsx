@@ -42,25 +42,17 @@ const MyOrdersScreen = () => {
         <View style={styles.details}>
           <View style={styles.rowSpaceBetween}>
             <Text style={styles.productTitle}>{product.productName}</Text>
-            <View>
-              <Text style={styles.orderNumber}>
-                Order #: {item.id.slice(-8)}
-              </Text>
-              <TouchableOpacity>
-                <Text style={styles.viewDetails}>View Order Details</Text>
-              </TouchableOpacity>
-            </View>
           </View>
-          {/* <Text style={styles.brand}>Brand Name</Text> */}
           <Text style={styles.price}>${product.price}</Text>
           <Text style={styles.date}>
             Order Placed on: {new Date(item.createdAt).toDateString()}
           </Text>
           <Text style={styles.ship}>Ship To: Saurav Gupta</Text>
           <View style={styles.buttonRow}>
-            {/* <TouchableOpacity>
-              <Text style={styles.cancelText}>Cancel</Text>
-            </TouchableOpacity> */}
+            <Text style={styles.orderNumber}>Order #: {item.id.slice(-8)}</Text>
+            <TouchableOpacity>
+              <Text style={styles.viewDetails}>View Order Details</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </View>
