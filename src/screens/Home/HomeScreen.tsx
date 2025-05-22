@@ -36,8 +36,8 @@ const HomeScreen = () => {
     BannerData.map(() => new Animated.Value(17))
   ).current;
 
-  const renderCategoryPage = (name) => {
-    navigation.navigate("Category", { name: name });
+  const renderCategoryPage = (id,name) => {
+    navigation.navigate("Category", { id: id, name: name });
   };
 
   // Category Render Item
@@ -46,7 +46,7 @@ const HomeScreen = () => {
     return (
       <Pressable
         style={styles.subContainer}
-        onPress={() => renderCategoryPage(item.name)}
+        onPress={() => renderCategoryPage(item.id,item.name)}
       >
         <Image source={{ uri: item.image }} style={styles.flatlistImage} />
         <Text style={styles.text} numberOfLines={1}>

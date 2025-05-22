@@ -5,17 +5,15 @@ import { Typography } from "../../theme/Colors";
 import Icon from "react-native-vector-icons/Entypo";
 import { useNavigation } from "@react-navigation/native";
 import SizeComponent from "../../components/product/SizeComponent";
-import { ProductFilters } from "../../services/api/apiServices";
+import { Color, ProductFilters } from "../../services/api/apiServices";
 
-const FilterScreen = ({route}) => {
-  const { category, categoryName,setFilterApplied,setFilterData } = route.params;
-  // console.log(category.name,"cat",categoryName,"sdvgjawycfg");
-  
+const FilterScreen = ({ route }) => {
+  const { category, categoryName, subCategoryId,categoryId,setFilterApplied, setFilterData } =
+    route.params;
+  // console.log(categoryId,"cat",subCategoryId,"sdvgjawycfg");
+
   const navigation = useNavigation();
   const [applyfilter, setApplyFilter] = useState();
-  // console.log(applyfilter,"mjkmjkmjikmjikjik");
-  
-  
   const globalFilter = {
     amountMin: 0,
     amountMax: 100000,
@@ -52,10 +50,10 @@ const FilterScreen = ({route}) => {
     }));
   };
 
-  const handleColorSelect = (color) => {
+  const handleColorSelect = (colorId) => {
     setFilters((prev) => ({
       ...prev,
-      selectedColor: prev.selectedColor === color ? null : color,
+      selectedColor: prev.selectedColor === colorId ? null : colorId,
     }));
   };
 
@@ -72,37 +70,49 @@ const FilterScreen = ({route}) => {
   const sizes = ["S", "M", "L", "XL", "XXL"];
 
   // Color options
-  const colors = [
-    { name: "Black", hex: "#000000" },
-    { name: "White", hex: "#FFFFFF" },
-    { name: "Yellow", hex: "#F2C94C" },
-    { name: "Red", hex: "#E90000" },
-    { name: "Green", hex: "#19B600" },
-  ];
-const handleApplyFilter=()=>{
+  const getColorHex = (colorName) => {
+    const colorMap = {
+      'Black': '#000000',
+      'White': '#FFFFFF',
+      'Yellow': '#F2C94C',
+      'Red': '#E90000',
+      'Green': '#19B600',
+    };
+    return colorMap[colorName] || '#CCCCCC'; // Default gray if color not found
+  };
+  const [colorId, setColorId] = useState();
+
+  useEffect(() => {
+    Color()
+      .then((item: any) => {
+        setColorId(item.data);
+      })
+      .catch((e) => {
+        console.log("no data");
+      });
+  }, []);
 
 
-
+  const handleApplyFilter = () => {
     ProductFilters(
-      filters.selectedSize,
-      filters.selectedColor,
       filters.discount[1],
       filters.discount[0],
       filters.amount[1],
       filters.amount[0],
-      category?.name,
-      categoryName
+      filters.selectedColor,
+      subCategoryId,
+      categoryId,
     )
-    .then((data) => {
-      setFilterApplied(true)
-      setFilterData(data?.data);
-      navigation.goBack()
-    })
-    .catch((e) => {
-      console.log("Filter API error:", e.message);
-    });
-  
-}
+      .then((data) => {
+        setFilterApplied(true);
+        setFilterData(data?.data);
+        console.log(data?.data);
+        navigation.goBack();
+      })
+      .catch((e) => {
+        console.log("Filter API error:", e.message);
+      });
+  };
 
   return (
     <ScrollView style={styles.container}>
@@ -145,20 +155,20 @@ const handleApplyFilter=()=>{
       <View style={styles.subContainer}>
         <Text style={styles.priceTitle}>Color</Text>
         <View style={styles.colorContainer}>
-          {colors.map((color, index) => (
+          {colorId?.map((color) => (
             <Pressable
-              key={index}
+              key={color.id}
               style={[
                 styles.colorCircle,
-                filters.selectedColor === color.name &&
+                filters.selectedColor === color.id &&
                   styles.selectedColorCircle,
               ]}
-              onPress={() => handleColorSelect(color.name)}
+              onPress={() => handleColorSelect(color.id)}
             >
               <View
-                style={[styles.colorCircle1, { backgroundColor: color.hex }]}
+                style={[styles.colorCircle1, { backgroundColor: getColorHex(color.name) }]}
               />
-              {filters.selectedColor === color.name && (
+              {filters.selectedColor === color.id && (
                 <View style={styles.colorCheckmark}>
                   <Icon
                     name="check"

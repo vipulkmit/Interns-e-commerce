@@ -28,6 +28,8 @@ const ENDPOINTS = {
   PAYMENT: "/order/razorpay",
   UPLOADS: "/user/upload",
   ALLORDERS: "/order",
+  COLOR: "/color",
+  BRAND:"/brand"
 };
 
 export default ENDPOINTS;
