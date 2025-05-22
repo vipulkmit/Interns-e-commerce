@@ -13,15 +13,19 @@ type AuthStore = {
   clearUser: () => void;
   hashydrated: boolean;
   sethydrated: (hashydrated: boolean) => void;
+  cart: any;
+  setCart: (cart: any) => void;
 };
 
 const useAuthStore = create<AuthStore>()(
+
   persist(
     (set) => ({
       user: null,
       token: null,
       isLoggedIn: false,
       hashydrated: false,
+      cart: null,
 
       setUser: (user) => set({ user }),
       setToken: (newtoken) => set({ token: newtoken }),
@@ -29,6 +33,7 @@ const useAuthStore = create<AuthStore>()(
       logout: () => set({ isLoggedIn: false, token: null }),
       clearUser: () => set({ user: null }),
       sethydrated: (hashydrated) => set({ hashydrated }),
+      setCart: (cart)=> set({cart})
     }),
     {
       name: "auth-storage",

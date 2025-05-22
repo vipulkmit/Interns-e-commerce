@@ -20,7 +20,6 @@ const CartNavigator = () => {
       <Stack.Screen name="PromoCodeScreen" component={PromoCodeScreen} />
       <Stack.Screen name="DeliveryAddress" component={DeliveryAddress} />
       <Stack.Screen name="AddAddressList" component={AddAddressList} />
-
     </Stack.Navigator>
   );
 };

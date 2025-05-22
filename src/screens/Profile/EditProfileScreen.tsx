@@ -14,14 +14,16 @@ const EditProfileScreen = () => {
   const [image, setImage] = useState();
   const Navigation = useNavigation();
   const user = useAuthStore((state) => state.user);
+
   // console.log(user, "vfbvfrjb");
+  
   const handlepasswordchange = () => {
     // Navigation.navigate("Passwordchange", { email: user?.email });
     Navigation.navigate("ChangePasswordScreen");
   };
 
   const handleImageChange = () => {
-    Alert.alert("Choose Image", "Select image from:", [
+    Alert.alert("Choose Image", undefined, [
       { text: "Cancel", style: "cancel" },
       { text: "Gallery", onPress: handleGallery },
       { text: "Camera", onPress: handleCamera },

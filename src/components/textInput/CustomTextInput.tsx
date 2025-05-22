@@ -60,6 +60,7 @@ const CustomTextInput = forwardRef<TextInput, CustomTextInputProps>(
       error,
       onValidate,
       setError,
+      onChange,
       ...rest
     },
     ref
@@ -85,7 +86,7 @@ const CustomTextInput = forwardRef<TextInput, CustomTextInputProps>(
           <TextInput
             ref={ref}
             value={value}
-            onChangeText={handleChange}
+            onChangeText={onChangeText}
             placeholder={placeholder}
             secureTextEntry={secureTextEntry}
             keyboardType={keyboardType}
@@ -96,6 +97,7 @@ const CustomTextInput = forwardRef<TextInput, CustomTextInputProps>(
             numberOfLines={numberOfLines}
             style={[styles.input, inputStyle]}
             selection={selection}
+            onChange={onChange}
             {...rest}
           />
         </View>

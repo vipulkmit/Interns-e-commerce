@@ -1,4 +1,3 @@
-import axios from "axios";
 import axiosInstance from "../services/api/axiosInstance";
 import ENDPOINTS from "../utils/endpoints";
 
@@ -8,6 +7,8 @@ export const loginUser = (data: any) =>
   axiosInstance.post(ENDPOINTS.LOGIN, data);
 export const forgetpassword = (data: any) =>
   axiosInstance.post(ENDPOINTS.FORGET_PASSWORD, data);
+export const changepassword = (data: any) =>
+  axiosInstance.post(ENDPOINTS.CHANGE_PASSWORD, data);
 export const verifyotp = (data: any) =>
   axiosInstance.post(ENDPOINTS.VERIFY_OTP, data);
 export const googlelogin = (data: any) =>

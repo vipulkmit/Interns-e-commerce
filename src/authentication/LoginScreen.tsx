@@ -1,6 +1,15 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, Image, Alert, ScrollView } from "react-native";
-import { TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  Alert,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+  Platform,
+  SafeAreaView,
+} from "react-native";
 import { Typography } from "../theme/Colors";
 import { assets } from "../../assets/images";
 import useAuthStore from "../stores/useAuthStore";
@@ -19,18 +28,17 @@ export default function LoginScreen() {
   const [isSelected, setSelection] = useState(false);
   const Navigation = useNavigation();
   const { setToken, setUser } = useAuthStore();
-  // console.log(setUser, "dsfdsnfdsf");
 
   const handleForgotPasswordPress = () => {
     Navigation.navigate("Forgetpassword");
   };
-  // console.log("fmbgligmg");
+
   const handleRegisterPress = () => {
     Navigation.navigate("Signup");
   };
 
   const handleSocialLoginPress = () => {
-    console.log("login pressed");
+    console.log("Social login pressed");
   };
 
   const validateInputs = () => {
@@ -60,25 +68,14 @@ export default function LoginScreen() {
   };
 
   const handleLoginPress = async () => {
-    if (!validateInputs()) {
-      // console.log("sdkufdsfn");
-      return;
-    }
-    // console.log("helorfsubf");
+    if (!validateInputs()) return;
     setIsLoading(true);
     try {
       const response = await loginService({ email, password });
-      // console.log(response.access_token, "response.access_token");
+
       if (response.access_token) {
-        // const userData = {
-        //   name: response.userDetail.name,
-        //   email: response.userDetail.email,
-        //   number: response.userDetail.number,
-        // };
-        // console.log(userData, "dusvndsivud");
         useAuthStore.setState({ isLoggedIn: true });
         setUser(response.userDetails);
-        // console.log(response, "nigsfgnrsf");
         setToken(response.access_token);
         Navigation.reset({
           index: 0,
@@ -89,223 +86,132 @@ export default function LoginScreen() {
       }
     } catch (error: any) {
       console.error("Login Error:", error.message);
-      // console.log("sdcybds");
-      Alert.alert("Error", error.message || "Login failed. Please try again");
+      if (error.response?.status === 404) {
+        Alert.alert(
+          "Invalid Email ID or Password",
+          "The Email ID or Password you entered is incorrect."
+        );
+      } else {
+        Alert.alert(
+          "Error",
+          error.message || "Login failed. Please try again."
+        );
+      }
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <ScrollView style={styles.scrollviewcontainer}>
-      <View style={styles.container}>
-        <View style={styles.logoContainer}>
-          <View style={styles.containerlogo}>
-            <View style={styles.diamond}>
-              <Image source={assets.logofirst} style={styles.diamond} />
-            </View>
-          </View>
-        </View>
-
-        <View style={styles.welcomeandsignup}>
-          <Text style={styles.welcomeText}>Welcome back to E-Com!</Text>
-          <Text style={styles.subText}>Sign in to continue</Text>
-        </View>
-
-        <CustomTextInput
-          value={email}
-          onChangeText={setEmail}
-          placeholder="Enter Your Email"
-          keyboardType="email-address"
-          iconname="person"
-          iconsize={25}
-          iconcolor={Typography.Colors.lightgrey}
-          error={emailError}
-          setError={setEmailError}
-          onValidate={(val) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)}
-        />
-
-        <CustomTextInput
-          value={password}
-          onChangeText={setPassword}
-          placeholder="Password"
-          secureTextEntry
-          iconname="lock"
-          iconsize={25}
-          iconcolor={Typography.Colors.lightgrey}
-          error={passwordError}
-          setError={setPasswordError}
-          onValidate={(val) => val.length >= 8}
-        />
-
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-            marginBottom: 40,
-          }}
-        >
-          <AdvancedCheckbox
-            value={isSelected}
-            onValueChange={setSelection}
-            label="Remember me"
-            labelStyle={styles.labelStyle}
-            checkedColor={Typography.Colors.checkboxcolour}
-            uncheckedColor={Typography.Colors.lightgrey}
-            checkBoxStyle={styles.checkBoxstyle}
-            size={18}
-          />
-          <TouchableOpacity
-            onPress={handleForgotPasswordPress}
-            style={styles.forgotContainer}
-          >
-            <Text style={styles.forgotText}>Forgot Password?</Text>
-          </TouchableOpacity>
-        </View>
-
-        <CustomButton
-          title={isLoading ? "Logging in...." : "Login"}
-          onPress={() => handleLoginPress()}
-          buttonStyle={styles.buttonstyle}
-        />
-
-        <View
-          style={{
-            alignSelf: "center",
-            marginTop: 36,
-            flexDirection: "row",
-            gap: 10,
-            paddingBottom: 32,
-          }}
-        >
-          <View
-            style={{
-              alignSelf: "center",
-              height: 0.1,
-              borderWidth: 0.2,
-              width: 150,
-              borderColor: Typography.Colors.lightgrey,
-            }}
-          ></View>
-          <Text style={styles.orText}>OR</Text>
-          <View
-            style={{
-              alignSelf: "center",
-              borderWidth: 0.2,
-              height: 0.1,
-              width: 150,
-              borderColor: Typography.Colors.lightgrey,
-            }}
-          ></View>
-        </View>
-
-        <Text style={styles.socialText}>Login using</Text>
-        <View style={styles.socialButtons}>
-          <TouchableOpacity onPress={() => handleSocialLoginPress()}>
-            <Image
-              source={assets.facebooklogo}
-              style={styles.socialIconfacebook}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleSocialLoginPress()}>
-            <Image source={assets.googlelogo} style={styles.socialIcongoogle} />
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.registerContainer}>
-          <Text style={styles.registerText}>Don't have an account? </Text>
-          <TouchableOpacity onPress={handleRegisterPress}>
-            <Text style={styles.registerLink}>Register</Text>
-          </TouchableOpacity>
+    <View style={styles.container}>
+      <View style={styles.logoContainer}>
+        <View style={styles.containerlogo}>
+          <Image source={assets.logofirst} style={styles.diamond} />
         </View>
       </View>
-    </ScrollView>
+
+      <View style={styles.welcomeandsignup}>
+        <Text style={styles.welcomeText}>Welcome back to E-Com!</Text>
+        <Text style={styles.subText}>Sign in to continue</Text>
+      </View>
+
+      <CustomTextInput
+        value={email}
+        onChangeText={setEmail}
+        placeholder="Enter Your Email"
+        keyboardType="email-address"
+        iconname="person"
+        iconsize={25}
+        iconcolor={Typography.Colors.lightgrey}
+        error={emailError}
+        setError={setEmailError}
+        onValidate={(val) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)}
+      />
+
+      <CustomTextInput
+        value={password}
+        onChangeText={setPassword}
+        placeholder="Password"
+        secureTextEntry
+        iconname="lock"
+        iconsize={25}
+        iconcolor={Typography.Colors.lightgrey}
+        error={passwordError}
+        setError={setPasswordError}
+        onValidate={(val) => val.length >= 8}
+      />
+
+      <View style={styles.checkboxAndForgot}>
+        <AdvancedCheckbox
+          value={isSelected}
+          onValueChange={setSelection}
+          label="Remember me"
+          labelStyle={styles.labelStyle}
+          checkedColor={Typography.Colors.checkboxcolour}
+          uncheckedColor={Typography.Colors.lightgrey}
+          checkBoxStyle={styles.checkBoxstyle}
+          size={18}
+        />
+        <TouchableOpacity
+          onPress={handleForgotPasswordPress}
+          style={styles.forgotContainer}
+        >
+          <Text style={styles.forgotText}>Forgot Password?</Text>
+        </TouchableOpacity>
+      </View>
+
+      <CustomButton
+        title={isLoading ? "Logging in...." : "Login"}
+        onPress={handleLoginPress}
+        buttonStyle={styles.buttonstyle}
+      />
+
+      <View style={styles.dividerContainer}>
+        <View style={styles.divider} />
+        <Text style={styles.orText}>OR</Text>
+        <View style={styles.divider} />
+      </View>
+
+      <Text style={styles.socialText}>Login using</Text>
+      <View style={styles.socialButtons}>
+        <TouchableOpacity onPress={handleSocialLoginPress}>
+          <Image
+            source={assets.facebooklogo}
+            style={styles.socialIconfacebook}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={handleSocialLoginPress}>
+          <Image source={assets.googlelogo} style={styles.socialIcongoogle} />
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.registerContainer}>
+        <Text style={styles.registerText}>Don't have an account? </Text>
+        <TouchableOpacity onPress={handleRegisterPress}>
+          <Text style={styles.registerLink}>Register</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  scrollviewcontainer: {
+  safeArea: {
+    flex: 1,
     backgroundColor: Typography.Colors.white,
   },
-
+  keyboardAvoidingView: {
+    flex: 1,
+  },
   container: {
     flex: 1,
     paddingHorizontal: 20,
+    justifyContent: "center",
     backgroundColor: Typography.Colors.white,
   },
-  welcomeText: {
-    fontSize: 18,
-    fontFamily: Typography.font.bold,
-    color: Typography.Colors.navyblue,
-    marginTop: 20,
-    marginBottom: 5,
-  },
-  subText: {
-    fontFamily: Typography.font.regular,
-    fontSize: 18,
-    color: Typography.Colors.lightgrey,
-    marginBottom: 30,
-  },
-  forgotContainer: {
-    marginTop: 7,
-    alignSelf: "flex-end",
-    marginBottom: 20,
-  },
-  forgotText: {
-    fontFamily: Typography.font.bold,
-    fontWeight: "700",
-    fontSize: 16,
-    color: Typography.Colors.primary,
-  },
-  orText: {
-    fontFamily: Typography.font.bold,
-    fontWeight: "bold",
-    textAlign: "center",
-    fontSize: 15,
-    color: Typography.Colors.darkgrey,
-    marginVertical: 10,
-  },
-  socialText: {
-    alignSelf: "center",
-    fontFamily: Typography.font.regular,
-    fontSize: 16,
-    color: Typography.Colors.black,
-    marginBottom: 20,
-  },
-  socialButtons: {
-    height: 40,
-    overflow: "hidden",
-    alignSelf: "center",
-    flexDirection: "row",
-    justifyContent: "space-around",
-    width: 230,
-    marginBottom: 42,
-  },
-
-  socialIconfacebook: {
-    width: 35,
-    height: 35,
-  },
-  socialIcongoogle: {
-    width: 35.31,
-    height: 35,
-  },
-
-  registerContainer: {
-    alignSelf: "center",
-    flexDirection: "row",
+  logoContainer: {
     alignItems: "center",
-    marginTop: 10,
-  },
-  registerText: {
-    fontSize: 14,
-    color: Typography.Colors.lightgrey,
-  },
-  registerLink: {
-    fontSize: 14,
-    color: Typography.Colors.primary,
-    fontWeight: "bold",
+    marginTop: 20,
   },
   containerlogo: {
     width: 72,
@@ -318,16 +224,38 @@ const styles = StyleSheet.create({
   diamond: {
     width: 32,
     height: 32,
-    transform: [{ rotate: "45deg" }],
-  },
-  logoContainer: {
-    alignItems: "center",
-    marginTop: 40,
+    transform: [{ rotate: "90deg" }],
   },
   welcomeandsignup: {
     alignItems: "center",
     marginTop: 26,
-    paddingBottom: 28,
+    marginBottom: 28,
+  },
+  welcomeText: {
+    fontSize: 18,
+    fontFamily: Typography.font.bold,
+    color: Typography.Colors.navyblue,
+    marginBottom: 5,
+  },
+  subText: {
+    fontFamily: Typography.font.regular,
+    fontSize: 18,
+    color: Typography.Colors.lightgrey,
+  },
+  checkboxAndForgot: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: 30,
+  },
+  forgotContainer: {
+    // marginTop: 3,
+  },
+  forgotText: {
+    fontFamily: Typography.font.bold,
+    fontWeight: "700",
+    fontSize: 16,
+    color: Typography.Colors.primary,
   },
   labelStyle: {
     fontFamily: Typography.font.regular,
@@ -343,8 +271,60 @@ const styles = StyleSheet.create({
   buttonstyle: {
     height: 52,
   },
-  errorText: {
-    color: Typography.Colors.red,
+  dividerContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 36,
+    marginBottom: 20,
+    gap: 10,
+  },
+  divider: {
+    height: 1,
+    width: 120,
+    backgroundColor: Typography.Colors.lightgrey,
+  },
+  orText: {
+    fontFamily: Typography.font.bold,
+    fontSize: 15,
+    color: Typography.Colors.darkgrey,
+  },
+  socialText: {
+    alignSelf: "center",
+    fontFamily: Typography.font.regular,
+    fontSize: 16,
+    color: Typography.Colors.black,
+    marginBottom: 20,
+  },
+  socialButtons: {
+    height: 40,
+    flexDirection: "row",
+    justifyContent: "space-around",
+    width: 230,
+    alignSelf: "center",
+    marginBottom: 32,
+  },
+  socialIconfacebook: {
+    width: 35,
+    height: 35,
+  },
+  socialIcongoogle: {
+    width: 35,
+    height: 35,
+  },
+  registerContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 10,
+  },
+  registerText: {
     fontSize: 14,
+    color: Typography.Colors.lightgrey,
+  },
+  registerLink: {
+    fontSize: 14,
+    color: Typography.Colors.primary,
+    fontWeight: "bold",
   },
 });

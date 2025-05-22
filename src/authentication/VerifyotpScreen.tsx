@@ -13,7 +13,7 @@ export default function VerifyotpScreen({ route }) {
   const [isLoading, setIsLoading] = useState(false);
   const Navigation = useNavigation();
 
-  const Sendverification = async () => {
+  const SendverificationOTP = async () => {
     if (!otp.trim()) {
       Alert.alert("Error", "Please enter OTP.");
       return;
@@ -23,10 +23,18 @@ export default function VerifyotpScreen({ route }) {
     try {
       await verifyOtpService({ email, OTP: otp });
       Alert.alert("Success", "OTP verified successfully!");
-      // console.log(email, "fdbyjybfduiyf");
-      Navigation.navigate("Passwordchange", { email: email });
+      Navigation.navigate("Passwordchange", { email });
     } catch (error: any) {
-      Alert.alert("Error", error.message || "Failed to verify OTP.");
+      console.error("OTP Verification Error:", error);
+
+      if (error.response?.status === 404) {
+        Alert.alert("Invalid OTP", "The OTP you entered is incorrect.");
+      } else {
+        Alert.alert(
+          "Error",
+          error.message || "Failed to verify OTP. Please try again."
+        );
+      }
     } finally {
       setIsLoading(false);
     }
@@ -47,12 +55,12 @@ export default function VerifyotpScreen({ route }) {
         onChangeText={setotp}
         placeholder="Enter OTP here"
         keyboardType="number-pad"
-        maxLength={8}
+        maxLength={6910}
       />
 
       <CustomButton
         title={isLoading ? "Verifying..." : "Confirm"}
-        onPress={Sendverification}
+        onPress={SendverificationOTP}
         buttonStyle={styles.buttonstyle}
       />
     </View>

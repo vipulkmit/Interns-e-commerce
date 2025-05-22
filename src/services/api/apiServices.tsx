@@ -1,5 +1,6 @@
 import { z } from "zod";
 import {
+  changepassword,
   forgetpassword,
   loginUser,
   verifyotp,
@@ -8,7 +9,6 @@ import { registerUser } from "../../authentication/AuthApi";
 import axiosInstance from "./axiosInstance";
 import ENDPOINTS from "../../utils/endpoints";
 import useAuthStore from "../../stores/useAuthStore";
-import axios from "axios";
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -66,17 +66,9 @@ export const registerService = async (FormData: any) => {
   }
 };
 
-const forgotPasswordschema = z.object({
-  email: z.string().email({ message: "Please enter a valid email address." }),
-});
-
 export const forgotPasswordService = async (FormData: any) => {
-  const parsed = forgotPasswordschema.safeParse(FormData);
-  if (!parsed.success) {
-    throw new Error("Validation failed:" + JSON.stringify(parsed.error.errors));
-  }
   try {
-    const response = await forgetpassword(parsed.data);
+    const response = await forgetpassword(FormData);
     return response.data;
   } catch (error) {
     console.error("Forget Password Service Error:", error.message);
@@ -84,19 +76,7 @@ export const forgotPasswordService = async (FormData: any) => {
   }
 };
 
-const verifyOtpSchema = z.object({
-  // email: z.string().email({ message: "Please enter a valid email address." }),
-  otp: z
-    .string()
-    .length(6, { message: "OTP must be exactly 6 digits" })
-    .regex(/^\d+$/, { message: "OTP must contain only numeric digits." }),
-});
-
 export const verifyOtpService = async (FormData: any) => {
-  // const parsed = verifyOtpSchema.safeParse(FormData);
-  // if (!parsed.success) {
-  //   throw new Error("Validation Failed:" + JSON.stringify(parsed.error.errors));
-  // }
   try {
     const response = await verifyotp(FormData);
     return response.data;
@@ -106,8 +86,18 @@ export const verifyOtpService = async (FormData: any) => {
   }
 };
 
+export const PasswordChangeService = async (FormData: any) => {
+  try {
+    const response = await changepassword(FormData);
+    return response.data;
+  } catch (error) {
+    console.error("Password Change Service Error:", error.message);
+    throw error;
+  }
+};
+
 export const changePasswordService = (FormData: any) => {
-  return axiosInstance.post(ENDPOINTS.CHANGE_PASSWORD, FormData);
+  return axiosInstance.post(ENDPOINTS.UPDATE_PASSWORD, FormData);
 };
 
 export const updateUserdata = async (userId: any, updatedData: any) => {
@@ -138,11 +128,10 @@ export const updateUserdata = async (userId: any, updatedData: any) => {
 
 export const searchProducts = (query: string) =>
   axiosInstance.get(ENDPOINTS.SEARCHALL, { params: { q: query } });
-
+export const orders = () => axiosInstance.get(ENDPOINTS.ALLORDERS);
 export const promocode = () => axiosInstance.get(ENDPOINTS.PROMOCODE);
 export const Categories = () => axiosInstance.get(ENDPOINTS.CATEGORY);
 export const Collection = () => axiosInstance.get(ENDPOINTS.COLLECTION);
-// export const profilechange = () => axiosInstance.post(ENDPOINTS.UPLOADS);
 export const profilechange = (formData: FormData) =>
   axiosInstance.post(ENDPOINTS.UPLOADS, formData, {
     headers: {
@@ -155,7 +144,6 @@ export const SubCategories = (name) => {
 };
 
 export const Products = (name, category) => {
-  // console.log(name, "hufdvhf"), console.log(category, "dfnbvif");
   return axiosInstance.get(`${ENDPOINTS.PRODUCTS}${name}/${category}`);
 };
 
@@ -190,7 +178,6 @@ export const ProductFilters = (
   subcategoryName,
   categoryName
 ) => {
-  // Build query parameters the same way as your successful curl request
   const queryParams = new URLSearchParams({
     size: size,
     color: color,
@@ -205,9 +192,18 @@ export const ProductFilters = (
   return axiosInstance.get(`${ENDPOINTS.FILTERS}?${queryParams}`);
 };
 
-
-export const AddToCart = (id: string,quantity: number,productColorId: string,productSizeId: string) => {
-  return axiosInstance.post(ENDPOINTS.CART, { productId: id ,quantity:quantity,productColorId: productColorId, productSizeId:productSizeId});
+export const AddToCart = (
+  id: string,
+  quantity: number,
+  productColorId: string,
+  productSizeId: string
+) => {
+  return axiosInstance.post(ENDPOINTS.CART, {
+    productId: id,
+    quantity: quantity,
+    productColorId: productColorId,
+    productSizeId: productSizeId,
+  });
 };
 
 export const CartData = () => {
@@ -223,9 +219,11 @@ export const CartDelete = (productId: string) => {
 };
 
 export const PromoCode = (promoCode: string) => {
+  
+  // console.log(promoCode,"promoCodeeee");
+  
   return axiosInstance.post(ENDPOINTS.PROMOCODEPOST, { promoCode: promoCode });
 };
-
 
 export const QuantityDelete = (productId: string) => {
   return axiosInstance.delete(ENDPOINTS.QUANTITYDELETE, {
@@ -235,6 +233,16 @@ export const QuantityDelete = (productId: string) => {
   });
 };
 
-export const Payment = (address: string,city: string,country: string,postalCode: string) => {
-  return axiosInstance.post(ENDPOINTS.PAYMENT, { address: address ,city:city,country: country, postalCode:postalCode});
+export const Payment = (
+  address: string,
+  city: string,
+  country: string,
+  postalCode: string
+) => {
+  return axiosInstance.post(ENDPOINTS.PAYMENT, {
+    address: address,
+    city: city,
+    country: country,
+    postalCode: postalCode,
+  });
 };

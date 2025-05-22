@@ -1,14 +1,31 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  Image,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import { Typography } from "../../theme/Colors";
 import TopHeaderComponent from "../../components/header/TopHeaderComponent";
+import { useNavigation } from "@react-navigation/native";
+import { assets } from "../../../assets/images";
 
 const HelpScreen = () => {
+  const navigation = useNavigation();
   return (
-    <ScrollView>
-      <View style={styles.container}>
-        <View style={styles.HeaderStyle}>
-          <TopHeaderComponent />
+    <View style={styles.container}>
+      <>
+        <View style={styles.headerRow}>
+          <Pressable onPress={() => navigation.goBack()}>
+            <Image source={assets.ArrowLeft} style={styles.backIcon} />
+          </Pressable>
+          <Text numberOfLines={1} style={styles.headerTitle}>
+            Help
+          </Text>
         </View>
+      </>
+      <ScrollView>
         <Text style={styles.title}>🛠️ Help & Support — Snapshop</Text>
         <Text style={styles.paragraph}>
           Welcome to the Snapshop Help Center! 💬{"\n"}
@@ -89,8 +106,8 @@ const HelpScreen = () => {
         <Text style={styles.footer}>
           Thanks for using Snapshop — happy shopping! 🛍️🎉
         </Text>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 };
 
@@ -107,9 +124,10 @@ const styles = StyleSheet.create({
     padding: 10,
     flex: 1,
     color: Typography.Colors.white,
+    backgroundColor: Typography.Colors.white,
   },
   HeaderStyle: {
-    backgroundColor: Typography.Colors.grayy,
+    backgroundColor: Typography.Colors.white,
     marginBottom: 10,
     // paddingHorizontal: 20,
   },
@@ -156,6 +174,24 @@ const styles = StyleSheet.create({
     marginTop: 15,
     fontWeight: "500",
     color: "#333",
+  },
+  backIcon: {
+    color: Typography.Colors.primary,
+    height: 28,
+    width: 28,
+  },
+  headerRow: {
+    paddingBottom: 15,
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 10,
+    gap: 13,
+  },
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: "700",
+    fontFamily: Typography.font.bold,
+    color: Typography.Colors.primary,
   },
 });
 
