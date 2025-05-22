@@ -43,36 +43,37 @@ const ProductDetailPage = ({ route }) => {
 
   // console.log(data,"dataaaaaaaaaaa");
 
+  const [selectedSize, setSelectedSize] = useState(
+    data?.productSize?.length > 0 ? 0 : null
+  );
+  const [selectSize, setSelectSize] = useState(
+    data?.productSize?.length > 0 ? data.productSize[0]?.id : ""
+  );
 
-  const [selectedSize, setSelectedSize] = useState(data?.productSize?.length > 0 ? 0 : null);
-  const [selectSize, setSelectSize] = useState(data?.productSize?.length > 0 ? data.productSize[0]?.id : '');
-  
   const handleSizeAddToCart = (index, sizeId) => {
     // console.log(sizeId, index, "sixeeee");
-    setSelectedSize(index), 
-    setSelectSize(sizeId);
+    setSelectedSize(index), setSelectSize(sizeId);
   };
 
   const [selectedColorIndex, setSelectedColorIndex] = useState(0);
-  const [selectedColor, setSelectedColor] = useState(data?.productColor?.length > 0 ? data.productColor[0]?.id : '');
+  const [selectedColor, setSelectedColor] = useState(
+    data?.productColor?.length > 0 ? data.productColor[0]?.id : ""
+  );
 
   const handleColorAddToCart = (index, colorId) => {
     // console.log(colorId, index, "coloorrr");
-    setSelectedColorIndex(index), 
-    setSelectedColor(colorId);
+    setSelectedColorIndex(index), setSelectedColor(colorId);
   };
 
   useEffect(() => {
     if (data?.productColor?.length > 0) {
       setSelectedColor(data.productColor[0]?.id);
     }
-    
+
     if (data?.productSize?.length > 0) {
       setSelectSize(data.productSize[0]?.id);
     }
   }, [data]);
-
-
 
   const [wishlistToggle, setWislistToggle] = useState(false);
 
@@ -88,27 +89,20 @@ const ProductDetailPage = ({ route }) => {
   };
   const [cartToggle, setCartToggle] = useState(false);
 
-
   const handleAddToCart = async () => {
     try {
       if (!selectedColor) {
         Alert.alert("Please select a color");
         return;
       }
-      
+
       if (!selectSize) {
         Alert.alert("Please select a size");
         return;
       }
 
-      
-      const response = await AddToCart(
-        data?.id, 
-        1,  
-        selectedColor, 
-        selectSize
-      );
-      
+      const response = await AddToCart(data?.id, 1, selectedColor, selectSize);
+
       setCartToggle(!cartToggle);
       // console.log("Added to cart successfully:", response);
       Alert.alert("Success", "Product added to cart");
@@ -168,8 +162,8 @@ const ProductDetailPage = ({ route }) => {
   ).current;
 
   const handleSnap = (index: number) => {
-    animateDot(currentIndex, false); // Shrink previous active dot
-    animateDot(index, true); // Expand new active dot
+    animateDot(currentIndex, false);
+    animateDot(index, true);
     setCurrentIndex(index);
   };
 
@@ -180,10 +174,8 @@ const ProductDetailPage = ({ route }) => {
 
     for (let i = 1; i <= totalStars; i++) {
       if (i <= numRating) {
-        // Filled star
         stars.push(<Icon key={i} name="star" size={28} style={styles.icon} />);
       } else {
-        // Empty star
         stars.push(
           <Icon key={i} name="star-o" size={28} style={styles.icon} />
         );
@@ -199,7 +191,6 @@ const ProductDetailPage = ({ route }) => {
 
     for (let i = 1; i <= totalStars; i++) {
       if (i <= numRating) {
-        // Filled star
         stars.push(
           <Icon
             key={i}
@@ -209,7 +200,6 @@ const ProductDetailPage = ({ route }) => {
           />
         );
       } else {
-        // Empty star
         stars.push(
           <Icon key={i} name="star-o" size={17} style={styles.icon1} />
         );
@@ -263,7 +253,6 @@ const ProductDetailPage = ({ route }) => {
         data={data?.images}
         scrollAnimationDuration={1000}
         renderItem={(item) => CarouselRenderItem(item)}
-        
       />
 
       {/* carousal pagination */}

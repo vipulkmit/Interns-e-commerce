@@ -65,12 +65,12 @@ const CustomTextInput = forwardRef<TextInput, CustomTextInputProps>(
     },
     ref
   ) => {
-    // const handleChange = (text: string) => {
-    //   onChangeText?.(text);
-    //   if (onValidate && onValidate(text)) {
-    //     setError?.("");
-    //   }
-    // };
+    const handleChange = (text: string) => {
+      onChangeText?.(text);
+      if (onValidate && onValidate(text)) {
+        setError?.("");
+      }
+    };
 
     return (
       <View style={{ marginBottom: 16 }}>

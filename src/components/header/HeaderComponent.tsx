@@ -24,15 +24,13 @@ const HeaderComponent = ({
   const navigation = useNavigation();
   const state = useNavigationState((state) => state);
   // console.log(state, "state");
-  // const handlewishlist = () => {
-  //   navigation.navigate(SearchNavigator, { screen: “WishlistScreen” });
-  // };
 
   const onPressfunc = () => {
-    if (state.routes[1]?.name === "ProductPage") {
+    if (state.routes[1]?.name === "ProductDetailPage") {
       navigation.navigate(SearchNavigator, {
         screen: "SearchScreen",
       });
+      // navigation.navigate("SearchScreen");
     } else {
       navigation.navigate("SearchScreen");
     }

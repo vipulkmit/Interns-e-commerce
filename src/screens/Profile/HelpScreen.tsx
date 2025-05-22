@@ -14,18 +14,18 @@ import { assets } from "../../../assets/images";
 const HelpScreen = () => {
   const navigation = useNavigation();
   return (
-    <ScrollView>
-      <View style={styles.container}>
-        <>
-          <View style={styles.headerRow}>
-            <Pressable onPress={() => navigation.goBack()}>
-              <Image source={assets.ArrowLeft} style={styles.backIcon} />
-            </Pressable>
-            <Text numberOfLines={1} style={styles.headerTitle}>
-              Help
-            </Text>
-          </View>
-        </>
+    <View style={styles.container}>
+      <>
+        <View style={styles.headerRow}>
+          <Pressable onPress={() => navigation.goBack()}>
+            <Image source={assets.ArrowLeft} style={styles.backIcon} />
+          </Pressable>
+          <Text numberOfLines={1} style={styles.headerTitle}>
+            Help
+          </Text>
+        </View>
+      </>
+      <ScrollView>
         <Text style={styles.title}>🛠️ Help & Support — Snapshop</Text>
         <Text style={styles.paragraph}>
           Welcome to the Snapshop Help Center! 💬{"\n"}
@@ -106,8 +106,8 @@ const HelpScreen = () => {
         <Text style={styles.footer}>
           Thanks for using Snapshop — happy shopping! 🛍️🎉
         </Text>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 };
 

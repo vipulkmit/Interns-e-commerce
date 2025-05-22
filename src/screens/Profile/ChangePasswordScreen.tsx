@@ -12,26 +12,34 @@ export default function ChangePasswordScreen() {
   const [newPassword, setNewPassword] = useState("");
   const [oldPassword, setoldPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
+  const [oldPasswordError, setOldPasswordError] = useState("");
+  const [newPasswordError, setNewPasswordError] = useState("");
+  const [confirmPasswordError, setConfirmPasswordError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const Navigation = useNavigation();
 
   const Passwordchangesuccess = async () => {
-    if (!newPassword.trim() || !confirmNewPassword.trim()) {
-      Alert.alert("Error", "Please fill in all fields.");
-      return;
+    let isValid = true;
+
+    setOldPasswordError("");
+    setNewPasswordError("");
+    setConfirmPasswordError("");
+    if (!oldPassword.trim()) {
+      setOldPasswordError("Old password is required");
+      isValid = false;
     }
 
     if (newPassword.length < 8) {
       setNewPasswordError("Password must be at least 8 characters");
-      return;
+      isValid = false;
     }
+
     if (confirmNewPassword.length < 8) {
       setConfirmPasswordError("Password must be at least 8 characters");
-      return;
-    }
-    if (newPassword !== confirmNewPassword) {
-      Alert.alert("Error", "New password and confirm password do not match.");
-      return;
+      isValid = false;
+    } else if (newPassword !== confirmNewPassword) {
+      setConfirmPasswordError("Passwords do not match");
+      isValid = false;
     }
 
     setIsLoading(true);
@@ -74,7 +82,6 @@ export default function ChangePasswordScreen() {
         <Text style={styles.welcomeText}>New Password</Text>
         <Text style={styles.subText}>Set new password for your account</Text>
       </View>
-
       <CustomTextInput
         value={oldPassword}
         onChangeText={setoldPassword}
@@ -83,6 +90,8 @@ export default function ChangePasswordScreen() {
         iconname="lock"
         iconsize={25}
         iconcolor={Typography.Colors.lightgrey}
+        error={oldPasswordError}
+        setError={setOldPasswordError}
       />
 
       <CustomTextInput
@@ -93,6 +102,9 @@ export default function ChangePasswordScreen() {
         iconname="lock"
         iconsize={25}
         iconcolor={Typography.Colors.lightgrey}
+        error={newPasswordError}
+        setError={setNewPasswordError}
+        onValidate={(val) => val.length >= 8}
       />
 
       <CustomTextInput
@@ -103,6 +115,9 @@ export default function ChangePasswordScreen() {
         iconname="lock"
         iconsize={25}
         iconcolor={Typography.Colors.lightgrey}
+        error={confirmPasswordError}
+        setError={setConfirmPasswordError}
+        onValidate={(val) => val.length >= 8}
       />
 
       <CustomButton
@@ -123,7 +138,6 @@ const styles = StyleSheet.create({
   HeaderStyle: {
     marginTop: 10,
     backgroundColor: Typography.Colors.white,
-    // paddingHorizontal: 20,
   },
   welcomeText: {
     fontSize: 18,
