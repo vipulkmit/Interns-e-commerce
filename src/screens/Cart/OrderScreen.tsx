@@ -17,10 +17,22 @@ import { CartData, Payment } from "../../services/api/apiServices";
 import { Button } from "@react-navigation/elements";
 import ButtonComponent from "../../components/button/ButtonComponent";
 import CustomButton from "../../components/button/CustomButton";
+import useAuthStore from "../../stores/useAuthStore";
 
 const { width } = Dimensions.get("window");
 
 const OrderScreen = ({ route }) => {
+  const themeMode = useAuthStore((state) => state.theme);
+  const theme =
+    themeMode === "dark"
+      ? {
+          background: Typography.Colors.black,
+          text: Typography.Colors.white,
+        }
+      : {
+          background: Typography.Colors.white,
+          text: Typography.Colors.black,
+        };
   const { item } = route.params;
   const isFocus = useIsFocused();
 
@@ -81,10 +93,10 @@ const OrderScreen = ({ route }) => {
           <Image source={{ uri: item.productImage[0] }} style={styles.Image} />
         </View>
         <View style={styles.dataContainer}>
-          <Text style={styles.title} numberOfLines={1}>
+          <Text style={[styles.title,{color:theme.text}]} numberOfLines={1}>
             {item?.productName}
           </Text>
-          <Text style={styles.quantity}>Quantity: {item?.quantity}</Text>
+          <Text style={[styles.quantity,{color:theme.text}]}>Quantity: {item?.quantity}</Text>
           <Text style={styles.particularPrice}>
             Rs. {item?.price * item?.quantity}
           </Text>
@@ -122,12 +134,12 @@ const OrderScreen = ({ route }) => {
     }
   };
   return (
-    <View style={styles.container}>
+    <View style={[styles.container,{backgroundColor:theme.background}]}>
       <View style={styles.header}>
         <Pressable onPress={() => navigation.goBack()}>
-          <Image source={assets.ArrowLeft} style={styles.backIcon} />
+          <Image source={assets.ArrowLeft} style={[styles.backIcon,{tintColor:theme.text}]} />
         </Pressable>
-        <Text style={styles.headerText}>Order Summary</Text>
+        <Text style={[styles.headerText,{color:theme.text}]}>Order Summary</Text>
       </View>
       <View style={{ flex: 0.55 }}>
         <FlatList
@@ -144,10 +156,10 @@ const OrderScreen = ({ route }) => {
         }}
       />
       <View style={styles.deliveryContainer}>
-        <Text style={styles.heading}>Delivery Address</Text>
+        <Text style={[styles.heading,{color:theme.text}]}>Delivery Address</Text>
         <View style={styles.subContainer}>
           <View style={{ flex: 1 }}>
-            <Text style={styles.details} numberOfLines={4}>
+            <Text style={[styles.details,{color:theme.text}]} numberOfLines={4}>
               {item?.firstName} {item?.lastName} , {item?.streetAddress}{" "}
               {item?.city}, {item?.state}, {item?.country} {item?.zipCode},{" "}
               {item?.phoneNumber}{" "}
@@ -157,10 +169,10 @@ const OrderScreen = ({ route }) => {
       </View>
       <View style={styles.horizonLine} />
       <View style={styles.deliveryContainer}>
-        <Text style={styles.heading}>Payment Method</Text>
+        <Text style={[styles.heading,{color:theme.text}]}>Payment Method</Text>
         <Pressable style={styles.paymentContainer}>
           <Image source={assets.Razorpay} style={styles.paymentImage} />
-          <Text style={styles.details}>Pay With Rozorpay Pay</Text>
+          <Text style={[styles.details,{color:theme.text}]}>Pay With Rozorpay Pay</Text>
           <View style={styles.arrowConatiner}>
           </View>
         </Pressable>
@@ -201,7 +213,7 @@ const OrderScreen = ({ route }) => {
               fontWeight: "800",
             }}
           >
-            Rs. {priceData.totalPrice}{" "}
+            Rs. {priceData.totalPrice.toFixed(3)}{" "}
           </Text>
         </View>
         <View style={{ flex: 1 }}>

@@ -2,12 +2,24 @@ import { View, Text, StyleSheet, Pressable } from 'react-native'
 import React from 'react'
 import { sizeProps } from '../../models/HomePage.type'
 import { Typography } from '../../theme/Colors'
+import useAuthStore from '../../stores/useAuthStore'
 
 const SizeComponent = ({
     size,
     onClick,
     selectedSize
 }: sizeProps) => {
+    const themeMode = useAuthStore((state) => state.theme);
+  const theme =
+    themeMode === "dark"
+      ? {
+          background: Typography.Colors.black,
+          text: Typography.Colors.white,
+        }
+      : {
+          background: Typography.Colors.white,
+          text: Typography.Colors.black,
+        };
     return (
         <Pressable 
             style={[
@@ -35,8 +47,8 @@ const styles = StyleSheet.create({
         borderRadius: 4,
     },
     selectedSize: {
-        borderWidth: 2,
-        borderColor: Typography.Colors.lightgrey,
+        borderWidth: 3,
+        borderColor: Typography.Colors.darkruby,
     },
     sizeText: {
         color: Typography.Colors.lightblack,

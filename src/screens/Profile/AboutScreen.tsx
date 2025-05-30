@@ -11,25 +11,37 @@ import { TouchableOpacity } from "react-native";
 import { Pressable } from "react-native";
 import { assets } from "../../../assets/images";
 import { useNavigation } from "@react-navigation/native";
+import useAuthStore from "../../stores/useAuthStore";
 
 const AboutScreen = () => {
+  const themeMode = useAuthStore((state) => state.theme);
+  const theme =
+    themeMode === "dark"
+      ? {
+          background: Typography.Colors.black,
+          text: Typography.Colors.white,
+        }
+      : {
+          background: Typography.Colors.white,
+          text: Typography.Colors.darkgrey,
+        };
   const navigation = useNavigation();
   return (
-    <View style={styles.container}>
+    <View style={[styles.container,{backgroundColor:theme.background}]}>
       <>
         <View style={styles.headerRow}>
           <Pressable onPress={() => navigation.goBack()}>
-            <Image source={assets.ArrowLeft} style={styles.backIcon} />
+            <Image source={assets.ArrowLeft} style={[styles.backIcon,{tintColor:theme.text}]} />
           </Pressable>
-          <Text numberOfLines={1} style={styles.headerTitle}>
+          <Text numberOfLines={1} style={[styles.headerTitle,{color:theme.text}]}>
             About Us
           </Text>
         </View>
       </>
       {/* <Text style={styles.title}>About Snapshop</Text> */}
       <ScrollView>
-        <Text style={styles.heading}>Introduction</Text>
-        <Text style={styles.text}>
+        <Text style={[styles.heading,{color:theme.text}]}>Introduction</Text>
+        <Text style={[styles.text,{color:theme.text}]}>
           Snapshop is a smart and user-friendly e-commerce mobile application
           built to deliver a smooth, secure, and modern online shopping
           experience. Developed during a 6-month internship at KeyMouseIT Pvt.
@@ -39,42 +51,42 @@ const AboutScreen = () => {
           profiles, and shop with ease, all from a single platform.
         </Text>
 
-        <Text style={styles.heading}>Features</Text>
-        <Text style={styles.feature}>🛒 Add to Cart & Wishlist:</Text>
-        <Text style={styles.text}>
+        <Text style={[styles.heading,{color:theme.text}]}>Features</Text>
+        <Text style={[styles.feature,{color:theme.text}]}>🛒 Add to Cart & Wishlist:</Text>
+        <Text style={[styles.text,{color:theme.text}]}>
           Seamlessly add items to your cart or save products for later.
         </Text>
 
-        <Text style={styles.feature}>📂 Category & Subcategory Browsing:</Text>
-        <Text style={styles.text}>
+        <Text style={[styles.feature,{color:theme.text}]}>📂 Category & Subcategory Browsing:</Text>
+        <Text style={[styles.text,{color:theme.text}]}>
           Navigate through a wide range of products organized into intuitive
           categories and subcategories.
         </Text>
 
-        <Text style={styles.feature}>🔐 User Authentication:</Text>
-        <Text style={styles.text}>
+        <Text style={[styles.feature,{color:theme.text}]}>🔐 User Authentication:</Text>
+        <Text style={[styles.text,{color:theme.text}]}>
           Secure login, signup, and password recovery functionality.
         </Text>
 
-        <Text style={styles.feature}>👤 Profile Management:</Text>
-        <Text style={styles.text}>
+        <Text style={[styles.feature,{color:theme.text}]}>👤 Profile Management:</Text>
+        <Text style={[styles.text,{color:theme.text}]}>
           Update your personal information and change your profile picture
           anytime.
         </Text>
 
-        <Text style={styles.feature}>🚚 Delivery Address Control:</Text>
-        <Text style={styles.text}>
+        <Text style={[styles.feature,{color:theme.text}]}>🚚 Delivery Address Control:</Text>
+        <Text style={[styles.text,{color:theme.text}]}>
           Add or modify your delivery address directly from your profile.
         </Text>
 
-        <Text style={styles.feature}>📱 Smooth UI/UX:</Text>
-        <Text style={styles.text}>
+        <Text style={[styles.feature,{color:theme.text}]}>📱 Smooth UI/UX:</Text>
+        <Text style={[styles.text,{color:theme.text}]}>
           Designed with responsiveness in mind, ensuring a smooth experience
           across various screen sizes and devices.
         </Text>
 
-        <Text style={styles.heading}>Purpose & Motto</Text>
-        <Text style={styles.text}>
+        <Text style={[styles.heading,{color:theme.text}]}>Purpose & Motto</Text>
+        <Text style={[styles.text,{color:theme.text}]}>
           Snapshop was created as part of our academic semester project with the
           goal of not only learning app development but also understanding
           collaborative development workflows. It taught us the importance of
@@ -86,8 +98,8 @@ const AboutScreen = () => {
           Ltd., ensuring its reliability and usability before release.
         </Text>
 
-        <Text style={styles.heading}>Contact Us</Text>
-        <Text style={styles.text}>📧 Email:</Text>
+        <Text style={[styles.heading,{color:theme.text}]}>Contact Us</Text>
+        <Text style={[styles.text,{color:theme.text}]}>📧 Email:</Text>
         <TouchableOpacity
           onPress={() => Linking.openURL("mailto:gsaurav641@gmail.com")}
         >
@@ -98,7 +110,7 @@ const AboutScreen = () => {
         >
           <Text style={styles.link}>goyalsneha089@gmail.com</Text>
         </TouchableOpacity>
-        <Text style={styles.text}>📞 Phone: +91-7376811531</Text>
+        <Text style={[styles.text,{color:theme.text}]}>📞 Phone: +91-7376811531</Text>
       </ScrollView>
     </View>
   );

@@ -18,6 +18,17 @@ import CustomButton from "../../components/button/CustomButton";
 import CustomTextInput from "../../components/textInput/CustomTextInput";
 
 const AddAddressList = ({ route }) => {
+   const themeMode = useAuthStore((state) => state.theme);
+  const theme =
+    themeMode === "dark"
+      ? {
+          background: Typography.Colors.black,
+          text: Typography.Colors.lightgrey,
+        }
+      : {
+          background: Typography.Colors.white,
+          text: Typography.Colors.primary,
+        };
   const { address, index } = route.params || {};
   const validationSchema = Yup.object().shape({
     country: Yup.string().required("Country is required"),
@@ -116,18 +127,18 @@ const AddAddressList = ({ route }) => {
   };
 
   return (
-    <ScrollView style={{ backgroundColor: Typography.Colors.white }}>
-      <View style={styles.container}>
+    <ScrollView style={{ backgroundColor: theme.background}}>
+      <View style={[styles.container,{backgroundColor:theme.background}]}>
         <View style={styles.mainContainer}>
           <TouchableOpacity onPress={handlearrowbutton}>
             <Iconarrow
               size={35}
               color={Typography.Colors.black}
-              style={styles.arrow}
+              style={[styles.arrow,{color:theme.text}]}
               name="arrow-left"
             />
           </TouchableOpacity>
-          <Text style={styles.addressText}>Add Address</Text>
+          <Text style={[styles.addressText,{color:theme.text}]}>Add Address</Text>
         </View>
 
         <Formik
@@ -151,7 +162,7 @@ const AddAddressList = ({ route }) => {
               <>
                 <View style={styles.boxstyle}>
                   <View>
-                    <Text style={styles.textstyle}>Country</Text>
+                    <Text style={[styles.textstyle,{color:theme.text}]}>Country</Text>
                     {renderField(
                       "Country",
                       "country",
@@ -162,7 +173,7 @@ const AddAddressList = ({ route }) => {
                     )}
                   </View>
                   <View>
-                    <Text style={styles.textstyle}>First Name</Text>
+                    <Text style={[styles.textstyle,{color:theme.text}]}>First Name</Text>
                     {renderField(
                       "First Name",
                       "firstName",
@@ -173,7 +184,7 @@ const AddAddressList = ({ route }) => {
                     )}
                   </View>
                   <View>
-                    <Text style={styles.textstyle}>Last Name</Text>
+                    <Text style={[styles.textstyle,{color:theme.text}]}>Last Name</Text>
                     {renderField(
                       "Last Name",
                       "lastName",
@@ -184,7 +195,7 @@ const AddAddressList = ({ route }) => {
                     )}
                   </View>
                   <View>
-                    <Text style={styles.textstyle}>Street Address</Text>
+                    <Text style={[styles.textstyle,{color:theme.text}]}>Street Address</Text>
                     {renderField(
                       "Street Address",
                       "streetAddress",
@@ -195,7 +206,7 @@ const AddAddressList = ({ route }) => {
                     )}
                   </View>
                   <View>
-                    <Text style={styles.textstyle}>City</Text>
+                    <Text style={[styles.textstyle,{color:theme.text}]}>City</Text>
                     {renderField(
                       "City",
                       "city",
@@ -206,7 +217,7 @@ const AddAddressList = ({ route }) => {
                     )}
                   </View>
                   <View>
-                    <Text style={styles.textstyle}>State/Province/Region</Text>
+                    <Text style={[styles.textstyle,{color:theme.text}]}>State/Province/Region</Text>
 
                     {renderField(
                       "State/Province/Region",
@@ -218,7 +229,7 @@ const AddAddressList = ({ route }) => {
                     )}
                   </View>
                   <View>
-                    <Text style={styles.textstyle}>Zip Code</Text>
+                    <Text style={[styles.textstyle,{color:theme.text}]}>Zip Code</Text>
                     {renderField(
                       "Zip Code",
                       "zipCode",
@@ -231,7 +242,7 @@ const AddAddressList = ({ route }) => {
                     )}
                   </View>
                   <View>
-                    <Text style={styles.textstyle}>Phone Number</Text>
+                    <Text style={[styles.textstyle,{color:theme.text}]}>Phone Number</Text>
 
                     {renderField(
                       "Phone Number",

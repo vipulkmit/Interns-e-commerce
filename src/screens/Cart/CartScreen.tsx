@@ -25,6 +25,17 @@ import {
 import useAuthStore from "../../stores/useAuthStore";
 
 const CartScreen = () => {
+  const themeMode = useAuthStore((state) => state.theme);
+  const theme =
+    themeMode === "dark"
+      ? {
+          background: Typography.Colors.black,
+          text: Typography.Colors.white,
+        }
+      : {
+          background: Typography.Colors.white,
+          text: Typography.Colors.black,
+        };
   const { setCart } = useAuthStore();
   const navigation = useNavigation();
   const isFocus = useIsFocused();
@@ -208,7 +219,7 @@ const CartScreen = () => {
             <View style={styles.dataContainer}>
               <View style={styles.dataSubConatiner}>
                 <View style={styles.innerContainer}>
-                  <Text style={styles.title} numberOfLines={2}>
+                  <Text style={[styles.title,{color:theme.text}]} numberOfLines={2}>
                     {item?.productName}
                   </Text>
                 </View>
@@ -216,14 +227,14 @@ const CartScreen = () => {
                   onPress={() => deleteItem(item)}
                   style={styles.iconContainer}
                 >
-                  <Icon name="delete" size={18} />
+                  <Icon name="delete" color={theme.text} size={18} />
                 </Pressable>
               </View>
               <View style={styles.priceContainer}>
                 <View style={styles.priceSubContainer}>
                   <Text style={styles.price}>Rs. {item.price}</Text>
                 </View>
-                <View style={styles.quantityContainer}>
+                <View style={[styles.quantityContainer,{backgroundColor:theme.background}]}>
                   <Pressable
                     style={styles.quantityButton}
                     onPress={() => handleDecrementQuantity(item)}
@@ -281,7 +292,7 @@ const CartScreen = () => {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container,{backgroundColor:theme.background}]}>
       <View style={styles.header}>
         <Text style={styles.heading}>Your Cart</Text>
       </View>
@@ -341,7 +352,7 @@ const CartScreen = () => {
             <Text style={styles.perItemAmount}>Rs.{priceData?.gstAmount?.toFixed(2)}</Text>
           </View>
           <View style={styles.totalAmount}>
-            <Text style={styles.totalPriceText}>Total Price</Text>
+            <Text style={[styles.totalPriceText,{color:theme.text}]}>Total Price</Text>
             <Text style={styles.totalPrice}>
               Rs.{" "}
               {promoData?.updatedCart?.totalPrice

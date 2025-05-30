@@ -11,11 +11,21 @@ import { profilechange, updateUserdata } from "../../services/api/apiServices";
 import { useState } from "react";
 
 const EditProfileScreen = () => {
+  
   const [image, setImage] = useState();
   const Navigation = useNavigation();
   const user = useAuthStore((state) => state.user);
-
-  // console.log(user, "vfbvfrjb");
+    const themeMode = useAuthStore((state) => state.theme);
+  const theme =
+    themeMode === "dark"
+      ? {
+          background: Typography.Colors.black,
+          text: Typography.Colors.white,
+        }
+      : {
+          background: Typography.Colors.white,
+          text: Typography.Colors.black,
+        };
   
   const handlepasswordchange = () => {
     // Navigation.navigate("Passwordchange", { email: user?.email });
@@ -80,7 +90,7 @@ const EditProfileScreen = () => {
     Navigation.goBack();
   };
   return (
-    <View style={styles.container}>
+    <View style={[styles.container,{backgroundColor:theme.background}]}>
       <View style={styles.viewaccount}>
         <TouchableOpacity onPress={gobacknav}>
           <Image source={assets.left} style={styles.arrowstyle} />
@@ -105,7 +115,7 @@ const EditProfileScreen = () => {
           /> */}
         </TouchableOpacity>
         <View style={styles.textcontainer}>
-          <Text style={styles.textname}>{user?.name}</Text>
+          <Text style={[styles.textname,{color:theme.text}]}>{user?.name}</Text>
           <Text style={styles.mailcontainer}>{user?.email}</Text>
         </View>
       </View>

@@ -33,6 +33,17 @@ import useAuthStore from "../../stores/useAuthStore";
 const width = Dimensions.get("window").width;
 
 const ProductDetailPage = ({ route }) => {
+  const themeMode = useAuthStore((state) => state.theme);
+  const theme =
+    themeMode === "dark"
+      ? {
+          background: Typography.Colors.black,
+          text: Typography.Colors.white,
+        }
+      : {
+          background: Typography.Colors.white,
+          text: Typography.Colors.black,
+        };
   const navigation = useNavigation();
   const { data } = route.params;
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -136,8 +147,8 @@ const ProductDetailPage = ({ route }) => {
   const SpecificationRenderItem = ({ item }) => {
     return (
       <View style={styles.specificContainer}>
-        <Text style={styles.specificationName}>{item.name}</Text>
-        <Text style={styles.specificationValue}>{item.value}</Text>
+        <Text style={[styles.specificationName,{color:theme.text}]}>{item.name}</Text>
+        <Text style={[styles.specificationValue,{color:theme.text}]}>{item.value}</Text>
         <View style={styles.line} />
       </View>
     );
@@ -146,10 +157,10 @@ const ProductDetailPage = ({ route }) => {
   const CarouselRenderItem = (item) => {
     return (
       <ImageBackground
-        resizeMode="contain"
+        // resizeMode="contain"
         source={{ uri: item.item }}
-        style={styles.imageBackground}
-        imageStyle={styles.imagestyle}
+        style={[styles.imageBackground,{backgroundColor:theme.background}]}
+        imageStyle={[styles.imagestyle,{backgroundColor:theme.background}]}
       ></ImageBackground>
     );
   };
@@ -179,10 +190,10 @@ const ProductDetailPage = ({ route }) => {
 
     for (let i = 1; i <= totalStars; i++) {
       if (i <= numRating) {
-        stars.push(<Icon key={i} name="star" size={28} style={styles.icon} />);
+        stars.push(<Icon key={i} name="star" size={28} style={[styles.icon,{color:theme.text}]} />);
       } else {
         stars.push(
-          <Icon key={i} name="star-o" size={28} style={styles.icon} />
+          <Icon key={i} name="star-o" size={28} style={[styles.icon,{color:theme.text}]} />
         );
       }
     }
@@ -206,7 +217,7 @@ const ProductDetailPage = ({ route }) => {
         );
       } else {
         stars.push(
-          <Icon key={i} name="star-o" size={17} style={styles.icon1} />
+          <Icon key={i} name="star-o" size={17} style={[styles.icon1,{color:theme.text}]} />
         );
       }
     }
@@ -218,9 +229,9 @@ const ProductDetailPage = ({ route }) => {
       <>
         <View style={styles.reviews}>
           {renderYellowStars(data.averageRating)}
-          <Text style={styles.Reviews}>{item.rating}</Text>
+          <Text style={[styles.Reviews,{color:theme.text}]}>{item.rating}</Text>
         </View>
-        <Text style={styles.reviewsComment}>{item.comment}</Text>
+        <Text style={[styles.reviewsComment,{color:theme.text}]}>{item.comment}</Text>
         <View style={{ flexDirection: "row", gap: 9 }}>
           {item?.images?.map((img, index) => (
             <Image
@@ -237,7 +248,7 @@ const ProductDetailPage = ({ route }) => {
   return (
     <ScrollView style={styles.container} nestedScrollEnabled={true}>
       {/* heading */}
-      <View style={styles.header}>
+      <View style={[styles.header,{backgroundColor:theme.background}]}>
         <HeaderComponent
           onClick={handleBackButton}
           onPress={function () {
@@ -260,7 +271,8 @@ const ProductDetailPage = ({ route }) => {
       />
 
       {/* carousel pagination */}
-      <View style={styles.paginationContainer}>
+      <View style={[styles.paginationContainer,{backgroundColor:theme.background
+      }]}>
         {data?.images?.map((_, index) => {
           return (
             <Animated.View
@@ -281,20 +293,20 @@ const ProductDetailPage = ({ route }) => {
       </View>
 
       {/* details container */}
-      <View style={styles.dataContainer}>
+      <View style={[styles.dataContainer,{backgroundColor:theme.background}]}>
         <View style={styles.shareContainer}>
-          <Text numberOfLines={1} style={styles.productName}>
+          <Text numberOfLines={1} style={[styles.productName,{color:theme.text}]}>
             {data.title}
           </Text>
-          <Image source={assets.Share} style={styles.ShareIcon} />
+          <Image source={assets.Share} style={[styles.ShareIcon,{tintColor:theme.text}]} />
         </View>
-        <Text numberOfLines={1} style={styles.brandName}>
+        <Text numberOfLines={1} style={[styles.brandName,{color:theme.text}]}>
           {data.brand.name}
         </Text>
         <View style={styles.amountTimer}>
           <View style={styles.Amount}>
             <Text style={styles.initialRate}>Rs. {data.price}</Text>
-            <Text numberOfLines={1} style={styles.rate}>
+            <Text numberOfLines={1} style={[styles.rate,{color:theme.text}]}>
               Rs. {data.discountPrice}
             </Text>
             <Text numberOfLines={1} style={styles.discount}>
@@ -309,9 +321,9 @@ const ProductDetailPage = ({ route }) => {
       </View>
 
       {/* color set */}
-      <View style={styles.colour}>
-        <Text style={styles.productName}>Color</Text>
-        <Text style={styles.colorText}>
+      <View style={[styles.colour,{backgroundColor:theme.background}]}>
+        <Text style={[styles.productName,{color:theme.text}]}>Color</Text>
+        <Text style={[styles.colorText,{color:theme.text}]}>
           {data?.productColor[selectedColorIndex]?.name}
         </Text>
 
@@ -343,11 +355,11 @@ const ProductDetailPage = ({ route }) => {
         </View>
       </View>
 
-      {/* size set */}s
-      <View style={styles.size}>
-        <View style={styles.sizeView}>
+      {/* size set */}
+      <View style={[styles.size,{backgroundColor:theme.background}]}>
+        <View style={[styles.sizeView]}>
           <Text
-            style={[styles.brandName, { fontFamily: Typography.font.medium }]}
+            style={[styles.brandName, { fontFamily: Typography.font.medium ,color:theme.text}]}
           >
             Select Size
           </Text>
@@ -356,7 +368,7 @@ const ProductDetailPage = ({ route }) => {
           </TouchableOpacity>
         </View>
 
-        <View style={styles.sizeData}>
+        <View style={[styles.sizeData]}>
           {data.productSize.map((sizeItem, index) => (
             <SizeComponent
               key={index}
@@ -369,7 +381,7 @@ const ProductDetailPage = ({ route }) => {
       </View>
 
       {/* button */}
-      <View style={styles.buttonView}>
+      <View style={[styles.buttonView,{backgroundColor:theme.background}]}>
         <ButtonComponent
           icon={wishlistToggle ? assets.HeartBlue : assets.heart}
           buttonText="Wishlist"
@@ -401,7 +413,7 @@ const ProductDetailPage = ({ route }) => {
       </View>
 
       {/* accordion */}
-      <View style={{ paddingTop: 10 }}>
+      <View style={{ paddingTop: 10 ,backgroundColor:theme.background}}>
         <Pressable onPress={toggleExpanded} style={styles.header1}>
           <View>
             {collapsed ? (
@@ -411,12 +423,12 @@ const ProductDetailPage = ({ route }) => {
                   { borderBottomWidth: 1, borderBottomColor: "#EAEAEA" },
                 ]}
               >
-                <Text style={styles.accordionTitle}>Product Details</Text>
+                <Text style={[styles.accordionTitle,{color:theme.text}]}>Product Details</Text>
                 <Image source={assets.Down} style={styles.accordionIcon} />
               </View>
             ) : (
               <View style={styles.accordionHeading}>
-                <Text style={styles.accordionTitle}>Product Details</Text>
+                <Text style={[styles.accordionTitle,{color:theme.text}]}>Product Details</Text>
                 <Image source={assets.Up} style={styles.accordionIcon} />
               </View>
             )}
@@ -425,14 +437,14 @@ const ProductDetailPage = ({ route }) => {
 
         <Collapsible collapsed={collapsed}>
           <View style={styles.content}>
-            <Text numberOfLines={4} style={styles.accordionText}>
+            <Text numberOfLines={4} style={[styles.accordionText,{color:theme.text}]}>
               {data.description}
             </Text>
           </View>
         </Collapsible>
       </View>
 
-      <View>
+      <View style={{backgroundColor:theme.background}}>
         <Pressable onPress={toggleExpanded1} style={styles.header1}>
           <View>
             {collapsed1 ? (
@@ -442,12 +454,12 @@ const ProductDetailPage = ({ route }) => {
                   { borderBottomWidth: 1.5, borderBottomColor: "#EAEAEA" },
                 ]}
               >
-                <Text style={styles.accordionTitle}>Specifications</Text>
+                <Text style={[styles.accordionTitle,{color:theme.text}]}>Specifications</Text>
                 <Image source={assets.Down} style={styles.accordionIcon} />
               </View>
             ) : (
               <View style={styles.accordionHeading}>
-                <Text style={styles.accordionTitle}>Specifications</Text>
+                <Text style={[styles.accordionTitle,{color:theme.text}]}>Specifications</Text>
                 <Image source={assets.Up} style={styles.accordionIcon} />
               </View>
             )}
@@ -467,8 +479,8 @@ const ProductDetailPage = ({ route }) => {
         </Collapsible>
       </View>
 
-      <View>
-        <Pressable onPress={toggleExpanded2} style={styles.header1}>
+      <View style={{backgroundColor:theme.background}}>       
+         <Pressable onPress={toggleExpanded2} style={styles.header1}>
           <View>
             {collapsed2 ? (
               <View
@@ -477,12 +489,12 @@ const ProductDetailPage = ({ route }) => {
                   { borderBottomWidth: 1.5, borderBottomColor: "#EAEAEA" },
                 ]}
               >
-                <Text style={styles.accordionTitle}>Ratings & Reviews</Text>
+                <Text style={[styles.accordionTitle,{color:theme.text}]}>Ratings & Reviews</Text>
                 <Image source={assets.Down} style={styles.accordionIcon} />
               </View>
             ) : (
               <View style={styles.accordionHeading}>
-                <Text style={styles.accordionTitle}>Ratings & Reviews</Text>
+                <Text style={[styles.accordionTitle,{color:theme.text}]}>Ratings & Reviews</Text>
                 <Image source={assets.Up} style={styles.accordionIcon} />
               </View>
             )}
@@ -492,7 +504,7 @@ const ProductDetailPage = ({ route }) => {
         <Collapsible collapsed={collapsed2}>
           <View style={styles.ratingContainer}>
             <View style={styles.rating}>
-              <Text style={styles.averageRating}>{data.averageRating}</Text>
+              <Text style={[styles.averageRating,{color:theme.text}]}>{data.averageRating}</Text>
               {renderStars(data.averageRating)}
             </View>
             <FlatList
@@ -630,7 +642,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 10,
+    paddingTop: 10,
   },
   dot: {
     height: 8,

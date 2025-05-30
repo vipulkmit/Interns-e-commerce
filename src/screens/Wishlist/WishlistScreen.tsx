@@ -22,6 +22,17 @@ import { useIsFocused, useNavigation } from "@react-navigation/native";
 import useAuthStore from "../../stores/useAuthStore";
 
 const WishlistScreen = () => {
+    const themeMode = useAuthStore((state) => state.theme);
+    const theme =
+      themeMode === "dark"
+        ? {
+            background: Typography.Colors.black,
+            text: Typography.Colors.white,
+          }
+        : {
+            background: Typography.Colors.white,
+            text: Typography.Colors.black,
+          };
   const { removeFromWishlist, clearWishlist } = useAuthStore();
 
   const navigation = useNavigation();
@@ -69,13 +80,13 @@ const WishlistScreen = () => {
           <Text style={styles.brand}>{item.brand.name}</Text>
         </View>
         <View style={styles.amountIcon}>
-          <Text style={styles.amount}>Rs. {item.discountPrice}</Text>
+          <Text style={[styles.amount,{color:theme.text}]}>Rs. {item.discountPrice}</Text>
           <Pressable
             onPress={() => {
               deleteitem(item);
             }}
           >
-            <Delete name="delete" style={styles.icon} size={20} />
+            <Delete name="delete" style={[styles.icon,{color:theme.text}]} size={20} />
           </Pressable>
         </View>
       </Pressable>
@@ -84,7 +95,7 @@ const WishlistScreen = () => {
 
   const EmptyWishlist = () => {
     return (
-      <View style={styles.emptyContainer}>
+      <View style={[styles.emptyContainer,{backgroundColor:theme.background}]}>
         <View style={styles.heartIconContainer}>
           <Ionicons name="heart" size={64} color={Typography.Colors.primary} />
         </View>
@@ -99,8 +110,8 @@ const WishlistScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
+    <View style={[styles.container,{backgroundColor:theme.background}]}>
+      <View style={[styles.header,{backgroundColor:theme.background}]}>
         <Text style={styles.heading}>Wishlist</Text>
         {Wishlist && Wishlist.length > 0 && (
           <Pressable style={styles.deleteAll} onPress={DeleteAll}>
@@ -165,7 +176,7 @@ const styles = StyleSheet.create({
   brand: {
     fontFamily: Typography.font.bold,
     color: Typography.Colors.lightgrey,
-    fontSize: 10,
+    fontSize: 15,
   },
   amount: {
     fontFamily: Typography.font.bold,

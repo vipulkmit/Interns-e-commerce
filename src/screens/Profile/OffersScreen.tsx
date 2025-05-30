@@ -16,8 +16,20 @@ import { PromoCode, promocode } from "../../services/api/apiServices";
 import TopHeaderComponent from "../../components/header/TopHeaderComponent";
 import { useNavigation } from "@react-navigation/native";
 import { assets } from "../../../assets/images";
+import useAuthStore from "../../stores/useAuthStore";
 
 const PromoCodeScreen = () => {
+  const themeMode = useAuthStore((state) => state.theme);
+  const theme =
+    themeMode === "dark"
+      ? {
+          background: Typography.Colors.black,
+          text: Typography.Colors.white,
+        }
+      : {
+          background: Typography.Colors.white,
+          text: Typography.Colors.black,
+        };
   const navigation = useNavigation()
   const [promoCodeData, setPromoCodeData] = useState();
   const [loading, setLoading] = useState(true);
@@ -50,7 +62,7 @@ const PromoCodeScreen = () => {
   const renderOffer = ({ item }) => (
     <View style={styles.offerContainer} >
       <Text selectable={true} style={styles.codeBox}>{item}</Text>
-      <Text style={styles.description}>
+      <Text style={[styles.description,{color: theme.text}]}>
         Get extra ₹100 off on orders above ₹999.
       </Text>
       <Text style={styles.expires}>Valid until 31st Jan 2025</Text>
@@ -72,17 +84,17 @@ const PromoCodeScreen = () => {
   }
 
   return (
-    <View style={styles.container}>
-      <>
+    <View style={[styles.container,{backgroundColor:theme.background}]}>
+    
         <View style={styles.headerRow}>
           <Pressable onPress={() => navigation.goBack()}>
-            <Image source={assets.ArrowLeft} style={styles.backIcon} />
+            <Image source={assets.ArrowLeft} style={[styles.backIcon,{tintColor:theme.text}]} />
           </Pressable>
-          <Text numberOfLines={1} style={styles.headerTitle}>
+          <Text numberOfLines={1} style={[styles.headerTitle,{color:theme.text}]}>
             Offers
           </Text>
         </View>
-      </>
+      
       <FlatList
         data={promoCodeData || []}
         keyExtractor={(item, index) => index.toString()}

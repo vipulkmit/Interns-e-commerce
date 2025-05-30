@@ -22,6 +22,17 @@ import TopHeaderComponent from "../../components/header/TopHeaderComponent";
 import { assets } from "../../../assets/images";
 
 const DeliveryAddress = () => {
+  const themeMode = useAuthStore((state) => state.theme);
+  const theme =
+    themeMode === "dark"
+      ? {
+          background: Typography.Colors.black,
+          text: Typography.Colors.white,
+        }
+      : {
+          background: Typography.Colors.white,
+          text: Typography.Colors.black,
+        };
   const user = useAuthStore((state) => state.user);
   const Navigation = useNavigation();
   const [selectedIndex, setSelectedIndex] = useState(null);
@@ -95,7 +106,7 @@ const DeliveryAddress = () => {
               borderColor:
                 selectedIndex === index
                   ? Typography.Colors.primary
-                  : Typography.Colors.black,
+                  : theme.text,
               borderWidth: selectedIndex === index ? 2 : 1,
             },
           ]}
@@ -154,10 +165,10 @@ const DeliveryAddress = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container,{backgroundColor:theme.background}]}>
       <View style={styles.headerRow}>
         <Pressable onPress={() => Navigation.goBack()}>
-          <Image source={assets.ArrowLeft} style={styles.backIcon} />
+          <Image source={assets.ArrowLeft} style={[styles.backIcon,{tintColor:theme.text}]} />
         </Pressable>
         <Text numberOfLines={1} style={styles.headerTitle}>
           Choose Delivery Address

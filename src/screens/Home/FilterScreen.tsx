@@ -6,11 +6,22 @@ import Icon from "react-native-vector-icons/Entypo";
 import { useNavigation } from "@react-navigation/native";
 import SizeComponent from "../../components/product/SizeComponent";
 import { Color, ProductFilters } from "../../services/api/apiServices";
+import useAuthStore from "../../stores/useAuthStore";
 
 const FilterScreen = ({ route }) => {
   const { category, categoryName, subCategoryId,categoryId,setFilterApplied, setFilterData } =
     route.params;
-
+const themeMode = useAuthStore((state) => state.theme);
+  const theme =
+    themeMode === "dark"
+      ? {
+          background: Typography.Colors.black,
+          text: Typography.Colors.white,
+        }
+      : {
+          background: Typography.Colors.white,
+          text: Typography.Colors.black,
+        };
   const navigation = useNavigation();
   const [applyfilter, setApplyFilter] = useState();
   const globalFilter = {
@@ -114,7 +125,7 @@ const FilterScreen = ({ route }) => {
   };
 
   return (
-    <ScrollView style={styles.container}>
+    <View style={[styles.container,{backgroundColor:theme.background}]}>
       <View style={styles.heading}>
         <Pressable onPress={() => navigation.goBack()}>
           <Icon name="cross" size={24} style={styles.icon} />
@@ -122,11 +133,11 @@ const FilterScreen = ({ route }) => {
         <Text style={styles.headingText}>Filter Search</Text>
       </View>
 
-      <View style={styles.line} />
+       <View style={[styles.line,{borderBottomColor:theme.background}]} />
 
       <View style={styles.subContainer}>
         <Text style={styles.priceTitle}>Size</Text>
-        <View style={styles.sizeContainer}>
+        <View style={[styles.sizeContainer,{backgroundColor:theme.background}]}>
           {sizes.map((size, index) => (
             <Pressable
               key={index}
@@ -138,7 +149,7 @@ const FilterScreen = ({ route }) => {
             >
               <Text
                 style={[
-                  styles.sizeText,
+                  styles.sizeText,{color:theme.text},
                   filters.selectedSize === size && styles.selectedSizeText,
                 ]}
               >
@@ -149,7 +160,7 @@ const FilterScreen = ({ route }) => {
         </View>
       </View>
 
-      <View style={styles.line} />
+       <View style={[styles.line,{borderBottomColor:theme.background}]} />
 
       <View style={styles.subContainer}>
         <Text style={styles.priceTitle}>Color</Text>
@@ -181,18 +192,18 @@ const FilterScreen = ({ route }) => {
         </View>
       </View>
 
-      <View style={styles.line} />
+      <View style={[styles.line,{borderBottomColor:theme.background}]} />
 
       <View style={styles.subContainer}>
         <Text style={styles.priceTitle}>Price Range</Text>
         <View style={styles.minmax}>
           <View style={styles.amountRange}>
-            <Text numberOfLines={1} style={styles.amountText}>
+            <Text numberOfLines={1} style={[styles.amountText,{color:theme.text}]}>
               Rs. {filters.amount[0]}
             </Text>
           </View>
           <View style={styles.amountRange}>
-            <Text numberOfLines={1} style={styles.amountText}>
+            <Text numberOfLines={1} style={[styles.amountText,{color:theme.text}]}>
               Rs. {filters.amount[1]}
             </Text>
           </View>
@@ -214,18 +225,18 @@ const FilterScreen = ({ route }) => {
         </View>
       </View>
 
-      <View style={styles.line} />
+       <View style={[styles.line,{borderBottomColor:theme.background}]} />
 
       <View style={styles.subContainer}>
         <Text style={styles.priceTitle}>Discount</Text>
         <View style={styles.minmax}>
           <View style={styles.amountRange}>
-            <Text numberOfLines={1} style={styles.amountText}>
+            <Text numberOfLines={1} style={[styles.amountText,{color:theme.text}]}>
               {filters.discount[0]} %
             </Text>
           </View>
           <View style={styles.amountRange}>
-            <Text numberOfLines={1} style={styles.amountText}>
+            <Text numberOfLines={1} style={[styles.amountText,{color:theme.text}]}>
               {filters.discount[1]} %
             </Text>
           </View>
@@ -252,7 +263,7 @@ const FilterScreen = ({ route }) => {
           <Text style={styles.buttonText}>Apply Filters</Text>
         </Pressable>
       </View>
-    </ScrollView>
+    </View>
   );
 };
 

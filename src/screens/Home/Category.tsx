@@ -14,11 +14,22 @@ import { SubCategories } from "../../services/api/apiServices";
 import { CategoryProps } from "../../models/HomePage.type";
 import { Typography } from "../../theme/Colors";
 import { useNavigation } from "@react-navigation/native";
+import useAuthStore from "../../stores/useAuthStore";
 
 const Category = ({ route }) => {
   const { name ,id} = route.params;
   const navigation = useNavigation();
-
+ const themeMode = useAuthStore((state) => state.theme);
+  const theme =
+    themeMode === "dark"
+      ? {
+          background: Typography.Colors.black,
+          text: Typography.Colors.white,
+        }
+      : {
+          background: Typography.Colors.white,
+          text: Typography.Colors.black,
+        };
   const renderProductPage = (category) => {
     navigation.navigate("ProductsPage", {
       category: category,
@@ -59,10 +70,10 @@ const Category = ({ route }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container,{backgroundColor:theme.background}]}>
       <HeaderComponent onClick={goback} Title={name} />
 
-      <Text style={styles.text}>Shop by Category: {name}</Text>
+      <Text style={[styles.text,{color:theme.text}]}>Shop by Category: {name}</Text>
       <FlatList
         data={Category}
         numColumns={2}

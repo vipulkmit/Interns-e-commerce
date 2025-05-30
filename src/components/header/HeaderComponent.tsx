@@ -22,6 +22,17 @@ const HeaderComponent = ({
   Title,
   productType, // Add this prop for cart item count
 }: MainHeaderProps) => {
+   const themeMode = useAuthStore((state) => state.theme);
+  const theme =
+    themeMode === "dark"
+      ? {
+          background: Typography.Colors.black,
+          text: Typography.Colors.white,
+        }
+      : {
+          background: Typography.Colors.white,
+          text: Typography.Colors.black,
+        };
   const navigation = useNavigation();
   const cartQuantity = useAuthStore((state) => state.cart);
 
@@ -42,16 +53,16 @@ const HeaderComponent = ({
       <View style={styles.container}>
         <View style={styles.UserContainer}>
           <Pressable onPress={onClick}>
-            <Image source={assets.ArrowLeft} style={styles.backIcon} />
+            <Image source={assets.ArrowLeft} style={[styles.backIcon,{tintColor:theme.text}]} />
           </Pressable>
-          <Text numberOfLines={1} style={styles.productType}>
+          <Text numberOfLines={1} style={[styles.productType,{color:theme.text}]}>
             {Title}{" "}
           </Text>
         </View>
 
         <View style={styles.iconContainer}>
           <Pressable onPress={() => onPressfunc()}>
-            <Image source={assets.MainSearch} style={styles.icon} />
+            <Image source={assets.MainSearch} style={[styles.icon,{tintColor:theme.text}]} />
           </Pressable>
           <Pressable
             onPress={() =>
@@ -60,7 +71,7 @@ const HeaderComponent = ({
               })
             }
           >
-            <Image source={assets.HeartBlack} style={styles.icon} />
+            <Image source={assets.HeartBlack} style={[styles.icon,{tintColor:theme.text}]} />
           </Pressable>
           <View style={styles.cartContainer}>
             <Pressable
@@ -68,7 +79,7 @@ const HeaderComponent = ({
                 navigation.navigate(CartNavigator, { screen: "CartScreen" })
               }
             >
-              <Image source={assets.BagBlack} style={styles.icon} />
+              <Image source={assets.BagBlack} style={[styles.icon,{tintColor:theme.text}]} />
             </Pressable>
               <View style={styles.badge}>
                 <Text style={styles.badgeText}>{cartQuantity}</Text>

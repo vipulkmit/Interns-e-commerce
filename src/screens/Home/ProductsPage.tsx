@@ -15,8 +15,20 @@ import ProductComponent from "../../components/product/ProductComponent";
 import ButtonComponent from "../../components/button/ButtonComponent";
 import { Typography } from "../../theme/Colors";
 import { Products } from "../../services/api/apiServices";
+import useAuthStore from "../../stores/useAuthStore";
 
 const ProductsPage = ({ route }) => {
+  const themeMode = useAuthStore((state) => state.theme);
+  const theme =
+    themeMode === "dark"
+      ? {
+          background: Typography.Colors.black,
+          text: Typography.Colors.white,
+        }
+      : {
+          background: Typography.Colors.white,
+          text: Typography.Colors.black,
+        };
   const navigation = useNavigation();
   const handleBackButton = () => {
     navigation.goBack();
@@ -43,7 +55,7 @@ const ProductsPage = ({ route }) => {
   };
   const ProductRenderItem = ({ item }) => {
     return (
-      <View style={styles.container}>
+      <View style={[styles.container,{backgroundColor:theme.background}]}>
         <ProductComponent
           onClick={() => renderProduct(item)}
           images={item.images}
@@ -75,8 +87,8 @@ const ProductsPage = ({ route }) => {
               })
             }
           >
-            <Text style={styles.text}>Filters</Text>
-            <Image source={assets.Filter} style={styles.SubIcon} />
+            <Text style={[styles.text,{color:theme.text}]}>Filters</Text>
+            <Image source={assets.Filter} style={[styles.SubIcon,{tintColor:theme.text}]} />
           </Pressable>
         </View>
       </>
@@ -95,7 +107,7 @@ const ProductsPage = ({ route }) => {
         refreshing={refresh}
         keyExtractor={(item) => item.id}
         ListHeaderComponent={ListHeader}
-        ListHeaderComponentStyle={styles.header}      
+        ListHeaderComponentStyle={[styles.header,{backgroundColor:theme.background}]}      
         />
     </>
   );

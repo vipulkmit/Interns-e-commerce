@@ -82,7 +82,10 @@ const ProfileScreen = () => {
             style={[
               item.iconStyle || styles.logostyle,
               {
-                tintColor: theme.text,
+                tintColor:
+                  item.icon === assets.Logout
+                    ? Typography.Colors.red
+                    : theme.text,
               },
             ]}
           />
@@ -128,7 +131,7 @@ const ProfileScreen = () => {
               {user?.email}
             </Text>
           </View>
-          <View style={styles.logocontainer}>
+          <View style={styles.modeContainer}>
             <ThemeToggle />
           </View>
         </View>
@@ -164,6 +167,14 @@ const styles = StyleSheet.create({
     // backgroundColor: Typography.Colors.white,
     paddingHorizontal: 20,
     flex: 1,
+  },
+  modeContainer: {
+    flexDirection: "row",
+    gap: 20,
+    flex: 1,
+    justifyContent: "flex-end",
+    alignItems:'center'
+
   },
   firstsection: {
     paddingVertical: 35,

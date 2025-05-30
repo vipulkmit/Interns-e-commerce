@@ -20,7 +20,6 @@ export default function ChangePasswordScreen() {
 
   const Passwordchangesuccess = async () => {
     let isValid = true;
-
     setOldPasswordError("");
     setNewPasswordError("");
     setConfirmPasswordError("");
