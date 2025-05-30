@@ -16,7 +16,6 @@ const HomeNavigator = () => {
     <Stack.Navigator
       // @ts-ignore: Suppress TypeScript error for 'id'
       id="HomeNavigator"
-      // initialRouteName='Category'
       screenOptions={{ headerShown: false }}
     >
       <Stack.Screen name="HomeScreen" component={HomeScreen} />

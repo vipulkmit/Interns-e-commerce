@@ -26,15 +26,11 @@ const ProductsPage = ({ route }) => {
   const [Category, setCategory] = useState();
   const [filterData, setFilterData] = useState([]);
   const [cartToggle, setCartToggle] = useState(false);
-// console.log(category.id,"categoryyyyyyy");
-// console.log(categoryId,"categoryIdcategoryIdcategoryIdcategoryId");
 
 
-console.log(filterData,'ffilter=-=-=--=--')
   useEffect(() => {
     Products(categoryName, category.name,categoryId)
       .then((data) => {
-        console.log(data?.data,'da6ta')
         setCategory(data?.data);
       })
       .catch((e) => {
@@ -42,9 +38,7 @@ console.log(filterData,'ffilter=-=-=--=--')
       });
   }, []);
   const [refresh, setRefresh] = useState(false);
-  const renderProduct = (data) => {
-    // console.log(data, "item");
-
+  const renderProduct = (data: any) => {
     return navigation.navigate("ProductDetailPage", { data: data });
   };
   const ProductRenderItem = ({ item }) => {
@@ -101,9 +95,8 @@ console.log(filterData,'ffilter=-=-=--=--')
         refreshing={refresh}
         keyExtractor={(item) => item.id}
         ListHeaderComponent={ListHeader}
-        ListHeaderComponentStyle={styles.header}
-        // contentContainerStyle={{backgroundColor:'green'}}
-      />
+        ListHeaderComponentStyle={styles.header}      
+        />
     </>
   );
 };
@@ -146,7 +139,6 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     paddingTop: 10,
     paddingRight: 10,
-    // backgroundColor:'red'
   },
   text: {
     fontSize: 14,

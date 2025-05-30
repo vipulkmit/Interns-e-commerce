@@ -10,7 +10,6 @@ import { Color, ProductFilters } from "../../services/api/apiServices";
 const FilterScreen = ({ route }) => {
   const { category, categoryName, subCategoryId,categoryId,setFilterApplied, setFilterData } =
     route.params;
-  // console.log(categoryId,"cat",subCategoryId,"sdvgjawycfg");
 
   const navigation = useNavigation();
   const [applyfilter, setApplyFilter] = useState();
@@ -104,9 +103,9 @@ const FilterScreen = ({ route }) => {
       categoryId,
     )
       .then((data) => {
+        console.log(data?.data,"=-=-=-=-=-=--");
         setFilterApplied(true);
         setFilterData(data?.data);
-        console.log(data?.data);
         navigation.goBack();
       })
       .catch((e) => {

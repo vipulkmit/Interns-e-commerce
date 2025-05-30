@@ -5,7 +5,6 @@ import {
   Image,
   ImageBackground,
   Pressable,
-  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -42,7 +41,6 @@ const HomeScreen = () => {
 
   // Category Render Item
   const renderItem = ({ item }) => {
-    // console.log(item.image);
     return (
       <Pressable
         style={styles.subContainer}
@@ -59,7 +57,6 @@ const HomeScreen = () => {
   // Carousel Render Item
 
   const CarouselRenderItem = ({ item }) => {
-    // console.log(item.image,"cvadj",item.logoURL);
     
     return (
       <ImageBackground
@@ -92,7 +89,6 @@ const HomeScreen = () => {
   };
 
   const TrendingRenderItem = ({ item }) => {
-    // console.log(item.images,'item.images[0]',item.images[0])
     return (
       <View style={styles.container}>
         <CardComponent
@@ -164,7 +160,6 @@ const HomeScreen = () => {
     useEffect(() => {
       Categories()
         .then((data) => {
-          // console.log(data.data, "eufiebfh");
           setCategory(data?.data);
         })
         .catch((e) => {
@@ -207,7 +202,6 @@ const HomeScreen = () => {
             <FlatList
               data={Category}
               renderItem={renderItem}
-              // keyExtractor={(item) => item?.id?.toString()}
               horizontal
               showsHorizontalScrollIndicator={false}
             />
@@ -307,7 +301,7 @@ const HomeScreen = () => {
   };
 
   return (
-    // <View style={styles.container}>
+
     <FlatList
       data={DealData.slice(0, 4)}
       renderItem={DealRenderItem}
@@ -327,7 +321,7 @@ const HomeScreen = () => {
         backgroundColor: Typography.Colors.white,
       }}
     />
-    // </View>
+
   );
 };
 
@@ -437,7 +431,6 @@ const styles = StyleSheet.create({
     paddingLeft: 11,
   },
   TrendingText: {
-    // fontFamily: Typography.font.bold,
     fontWeight:'500',
     fontSize: 20,
     color: Typography.Colors.lightblack,

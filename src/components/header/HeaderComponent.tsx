@@ -24,7 +24,6 @@ const HeaderComponent = ({
 }: MainHeaderProps) => {
   const navigation = useNavigation();
   const cartQuantity = useAuthStore((state) => state.cart);
-  // console.log(cartQuantity,"cartQuantity");
 
   const state = useNavigationState((state) => state);
 
@@ -122,14 +121,12 @@ const styles = StyleSheet.create({
     height: 16,
     justifyContent: "center",
     alignItems: "center",
-    // paddingHorizontal: 4,
   },
   badgeText: {
     color: "#FFFFFF",
     fontSize: 12,
     fontWeight: "bold",
     textAlign: "center",
-    // lineHeight: 16,
   },
 });
 

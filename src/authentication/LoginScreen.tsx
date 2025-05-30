@@ -6,9 +6,6 @@ import {
   Image,
   Alert,
   TouchableOpacity,
-  KeyboardAvoidingView,
-  Platform,
-  SafeAreaView,
 } from "react-native";
 import { Typography } from "../theme/Colors";
 import { assets } from "../../assets/images";
@@ -174,7 +171,7 @@ export default function LoginScreen() {
 
       <Text style={styles.socialText}>Login using</Text>
       <View style={styles.socialButtons}>
-        <TouchableOpacity onPress={handleSocialLoginPress}>
+        <TouchableOpacity>
           <Image
             source={assets.facebooklogo}
             style={styles.socialIconfacebook}

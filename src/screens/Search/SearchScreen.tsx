@@ -243,7 +243,6 @@ const SearchScreen = () => {
                 <SectionList
                   sections={sections}
                   keyExtractor={(_, index) => index.toString()}
-                  // ListHeaderComponent={renderHeader}
                   renderSectionHeader={({ section: { title } }) => (
                     <Text style={styles.title}>{title} Fashion</Text>
                   )}
@@ -270,7 +269,6 @@ const styles = StyleSheet.create({
   },
   HeaderStyle: {
     backgroundColor: Typography.Colors.white,
-    // paddingHorizontal: 20,
   },
   container: {
     flex: 1,
@@ -286,7 +284,6 @@ const styles = StyleSheet.create({
     fontFamily: Typography.font.bold,
     fontWeight: "800",
     fontSize: 24,
-    // paddingVertical: 5,
     paddingHorizontal: 10,
   },
   title: {

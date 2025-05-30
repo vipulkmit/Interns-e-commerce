@@ -4,7 +4,6 @@ import { Typography } from "../theme/Colors";
 import { assets } from "../../assets/images";
 import { useNavigation, useNavigationState } from "@react-navigation/native";
 import {
-  forgotPasswordService,
   PasswordChangeService,
 } from "../services/api/apiServices";
 import CustomTextInput from "../components/textInput/CustomTextInput";
@@ -52,7 +51,6 @@ export default function PasswordchangeScreen({ route }) {
   };
 
   return (
-    // <ScrollView style={{ flex: 1 }}>
     <View style={styles.container}>
       <View style={styles.logoContainer}>
         <View style={styles.containerlogo}>
@@ -116,7 +114,6 @@ export default function PasswordchangeScreen({ route }) {
         )}
       </Formik>
     </View>
-    // </ScrollView>
   );
 }
 

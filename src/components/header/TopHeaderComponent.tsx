@@ -16,17 +16,11 @@ const TopHeaderComponent = () => {
             user?.profilePicture ? { uri: user?.profilePicture } : assets.Demo
           }
           style={styles.userImage}
-          // resizeMode="contain"
         />
         <Text numberOfLines={1} style={styles.userName}>
           {user?.name}
         </Text>
       </View>
-      {/* <View style={styles.iconContainer}>
-        <Pressable >
-          <Image source={assets.MainSearch} style={styles.icon} resizeMode="cover" />
-        </Pressable>
-      </View> */}
     </View>
   );
 };

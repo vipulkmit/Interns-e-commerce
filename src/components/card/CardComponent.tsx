@@ -48,12 +48,9 @@ const styles = StyleSheet.create({
         paddingTop: 20,
         flex: 1,
         marginVertical:4,
-        // marginHorizontal:10
-        // backgroundColor:'red'
     },
     imgView:{
         flex:1,
-        // backgroundColor:'red',
         height: 227,
         width: 216,
         borderTopLeftRadius: 5,

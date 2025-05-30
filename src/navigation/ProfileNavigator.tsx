@@ -14,7 +14,7 @@ import AddAdressList from "../screens/Profile/AddAddressListScreen";
 import PromoCodeScreen from "../screens/Profile/OffersScreen";
 import ChangePasswordScreen from "../screens/Profile/ChangePasswordScreen";
 import MyOrdersScreen from "../screens/Profile/MyOrdersScreen";
-// import PromoCodeScreen from "../screens/Profile/offersScreen";
+
 
 const Stack = createNativeStackNavigator();
 const ProfileNavigator = () => {

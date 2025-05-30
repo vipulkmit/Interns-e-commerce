@@ -38,28 +38,22 @@ const CartScreen = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [coupon, setCoupon] = useState("");
   const [promoData, setPromoData] = useState({ discount: 0 });
-  //  const cartQuantity = useAuthStore((state) => state.cart);
+
   const handleCouponChange = (text) => {
-    // console.log("Coupon text changed:", text);
     setCoupon(text);
   };
-  // console.log(promoData, "=-=-=-=-=------");
+
 
   const handlePromoCode = async () => {
-    // console.log(coupon, "coupoonnnnnnn");
-
     if (!coupon.trim()) {
       Alert.alert("Invalid Coupon", "Please enter a valid coupon code");
       return;
     }
 
     try {
-      console.log("Applying coupon:", coupon);
 
       const response = await PromoCode(coupon);
-      // console.log("Promo code response:", response);
       setPromoData(response?.data);
-      // Refresh cart data after applying coupon
       GetCartData();
       GetCartPrice();
     } catch (error) {
@@ -76,9 +70,6 @@ const CartScreen = () => {
     try {
       const data = await CartData();
       const items = data?.data?.cartDetails?.items || [];
-      // console.log(items && coupon, "items && coupon");
-
-      // console.log(data,'datadatadatadatadatadatadata')
       setCartData(items);
       setCart(items.length)
       setIsLoading(false);
@@ -104,7 +95,6 @@ const CartScreen = () => {
       );
       if (data?.data?.cartDetails && coupon) {
         const response = await PromoCode(coupon);
-        // console.log("Promo code response:", response);
         setPromoData(response?.data);
       }
     } catch (e) {
@@ -129,7 +119,6 @@ const CartScreen = () => {
   // Increment quantity handler
   const handleIncrementQuantity = async (item) => {
     try {
-      // Optimistically update UI first for better user experience
       const newQuantity = item.quantity + 1;
       setCartData((prev) =>
         prev.map((cartItem) =>
@@ -138,7 +127,6 @@ const CartScreen = () => {
             : cartItem
         )
       );
-      // console.log(newQuantity,"newQuantity");
 
       // Then call API
       await AddToCart(
@@ -148,11 +136,10 @@ const CartScreen = () => {
         item.productSizeId
       );
 
-      // Refresh cart data and price after API success
+
       GetCartPrice();
     } catch (error) {
       console.log("Error updating quantity:", error);
-      // Revert the local state if API call fails
       GetCartData();
     }
   };
@@ -162,7 +149,6 @@ const CartScreen = () => {
     try {
       const response = await QuantityDelete(item.productId);
       if (response.data) {
-        // GetCartData();
       }
     } catch (error) {
       console.log("Error deleting item:", error);
@@ -171,7 +157,7 @@ const CartScreen = () => {
 
   const handleDecrementQuantity = async (item) => {
     try {
-      // Only decrement if quantity is greater than 1
+
       if (item.quantity > 1) {
         const newQuantity = item.quantity - 1;
         setCartData((prev) =>
@@ -181,13 +167,11 @@ const CartScreen = () => {
               : cartItem
           )
         );
-        // console.log(newQuantity,"newQuantity");
+
 
         await deleteQuantity(item);
         GetCartPrice();
       } else {
-        // If quantity is 1, show confirmation or directly delete the item
-        // You can customize this behavior based on your requirements
         deleteItem(item);
       }
     } catch (error) {
@@ -211,7 +195,6 @@ const CartScreen = () => {
 
   const renderData = useCallback(
     ({ item }) => {
-      // console.log(item);
 
       return (
         <View style={{ flex: 1 }}>
@@ -538,7 +521,7 @@ const styles = StyleSheet.create({
     color: Typography.Colors.nature,
     fontSize: 18,
   },
-  // Empty Cart Styles
+
   emptyCartContainer: {
     flex: 1,
     justifyContent: "center",

@@ -32,7 +32,6 @@ const OrderScreen = ({ route }) => {
     totalPrice: 0,
   });
   
-// console.log(priceData,"priceData");
 
   const GetCartData = async () => {
     try {
@@ -112,11 +111,8 @@ const OrderScreen = ({ route }) => {
       );
       
       setPaymentToggle(!paymentToggle);
-      // console.log("Payment response:", response);
-      
-      // Check if we have a payment link and redirect to it
+
       if (response?.data?.paymentLink) {
-        // Opening the payment link in the device's browser
         await Linking.openURL(response.data.paymentLink);
       } else {
         Alert.alert("Error", "Payment link not received");
@@ -161,13 +157,6 @@ const OrderScreen = ({ route }) => {
               {item?.phoneNumber}{" "}
             </Text>
           </View>
-          {/* <Pressable style={{ flex: 0.1, justifyContent: "center" }}>
-            <Image
-              source={assets.rightarrow}
-              style={styles.arrow}
-              resizeMode="contain"
-            />
-          </Pressable> */}
         </View>
       </View>
       <View style={styles.horizonLine} />
@@ -177,11 +166,6 @@ const OrderScreen = ({ route }) => {
           <Image source={assets.Razorpay} style={styles.paymentImage} />
           <Text style={styles.details}>Pay With Rozorpay Pay</Text>
           <View style={styles.arrowConatiner}>
-            {/* <Image
-              source={assets.rightarrow}
-              style={styles.arrow}
-              resizeMode="contain"
-            /> */}
           </View>
         </Pressable>
       </View>
@@ -265,38 +249,28 @@ const styles = StyleSheet.create({
   },
   trackerText: {
     fontSize: 12,
-    // paddingLeft:8,
+
     color: Typography.Colors.lightblack,
     fontFamily: Typography.font.regular,
   },
   CartContainer: {
     flex: 1,
     flexDirection: "row",
-    // backgroundColor:'pink',
-    // marginHorizontal: 36,
-    // paddingTop:10,
-    // elevation: 1,
-    // borderWidth: 0.2,
-    // marginBottom: 16,
     borderRadius: 10,
-    // marginTop: 10,
-    // marginHorizontal: 20,
+
   },
   imageConatiner: {
     paddingVertical: 18,
     paddingLeft: 18,
     flex: 1,
-    // backgroundColor: "red",
   },
   Image: {
     height: 77,
     width: 87,
     borderRadius: 5,
-    // paddingHorizontal: 16,
   },
   dataContainer: {
     flex: 2,
-    // backgroundColor: "green",
     paddingVertical: 18,
     paddingRight: 18,
   },
@@ -307,10 +281,6 @@ const styles = StyleSheet.create({
     paddingTop: 5,
     gap: 5,
   },
-  // dataSubConatiner: {
-  //   flex: 1,
-  //   flexDirection: "row",
-  // },
   title: {
     fontFamily: Typography.font.bold,
     color: Typography.Colors.black,

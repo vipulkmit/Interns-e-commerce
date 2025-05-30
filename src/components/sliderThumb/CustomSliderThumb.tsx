@@ -5,7 +5,6 @@ import { Typography } from '../../theme/Colors';
 const CustomSliderThumb = () => {
   return (
     <View style={styles.mainView}>
-      {/* <View style={styles.innerView} /> */}
     </View>
   );
 };

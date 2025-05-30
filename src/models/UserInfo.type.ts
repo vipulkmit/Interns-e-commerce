@@ -6,6 +6,5 @@ export type HeaderProps = {
     icon?: ImageSourcePropType,
     icon1?: ImageSourcePropType,
     icon2?: ImageSourcePropType,
-
     imgStyle?:StyleProp<ImageStyle>
 }

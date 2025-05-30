@@ -23,7 +23,6 @@ const ProductComponent = ({
                     <Image source={{uri:images[0].toString()}} style={styles.Collection} />
                 </View>
                 <View style={[ styles.Container,{ gap: 15 }]}>
-
                     <View style={styles.Container}>
                         <Image source={{uri:images[1].toString()}} style={styles.Collection} />
                     </View>
@@ -46,7 +45,7 @@ const ProductComponent = ({
                     <Text numberOfLines={1} style={styles.discount}>({discount}% Off)</Text>
                 </View>
             </View>
-
+        
         </View>
     )
 }
@@ -78,20 +77,16 @@ const styles = StyleSheet.create({
         alignItems:'center',
         borderRadius:10,
         overflow:'hidden'
-        // borderRadius:200
     },
     dataContainer: {
-        // flex: 1,
         paddingLeft: 8,
         paddingBottom: 15,
-        // backgroundColor: 'pink'
     },
   
     numberText: {
         color: Typography.Colors.white,
         fontFamily: Typography.font.bold,
         fontSize: 33,
-        // alignSelf: 'center',
         textAlign: 'center',
         position: 'absolute',
         zIndex: 99
@@ -109,8 +104,6 @@ const styles = StyleSheet.create({
     Amount: {
         flexDirection: 'row',
         paddingTop: 7,
-        // flex: 1,
-        // backgroundColor:'red'
     },
     productName: {
         paddingTop: 16,

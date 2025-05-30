@@ -15,25 +15,71 @@ type AuthStore = {
   sethydrated: (hashydrated: boolean) => void;
   cart: any;
   setCart: (cart: any) => void;
+
+  wishlistItems: string[];
+  isInWishlist: (productId: string) => boolean;
+  addToWishlist: (productId: string) => void;
+  removeFromWishlist: (productId: string) => void;
+  toggleWishlist: (productId: string) => void;
+  clearWishlist: () => void;
 };
 
 const useAuthStore = create<AuthStore>()(
 
   persist(
-    (set) => ({
+    (set, get) => ({
       user: null,
       token: null,
       isLoggedIn: false,
       hashydrated: false,
       cart: null,
+      wishlistItems: [],
 
       setUser: (user) => set({ user }),
       setToken: (newtoken) => set({ token: newtoken }),
       login: () => set({ isLoggedIn: true }),
-      logout: () => set({ isLoggedIn: false, token: null }),
+      logout: () =>
+        set({
+          isLoggedIn: false,
+          token: null,
+          wishlistItems: [],
+        }),
       clearUser: () => set({ user: null }),
       sethydrated: (hashydrated) => set({ hashydrated }),
-      setCart: (cart)=> set({cart})
+      setCart: (cart)=> set({cart}),
+
+      isInWishlist: (productId: string) => {
+        const state = get();
+        return state.wishlistItems.includes(productId);
+      },
+
+      addToWishlist: (productId: string) => {
+        set((state) => {
+          if (!state.wishlistItems.includes(productId)) {
+            return {
+              wishlistItems: [...state.wishlistItems, productId],
+            };
+          }
+          return state;
+        });
+      },
+
+      removeFromWishlist: (productId: string) => {
+        set((state) => ({
+          wishlistItems: state.wishlistItems.filter((id) => id !== productId),
+        }));
+      },
+
+      toggleWishlist: (productId: string) => {
+        const state = get();
+        if (state.isInWishlist(productId)) {
+          state.removeFromWishlist(productId);
+        } else {
+          state.addToWishlist(productId);
+        }
+      },
+
+      clearWishlist: () => set({ wishlistItems: [] }),
     }),
     {
       name: "auth-storage",
@@ -44,4 +90,5 @@ const useAuthStore = create<AuthStore>()(
     }
   )
 );
+
 export default useAuthStore;

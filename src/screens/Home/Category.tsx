@@ -28,8 +28,6 @@ const Category = ({ route }) => {
   };
 
   const renderItem = ({ item }: { item: CategoryProps }) => {
-    // console.log(item);
-
     return (
       <Pressable
         style={styles.backgroundContainer}
@@ -69,7 +67,6 @@ const Category = ({ route }) => {
         data={Category}
         numColumns={2}
         renderItem={renderItem}
-        // keyExtractor={(index) => index.toString()}
         contentContainerStyle={{ marginHorizontal: 10 }}
         columnWrapperStyle={{ gap: 15 }}
       />
@@ -124,7 +121,6 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     height: 140,
     paddingTop: 15,
-    // paddingRight:10
   },
 });
 

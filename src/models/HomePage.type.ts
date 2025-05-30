@@ -62,12 +62,8 @@ export type MainHeaderProps = {
   productType?: string;
   onClick: () => void;
   onPress: () => void;
-
   Title?: string;
-  // back:ImageSourcePropType,
-  // icon:ImageSourcePropType,
-  // icon1:ImageSourcePropType,
-  // icon2:ImageSourcePropType,
+
 };
 export type sizeProps = {
   size: string;

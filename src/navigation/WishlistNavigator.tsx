@@ -13,7 +13,6 @@ const WishlistNavigator = () => {
     <Stack.Navigator
     // @ts-ignore: Suppress TypeScript error for 'id'
     id="WishlistNavigator"
-    // initialRouteName='Category'
     screenOptions={{ headerShown: false }}>
     <Stack.Screen name="WishlistScreen" component={WishlistScreen} />
     <Stack.Screen name="CartScreen" component={CartScreen} />
