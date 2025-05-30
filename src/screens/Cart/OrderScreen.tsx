@@ -75,8 +75,6 @@ const OrderScreen = ({ route }) => {
   const navigation = useNavigation();
 
   const renderData = ({ item }) => {
-
-
     return (
       <Pressable style={[styles.CartContainer]}>
         <View style={styles.imageConatiner}>
@@ -102,16 +100,15 @@ const OrderScreen = ({ route }) => {
   const handlePayment = async () => {
     try {
       setIsLoading(true);
-      
+
       const response = await Payment(
         item?.streetAddress,
         item?.city,
         item?.country,
         item?.zipCode
       );
-      
-      setPaymentToggle(!paymentToggle);
 
+      setPaymentToggle(!paymentToggle);
       if (response?.data?.paymentLink) {
         await Linking.openURL(response.data.paymentLink);
       } else {
@@ -132,8 +129,7 @@ const OrderScreen = ({ route }) => {
         </Pressable>
         <Text style={styles.headerText}>Order Summary</Text>
       </View>
-      <View style=
-      {{flex:0.55}}>
+      <View style={{ flex: 0.55 }}>
         <FlatList
           data={cartData}
           renderItem={renderData}
@@ -162,7 +158,7 @@ const OrderScreen = ({ route }) => {
       <View style={styles.horizonLine} />
       <View style={styles.deliveryContainer}>
         <Text style={styles.heading}>Payment Method</Text>
-        <Pressable style={styles.paymentContainer} >
+        <Pressable style={styles.paymentContainer}>
           <Image source={assets.Razorpay} style={styles.paymentImage} />
           <Text style={styles.details}>Pay With Rozorpay Pay</Text>
           <View style={styles.arrowConatiner}>
@@ -173,11 +169,15 @@ const OrderScreen = ({ route }) => {
       <View style={{ paddingHorizontal: 20 }}>
         <View style={styles.amountContainer}>
           <Text style={styles.text1}>Items (3)</Text>
-          <Text style={styles.perItemAmount}>Rs.{priceData?.breakdown?.subtotal}</Text>
+          <Text style={styles.perItemAmount}>
+            Rs.{priceData?.breakdown?.subtotal}
+          </Text>
         </View>
         <View style={styles.amountContainer}>
           <Text style={styles.text1}>Shipping</Text>
-          <Text style={styles.perItemAmount}>Rs.{priceData?.breakdown?.shippingPrice}</Text>
+          <Text style={styles.perItemAmount}>
+            Rs.{priceData?.breakdown?.shippingPrice}
+          </Text>
         </View>
         <View style={styles.amountContainer}>
           <Text style={styles.text1}>Promo Code</Text>
@@ -185,16 +185,28 @@ const OrderScreen = ({ route }) => {
         </View>
         <View style={styles.amountContainer}>
           <Text style={styles.text1}>Import Charges</Text>
-          <Text style={styles.perItemAmount}>Rs.{priceData?.breakdown?.gstAmount}</Text>
+          <Text style={styles.perItemAmount}>
+            Rs.{priceData?.breakdown?.gstAmount}
+          </Text>
         </View>
       </View>
-      <View style={{flexDirection:'row',paddingTop:20,paddingHorizontal:20}} >
-        <View style={{flex:1,justifyContent:'center'}}>
-        <Text style={{color:Typography.Colors.primary,fontSize:20,fontWeight:'800'}}>Rs. {priceData.totalPrice} </Text>
-        </View >
-        <View style={{flex:1}}>
-        <CustomButton title="Pay Now" onPress={handlePayment} />
-        </View >
+      <View
+        style={{ flexDirection: "row", paddingTop: 20, paddingHorizontal: 20 }}
+      >
+        <View style={{ flex: 1, justifyContent: "center" }}>
+          <Text
+            style={{
+              color: Typography.Colors.primary,
+              fontSize: 20,
+              fontWeight: "800",
+            }}
+          >
+            Rs. {priceData.totalPrice}{" "}
+          </Text>
+        </View>
+        <View style={{ flex: 1 }}>
+          <CustomButton title="Pay Now" onPress={handlePayment} />
+        </View>
       </View>
     </View>
   );

@@ -1,7 +1,6 @@
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import { fonts } from "../../assets/fonts";
 
-
 export const Typography = {
   Colors: {
     primary: "#002482",
@@ -39,4 +38,14 @@ export const Typography = {
     heavy: "SFPRODISPLAYHEAVYITALIC",
     black: "SFPRODISPLAYBLACKITALIC",
   },
+};
+
+export const LightColors = {
+  background: "#ffffff",
+  text: Typography.Colors.black,
+};
+
+export const DarkColors = {
+  background: "#121212",
+  text: Typography.Colors.white,
 };

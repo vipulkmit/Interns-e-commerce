@@ -93,7 +93,6 @@ const AddAddressList = ({ route }) => {
       if (!user || !user.address) {
         throw new Error("No addresses found to delete.");
       }
-
       let updatedAddresses = [...user.address];
       if (typeof index === "number") {
         updatedAddresses.splice(index, 1);

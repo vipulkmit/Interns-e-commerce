@@ -1,47 +1,75 @@
 import React from "react";
-import { Image, Text, View, StyleSheet, Dimensions, Pressable } from "react-native";
+import {
+  Image,
+  Text,
+  View,
+  StyleSheet,
+  Dimensions,
+  Pressable,
+} from "react-native";
 import { TrendingProps } from "../../models/HomePage.type";
 import { Typography } from "../../theme/Colors";
-
+import useAuthStore from "../../stores/useAuthStore";
 
 const { width } = Dimensions.get("window");
 
-
 const CardComponent = ({
-    id,
-    img,
-    productImgStyle,
-    logo,
-    offer,
-    productType,
-    amount,
-    staticContainer,
-    onClick
+  id,
+  img,
+  productImgStyle,
+  logo,
+  offer,
+  productType,
+  amount,
+  staticContainer,
+  onClick,
 }: TrendingProps) => {
-
-    return (
-        <Pressable style={[styles.container,staticContainer]} onPress={onClick}>
-            <View style={[styles.imgView,productImgStyle]}> 
-                <Image source={img} style={styles.imgStyles} />
-            </View>
-            <View style={styles.dataView}>
-                {productType ? (
-                    <Text numberOfLines={1} style={styles.productTypeStyle}>{productType}</Text>)
-                    : (<View style={styles.logoImgContainer}>
-                    <Image source={logo} style={styles.logoStyle} resizeMode="cover" />
-                    </View>)
-                }
-            </View>
-            <View style={styles.dataView}>
-                {offer ? (
-                    <Text
-                        style={[styles.offerStyle, { paddingTop: 7 }]}>Min {offer}% Off</Text>)
-                    : (<Text style={styles.offerStyle}>Under Rs. {amount}</Text>)}
-            </View>
-        </Pressable>
-    )
-}
-
+  const themeMode = useAuthStore((state) => state.theme);
+  const theme =
+    themeMode === "dark"
+      ? {
+          background: Typography.Colors.black,
+          text: Typography.Colors.white,
+        }
+      : {
+          background: Typography.Colors.white,
+          text: Typography.Colors.black,
+        };
+  return (
+    <Pressable style={[styles.container, staticContainer]} onPress={onClick}>
+      <View style={[styles.imgView, productImgStyle]}>
+        <Image source={img} style={styles.imgStyles} />
+      </View>
+      <View style={styles.dataView}>
+        {productType ? (
+          <Text
+            numberOfLines={1}
+            style={[styles.productTypeStyle, { color: theme.text }]}
+          >
+            {productType}
+          </Text>
+        ) : (
+          <View style={styles.logoImgContainer}>
+            <Image source={logo} style={styles.logoStyle} resizeMode="cover" />
+          </View>
+        )}
+      </View>
+      <View style={styles.dataView}>
+        {offer ? (
+          <Text
+            style={[styles.offerStyle, { paddingTop: 10, color: theme.text }]}
+          >
+            Min {offer}% Off
+          </Text>
+        ) : (
+          <Text style={[styles.offerStyle, { color: theme.text }]}>
+            Under Rs. {amount}
+          </Text>
+        )}
+      </View>
+    </Pressable>
+  );
+};
 
 const styles = StyleSheet.create({
     container: {
@@ -90,4 +118,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default CardComponent
+export default CardComponent;

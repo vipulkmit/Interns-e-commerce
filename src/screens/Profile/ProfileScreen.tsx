@@ -10,9 +10,21 @@ import { Typography } from "../../theme/Colors";
 import { assets } from "../../../assets/images";
 import { useNavigation } from "@react-navigation/native";
 import useAuthStore from "../../stores/useAuthStore";
+import { ThemeToggle } from "../../components/Themes/ThemeToggle";
 
 const ProfileScreen = () => {
   const user = useAuthStore((state) => state.user);
+  const themeMode = useAuthStore((state) => state.theme);
+  const theme =
+    themeMode === "dark"
+      ? {
+          background: Typography.Colors.black,
+          text: Typography.Colors.white,
+        }
+      : {
+          background: Typography.Colors.white,
+          text: Typography.Colors.black,
+        };
   const logout = useAuthStore((state) => state.logout);
   const Navigation = useNavigation();
 
@@ -67,13 +79,31 @@ const ProfileScreen = () => {
         <View style={styles.logocontainer}>
           <Image
             source={item.icon}
-            style={item.iconStyle || styles.logostyle}
+            style={[
+              item.iconStyle || styles.logostyle,
+              {
+                tintColor: theme.text,
+              },
+            ]}
           />
-          <Text style={item.textStyle || styles.textlist}>{item.title}</Text>
+          <Text
+            style={[
+              item.textStyle || styles.textlist,
+              {
+                color:
+                  item.title === "Log Out" ? Typography.Colors.red : theme.text,
+              },
+            ]}
+          >
+            {item.title}
+          </Text>
         </View>
         {item.title !== "Log Out" && (
           <View style={styles.arrowstyleview}>
-            <Image source={assets.rightarrow} style={styles.arrowstyle} />
+            <Image
+              source={assets.rightarrow}
+              style={[styles.arrowstyle, { tintColor: theme.text }]}
+            />
           </View>
         )}
       </View>
@@ -81,8 +111,7 @@ const ProfileScreen = () => {
   );
 
   return (
-    // <ScrollView style={{ flex: 1, backgroundColor: Typography.Colors.white }}>
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: theme.background }]}>
       <TouchableOpacity onPress={() => handleNavigation("EditProfile")}>
         <View style={styles.firstsection}>
           <Image
@@ -92,8 +121,15 @@ const ProfileScreen = () => {
             style={styles.profilepic}
           />
           <View style={styles.textcontainer}>
-            <Text style={styles.textname}>{user?.name}</Text>
-            <Text style={styles.mailcontainer}>{user?.email}</Text>
+            <Text style={[styles.textname, { color: theme.text }]}>
+              {user?.name}
+            </Text>
+            <Text style={[styles.mailcontainer, { color: theme.text }]}>
+              {user?.email}
+            </Text>
+          </View>
+          <View style={styles.logocontainer}>
+            <ThemeToggle />
           </View>
         </View>
       </TouchableOpacity>
@@ -108,27 +144,26 @@ const ProfileScreen = () => {
 
       <View style={styles.tncstyle}>
         <TouchableOpacity onPress={() => handleNavigation("PrivacyPolicy")}>
-          <Text style={styles.policystyle}>Privacy Policy</Text>
+          <Text style={[styles.policystyle, { color: theme.text }]}>
+            Privacy Policy
+          </Text>
         </TouchableOpacity>
-        <View style={styles.line}></View>
+        <View style={[styles.line, { backgroundColor: theme.text }]}></View>
         <TouchableOpacity onPress={() => handleNavigation("TermsnConditions")}>
-          <Text style={styles.conditionstyle}>Terms and Conditions</Text>
+          <Text style={[styles.conditionstyle, { color: theme.text }]}>
+            Terms and Conditions
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
-    // </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    // backgroundColor: Typography.Colors.white,
     paddingHorizontal: 20,
     flex: 1,
-    backgroundColor: Typography.Colors.white,
-  },
-  HeaderStyle: {
-    backgroundColor: Typography.Colors.white,
-    paddingHorizontal: 20,
   },
   firstsection: {
     paddingVertical: 35,
@@ -154,23 +189,20 @@ const styles = StyleSheet.create({
   textname: {
     fontSize: 18,
     fontFamily: Typography.font.bold,
-    color: Typography.Colors.black,
     fontWeight: "500",
     textTransform: "capitalize",
   },
   mailcontainer: {
     fontSize: 14,
     fontFamily: Typography.font.regular,
-    color: Typography.Colors.lightgrey,
+  },
+  iconStyle: {
+    color: Typography.Colors.white,
   },
   logostyle: {
+    tintColor: Typography.Colors.white,
     marginTop: 5,
     height: 20,
-    width: 20,
-  },
-  logo: {
-    marginTop: 5,
-    height: 14,
     width: 20,
   },
   logodelivery: {
@@ -187,20 +219,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
     fontFamily: Typography.font.medium,
-    color: Typography.Colors.blackdim,
   },
   textlistlogout: {
     alignSelf: "center",
     fontSize: 16,
     fontWeight: "600",
     fontFamily: Typography.font.medium,
-    color: Typography.Colors.red,
-  },
-  textlistpayment: {
-    fontSize: 16,
-    fontWeight: "600",
-    fontFamily: Typography.font.medium,
-    color: Typography.Colors.blackdim,
   },
   arrowstyle: {
     paddingVertical: 8.5,
@@ -227,11 +251,9 @@ const styles = StyleSheet.create({
     color: Typography.Colors.lightgrey,
   },
   policystyle: {
-    color: Typography.Colors.darksilver,
     paddingVertical: 1.5,
   },
   conditionstyle: {
-    color: Typography.Colors.darksilver,
     paddingVertical: 1.5,
   },
 });

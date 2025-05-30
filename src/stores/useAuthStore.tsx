@@ -3,6 +3,9 @@ import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 
 type AuthStore = {
+  theme: "light" | "dark";
+  setTheme: (theme: "light" | "dark") => void;
+  toggleTheme: () => void;
   isLoggedIn: boolean;
   token: string | null;
   login: () => void;
@@ -25,9 +28,9 @@ type AuthStore = {
 };
 
 const useAuthStore = create<AuthStore>()(
-
   persist(
     (set, get) => ({
+      theme: "light",
       user: null,
       token: null,
       isLoggedIn: false,
@@ -35,6 +38,11 @@ const useAuthStore = create<AuthStore>()(
       cart: null,
       wishlistItems: [],
 
+      setTheme: (theme) => set({ theme }),
+      toggleTheme: () =>
+        set((state) => ({
+          theme: state.theme === "light" ? "dark" : "light",
+        })),
       setUser: (user) => set({ user }),
       setToken: (newtoken) => set({ token: newtoken }),
       login: () => set({ isLoggedIn: true }),

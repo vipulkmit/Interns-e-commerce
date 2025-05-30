@@ -3,10 +3,12 @@ import { Typography } from "../../theme/Colors";
 import useAuthStore from "../../stores/useAuthStore";
 import { assets } from "../../../assets/images";
 import { useNavigation } from "@react-navigation/native";
+import { useAppTheme } from "../../theme/useAppTheme";
 
 const TopHeaderComponent = () => {
   const { user } = useAuthStore();
   const navigation = useNavigation();
+  const theme = useAppTheme();
 
   return (
     <View style={styles.container}>
@@ -17,7 +19,10 @@ const TopHeaderComponent = () => {
           }
           style={styles.userImage}
         />
-        <Text numberOfLines={1} style={styles.userName}>
+        <Text
+          numberOfLines={1}
+          style={[styles.userName, { color: theme.text }]}
+        >
           {user?.name}
         </Text>
       </View>

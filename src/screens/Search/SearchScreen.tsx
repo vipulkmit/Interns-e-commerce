@@ -25,12 +25,24 @@ import { TouchableWithoutFeedback } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { assets } from "../../../assets/images";
 import TopHeaderComponent from "../../components/header/TopHeaderComponent";
+import useAuthStore from "../../stores/useAuthStore";
 
 const { width } = Dimensions.get("window");
 const numColumns = 4;
 const itemWidth = (width - 60) / numColumns;
 
 const SearchScreen = () => {
+  const themeMode = useAuthStore((state) => state.theme);
+  const theme =
+    themeMode === "dark"
+      ? {
+          background: Typography.Colors.black,
+          text: Typography.Colors.white,
+        }
+      : {
+          background: Typography.Colors.white,
+          text: Typography.Colors.black,
+        };
   const [Category, setCategory] = useState<any[]>([]);
   const inputRef = useRef(null);
   const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -130,7 +142,10 @@ const SearchScreen = () => {
                 style={styles.Images}
                 resizeMode="cover"
               />
-              <Text numberOfLines={1} style={styles.typeofCategory}>
+              <Text
+                numberOfLines={1}
+                style={[styles.typeofCategory, { color: theme.text }]}
+              >
                 {subItem.name}
               </Text>
             </View>
@@ -228,14 +243,19 @@ const SearchScreen = () => {
       keyboardVerticalOffset={Platform.OS === "ios" ? 80 : 0}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={styles.container}>
+        <View style={[styles.container, { backgroundColor: theme.background }]}>
           {loading ? (
             <ActivityIndicator size="large" color={Typography.Colors.primary} />
           ) : isSearching ? (
             renderSearchResults()
           ) : (
             <>
-              <View style={styles.HeaderStyle}>
+              <View
+                style={[
+                  styles.HeaderStyle,
+                  { backgroundColor: theme.background },
+                ]}
+              >
                 <TopHeaderComponent />
               </View>
               <View style={{ flex: 1 }}>
@@ -244,7 +264,9 @@ const SearchScreen = () => {
                   sections={sections}
                   keyExtractor={(_, index) => index.toString()}
                   renderSectionHeader={({ section: { title } }) => (
-                    <Text style={styles.title}>{title} Fashion</Text>
+                    <Text style={[styles.title, { color: theme.text }]}>
+                      {title} Fashion
+                    </Text>
                   )}
                   renderItem={renderItem}
                   stickySectionHeadersEnabled={false}
