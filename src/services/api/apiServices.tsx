@@ -143,7 +143,7 @@ export const SubCategories = (name) => {
   return axiosInstance.get(`${ENDPOINTS.SUBCATEGORY}${name}`);
 };
 
-export const Products = (name, category) => {
+export const Products = (name, category, id?: any) => {
   return axiosInstance.get(`${ENDPOINTS.PRODUCTS}${name}/${category}`);
 };
 
@@ -155,6 +155,15 @@ export const AddToWishlist = (id: string) => {
 
 export const WishlistData = () => {
   return axiosInstance.get(ENDPOINTS.WISHLISTGET);
+};
+
+export const Brand = () => {
+  return axiosInstance.get(ENDPOINTS.BRAND);
+};
+
+
+export const Color = () => {  
+  return axiosInstance.get(ENDPOINTS.COLOR);
 };
 
 export const WishlistDelete = (productId: string) => {
@@ -169,24 +178,23 @@ export const WishlistDeleteAll = () =>
   axiosInstance.delete(ENDPOINTS.WISHLISTDELETE);
 
 export const ProductFilters = (
-  size,
-  color,
   discountMax,
   discountMin,
   priceMax,
   priceMin,
-  subcategoryName,
-  categoryName
+  colorIds,
+  subcategoryIds,
+  categoryIds
 ) => {
   const queryParams = new URLSearchParams({
-    size: size,
-    color: color,
+
     discountMax: discountMax,
     discountMin: discountMin,
     priceMax: priceMax,
     priceMin: priceMin,
-    subcategoryName: subcategoryName,
-    categoryName: categoryName,
+    colorIds: colorIds,
+    subcategoryIds:subcategoryIds,
+    categoryIds:categoryIds,
   }).toString();
 
   return axiosInstance.get(`${ENDPOINTS.FILTERS}?${queryParams}`);

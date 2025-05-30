@@ -13,17 +13,20 @@ import { useNavigation, useNavigationState } from "@react-navigation/native";
 import SearchNavigator from "../../navigation/SearchNavigator";
 import WishlistNavigator from "../../navigation/WishlistNavigator";
 import CartNavigator from "../../navigation/CartNavigator";
+import useAuthStore from "../../stores/useAuthStore";
 
 const HeaderComponent = ({
   id,
   onClick,
   onPress,
   Title,
-  productType,
+  productType, // Add this prop for cart item count
 }: MainHeaderProps) => {
   const navigation = useNavigation();
+  const cartQuantity = useAuthStore((state) => state.cart);
+  // console.log(cartQuantity,"cartQuantity");
+
   const state = useNavigationState((state) => state);
-  // console.log(state, "state");
 
   const onPressfunc = () => {
     if (state.routes[1]?.name === "ProductDetailPage") {
@@ -37,7 +40,6 @@ const HeaderComponent = ({
   };
 
   return (
-    <View>
       <View style={styles.container}>
         <View style={styles.UserContainer}>
           <Pressable onPress={onClick}>
@@ -61,16 +63,20 @@ const HeaderComponent = ({
           >
             <Image source={assets.HeartBlack} style={styles.icon} />
           </Pressable>
-          <Pressable
-            onPress={() =>
-              navigation.navigate(CartNavigator, { screen: "CartScreen" })
-            }
-          >
-            <Image source={assets.BagBlack} style={styles.icon} />
-          </Pressable>
+          <View style={styles.cartContainer}>
+            <Pressable
+              onPress={() =>
+                navigation.navigate(CartNavigator, { screen: "CartScreen" })
+              }
+            >
+              <Image source={assets.BagBlack} style={styles.icon} />
+            </Pressable>
+              <View style={styles.badge}>
+                <Text style={styles.badgeText}>{cartQuantity}</Text>
+              </View>
+          </View>
         </View>
       </View>
-    </View>
   );
 };
 
@@ -86,7 +92,6 @@ const styles = StyleSheet.create({
   },
   iconContainer: {
     flex: 1,
-
     justifyContent: "space-around",
     alignItems: "center",
     flexDirection: "row",
@@ -103,6 +108,28 @@ const styles = StyleSheet.create({
   backIcon: {
     height: 28,
     width: 28,
+  },
+  cartContainer: {
+    position: "relative",
+  },
+  badge: {
+    position: "absolute",
+    top: -2,
+    right: -6,
+    backgroundColor: "#FF0000",
+    borderRadius: 10,
+    minWidth: 16,
+    height: 16,
+    justifyContent: "center",
+    alignItems: "center",
+    // paddingHorizontal: 4,
+  },
+  badgeText: {
+    color: "#FFFFFF",
+    fontSize: 12,
+    fontWeight: "bold",
+    textAlign: "center",
+    // lineHeight: 16,
   },
 });
 

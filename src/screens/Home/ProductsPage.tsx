@@ -10,7 +10,7 @@ import {
 import React, { useEffect, useState } from "react";
 import HeaderComponent from "../../components/header/HeaderComponent";
 import { assets } from "../../../assets/images";
-import { useNavigation } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 import ProductComponent from "../../components/product/ProductComponent";
 import ButtonComponent from "../../components/button/ButtonComponent";
 import { Typography } from "../../theme/Colors";
@@ -21,16 +21,20 @@ const ProductsPage = ({ route }) => {
   const handleBackButton = () => {
     navigation.goBack();
   };
-  const { category, categoryName } = route.params;
+  const { category, categoryName ,categoryId} = route.params;
   const [filterApplied, setFilterApplied] = useState(false);
   const [Category, setCategory] = useState();
   const [filterData, setFilterData] = useState([]);
   const [cartToggle, setCartToggle] = useState(false);
+// console.log(category.id,"categoryyyyyyy");
+// console.log(categoryId,"categoryIdcategoryIdcategoryIdcategoryId");
 
 
+console.log(filterData,'ffilter=-=-=--=--')
   useEffect(() => {
-    Products(categoryName, category.name)
+    Products(categoryName, category.name,categoryId)
       .then((data) => {
+        console.log(data?.data,'da6ta')
         setCategory(data?.data);
       })
       .catch((e) => {
@@ -70,6 +74,8 @@ const ProductsPage = ({ route }) => {
               navigation.navigate("FilterScreen", {
                 category: category,
                 categoryName: categoryName,
+                subCategoryId: category.id,
+                categoryId:categoryId,
                 setFilterApplied: setFilterApplied,
                 setFilterData: setFilterData,
               })
@@ -86,7 +92,7 @@ const ProductsPage = ({ route }) => {
   return (
     <>
       <FlatList
-        data={filterApplied ? filterData : Category}
+        data={filterApplied ? filterData?.products : Category}
         renderItem={ProductRenderItem}
         onRefresh={() => {
           setFilterApplied(false);

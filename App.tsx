@@ -1,16 +1,24 @@
 import React from "react";
-import { NavigationContainer } from "@react-navigation/native";
+import {
+  DarkTheme,
+  DefaultTheme,
+  NavigationContainer,
+} from "@react-navigation/native";
 import RootNavigator from "./src/navigation/RootNavigator";
 import { StatusBar } from "react-native";
 import { Typography } from "./src/theme/Colors";
+import useAuthStore from "./src/stores/useAuthStore";
 
 export default function App() {
+  const theme = useAuthStore((state) => state.theme);
   return (
-    <NavigationContainer>
+    <NavigationContainer theme={theme === "dark" ? DarkTheme : DefaultTheme}>
       <RootNavigator />
       <StatusBar
         barStyle="dark-content"
-        backgroundColor={Typography.Colors.white}
+        backgroundColor={
+          theme === "dark" ? Typography.Colors.black : Typography.Colors.white
+        }
       />
     </NavigationContainer>
   );

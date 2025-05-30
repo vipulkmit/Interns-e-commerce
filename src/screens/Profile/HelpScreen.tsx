@@ -123,8 +123,8 @@ const styles = StyleSheet.create({
   container: {
     padding: 10,
     flex: 1,
-    color: Typography.Colors.white,
-    backgroundColor: Typography.Colors.white,
+    // color: Typography.Colors.white,
+    // backgroundColor: Typography.Colors.white,
   },
   HeaderStyle: {
     backgroundColor: Typography.Colors.white,

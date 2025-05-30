@@ -27,17 +27,29 @@ import {
   Collection,
 } from "../../services/api/apiServices";
 import ContentLoader from "react-native-easy-content-loader";
+import useAuthStore from "../../stores/useAuthStore";
 
 const { width } = Dimensions.get("window");
 
 const HomeScreen = () => {
   const navigation = useNavigation();
+  const themeMode = useAuthStore((state) => state.theme);
+  const theme =
+    themeMode === "dark"
+      ? {
+          background: Typography.Colors.black,
+          text: Typography.Colors.white,
+        }
+      : {
+          background: Typography.Colors.white,
+          text: Typography.Colors.black,
+        };
   const animations = useRef(
     BannerData.map(() => new Animated.Value(17))
   ).current;
 
-  const renderCategoryPage = (name) => {
-    navigation.navigate("Category", { name: name });
+  const renderCategoryPage = (id, name) => {
+    navigation.navigate("Category", { id: id, name: name });
   };
 
   // Category Render Item
@@ -46,10 +58,13 @@ const HomeScreen = () => {
     return (
       <Pressable
         style={styles.subContainer}
-        onPress={() => renderCategoryPage(item.name)}
+        onPress={() => renderCategoryPage(item.id, item.name)}
       >
         <Image source={{ uri: item.image }} style={styles.flatlistImage} />
-        <Text style={styles.text} numberOfLines={1}>
+        <Text
+          style={[styles.text, { paddingTop: 12, color: theme.text }]}
+          numberOfLines={1}
+        >
           {item.name}
         </Text>
       </Pressable>
@@ -60,7 +75,7 @@ const HomeScreen = () => {
 
   const CarouselRenderItem = ({ item }) => {
     // console.log(item.image,"cvadj",item.logoURL);
-    
+
     return (
       <ImageBackground
         source={{ uri: item.image }}
@@ -96,7 +111,7 @@ const HomeScreen = () => {
     return (
       <View style={styles.container}>
         <CardComponent
-          img={{ uri: item.images[0]?item.images[0]:item.images[1] }}
+          img={{ uri: item.images[0] ? item.images[0] : item.images[1] }}
           logo={{ uri: item.brand.logo }}
           offer={item.discountPrice}
           productType={item.productType}
@@ -185,7 +200,9 @@ const HomeScreen = () => {
     return (
       <>
         {/* Header View */}
-        <View style={styles.HeaderStyle}>
+        <View
+          style={[styles.HeaderStyle, { backgroundColor: theme.background }]}
+        >
           <TopHeaderComponent />
         </View>
 
@@ -199,7 +216,10 @@ const HomeScreen = () => {
                 resizeMode="contain"
               />
             </View>
-            <Text numberOfLines={1} style={[styles.text, { paddingTop: 8 }]}>
+            <Text
+              numberOfLines={1}
+              style={[styles.text, { color: theme.text }]}
+            >
               Categories
             </Text>
           </View>
@@ -254,7 +274,10 @@ const HomeScreen = () => {
         <View style={styles.trendContainer}>
           <Text
             numberOfLines={1}
-            style={[styles.TrendingText, { paddingLeft: 10 }]}
+            style={[
+              styles.TrendingText,
+              { paddingLeft: 10, color: theme.text },
+            ]}
           >
             Trending Offers
           </Text>
@@ -271,7 +294,7 @@ const HomeScreen = () => {
         <View style={styles.dealContainer}>
           <Text
             numberOfLines={1}
-            style={[styles.TrendingText, { paddingLeft: 5 }]}
+            style={[styles.TrendingText, { paddingLeft: 5, color: theme.text }]}
           >
             Deals Of The Day
           </Text>
@@ -295,7 +318,9 @@ const HomeScreen = () => {
     return (
       <>
         <View style={styles.dealContainer}>
-          <Text style={styles.TrendingText}>Our Collection</Text>
+          <Text style={[styles.TrendingText, { color: theme.text }]}>
+            Our Collection
+          </Text>
           <FlatList
             data={ourCollection?.slice(0, 10)}
             renderItem={ProductRenderItem}
@@ -313,18 +338,18 @@ const HomeScreen = () => {
       renderItem={DealRenderItem}
       keyExtractor={(item) => item.id.toString()}
       numColumns={2}
-      contentContainerStyle={{ gap: 10, backgroundColor: "#FFFFFF" }}
+      contentContainerStyle={{ gap: 10, backgroundColor: theme.background }}
       columnWrapperStyle={styles.row}
       showsVerticalScrollIndicator={false}
       ListHeaderComponent={ListHeader}
       ListHeaderComponentStyle={{
         flex: 1,
-        backgroundColor: Typography.Colors.white,
+        backgroundColor: theme.background,
       }}
       ListFooterComponent={listFooter}
       ListFooterComponentStyle={{
         flex: 1,
-        backgroundColor: Typography.Colors.white,
+        backgroundColor: theme.background,
       }}
     />
     // </View>
@@ -334,13 +359,13 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Typography.Colors.white,
+    // color
+    // backgroundColor: Typography.Colors.white,
   },
 
   //HeaderStyle
 
   HeaderStyle: {
-    backgroundColor: Typography.Colors.white,
     paddingHorizontal: 20,
   },
   //Category Style
@@ -420,10 +445,10 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 10,
     marginTop: 27,
-    padding:6,
+    padding: 6,
     paddingHorizontal: 25,
     alignItems: "center",
-    justifyContent:'center'
+    justifyContent: "center",
   },
   buttonText: {
     color: Typography.Colors.white,
@@ -438,9 +463,9 @@ const styles = StyleSheet.create({
   },
   TrendingText: {
     // fontFamily: Typography.font.bold,
-    fontWeight:'500',
+    fontWeight: "500",
     fontSize: 20,
-    color: Typography.Colors.lightblack,
+    // color: Typography.Colors.lightblack,
   },
 
   //Deal of the day
@@ -513,3 +538,5 @@ const styles = StyleSheet.create({
   },
 });
 export default HomeScreen;
+
+// ----------------

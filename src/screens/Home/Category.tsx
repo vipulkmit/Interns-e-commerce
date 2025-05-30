@@ -16,13 +16,14 @@ import { Typography } from "../../theme/Colors";
 import { useNavigation } from "@react-navigation/native";
 
 const Category = ({ route }) => {
-  const { name } = route.params;
+  const { name ,id} = route.params;
   const navigation = useNavigation();
 
   const renderProductPage = (category) => {
     navigation.navigate("ProductsPage", {
       category: category,
       categoryName: name,
+      categoryId:id
     });
   };
 

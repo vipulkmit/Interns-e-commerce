@@ -19,13 +19,13 @@ import {
   AddToCart,
   CartData,
   CartDelete,
-  promocode,
   PromoCode,
   QuantityDelete,
 } from "../../services/api/apiServices";
-import { CardData } from "../../constant";
+import useAuthStore from "../../stores/useAuthStore";
 
 const CartScreen = () => {
+  const { setCart } = useAuthStore();
   const navigation = useNavigation();
   const isFocus = useIsFocused();
   const [cartData, setCartData] = useState([]);
@@ -38,6 +38,7 @@ const CartScreen = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [coupon, setCoupon] = useState("");
   const [promoData, setPromoData] = useState({ discount: 0 });
+  //  const cartQuantity = useAuthStore((state) => state.cart);
   const handleCouponChange = (text) => {
     // console.log("Coupon text changed:", text);
     setCoupon(text);
@@ -79,8 +80,9 @@ const CartScreen = () => {
 
       // console.log(data,'datadatadatadatadatadatadata')
       setCartData(items);
-
+      setCart(items.length)
       setIsLoading(false);
+
     } catch (e) {
       console.log("Error fetching cart data:", e);
       setCartData([]);
