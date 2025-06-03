@@ -20,6 +20,7 @@ import {
 import CustomButton from "../../components/button/CustomButton";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 import useAuthStore from "../../stores/useAuthStore";
+import WishlistSkeleton from "../../components/skeleton/WishlishSkeleton";
 
 const WishlistScreen = () => {
     const themeMode = useAuthStore((state) => state.theme);
@@ -37,14 +38,18 @@ const WishlistScreen = () => {
 
   const navigation = useNavigation();
   const [Wishlist, setWislist] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true); // Add loading state
   const isFocus = useIsFocused();
 
   const WishlistApi = async () => {
     try {
+      setIsLoading(true); 
       const data = await WishlistData();
       setWislist(data?.data?.data);
     } catch (e) {
       console.log("no data");
+    } finally {
+      setIsLoading(false); // Stop loading
     }
   };
 
@@ -108,6 +113,11 @@ const WishlistScreen = () => {
       </View>
     );
   };
+
+  // Show skeleton while loading
+  if (isLoading) {
+    return <WishlistSkeleton theme={theme} itemCount={5} />;
+  }
 
   return (
     <View style={[styles.container,{backgroundColor:theme.background}]}>

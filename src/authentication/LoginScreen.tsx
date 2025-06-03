@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -12,9 +12,10 @@ import { assets } from "../../assets/images";
 import useAuthStore from "../stores/useAuthStore";
 import { AdvancedCheckbox } from "react-native-advanced-checkbox";
 import { useNavigation } from "@react-navigation/native";
-import { loginService } from "../services/api/apiServices";
+import { GoogleSign, loginService } from "../services/api/apiServices";
 import CustomButton from "../components/button/CustomButton";
 import CustomTextInput from "../components/textInput/CustomTextInput";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
@@ -25,7 +26,47 @@ export default function LoginScreen() {
   const [isSelected, setSelection] = useState(false);
   const Navigation = useNavigation();
   const { setToken, setUser } = useAuthStore();
+  const [userInfo, setUserInfo] = useState(null);
+  useEffect(() => {
+    GoogleSignin.configure({
+      webClientId:
+        "682390120484-agk45uo1d6pi039acrraldll41jdj11h.apps.googleusercontent.com",
+    });
+  }, []);
 
+  const signOut = async () => {
+    try {
+      await GoogleSignin.signOut();
+      console.log("Logout!!!");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const signinwithGoogle = async () => {
+    try {
+      await GoogleSignin.hasPlayServices();
+      const userInfo = await GoogleSignin.signIn();
+      console.log(userInfo, "userInfo");
+      setUserInfo(userInfo);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+    // const GoogleAuth = async (item) => {
+    //   try {
+    //     // Then call API
+    //     await GoogleSign(
+    //       item.name,
+    //       item.email,
+    //       item.profilePicture,
+    //     );
+  
+    //   } catch (error) {
+    //     console.log("Error updating quantity:", error);
+    //   }
+    // };
   const handleForgotPasswordPress = () => {
     Navigation.navigate("Forgetpassword");
   };
@@ -177,11 +218,15 @@ export default function LoginScreen() {
             style={styles.socialIconfacebook}
           />
         </TouchableOpacity>
-        <TouchableOpacity onPress={handleSocialLoginPress}>
+        <TouchableOpacity onPress={signinwithGoogle}>
           <Image source={assets.googlelogo} style={styles.socialIcongoogle} />
         </TouchableOpacity>
       </View>
-
+      <View>
+        <TouchableOpacity onPress={signOut}>
+          <Text>Logoutttt</Text>
+        </TouchableOpacity>
+      </View>
       <View style={styles.registerContainer}>
         <Text style={styles.registerText}>Don't have an account? </Text>
         <TouchableOpacity onPress={handleRegisterPress}>

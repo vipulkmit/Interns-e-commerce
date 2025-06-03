@@ -254,3 +254,15 @@ export const Payment = (
     postalCode: postalCode,
   });
 };
+
+export const GoogleSign = (
+  name: string,
+  email: string,
+  profilePicture: string,
+) => {
+  return axiosInstance.post(ENDPOINTS.GOOGLELOGIN, {
+    name: name,
+    email: email,
+    profilePicture: profilePicture,
+  });
+};

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -17,6 +17,7 @@ import { useNavigation } from "@react-navigation/native";
 import { registerUser } from "./AuthApi";
 import CustomButton from "../components/button/CustomButton";
 import CustomTextInput from "../components/textInput/CustomTextInput";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
 
 export default function SignupScreen() {
   const { setUser } = useAuthStore();
@@ -26,7 +27,24 @@ export default function SignupScreen() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const Navigation = useNavigation();
+  const [userInfo, setUserInfo] = useState(null);
+  useEffect(() => {
+    GoogleSignin.configure({
+      webClientId:
+        "682390120484-agk45uo1d6pi039acrraldll41jdj11h.apps.googleusercontent.com",
+    });
+  }, []);
 
+  const signinwithGoogle = async () => {
+    try {
+      await GoogleSignin.hasPlayServices();
+      const userInfo = await GoogleSignin.signIn();
+      console.log(userInfo, "userInfo");
+      setUserInfo(userInfo);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const validateInputs = () => {
     if (!name.trim()) {
       Alert.alert("Error", "Name is required.");
@@ -159,7 +177,7 @@ export default function SignupScreen() {
               style={styles.socialIconfacebook}
             />
           </TouchableOpacity>
-          <TouchableOpacity onPress={handleSocialLoginPress}>
+          <TouchableOpacity onPress={signinwithGoogle}>
             <Image
               source={assets.googlelogo}
               style={styles.socialIconfacebook}

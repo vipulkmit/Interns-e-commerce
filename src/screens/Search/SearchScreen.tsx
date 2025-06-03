@@ -26,6 +26,8 @@ import { useNavigation } from "@react-navigation/native";
 import { assets } from "../../../assets/images";
 import TopHeaderComponent from "../../components/header/TopHeaderComponent";
 import useAuthStore from "../../stores/useAuthStore";
+import SearchScreenSkeleton from "../../components/skeleton/SearchScreenSkeleton";
+
 
 const { width } = Dimensions.get("window");
 const numColumns = 4;
@@ -55,6 +57,7 @@ const SearchScreen = () => {
 
   const [loading, setLoading] = useState(true);
   const Navigation = useNavigation();
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -194,6 +197,7 @@ const SearchScreen = () => {
       />
     </>
   );
+  
   const renderSearchResults = () => (
     <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
       <View style={styles.viewaccount}>
@@ -245,7 +249,9 @@ const SearchScreen = () => {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={[styles.container, { backgroundColor: theme.background }]}>
           {loading ? (
-            <ActivityIndicator size="large" color={Typography.Colors.primary} />
+            // Replace ActivityIndicator with SearchScreenSkeleton
+            <SearchScreenSkeleton
+             themeMode={themeMode} />
           ) : isSearching ? (
             renderSearchResults()
           ) : (
@@ -283,6 +289,7 @@ const SearchScreen = () => {
     </KeyboardAvoidingView>
   );
 };
+
 export default SearchScreen;
 
 const styles = StyleSheet.create({
