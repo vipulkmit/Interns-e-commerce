@@ -1,5 +1,6 @@
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import { fonts } from "../../assets/fonts";
+import { blue } from "react-native-reanimated/lib/typescript/Colors";
 
 export const Typography = {
   Colors: {
@@ -29,6 +30,7 @@ export const Typography = {
     blackdim: "#272727",
     nature: "#038200",
     grayy: "#F2F3F2",
+    blue: "#bcccdc",
   },
 
   font: {

@@ -47,26 +47,34 @@ export default function LoginScreen() {
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
-      console.log(userInfo, "userInfo");
       setUserInfo(userInfo);
+      if (userInfo?.type === "success") {
+        GoogleAuth();
+      } else {
+        Alert.alert("Google Sign In Failed", "Please try again.");
+      }
     } catch (error) {
       console.log(error);
     }
   };
 
-    // const GoogleAuth = async (item) => {
-    //   try {
-    //     // Then call API
-    //     await GoogleSign(
-    //       item.name,
-    //       item.email,
-    //       item.profilePicture,
-    //     );
-  
-    //   } catch (error) {
-    //     console.log("Error updating quantity:", error);
-    //   }
-    // };
+  const GoogleAuth = async () => {
+    try {
+      // Then call API
+      // console.log("Google Sign In Success:");
+      // console.log("userInfo.data.user.name", userInfo.data.user.name);
+      // console.log("userInfo.data.user.email", userInfo.data.user.email);
+      // console.log("userInfo.data.user.photo", userInfo.data.user.photo);
+
+      await GoogleSign(
+        userInfo?.data?.user?.name,
+        userInfo?.data?.user?.email,
+        userInfo?.data?.user?.photo
+      );
+    } catch (error) {
+      console.log("Error updating quantity:", error);
+    }
+  };
   const handleForgotPasswordPress = () => {
     Navigation.navigate("Forgetpassword");
   };

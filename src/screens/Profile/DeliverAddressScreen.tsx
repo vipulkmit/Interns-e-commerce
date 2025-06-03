@@ -23,16 +23,18 @@ import { assets } from "../../../assets/images";
 
 const DeliveryAddress = () => {
   const themeMode = useAuthStore((state) => state.theme);
-  const theme =
-    themeMode === "dark"
-      ? {
-          background: Typography.Colors.black,
-          text: Typography.Colors.white,
-        }
-      : {
-          background: Typography.Colors.white,
-          text: Typography.Colors.black,
-        };
+  const isDarkMode = themeMode === "dark";
+
+  // Example of conditionally setting special text color
+  const specialTextColor = isDarkMode
+    ? Typography.Colors.blue
+    : Typography.Colors.primary;
+
+  const theme = {
+    background: isDarkMode ? Typography.Colors.black : Typography.Colors.white,
+    text: isDarkMode ? Typography.Colors.white : Typography.Colors.black,
+    specialText: specialTextColor,
+  };
   const user = useAuthStore((state) => state.user);
   const Navigation = useNavigation();
   const [selectedIndex, setSelectedIndex] = useState(null);
@@ -122,12 +124,14 @@ const DeliveryAddress = () => {
           </Text>
           <Text style={styles.addressText}>{item.country}</Text>
           <Text style={styles.addressText}>Phone: {item.phoneNumber}</Text>
-          <View style={{ flexDirection: "row", gap: 10 }}>
+          <View style={{ flexDirection: "row", gap: 10, alignItems: "center" }}>
             <TouchableOpacity onPress={() => onEditAddress(item, index)}>
-              <Text style={styles.editText}>Edit</Text>
+              <Text style={[styles.editText, { color: theme.specialText }]}>
+                Edit
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => onDeleteAddress(index)}>
-              <Icon size={20} color={Typography.Colors.red} name="delete" />
+              <Icon size={15} color={Typography.Colors.red} name="delete" />
             </TouchableOpacity>
           </View>
         </TouchableOpacity>
@@ -138,17 +142,6 @@ const DeliveryAddress = () => {
   const Emptylist = () => {
     return (
       <>
-        {/* <View style={styles.mainContainer}>
-          <TouchableOpacity onPress={handlearrowbutton}>
-            <Iconarrow
-              size={35}
-              color={Typography.Colors.black}
-              style={styles.arrow}
-              name="arrow-left"
-            />
-          </TouchableOpacity>
-          <Text style={styles.addressText}>Delivery Address</Text>
-        </View> */}
         <View style={styles.AddressContainer}>
           <Text style={styles.title}>🚚 No Delivery Address Found</Text>
           <Text style={styles.message}>
@@ -165,12 +158,18 @@ const DeliveryAddress = () => {
   };
 
   return (
-    <View style={[styles.container,{backgroundColor:theme.background}]}>
+    <View style={[styles.container, { backgroundColor: theme.background }]}>
       <View style={styles.headerRow}>
         <Pressable onPress={() => Navigation.goBack()}>
-          <Image source={assets.ArrowLeft} style={[styles.backIcon,{tintColor:theme.text}]} />
+          <Image
+            source={assets.ArrowLeft}
+            style={[styles.backIcon, { tintColor: theme.text }]}
+          />
         </Pressable>
-        <Text numberOfLines={1} style={styles.headerTitle}>
+        <Text
+          numberOfLines={1}
+          style={[styles.headerTitle, { color: theme.specialText }]}
+        >
           Choose Delivery Address
         </Text>
       </View>

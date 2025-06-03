@@ -196,12 +196,11 @@ const HomeScreen = () => {
         }
       }
     });
-console.log(notifee,"notifee");
 
     // Handle background notification events
     notifee.onBackgroundEvent(async ({ type, detail }) => {
-      console.log(type,"+");
-      
+      console.log(type, "+");
+
       if (type === "press") {
         console.log("Background notification press:", detail.notification);
         // Handle background press if needed
@@ -224,7 +223,10 @@ console.log(notifee,"notifee");
       .getInitialNotification()
       .then((remoteMessage) => {
         if (remoteMessage) {
-          console.log("App opened by notification from closed state:", remoteMessage);
+          console.log(
+            "App opened by notification from closed state:",
+            remoteMessage
+          );
 
           // Handle navigation
           const { data } = remoteMessage;
@@ -233,7 +235,6 @@ console.log(notifee,"notifee");
           }
         }
       });
-
 
     // Cleanup subscriptions
     return () => {

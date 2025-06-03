@@ -15,17 +15,18 @@ import useAuthStore from "../../stores/useAuthStore";
 
 const MyOrdersScreen = () => {
   const themeMode = useAuthStore((state) => state.theme);
+  const isDarkMode = themeMode === "dark";
 
-  const theme =
-    themeMode === "dark"
-      ? {
-          background: Typography.Colors.black,
-          text: Typography.Colors.white,
-        }
-      : {
-          background: Typography.Colors.white,
-          text: Typography.Colors.primary,
-        };
+  // Example of conditionally setting special text color
+  const specialTextColor = isDarkMode
+    ? Typography.Colors.blue
+    : Typography.Colors.primary;
+
+  const theme = {
+    background: isDarkMode ? Typography.Colors.black : Typography.Colors.white,
+    text: isDarkMode ? Typography.Colors.white : Typography.Colors.black,
+    specialText: specialTextColor,
+  };
   const [orderData, setOrderData] = useState([]);
   const [loading, setLoading] = useState(true);
   const Navigation = useNavigation();
@@ -50,13 +51,17 @@ const MyOrdersScreen = () => {
   const renderItem = ({ item }) => {
     const product = item.items[0];
     return (
-      <View style={[styles.card]}>
+      <View style={[styles.card, { backgroundColor: theme.background }]}>
         <Image source={{ uri: product.productImage[0] }} style={styles.image} />
         <View style={styles.details}>
           <View style={styles.rowSpaceBetween}>
-            <Text style={styles.productTitle}>{product.productName}</Text>
+            <Text style={[styles.productTitle, { color: theme.text }]}>
+              {product.productName}
+            </Text>
           </View>
-          <Text style={styles.price}>${product.price}</Text>
+          <Text style={[styles.price, { color: theme.text }]}>
+            Rs.{product.price}
+          </Text>
           <Text style={styles.date}>
             Order Placed on: {new Date(item.createdAt).toDateString()}
           </Text>
@@ -64,7 +69,9 @@ const MyOrdersScreen = () => {
           <View style={styles.buttonRow}>
             <Text style={styles.orderNumber}>Order #: {item.id.slice(-8)}</Text>
             <TouchableOpacity>
-              <Text style={styles.viewDetails}>View Order Details</Text>
+              <Text style={[styles.viewDetails, { color: theme.specialText }]}>
+                View Order Details
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -81,9 +88,10 @@ const MyOrdersScreen = () => {
   }
 
   return (
-    <View style={[styles.container,{backgroundColor:theme.background}]}>
+    <View style={[styles.container, { backgroundColor: theme.background }]}>
       <Text style={styles.header}>
-        <Text style={[styles.boldText,{color:theme.text}]}>My Orders</Text> ({orderData.length} Item
+        <Text style={[styles.boldText, { color: theme.text }]}>My Orders</Text>{" "}
+        ({orderData.length} Item
         {orderData.length > 1 ? "s" : ""})
       </Text>
       <FlatList
@@ -115,6 +123,8 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: Typography.Colors.white,
     shadowColor: Typography.Colors.black,
+    borderWidth: 3,
+    borderColor: Typography.Colors.white,
     shadowOffset: {
       width: 0,
       height: 3,

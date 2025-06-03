@@ -11,22 +11,22 @@ import { profilechange, updateUserdata } from "../../services/api/apiServices";
 import { useState } from "react";
 
 const EditProfileScreen = () => {
-  
   const [image, setImage] = useState();
   const Navigation = useNavigation();
   const user = useAuthStore((state) => state.user);
-    const themeMode = useAuthStore((state) => state.theme);
-  const theme =
-    themeMode === "dark"
-      ? {
-          background: Typography.Colors.black,
-          text: Typography.Colors.white,
-        }
-      : {
-          background: Typography.Colors.white,
-          text: Typography.Colors.black,
-        };
-  
+  const themeMode = useAuthStore((state) => state.theme);
+  const isDarkMode = themeMode === "dark";
+
+  // Example of conditionally setting special text color
+  const specialTextColor = isDarkMode
+    ? Typography.Colors.blue
+    : Typography.Colors.primary;
+
+  const theme = {
+    background: isDarkMode ? Typography.Colors.black : Typography.Colors.white,
+    text: isDarkMode ? Typography.Colors.white : Typography.Colors.black,
+    specialText: specialTextColor,
+  };
   const handlepasswordchange = () => {
     // Navigation.navigate("Passwordchange", { email: user?.email });
     Navigation.navigate("ChangePasswordScreen");
@@ -90,12 +90,14 @@ const EditProfileScreen = () => {
     Navigation.goBack();
   };
   return (
-    <View style={[styles.container,{backgroundColor:theme.background}]}>
+    <View style={[styles.container, { backgroundColor: theme.background }]}>
       <View style={styles.viewaccount}>
         <TouchableOpacity onPress={gobacknav}>
           <Image source={assets.left} style={styles.arrowstyle} />
         </TouchableOpacity>
-        <Text style={styles.textstyle}>My Account</Text>
+        <Text style={[styles.textstyle, { color: theme.specialText }]}>
+          My Account
+        </Text>
       </View>
       <View style={styles.firstsection}>
         <TouchableOpacity onPress={handleImageChange}>
@@ -115,23 +117,35 @@ const EditProfileScreen = () => {
           /> */}
         </TouchableOpacity>
         <View style={styles.textcontainer}>
-          <Text style={[styles.textname,{color:theme.text}]}>{user?.name}</Text>
+          <Text style={[styles.textname, { color: theme.text }]}>
+            {user?.name}
+          </Text>
           <Text style={styles.mailcontainer}>{user?.email}</Text>
         </View>
       </View>
       <View>
         <View style={styles.detailcontainer}>
           <View style={styles.mindetailstyle}>
-            <Image source={assets.name} style={styles.imgstyle} />
-            <Text style={styles.staticstyle}>Name</Text>
+            <Image
+              source={assets.name}
+              style={[styles.imgstyle, { tintColor: theme.specialText }]}
+            />
+            <Text style={[styles.staticstyle, { color: theme.specialText }]}>
+              Name
+            </Text>
           </View>
           <Text style={styles.dynamicstyle}>{user?.name}</Text>
         </View>
 
         <View style={styles.detailcontainer}>
           <View style={styles.mindetailstyle}>
-            <Image source={assets.message} style={styles.imgstyle} />
-            <Text style={styles.staticstyle}>Email</Text>
+            <Image
+              source={assets.message}
+              style={[styles.imgstyle, { tintColor: theme.specialText }]}
+            />
+            <Text style={[styles.staticstyle, { color: theme.specialText }]}>
+              Email
+            </Text>
           </View>
           <Text style={styles.dynamicstyle}>{user?.email}</Text>
         </View>
@@ -139,8 +153,13 @@ const EditProfileScreen = () => {
         <TouchableOpacity onPress={handlepasswordchange}>
           <View style={styles.detailcontainer}>
             <View style={styles.mindetailstyle}>
-              <Image source={assets.password} style={styles.imgstyle} />
-              <Text style={styles.staticstyle}>Change Password</Text>
+              <Image
+                source={assets.password}
+                style={[styles.imgstyle, { tintColor: theme.specialText }]}
+              />
+              <Text style={[styles.staticstyle, { color: theme.specialText }]}>
+                Change Password
+              </Text>
             </View>
             <Icon
               name="right"

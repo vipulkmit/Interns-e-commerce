@@ -23,17 +23,19 @@ import useAuthStore from "../../stores/useAuthStore";
 import WishlistSkeleton from "../../components/skeleton/WishlishSkeleton";
 
 const WishlistScreen = () => {
-    const themeMode = useAuthStore((state) => state.theme);
-    const theme =
-      themeMode === "dark"
-        ? {
-            background: Typography.Colors.black,
-            text: Typography.Colors.white,
-          }
-        : {
-            background: Typography.Colors.white,
-            text: Typography.Colors.black,
-          };
+  const themeMode = useAuthStore((state) => state.theme);
+  const isDarkMode = themeMode === "dark";
+
+  // Example of conditionally setting special text color
+  const specialTextColor = isDarkMode
+    ? Typography.Colors.blue
+    : Typography.Colors.primary;
+
+  const theme = {
+    background: isDarkMode ? Typography.Colors.black : Typography.Colors.white,
+    text: isDarkMode ? Typography.Colors.white : Typography.Colors.black,
+    specialText: specialTextColor,
+  };
   const { removeFromWishlist, clearWishlist } = useAuthStore();
 
   const navigation = useNavigation();
@@ -43,7 +45,7 @@ const WishlistScreen = () => {
 
   const WishlistApi = async () => {
     try {
-      setIsLoading(true); 
+      setIsLoading(true);
       const data = await WishlistData();
       setWislist(data?.data?.data);
     } catch (e) {
@@ -79,19 +81,33 @@ const WishlistScreen = () => {
           <Image source={{ uri: item.images[0] }} style={styles.Image} />
         </View>
         <View style={styles.productAmount}>
-          <Text numberOfLines={2} style={styles.title}>
+          <Text
+            numberOfLines={2}
+            style={[
+              styles.title,
+              {
+                color: theme.specialText,
+              },
+            ]}
+          >
             {item.title}
           </Text>
           <Text style={styles.brand}>{item.brand.name}</Text>
         </View>
         <View style={styles.amountIcon}>
-          <Text style={[styles.amount,{color:theme.text}]}>Rs. {item.discountPrice}</Text>
+          <Text style={[styles.amount, { color: theme.text }]}>
+            Rs. {item.discountPrice}
+          </Text>
           <Pressable
             onPress={() => {
               deleteitem(item);
             }}
           >
-            <Delete name="delete" style={[styles.icon,{color:theme.text}]} size={20} />
+            <Delete
+              name="delete"
+              style={[styles.icon, { color: theme.text }]}
+              size={20}
+            />
           </Pressable>
         </View>
       </Pressable>
@@ -100,12 +116,16 @@ const WishlistScreen = () => {
 
   const EmptyWishlist = () => {
     return (
-      <View style={[styles.emptyContainer,{backgroundColor:theme.background}]}>
+      <View
+        style={[styles.emptyContainer, { backgroundColor: theme.background }]}
+      >
         <View style={styles.heartIconContainer}>
           <Ionicons name="heart" size={64} color={Typography.Colors.primary} />
         </View>
 
-        <Text style={styles.emptyTitle}>Your Wishlist is Empty</Text>
+        <Text style={[styles.emptyTitle, { color: theme.specialText }]}>
+          Your Wishlist is Empty
+        </Text>
         <Text style={styles.emptyDescription}>
           Save items you love to your wishlist to keep track of them and get
           notified when they go on sale.
@@ -120,9 +140,11 @@ const WishlistScreen = () => {
   }
 
   return (
-    <View style={[styles.container,{backgroundColor:theme.background}]}>
-      <View style={[styles.header,{backgroundColor:theme.background}]}>
-        <Text style={styles.heading}>Wishlist</Text>
+    <View style={[styles.container, { backgroundColor: theme.background }]}>
+      <View style={[styles.header, { backgroundColor: theme.background }]}>
+        <Text style={[styles.heading, { color: theme.specialText }]}>
+          Wishlist
+        </Text>
         {Wishlist && Wishlist.length > 0 && (
           <Pressable style={styles.deleteAll} onPress={DeleteAll}>
             <Text style={styles.deleteAllText}>Delete All</Text>

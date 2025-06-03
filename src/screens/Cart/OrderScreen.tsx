@@ -23,16 +23,18 @@ const { width } = Dimensions.get("window");
 
 const OrderScreen = ({ route }) => {
   const themeMode = useAuthStore((state) => state.theme);
-  const theme =
-    themeMode === "dark"
-      ? {
-          background: Typography.Colors.black,
-          text: Typography.Colors.white,
-        }
-      : {
-          background: Typography.Colors.white,
-          text: Typography.Colors.black,
-        };
+  const isDarkMode = themeMode === "dark";
+
+  // Example of conditionally setting special text color
+  const specialTextColor = isDarkMode
+    ? Typography.Colors.blue
+    : Typography.Colors.primary;
+
+  const theme = {
+    background: isDarkMode ? Typography.Colors.black : Typography.Colors.white,
+    text: isDarkMode ? Typography.Colors.white : Typography.Colors.black,
+    specialText: specialTextColor,
+  };
   const { item } = route.params;
   const isFocus = useIsFocused();
 
@@ -43,7 +45,6 @@ const OrderScreen = ({ route }) => {
     gstAmount: 0,
     totalPrice: 0,
   });
-  
 
   const GetCartData = async () => {
     try {
@@ -93,11 +94,13 @@ const OrderScreen = ({ route }) => {
           <Image source={{ uri: item.productImage[0] }} style={styles.Image} />
         </View>
         <View style={styles.dataContainer}>
-          <Text style={[styles.title,{color:theme.text}]} numberOfLines={1}>
+          <Text style={[styles.title, { color: theme.text }]} numberOfLines={1}>
             {item?.productName}
           </Text>
-          <Text style={[styles.quantity,{color:theme.text}]}>Quantity: {item?.quantity}</Text>
-          <Text style={styles.particularPrice}>
+          <Text style={[styles.quantity, { color: theme.text }]}>
+            Quantity: {item?.quantity}
+          </Text>
+          <Text style={[styles.particularPrice, { color: theme.specialText }]}>
             Rs. {item?.price * item?.quantity}
           </Text>
         </View>
@@ -134,12 +137,17 @@ const OrderScreen = ({ route }) => {
     }
   };
   return (
-    <View style={[styles.container,{backgroundColor:theme.background}]}>
+    <View style={[styles.container, { backgroundColor: theme.background }]}>
       <View style={styles.header}>
         <Pressable onPress={() => navigation.goBack()}>
-          <Image source={assets.ArrowLeft} style={[styles.backIcon,{tintColor:theme.text}]} />
+          <Image
+            source={assets.ArrowLeft}
+            style={[styles.backIcon, { tintColor: theme.text }]}
+          />
         </Pressable>
-        <Text style={[styles.headerText,{color:theme.text}]}>Order Summary</Text>
+        <Text style={[styles.headerText, { color: theme.text }]}>
+          Order Summary
+        </Text>
       </View>
       <View style={{ flex: 0.55 }}>
         <FlatList
@@ -156,10 +164,15 @@ const OrderScreen = ({ route }) => {
         }}
       />
       <View style={styles.deliveryContainer}>
-        <Text style={[styles.heading,{color:theme.text}]}>Delivery Address</Text>
+        <Text style={[styles.heading, { color: theme.text }]}>
+          Delivery Address
+        </Text>
         <View style={styles.subContainer}>
           <View style={{ flex: 1 }}>
-            <Text style={[styles.details,{color:theme.text}]} numberOfLines={4}>
+            <Text
+              style={[styles.details, { color: theme.text }]}
+              numberOfLines={4}
+            >
               {item?.firstName} {item?.lastName} , {item?.streetAddress}{" "}
               {item?.city}, {item?.state}, {item?.country} {item?.zipCode},{" "}
               {item?.phoneNumber}{" "}
@@ -169,35 +182,40 @@ const OrderScreen = ({ route }) => {
       </View>
       <View style={styles.horizonLine} />
       <View style={styles.deliveryContainer}>
-        <Text style={[styles.heading,{color:theme.text}]}>Payment Method</Text>
+        <Text style={[styles.heading, { color: theme.text }]}>
+          Payment Method
+        </Text>
         <Pressable style={styles.paymentContainer}>
           <Image source={assets.Razorpay} style={styles.paymentImage} />
-          <Text style={[styles.details,{color:theme.text}]}>Pay With Rozorpay Pay</Text>
-          <View style={styles.arrowConatiner}>
-          </View>
+          <Text style={[styles.details, { color: theme.text }]}>
+            Pay With Rozorpay Pay
+          </Text>
+          <View style={styles.arrowConatiner}></View>
         </Pressable>
       </View>
       <View style={styles.horizonLine} />
       <View style={{ paddingHorizontal: 20 }}>
         <View style={styles.amountContainer}>
           <Text style={styles.text1}>Items (3)</Text>
-          <Text style={styles.perItemAmount}>
+          <Text style={[styles.perItemAmount, { color: theme.specialText }]}>
             Rs.{priceData?.breakdown?.subtotal}
           </Text>
         </View>
         <View style={styles.amountContainer}>
           <Text style={styles.text1}>Shipping</Text>
-          <Text style={styles.perItemAmount}>
+          <Text style={[styles.perItemAmount, { color: theme.specialText }]}>
             Rs.{priceData?.breakdown?.shippingPrice}
           </Text>
         </View>
         <View style={styles.amountContainer}>
           <Text style={styles.text1}>Promo Code</Text>
-          <Text style={styles.perItemAmount}>( - Rs.1234 )</Text>
+          <Text style={[styles.perItemAmount, { color: theme.specialText }]}>
+            ( - Rs.1234 )
+          </Text>
         </View>
         <View style={styles.amountContainer}>
           <Text style={styles.text1}>Import Charges</Text>
-          <Text style={styles.perItemAmount}>
+          <Text style={[styles.perItemAmount, { color: theme.specialText }]}>
             Rs.{priceData?.breakdown?.gstAmount}
           </Text>
         </View>
@@ -208,7 +226,7 @@ const OrderScreen = ({ route }) => {
         <View style={{ flex: 1, justifyContent: "center" }}>
           <Text
             style={{
-              color: Typography.Colors.primary,
+              color: theme.specialText,
               fontSize: 20,
               fontWeight: "800",
             }}
@@ -281,7 +299,6 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     borderRadius: 10,
-
   },
   imageConatiner: {
     paddingVertical: 18,

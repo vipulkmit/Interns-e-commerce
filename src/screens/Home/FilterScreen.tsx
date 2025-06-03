@@ -9,19 +9,29 @@ import { Color, ProductFilters } from "../../services/api/apiServices";
 import useAuthStore from "../../stores/useAuthStore";
 
 const FilterScreen = ({ route }) => {
-  const { category, categoryName, subCategoryId,categoryId,setFilterApplied, setFilterData } =
-    route.params;
-const themeMode = useAuthStore((state) => state.theme);
-  const theme =
-    themeMode === "dark"
-      ? {
-          background: Typography.Colors.black,
-          text: Typography.Colors.white,
-        }
-      : {
-          background: Typography.Colors.white,
-          text: Typography.Colors.black,
-        };
+  const {
+    category,
+    categoryName,
+    subCategoryId,
+    categoryId,
+    setFilterApplied,
+    setFilterData,
+  } = route.params;
+
+  const themeMode = useAuthStore((state) => state.theme);
+  const isDarkMode = themeMode === "dark";
+
+  // Example of conditionally setting special text color
+  const specialTextColor = isDarkMode
+    ? Typography.Colors.blue
+    : Typography.Colors.primary;
+
+  const theme = {
+    background: isDarkMode ? Typography.Colors.black : Typography.Colors.white,
+    text: isDarkMode ? Typography.Colors.white : Typography.Colors.black,
+    specialText: specialTextColor,
+  };
+
   const navigation = useNavigation();
   const [applyfilter, setApplyFilter] = useState();
   const globalFilter = {
@@ -82,13 +92,13 @@ const themeMode = useAuthStore((state) => state.theme);
   // Color options
   const getColorHex = (colorName) => {
     const colorMap = {
-      'Black': '#000000',
-      'White': '#FFFFFF',
-      'Yellow': '#F2C94C',
-      'Red': '#E90000',
-      'Green': '#19B600',
+      Black: "#000000",
+      White: "#FFFFFF",
+      Yellow: "#F2C94C",
+      Red: "#E90000",
+      Green: "#19B600",
     };
-    return colorMap[colorName] || '#CCCCCC'; // Default gray if color not found
+    return colorMap[colorName] || "#CCCCCC"; // Default gray if color not found
   };
   const [colorId, setColorId] = useState();
 
@@ -102,7 +112,6 @@ const themeMode = useAuthStore((state) => state.theme);
       });
   }, []);
 
-
   const handleApplyFilter = () => {
     ProductFilters(
       filters.discount[1],
@@ -111,10 +120,10 @@ const themeMode = useAuthStore((state) => state.theme);
       filters.amount[0],
       filters.selectedColor,
       subCategoryId,
-      categoryId,
+      categoryId
     )
       .then((data) => {
-        console.log(data?.data,"=-=-=-=-=-=--");
+        console.log(data?.data, "=-=-=-=-=-=--");
         setFilterApplied(true);
         setFilterData(data?.data);
         navigation.goBack();
@@ -125,19 +134,25 @@ const themeMode = useAuthStore((state) => state.theme);
   };
 
   return (
-    <View style={[styles.container,{backgroundColor:theme.background}]}>
+    <View style={[styles.container, { backgroundColor: theme.background }]}>
       <View style={styles.heading}>
         <Pressable onPress={() => navigation.goBack()}>
           <Icon name="cross" size={24} style={styles.icon} />
         </Pressable>
-        <Text style={styles.headingText}>Filter Search</Text>
+        <Text style={[styles.headingText, { color: theme.specialText }]}>
+          Filter Search
+        </Text>
       </View>
 
-       <View style={[styles.line,{borderBottomColor:theme.background}]} />
+      <View style={[styles.line, { borderBottomColor: theme.background }]} />
 
       <View style={styles.subContainer}>
-        <Text style={styles.priceTitle}>Size</Text>
-        <View style={[styles.sizeContainer,{backgroundColor:theme.background}]}>
+        <Text style={[styles.priceTitle, { color: theme.specialText }]}>
+          Size
+        </Text>
+        <View
+          style={[styles.sizeContainer, { backgroundColor: theme.background }]}
+        >
           {sizes.map((size, index) => (
             <Pressable
               key={index}
@@ -149,7 +164,8 @@ const themeMode = useAuthStore((state) => state.theme);
             >
               <Text
                 style={[
-                  styles.sizeText,{color:theme.text},
+                  styles.sizeText,
+                  { color: theme.text },
                   filters.selectedSize === size && styles.selectedSizeText,
                 ]}
               >
@@ -160,10 +176,12 @@ const themeMode = useAuthStore((state) => state.theme);
         </View>
       </View>
 
-       <View style={[styles.line,{borderBottomColor:theme.background}]} />
+      <View style={[styles.line, { borderBottomColor: theme.background }]} />
 
       <View style={styles.subContainer}>
-        <Text style={styles.priceTitle}>Color</Text>
+        <Text style={[styles.priceTitle, { color: theme.specialText }]}>
+          Color
+        </Text>
         <View style={styles.colorContainer}>
           {colorId?.map((color) => (
             <Pressable
@@ -176,7 +194,10 @@ const themeMode = useAuthStore((state) => state.theme);
               onPress={() => handleColorSelect(color.id)}
             >
               <View
-                style={[styles.colorCircle1, { backgroundColor: getColorHex(color.name) }]}
+                style={[
+                  styles.colorCircle1,
+                  { backgroundColor: getColorHex(color.name) },
+                ]}
               />
               {filters.selectedColor === color.id && (
                 <View style={styles.colorCheckmark}>
@@ -192,18 +213,26 @@ const themeMode = useAuthStore((state) => state.theme);
         </View>
       </View>
 
-      <View style={[styles.line,{borderBottomColor:theme.background}]} />
+      <View style={[styles.line, { borderBottomColor: theme.background }]} />
 
       <View style={styles.subContainer}>
-        <Text style={styles.priceTitle}>Price Range</Text>
+        <Text style={[styles.priceTitle, { color: theme.specialText }]}>
+          Price Range
+        </Text>
         <View style={styles.minmax}>
           <View style={styles.amountRange}>
-            <Text numberOfLines={1} style={[styles.amountText,{color:theme.text}]}>
+            <Text
+              numberOfLines={1}
+              style={[styles.amountText, { color: theme.text }]}
+            >
               Rs. {filters.amount[0]}
             </Text>
           </View>
           <View style={styles.amountRange}>
-            <Text numberOfLines={1} style={[styles.amountText,{color:theme.text}]}>
+            <Text
+              numberOfLines={1}
+              style={[styles.amountText, { color: theme.text }]}
+            >
               Rs. {filters.amount[1]}
             </Text>
           </View>
@@ -225,18 +254,26 @@ const themeMode = useAuthStore((state) => state.theme);
         </View>
       </View>
 
-       <View style={[styles.line,{borderBottomColor:theme.background}]} />
+      <View style={[styles.line, { borderBottomColor: theme.background }]} />
 
       <View style={styles.subContainer}>
-        <Text style={styles.priceTitle}>Discount</Text>
+        <Text style={[styles.priceTitle, { color: theme.specialText }]}>
+          Discount
+        </Text>
         <View style={styles.minmax}>
           <View style={styles.amountRange}>
-            <Text numberOfLines={1} style={[styles.amountText,{color:theme.text}]}>
+            <Text
+              numberOfLines={1}
+              style={[styles.amountText, { color: theme.text }]}
+            >
               {filters.discount[0]} %
             </Text>
           </View>
           <View style={styles.amountRange}>
-            <Text numberOfLines={1} style={[styles.amountText,{color:theme.text}]}>
+            <Text
+              numberOfLines={1}
+              style={[styles.amountText, { color: theme.text }]}
+            >
               {filters.discount[1]} %
             </Text>
           </View>
