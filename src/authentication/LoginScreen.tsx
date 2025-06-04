@@ -57,14 +57,15 @@ export default function LoginScreen() {
       console.log(error);
     }
   };
+console.log(userInfo,"userInfooooo");
 
   const GoogleAuth = async () => {
     try {
       // Then call API
-      // console.log("Google Sign In Success:");
-      // console.log("userInfo.data.user.name", userInfo.data.user.name);
-      // console.log("userInfo.data.user.email", userInfo.data.user.email);
-      // console.log("userInfo.data.user.photo", userInfo.data.user.photo);
+      console.log("Google Sign In Success:");
+      console.log("userInfo.data.user.name", userInfo.data.user.name);
+      console.log("userInfo.data.user.email", userInfo.data.user.email);
+      console.log("userInfo.data.user.photo", userInfo.data.user.photo);
 
       await GoogleSign(
         userInfo?.data?.user?.name,

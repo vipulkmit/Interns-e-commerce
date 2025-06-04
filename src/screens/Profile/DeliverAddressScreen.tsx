@@ -20,6 +20,7 @@ import { updateUserdata } from "../../services/api/apiServices";
 import { useState } from "react";
 import TopHeaderComponent from "../../components/header/TopHeaderComponent";
 import { assets } from "../../../assets/images";
+import { useAppTheme } from "../../theme/useAppTheme";
 
 const DeliveryAddress = () => {
   const themeMode = useAuthStore((state) => state.theme);
@@ -29,12 +30,13 @@ const DeliveryAddress = () => {
   const specialTextColor = isDarkMode
     ? Typography.Colors.blue
     : Typography.Colors.primary;
-
-  const theme = {
-    background: isDarkMode ? Typography.Colors.black : Typography.Colors.white,
-    text: isDarkMode ? Typography.Colors.white : Typography.Colors.black,
-    specialText: specialTextColor,
-  };
+    const theme = useAppTheme();
+    console.log(theme,'Theme')
+  // const theme = {
+  //   background: isDarkMode ? Typography.Colors.black : Typography.Colors.white,
+  //   text: isDarkMode ? Typography.Colors.white : Typography.Colors.black,
+  //   specialText: specialTextColor,
+  // };
   const user = useAuthStore((state) => state.user);
   const Navigation = useNavigation();
   const [selectedIndex, setSelectedIndex] = useState(null);
@@ -126,7 +128,7 @@ const DeliveryAddress = () => {
           <Text style={styles.addressText}>Phone: {item.phoneNumber}</Text>
           <View style={{ flexDirection: "row", gap: 10, alignItems: "center" }}>
             <TouchableOpacity onPress={() => onEditAddress(item, index)}>
-              <Text style={[styles.editText, { color: theme.specialText }]}>
+              <Text style={[styles.editText, { color: theme.text }]}>
                 Edit
               </Text>
             </TouchableOpacity>
@@ -168,7 +170,7 @@ const DeliveryAddress = () => {
         </Pressable>
         <Text
           numberOfLines={1}
-          style={[styles.headerTitle, { color: theme.specialText }]}
+          style={[styles.headerTitle, { color: theme.text }]}
         >
           Choose Delivery Address
         </Text>

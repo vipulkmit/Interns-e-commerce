@@ -45,6 +45,7 @@ export const Typography = {
 export const LightColors = {
   background: "#ffffff",
   text: Typography.Colors.black,
+  
 };
 
 export const DarkColors = {
