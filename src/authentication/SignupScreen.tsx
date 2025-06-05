@@ -9,6 +9,7 @@ import {
   SafeAreaView,
   KeyboardAvoidingView,
   Platform,
+  ActivityIndicator,
 } from "react-native";
 import { Typography } from "../theme/Colors";
 import { assets } from "../../assets/images";
@@ -18,16 +19,19 @@ import { registerUser } from "./AuthApi";
 import CustomButton from "../components/button/CustomButton";
 import CustomTextInput from "../components/textInput/CustomTextInput";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import { GoogleSign } from "../services/api/apiServices";
 
 export default function SignupScreen() {
-  const { setUser } = useAuthStore();
+  const { setToken, setUser } = useAuthStore();
   const [name, setName] = useState("");
   const [email, setemail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isGoogleLoading, setIsGoogleLoading] = useState<boolean>(false);
   const Navigation = useNavigation();
   const [userInfo, setUserInfo] = useState(null);
+
   useEffect(() => {
     GoogleSignin.configure({
       webClientId:
@@ -36,13 +40,71 @@ export default function SignupScreen() {
   }, []);
 
   const signinwithGoogle = async () => {
+    setIsGoogleLoading(true); // Start loading
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
-      console.log(userInfo, "userInfo");
       setUserInfo(userInfo);
+      if (userInfo?.type === "success") {
+        await GoogleAuth(userInfo);
+      } else {
+        Alert.alert("Google Sign In Failed", "Please try again.");
+      }
     } catch (error) {
       console.log(error);
+      Alert.alert(
+        "Google Sign In Error",
+        "Failed to sign in with Google. Please try again."
+      );
+    } finally {
+      setIsGoogleLoading(false); // Stop loading
+    }
+  };
+
+  const GoogleAuth = async (userInfo: any) => {
+    try {
+      console.log("userInfo.data.user.name", userInfo.data.user.name);
+      console.log("userInfo.data.user.email", userInfo.data.user.email);
+      console.log("userInfo.data.user.photo", userInfo.data.user.photo);
+
+      // Call the Google Sign API
+      const response = await GoogleSign(
+        userInfo?.data?.user?.name,
+        userInfo?.data?.user?.email,
+        userInfo?.data?.user?.photo
+      );
+      console.log(response.data.access_token, "response from google sign in");
+
+      // Handle the response similar to regular login
+      if (response && response.data && response.data.access_token) {
+        // Update auth store
+        useAuthStore.setState({ isLoggedIn: true });
+        setUser(
+          response.data.userDetails || {
+            name: userInfo.data.user.name,
+            email: userInfo.data.user.email,
+            photo: userInfo.data.user.photo,
+          }
+        );
+        setToken(response.data.access_token);
+
+        // Navigate to Home/BottomTabs
+        Navigation.reset({
+          index: 0,
+          routes: [{ name: "BottomTabs" }],
+        });
+      } else {
+        Alert.alert(
+          "Google Sign In Failed",
+          "Authentication failed. Please try again."
+        );
+      }
+    } catch (error) {
+      console.log("Error in Google authentication:", error);
+      Alert.alert(
+        "Authentication Error",
+        error.message || "Google sign-in failed. Please try again."
+      );
     }
   };
   const validateInputs = () => {
@@ -101,6 +163,15 @@ export default function SignupScreen() {
 
   return (
     <SafeAreaView style={styles.safeContainer}>
+      {/* Loading Overlay for Google Sign In */}
+      {isGoogleLoading && (
+        <View style={styles.loadingOverlay}>
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color={Typography.Colors.primary} />
+            <Text style={styles.loadingText}>Signing in with Google...</Text>
+          </View>
+        </View>
+      )}
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : undefined}
         style={styles.container}
@@ -287,5 +358,36 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: Typography.Colors.primary,
     fontWeight: "bold",
+  },
+  loadingOverlay: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 1000,
+  },
+  loadingContainer: {
+    backgroundColor: Typography.Colors.white,
+    padding: 30,
+    borderRadius: 15,
+    alignItems: "center",
+    elevation: 5,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+  },
+  loadingText: {
+    marginTop: 15,
+    fontSize: 16,
+    color: Typography.Colors.navyblue,
+    fontFamily: Typography.font.regular,
   },
 });

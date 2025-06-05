@@ -1,4 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 
@@ -9,6 +10,7 @@ type AuthStore = {
   isLoggedIn: boolean;
   token: string | null;
   login: () => void;
+  // logout: () => void;
   logout: () => void;
   user: any | null;
   setToken: (newtoken: string | null) => void;
@@ -46,15 +48,24 @@ const useAuthStore = create<AuthStore>()(
       setUser: (user) => set({ user }),
       setToken: (newtoken) => set({ token: newtoken }),
       login: () => set({ isLoggedIn: true }),
-      logout: () =>
+      logout: async () => {
+        try {
+          await GoogleSignin.signOut();
+        } catch (e) {
+          // Ignore error if not signed in with Google
+        }
         set({
           isLoggedIn: false,
           token: null,
+          user: null,
           wishlistItems: [],
-        }),
+          cart: null,
+        });
+      },
+
       clearUser: () => set({ user: null }),
       sethydrated: (hashydrated) => set({ hashydrated }),
-      setCart: (cart)=> set({cart}),
+      setCart: (cart) => set({ cart }),
 
       isInWishlist: (productId: string) => {
         const state = get();
