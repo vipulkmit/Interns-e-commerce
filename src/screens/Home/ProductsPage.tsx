@@ -1,5 +1,3 @@
-
-
 import {
   View,
   Text,
@@ -8,6 +6,7 @@ import {
   FlatList,
   Pressable,
   Image,
+  Dimensions,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import Animated, {
@@ -24,6 +23,8 @@ import ButtonComponent from "../../components/button/ButtonComponent";
 import { Typography } from "../../theme/Colors";
 import { Products } from "../../services/api/apiServices";
 import useAuthStore from "../../stores/useAuthStore";
+const { width } = Dimensions.get("window");
+console.log(width,"width");
 
 // Skeleton Component
 const SkeletonPlaceholder = ({ width, height, style }) => {
@@ -99,41 +100,54 @@ const ProductsPage = ({ route }) => {
     return navigation.navigate("ProductDetailPage", { data: data });
   };
   
-  const ProductRenderItem = ({ item }) => {
+  // Function to prepare data with empty placeholder for odd items
+  const prepareDisplayData = (data) => {
+    if (!data || data.length === 0) return data;
+    
+    // If odd number of items, add an empty placeholder at the end
+    if (data.length % 2 !== 0) {
+      return [...data, { id: 'empty-placeholder', isEmpty: true }];
+    }
+    return data;
+  };
+  
+  const ProductRenderItem = ({ item, index }) => {
     if (loading) {
-      // Skeleton version of ProductComponent
+      // Skeleton version matching the actual product UI
       return (
-        <View style={[styles.container, { backgroundColor: theme.background }]}>
-          <View style={styles.skeletonProductContainer}>
-            <SkeletonPlaceholder width="100%" height={200} style={{ borderRadius: 8 }} />
-            <View style={styles.skeletonTextContainer}>
-              <SkeletonPlaceholder width="60%" height={16} style={{ marginTop: 8 }} />
-              <SkeletonPlaceholder width="80%" height={14} style={{ marginTop: 4 }} />
-              <SkeletonPlaceholder width="40%" height={18} style={{ marginTop: 6 }} />
-            </View>
+        <View style={[styles.imageContainer]}>
+          <SkeletonPlaceholder 
+            width={width/2.5} 
+            height={220} 
+            style={{ borderRadius: 8 }} 
+          />
+          <View style={styles.skeletonTextContainer}>
+            <SkeletonPlaceholder width="80%" height={16} style={{ marginTop: 10 }} />
+            <SkeletonPlaceholder width="50%" height={14} style={{ marginTop: 4 }} />
           </View>
         </View>
       );
     }
+    // Return empty view for placeholder (invisible but maintains grid structure)
+    if (item.isEmpty) {
+      return <View style={[styles.imageContainer, { opacity: 0 }]} />;
+    }
 
     return (
-      <View style={[styles.container, { backgroundColor: theme.background }]}>
-        <ProductComponent
-          onClick={() => renderProduct(item)}
-          images={item.images}
-          productName={item.title}
-          brandName={item.brand.name}
-          initialRate={item.price}
-          discount={item.discountPercentage}
-          rate={item.discountPrice}
+      <Pressable onPress={() => renderProduct(item)} style={[styles.imageContainer]}>
+        <Image 
+          source={{ uri: item.images[0]}}
+          style={styles.productImage}
         />
-      </View>
+        <Text numberOfLines={1} style={styles.productName}>{item.title}</Text>
+        <Text style={styles.productPrice}>Rs. {item.price}</Text>
+      </Pressable>
     );
   };
 
   const ListHeader = () => {
     if (loading) {
-      // Skeleton version of header
+      // Skeleton version of header matching the actual header UI
       return (
         <View style={[styles.header, { backgroundColor: theme.background }]}>
           <View style={styles.skeletonHeaderContainer}>
@@ -175,13 +189,15 @@ const ProductsPage = ({ route }) => {
     );
   };
 
-  // Create skeleton data when loading
-  const displayData = loading 
+  // Create skeleton data when loading or prepare actual data
+  const rawData = loading 
     ? Array.from({ length: 6 }, (_, index) => ({ id: `skeleton-${index}` }))
     : (filterApplied ? filterData?.products : Category);
+  
+  const displayData = prepareDisplayData(rawData);
 
   return (
-    <>
+    <View style={styles.mainContainer}>
       <FlatList
         data={displayData}
         renderItem={ProductRenderItem}
@@ -189,12 +205,14 @@ const ProductsPage = ({ route }) => {
           setFilterApplied(false);
           setRefresh(false);
         }}
+        numColumns={2}
         refreshing={refresh}
         keyExtractor={(item) => item.id?.toString()}
         ListHeaderComponent={ListHeader}
         ListHeaderComponentStyle={[styles.header, { backgroundColor: theme.background }]}
+        columnWrapperStyle={styles.row}
       />
-    </>
+    </View>
   );
 };
 
@@ -229,6 +247,7 @@ const styles = StyleSheet.create({
   mainContainer: {
     backgroundColor: Typography.Colors.white,
     flex: 1,
+    paddingHorizontal:10
   },
   subContainer: {
     flexDirection: "row",
@@ -245,14 +264,15 @@ const styles = StyleSheet.create({
     height: 17,
     width: 17,
   },
-  // Skeleton-specific styles
-  skeletonProductContainer: {
-    backgroundColor: 'transparent',
-    borderRadius: 8,
-    marginVertical: 8,
+  // Row style for FlatList columns
+  row: {
+    justifyContent: 'flex-start',
+    paddingHorizontal: 0,
   },
+  // Skeleton-specific styles
   skeletonTextContainer: {
-    paddingVertical: 8,
+    alignItems: "flex-start",
+    width: '100%',
   },
   skeletonHeaderContainer: {
     paddingBottom: 16,
@@ -268,6 +288,45 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     paddingRight: 10,
   },
+  productImage:{
+    width: width/2.5, 
+    height: 220,
+    borderRadius: 8,
+    // tintColor:'#F2F2F2'
+    // backgroundColor:'gray',
+  },
+  imageContainer:{
+    backgroundColor:'#F2F2F2',
+    // backgroundColor:'red',
+    elevation:2,
+    flex: 1,
+    alignItems:'center',
+    justifyContent:'center',
+    padding:10,
+    margin:10,
+    borderRadius:8,
+    // maxWidth: '48%', // Ensures proper column width
+  },
+  productName:{
+    fontSize:16,
+    fontFamily:Typography.font.regular,
+    color:Typography.Colors.black,
+    textAlign: 'left',
+    // backgroundColor:'red',
+    width: '100%',
+    paddingLeft: 12,
+    paddingTop: 10
+  },
+  productPrice: {
+    fontSize: 14,
+    fontFamily: Typography.font.regular,
+    color:Typography.Colors.black,
+    marginTop:4,
+    textAlign: 'left',
+    // backgroundColor:'red',
+    width:'100%',
+    paddingLeft:12
+  }
 });
 
 export default ProductsPage;
