@@ -76,6 +76,8 @@ const styles = StyleSheet.create({
         paddingTop: 20,
         flex: 1,
         marginVertical:4,
+        backgroundColor:"#F3F3F3",
+        borderRadius:10
     },
     imgView:{
         flex:1,
@@ -83,16 +85,17 @@ const styles = StyleSheet.create({
         width: 216,
         borderTopLeftRadius: 5,
         borderTopRightRadius: 5,
+        paddingLeft:15
     },
     dataView:{
         flex:1,
         alignItems:'center'
     },
     imgStyles: {
-        width:'100%',
+        width:'90%',
         height:'100%',
-        borderTopRightRadius:8,
-        borderTopLeftRadius:8
+        borderRadius:8,
+        // borderTopLeftRadius:8
        
     },
     logoImgContainer:{

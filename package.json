@@ -33,6 +33,7 @@
     "react-hook-form": "^7.56.1",
     "react-native": "0.76.9",
     "react-native-advanced-checkbox": "^2.0.5",
+    "react-native-change-icon": "^5.0.0",
     "react-native-collapsible": "^1.6.2",
     "react-native-easy-content-loader": "^0.3.2",
     "react-native-fs": "^2.20.0",

@@ -624,11 +624,12 @@ const styles = StyleSheet.create({
     paddingTop: 40,
   },
   imageBackground: {
-    width: width,
-    height: 344.67,
+    width: width-10,
+    height: 300.67,
   },
   imagestyle: {
-    borderWidth: 2,
+    borderWidth: 5,
+    borderRadius:30,
     borderColor: Typography.Colors.white,
   },
   overlay: {
@@ -637,6 +638,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: Typography.Colors.lightblack,
     opacity: 0.8,
+        // borderWidth: 5,
+    borderRadius:30,
   },
   logostyle: {
     width: 175,
