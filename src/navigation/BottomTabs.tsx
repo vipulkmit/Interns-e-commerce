@@ -8,8 +8,11 @@ import WishlistNavigator from "./WishlistNavigator";
 import ProfileNavigator from "./ProfileNavigator";
 import CartNavigator from "./CartNavigator";
 import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
+import useAuthStore from "../stores/useAuthStore";
+import { Typography } from "../theme/Colors";
 
 function getTabBarVisibility(route: any) {
+ 
   const routeName = getFocusedRouteNameFromRoute(route) ?? "ProfileScreen";
   const hideOnScreens = [
     "MyOrdersScreen",
@@ -50,6 +53,18 @@ function getTabBarVisibilityForCart(route: any) {
 }
 export default function BottomTabs() {
   const Tab = createBottomTabNavigator();
+  const themeMode = useAuthStore((state) => state.theme);
+  const theme =
+    themeMode === "dark"
+      ? {
+          background: Typography.Colors.charcol,
+          text: Typography.Colors.white,
+        }
+      : {
+          background: Typography.Colors.navigatorColor,
+          text: Typography.Colors.black,
+        };
+
   return (
     <Tab.Navigator
       // @ts-ignore: Suppress TypeScript error for 'id'
@@ -86,7 +101,7 @@ export default function BottomTabs() {
             />
           );
         },
-        tabBarStyle: styles.tabBar,
+        tabBarStyle: {backgroundColor: theme.background, height:65},
         tabBarShowLabel: false,
         tabBarIconStyle: {},
       })}
@@ -99,7 +114,7 @@ export default function BottomTabs() {
           const hideTabBar = getTabBarVisibilityForHome(route);
           return {
             headerShown: false,
-            tabBarStyle: hideTabBar ? { display: "none" } : styles.tabBar,
+            tabBarStyle: hideTabBar ? { display: "none" } : {backgroundColor: theme.background, height:65},
           };
         }}
       />
@@ -110,7 +125,7 @@ export default function BottomTabs() {
           const hideTabBar = getTabBarVisibilityForSearch(route);
           return {
             headerShown: false,
-            tabBarStyle: hideTabBar ? { display: "none" } : styles.tabBar,
+            tabBarStyle: hideTabBar ? { display: "none" } : {backgroundColor: theme.background, height:65},
           };
         }}
       />
@@ -126,7 +141,7 @@ export default function BottomTabs() {
           const hideTabBar = getTabBarVisibilityForCart(route);
           return {
             headerShown: false,
-            tabBarStyle: hideTabBar ? { display: "none" } : styles.tabBar,
+            tabBarStyle: hideTabBar ? { display: "none" } : {backgroundColor: theme.background, height:65},
           };
         }}
       />
@@ -137,7 +152,7 @@ export default function BottomTabs() {
           const hideTabBar = getTabBarVisibility(route);
           return {
             headerShown: false,
-            tabBarStyle: hideTabBar ? { display: "none" } : styles.tabBar,
+            tabBarStyle: hideTabBar ? { display: "none" } : {backgroundColor: theme.background, height:65},
           };
         }}
       />
@@ -148,5 +163,6 @@ export default function BottomTabs() {
 const styles = StyleSheet.create({
   tabBar: {
     height: 65,
+
   },
 });

@@ -197,7 +197,7 @@ const ProductsPage = ({ route }) => {
   const displayData = prepareDisplayData(rawData);
 
   return (
-    <View style={styles.mainContainer}>
+    <View style={[styles.mainContainer,{backgroundColor:theme.background}]}>
       <FlatList
         data={displayData}
         renderItem={ProductRenderItem}
@@ -245,7 +245,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   mainContainer: {
-    backgroundColor: Typography.Colors.white,
+    // backgroundColor: Typography.Colors.white,
     flex: 1,
     paddingHorizontal:10
   },

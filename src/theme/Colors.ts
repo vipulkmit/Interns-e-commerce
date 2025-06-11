@@ -31,6 +31,8 @@ export const Typography = {
     nature: "#038200",
     grayy: "#F2F3F2",
     blue: "#bcccdc",
+    charcol: "#1C2128",
+    navigatorColor:'#fcf7fd'
   },
 
   font: {

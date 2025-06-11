@@ -8,8 +8,17 @@ import { useAppTheme } from "../../theme/useAppTheme";
 const TopHeaderComponent = () => {
   const { user } = useAuthStore();
   const navigation = useNavigation();
-  const theme = useAppTheme();
-
+  const themeMode = useAuthStore((state) => state.theme);
+  const theme =
+    themeMode === "dark"
+      ? {
+          background: Typography.Colors.black,
+          text: Typography.Colors.white,
+        }
+      : {
+          background: Typography.Colors.white,
+          text: Typography.Colors.black,
+        };
   return (
     <View style={styles.container}>
       <View style={styles.UserContainer}>
@@ -19,12 +28,20 @@ const TopHeaderComponent = () => {
           }
           style={styles.userImage}
         />
-        <Text
+      <Text
           numberOfLines={1}
           style={[styles.userName, { color: theme.text }]}
         >
-          {user?.name}
+         PocketCart
+          {/* {user?.name} */}
         </Text>
+      <Image
+        source={
+          themeMode === 'dark'
+            ? assets.Notification : assets.NotificationLight
+        }
+        style={{ height: 32, width: 32 }}
+      />
       </View>
     </View>
   );
@@ -33,19 +50,20 @@ const TopHeaderComponent = () => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
+    paddingVertical:15
   },
   userImage: {
-    height: 35,
-    width: 35,
+    height: 40,
+    width: 40,
+    borderWidth:2,
     borderRadius: 20,
     resizeMode: "cover",
     overflow: "hidden",
   },
   userName: {
-    fontSize: 18,
+    fontSize: 22,
     fontFamily: Typography.font.medium,
     textAlign: "center",
-    textTransform: "capitalize",
   },
   iconContainer: {
     flex: 1,
@@ -63,6 +81,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingVertical: 7,
     gap: 13,
+    justifyContent:'space-between'
   },
 });
 

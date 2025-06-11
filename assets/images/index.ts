@@ -1,3 +1,4 @@
+import { Background } from "@react-navigation/elements";
 import { Share } from "react-native";
 
 export const assets = {
@@ -59,5 +60,12 @@ export const assets = {
   password: require("./Password.png"),
   Filter: require("./filter.png"),
   Demo: require("./demo.png"),
-  Razorpay: require("./Razorpay.png")
+  Razorpay: require("./Razorpay.png"),
+  Background:require("./Background.jpeg"),
+  BackgroundDark:require("./DarkBackground.png"),
+  Notification:require("./Bell_pin.png"),
+  NotificationLight:require("./Bell_pin black.png"),
+  bannerLight:require("./bannerLight.png"),
+  bannerDark:require("./bannerDark.png"),
+
 };

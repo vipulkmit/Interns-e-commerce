@@ -259,7 +259,7 @@ const HomeScreen = () => {
   const [ourCollection, setOurCollection] = useState([]);
 
   const animations = useRef(
-    BannerData.map(() => new Animated.Value(17))
+    BannerData.map(() => new Animated.Value(2))
   ).current;
 
   // Load all data on component mount
@@ -321,25 +321,25 @@ const HomeScreen = () => {
         style={styles.imageBackground}
         imageStyle={styles.imagestyle}
       >
-        <View style={styles.overlay}>
+        {/* <View style={styles.overlay}>
           <Image
             style={styles.logostyle}
             source={{ uri: item.logoURL }}
             resizeMode="contain"
-          />
-          <Text style={styles.text1}>{item.description}</Text>
-          <Text style={styles.text1}>{item.offer}</Text>
+          /> */}
+          {/* <Text style={styles.text1}>{item.description}</Text> */}
+          {/* <Text style={styles.text1}>{item.offer}</Text>
           <TouchableOpacity style={styles.button}>
             <Text style={styles.buttonText}>Explore</Text>
-          </TouchableOpacity>
-        </View>
+          </TouchableOpacity> */}
+        {/* </View> */}
       </ImageBackground>
     );
   };
 
   const animateDot = (index: number, isActive: boolean) => {
     Animated.timing(animations[index], {
-      toValue: isActive ? 17 : 17,
+      toValue: isActive ? 8 : 8,
       duration: 200,
       useNativeDriver: false,
     }).start();
@@ -405,7 +405,7 @@ const HomeScreen = () => {
       <>
         {/* Header View */}
         <View
-          style={[styles.HeaderStyle, { backgroundColor: theme.background }]}
+          style={[styles.HeaderStyle]}
         >
           <TopHeaderComponent />
         </View>
@@ -453,7 +453,7 @@ const HomeScreen = () => {
               autoPlay
               autoPlayInterval={3000}
               width={width}
-              height={344.67}
+              height={250.67}
               onSnapToItem={(index) => {
                 setCurrentIndex(index);
               }}
@@ -468,7 +468,7 @@ const HomeScreen = () => {
                   style={[
                     styles.dot,
                     {
-                      width: animations[index],
+                      // width: animations[index],
                       backgroundColor:
                         currentIndex === index
                           ? Typography.Colors.lightblack
@@ -480,7 +480,6 @@ const HomeScreen = () => {
             </View>
           </View>
         </View>
-
         {/* Trending Cards */}
         <View style={styles.trendContainer}>
           <Text
@@ -500,6 +499,9 @@ const HomeScreen = () => {
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={{ gap: 20 }}
           />
+          <View style={{paddingVertical:20}} >
+            <Image source={themeMode==='dark'? assets.bannerDark:assets.bannerLight} style={styles.bannerSize} resizeMode="cover"/>
+          </View>
         </View>
 
         <View style={styles.dealContainer}>
@@ -532,25 +534,27 @@ const HomeScreen = () => {
   };
 
   return (
+    <ImageBackground source={themeMode === 'dark'? assets.BackgroundDark : assets.Background} style={{flex:1,}} resizeMode="cover">
     <FlatList
       data={DealData.slice(0, 4)}
       renderItem={DealRenderItem}
       keyExtractor={(item) => item.id.toString()}
       numColumns={2}
-      contentContainerStyle={{ gap: 10, backgroundColor: theme.background }}
+      contentContainerStyle={{ gap: 10}}
       columnWrapperStyle={styles.row}
       showsVerticalScrollIndicator={false}
       ListHeaderComponent={ListHeader}
       ListHeaderComponentStyle={{
         flex: 1,
-        backgroundColor: theme.background,
+        // backgroundColor: theme.background,
       }}
       ListFooterComponent={listFooter}
       ListFooterComponentStyle={{
         flex: 1,
-        backgroundColor: theme.background,
+        // backgroundColor: theme.background,
       }}
     />
+    </ImageBackground>
   );
 };
 
@@ -622,22 +626,29 @@ const styles = StyleSheet.create({
   //Carousel Style
   carousel: {
     paddingTop: 40,
+
+    // paddingHorizontal:20
   },
   imageBackground: {
-    width: width,
-    height: 344.67,
+    // width: width-80,
+    height: 209.67,
+    // backgroundColor:'green',
+    marginHorizontal:20
   },
   imagestyle: {
-    borderWidth: 2,
+    // borderWidth: 5,
+    borderRadius:30,
     borderColor: Typography.Colors.white,
   },
-  overlay: {
-    height: "100%",
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: Typography.Colors.lightblack,
-    opacity: 0.8,
-  },
+  // overlay: {
+  //   height: "100%",
+  //   justifyContent: "center",
+  //   alignItems: "center",
+  //   backgroundColor: Typography.Colors.lightblack,
+  //   opacity: 0.6,
+  //       // borderWidth: 5,
+  //   borderRadius:30,
+  // },
   logostyle: {
     width: 175,
     height: 29,
@@ -670,6 +681,11 @@ const styles = StyleSheet.create({
   trendContainer: {
     paddingTop: 20,
     paddingLeft: 11,
+  },
+  bannerSize:{
+    // flex:1,
+    width:width,
+    height:200,
   },
   TrendingText: {
     fontWeight: "500",
@@ -726,9 +742,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   dot: {
-    height: 3,
-    borderRadius: 4,
-    marginHorizontal: 4,
+    height: 8,
+    width:8,
+    borderRadius: 90,
+    marginHorizontal: 3,
   },
   textstyle: {
     fontSize: 14,

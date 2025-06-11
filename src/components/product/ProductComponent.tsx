@@ -41,7 +41,7 @@ const ProductComponent = ({
       <View style={styles.photoContainer}>
         <View style={styles.Container}>
           <Image
-            source={{ uri: images[0].toString() }}
+            source={{ uri: images[0] }}
             style={styles.Collection}
           />
         </View>

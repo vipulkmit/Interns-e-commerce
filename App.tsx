@@ -15,10 +15,12 @@ export default function App() {
     <NavigationContainer theme={theme === "dark" ? DarkTheme : DefaultTheme}>
       <RootNavigator />
       <StatusBar
-        barStyle={theme === "dark" ? "light-content":"dark-content"}
+      // barStyle="default"
+        barStyle={theme === "dark" ?"light-content":"dark-content"}
         backgroundColor={
-          theme === "dark" ? Typography.Colors.black : Typography.Colors.white
+          theme === "dark" ? Typography.Colors.charcol : "#fef8f8"
         }
+        
       />
     </NavigationContainer>
   );

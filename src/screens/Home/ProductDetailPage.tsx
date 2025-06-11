@@ -1175,7 +1175,6 @@ const ProductDetailPage = ({ route }) => {
       </>
     );
   };
-
   return (
     <ScrollView style={styles.container} nestedScrollEnabled={true}>
       {/* heading */}
@@ -1195,7 +1194,7 @@ const ProductDetailPage = ({ route }) => {
         autoPlayInterval={2000}
         width={width}
         onSnapToItem={handleSnap}
-        height={width * 1.2}
+        height={width * 1.1}
         data={data?.images}
         scrollAnimationDuration={1000}
         renderItem={(item) => CarouselRenderItem(item)}
@@ -1236,30 +1235,39 @@ const ProductDetailPage = ({ route }) => {
             numberOfLines={1}
             style={[styles.productName, { color: theme.text }]}
           >
-            {data.title}
+            {data.brand.name}
           </Text>
           <Image
             source={assets.Share}
             style={[styles.ShareIcon, { tintColor: theme.text }]}
           />
         </View>
+        <View>
         <Text
           numberOfLines={1}
           style={[styles.brandName, { color: theme.text }]}
         >
-          {data.brand.name}
+          {data.title}
         </Text>
+        </View>
+        <View style={styles.ratingBox}>
+          <Text style={styles.ratingText}>
+            {data.averageRating}
+          </Text>
+          <Text style={{paddingLeft:3}}>★</Text>
+        </View>
         <View style={styles.amountTimer}>
           <View style={styles.Amount}>
-            <Text style={styles.initialRate}>Rs. {data.price}</Text>
             <Text
               numberOfLines={1}
               style={[styles.rate, { color: theme.text }]}
             >
-              Rs. {data.discountPrice}
+              ₹{data.discountPrice}
             </Text>
+            <Text style={styles.initialRate}>MRP </Text>
+            <Text style={styles.initialRate1}>₹{data.price}</Text>
             <Text numberOfLines={1} style={styles.discount}>
-              ({data.discountPercentage}% Off)
+              {data.discountPercentage}% Off
             </Text>
           </View>
           <View style={styles.timer}>
@@ -1519,7 +1527,8 @@ const styles = StyleSheet.create({
   },
   productName: {
     fontSize: 20,
-    fontFamily: Typography.font.medium,
+    fontFamily: Typography.font.regular,
+    fontWeight: "bold",
     color: Typography.Colors.lightblack,
   },
   brandName: {
@@ -1528,15 +1537,24 @@ const styles = StyleSheet.create({
     color: Typography.Colors.lightblack,
   },
   initialRate: {
-    fontSize: 14,
+    fontSize: 16,
     alignSelf: "center",
+    paddingLeft: 17,
+    fontFamily: Typography.font.regular,
+    color: "#848484",
+    // textDecorationLine: "line-through",
+  },
+  initialRate1: {
+    fontSize: 16,
+    alignSelf: "center",
+    // paddingLeft:17,
     fontFamily: Typography.font.regular,
     color: "#848484",
     textDecorationLine: "line-through",
   },
   rate: {
     fontSize: 20,
-    paddingLeft: 17,
+    // paddingLeft: 17,
     fontFamily: Typography.font.regular,
     color: Typography.Colors.lightblack,
   },
@@ -1739,6 +1757,20 @@ const styles = StyleSheet.create({
     fontSize: 14,
     paddingTop: 9,
   },
+  ratingBox:{
+    backgroundColor : Typography.Colors.lightgreen,
+    padding:2,
+    marginTop:10,
+    borderRadius:4,
+    width:'10%',
+    flexDirection:'row'
+  },
+  ratingText:{
+    fontFamily: Typography.font.regular,
+    color: Typography.Colors.lightblack,
+    fontSize: 16,
+    paddingLeft:5
+  }
 });
 
 export default ProductDetailPage;

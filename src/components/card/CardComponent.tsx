@@ -73,31 +73,38 @@ const CardComponent = ({
 
 const styles = StyleSheet.create({
     container: {
-        paddingTop: 20,
+        marginTop: 20,
+        paddingTop:2,
         flex: 1,
         marginVertical:4,
+        // elevation:1,
+        // backgroundColor:"#FAF9F6",
+        borderRadius:10
     },
     imgView:{
         flex:1,
-        height: 227,
+        height: 270,
         width: 216,
-        borderTopLeftRadius: 5,
-        borderTopRightRadius: 5,
+        // borderTopLeftRadius: 5,
+        // borderTopRightRadius: 5,
+        paddingLeft:2
     },
     dataView:{
         flex:1,
-        alignItems:'center'
+        alignItems:'center',
+        marginBottom:2
     },
     imgStyles: {
-        width:'100%',
+        width:'99%',
         height:'100%',
-        borderTopRightRadius:8,
-        borderTopLeftRadius:8
+        borderRadius:8,
+        // borderTopLeftRadius:8
        
     },
     logoImgContainer:{
         height: 23,
         width: 35,
+        margin:5
     },
     logoStyle: {
         marginTop: 7,
