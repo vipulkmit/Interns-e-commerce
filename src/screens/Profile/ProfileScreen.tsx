@@ -83,7 +83,6 @@ const ProfileScreen = () => {
     </TouchableOpacity>
   );
   const { colorScheme } = useColorScheme();
-console.log(colorScheme,'colorScheme');
   return (
     // <ScrollView style={{ flex: 1, backgroundColor: Typography.Colors.white }}>
     <View style={[styles.container,{backgroundColor:colorScheme === "dark"?darkTheme.colors.mainBackground:theme.colors.mainBackground}]} >
