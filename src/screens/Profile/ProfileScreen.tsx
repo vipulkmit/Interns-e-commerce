@@ -10,6 +10,9 @@ import { Typography } from "../../theme/Colors";
 import { assets } from "../../../assets/images";
 import { useNavigation } from "@react-navigation/native";
 import useAuthStore from "../../stores/useAuthStore";
+import { ColorSchemeButton } from "../../components/theme/ColorSchemeButton";
+import { darkTheme, theme } from "../../components/theme/Theme";
+import { useColorScheme } from "../../components/theme/ColorSchemeContext";
 
 const ProfileScreen = () => {
   const user = useAuthStore((state) => state.user);
@@ -79,10 +82,12 @@ const ProfileScreen = () => {
       </View>
     </TouchableOpacity>
   );
-
+  const { colorScheme } = useColorScheme();
+console.log(colorScheme,'colorScheme');
   return (
     // <ScrollView style={{ flex: 1, backgroundColor: Typography.Colors.white }}>
-    <View style={styles.container}>
+    <View style={[styles.container,{backgroundColor:colorScheme === "dark"?darkTheme.colors.mainBackground:theme.colors.mainBackground}]} >
+      <View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center'}}>
       <TouchableOpacity onPress={() => handleNavigation("EditProfile")}>
         <View style={styles.firstsection}>
           <Image
@@ -92,12 +97,17 @@ const ProfileScreen = () => {
             style={styles.profilepic}
           />
           <View style={styles.textcontainer}>
-            <Text style={styles.textname}>{user?.name}</Text>
-            <Text style={styles.mailcontainer}>{user?.email}</Text>
+            <Text style={styles.textname}>{'user?.name'}</Text>
+            <Text style={styles.mailcontainer}>{'user?.email'}</Text>
           </View>
-        </View>
-      </TouchableOpacity>
 
+        </View>
+        
+      </TouchableOpacity>
+      {/* <View style={{ backgroundColor:'red'}}> */}
+          <ColorSchemeButton />
+          {/* </View> */}
+      </View>
       <FlatList
         data={menuItems}
         keyExtractor={(item, index) => index.toString()}

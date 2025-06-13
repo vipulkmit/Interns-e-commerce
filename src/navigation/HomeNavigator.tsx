@@ -13,6 +13,7 @@ const Stack = createNativeStackNavigator();
 
 const HomeNavigator = () => {
   return (
+    
     <Stack.Navigator
       // @ts-ignore: Suppress TypeScript error for 'id'
       id="HomeNavigator"

@@ -15,7 +15,7 @@ export default function RootNavigator() {
   return (
     <>
       {/* @ts-ignore: Suppress TypeScript error for 'id' */}
-      {isLoggedIn ? <BottomTabs /> : <AuthNavigator />}
+      {true ? <BottomTabs /> : <AuthNavigator />}
     </>
   );
 }
