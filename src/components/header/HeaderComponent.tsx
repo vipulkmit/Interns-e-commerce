@@ -1,5 +1,6 @@
 import {
   Image,
+  ImageBackground,
   Pressable,
   StyleSheet,
   Text,
@@ -50,6 +51,7 @@ const HeaderComponent = ({
   };
 
   return (
+
       <View style={styles.container}>
         <View style={styles.UserContainer}>
           <Pressable onPress={onClick}>
@@ -87,6 +89,7 @@ const HeaderComponent = ({
           </View>
         </View>
       </View>
+
   );
 };
 

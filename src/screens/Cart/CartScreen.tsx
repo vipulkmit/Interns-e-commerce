@@ -8,6 +8,7 @@ import {
   ScrollView,
   Alert,
   TextInput,
+  ImageBackground,
 } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import Animated, {
@@ -30,6 +31,7 @@ import {
   QuantityDelete,
 } from "../../services/api/apiServices";
 import useAuthStore from "../../stores/useAuthStore";
+import { assets } from "../../../assets/images";
 
 // Skeleton Components
 const SkeletonBox = ({ width, height, style }) => {
@@ -478,7 +480,9 @@ const CartScreen = () => {
   }
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.background }]}>
+    <ImageBackground source={themeMode === 'dark'? assets.BackgroundDark : assets.Background} style={{flex:1,}} resizeMode="cover">
+
+    <View style={[styles.container ]}>
       <View style={styles.header}>
         <Text style={[styles.heading, { color: theme.specialText }]}>
           Your Cart
@@ -490,7 +494,8 @@ const CartScreen = () => {
           renderItem={renderData}
           keyExtractor={(item) => item.productId}
           showsVerticalScrollIndicator={false}
-        />
+          contentContainerStyle={{backgroundColor:'white'}}
+/>
         <View style={{ flexDirection: "row", paddingTop: 10 }}>
           <View style={styles.priceSubContainer}>
             <CustomTextInput
@@ -564,14 +569,16 @@ const CartScreen = () => {
         </View>
       </>
     </View>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Typography.Colors.white,
+    // backgroundColor: Typography.Colors.black,
     paddingHorizontal: 36,
+    paddingBottom:80
   },
   heading: {
     fontFamily: Typography.font.bold,
@@ -588,9 +595,10 @@ const styles = StyleSheet.create({
     paddingBottom: 16,
   },
   Image: {
-    height: 77,
-    width: 87,
-    borderRadius: 5,
+    height: 108,
+    width: 110,
+    borderTopLeftRadius:20,
+    borderBottomLeftRadius:20
   },
   dataContainer: {
     flex: 2,
@@ -624,15 +632,17 @@ const styles = StyleSheet.create({
   },
   subContainer: {
     flexDirection: "row",
-    borderWidth: 0.2,
+    // borderWidth: 0.2,
     marginBottom: 16,
     borderRadius: 10,
     marginTop: 4,
+    // elevation:2
   },
   imageConatiner: {
-    paddingVertical: 18,
-    paddingLeft: 18,
+    // paddingVertical: 18,
+    // paddingLeft: 18,
     flex: 1,
+    // backgroundColor:'red'
   },
   quantityButton: {
     paddingHorizontal: 10,

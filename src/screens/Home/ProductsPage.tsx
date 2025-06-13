@@ -7,6 +7,7 @@ import {
   Pressable,
   Image,
   Dimensions,
+  ImageBackground,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import Animated, {
@@ -115,7 +116,7 @@ const ProductsPage = ({ route }) => {
     if (loading) {
       // Skeleton version matching the actual product UI
       return (
-        <View style={[styles.imageContainer]}>
+        <View style={[styles.imageContainer,{backgroundColor:theme.background}]}>
           <SkeletonPlaceholder 
             width={width/2.5} 
             height={220} 
@@ -132,15 +133,14 @@ const ProductsPage = ({ route }) => {
     if (item.isEmpty) {
       return <View style={[styles.imageContainer, { opacity: 0 }]} />;
     }
-
     return (
-      <Pressable onPress={() => renderProduct(item)} style={[styles.imageContainer]}>
+      <Pressable onPress={() => renderProduct(item)} style={[styles.imageContainer,{elevation:themeMode==='dark'?0:1,backgroundColor:themeMode==='dark'?Typography.Colors.charcol:Typography.Colors.white}]}>
         <Image 
           source={{ uri: item.images[0]}}
           style={styles.productImage}
         />
-        <Text numberOfLines={1} style={styles.productName}>{item.title}</Text>
-        <Text style={styles.productPrice}>Rs. {item.price}</Text>
+        <Text numberOfLines={1} style={[styles.productName,{color:theme.text}]}>{item.title}</Text>
+        <Text style={[styles.productPrice,{color:theme.text}]}>Rs. {item.discountPrice}</Text>
       </Pressable>
     );
   };
@@ -149,7 +149,7 @@ const ProductsPage = ({ route }) => {
     if (loading) {
       // Skeleton version of header matching the actual header UI
       return (
-        <View style={[styles.header, { backgroundColor: theme.background }]}>
+        <View style={[styles.header]}>
           <View style={styles.skeletonHeaderContainer}>
             <View style={styles.skeletonHeaderTop}>
               <SkeletonPlaceholder width={24} height={24} />
@@ -165,7 +165,7 @@ const ProductsPage = ({ route }) => {
     }
 
     return (
-      <>
+<>
         <HeaderComponent onClick={handleBackButton} Title={category.name} />
         <View style={styles.subContainer}>
           <Pressable
@@ -197,7 +197,9 @@ const ProductsPage = ({ route }) => {
   const displayData = prepareDisplayData(rawData);
 
   return (
-    <View style={[styles.mainContainer,{backgroundColor:theme.background}]}>
+
+    <ImageBackground source={themeMode === 'dark'? assets.BackgroundDark : assets.Background} style={{flex:1,}} resizeMode="cover">
+    <View style={[styles.mainContainer]}>
       <FlatList
         data={displayData}
         renderItem={ProductRenderItem}
@@ -209,16 +211,18 @@ const ProductsPage = ({ route }) => {
         refreshing={refresh}
         keyExtractor={(item) => item.id?.toString()}
         ListHeaderComponent={ListHeader}
-        ListHeaderComponentStyle={[styles.header, { backgroundColor: theme.background }]}
+        ListHeaderComponentStyle={[styles.header]}
         columnWrapperStyle={styles.row}
       />
     </View>
+    </ImageBackground>
+
   );
 };
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: Typography.Colors.white,
+    // backgroundColor: Typography.Colors.white,
     paddingTop: 20,
     paddingHorizontal: 14,
   },
@@ -296,9 +300,9 @@ const styles = StyleSheet.create({
     // backgroundColor:'gray',
   },
   imageContainer:{
-    backgroundColor:'#F2F2F2',
+    // backgroundColor:'#FFFFFF',
     // backgroundColor:'red',
-    elevation:2,
+    // elevation:2,
     flex: 1,
     alignItems:'center',
     justifyContent:'center',

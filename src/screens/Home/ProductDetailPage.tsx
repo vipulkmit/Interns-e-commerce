@@ -818,11 +818,11 @@ const ProductDetailPage = ({ route }) => {
   const theme =
     themeMode === "dark"
       ? {
-          background: Typography.Colors.black,
+          background: Typography.Colors.white,
           text: Typography.Colors.white,
         }
       : {
-          background: Typography.Colors.white,
+          background: "#CDCAC9",
           text: Typography.Colors.black,
         };
   const navigation = useNavigation();
@@ -1066,12 +1066,36 @@ const ProductDetailPage = ({ route }) => {
 
   const CarouselRenderItem = (item) => {
     return (
-      <ImageBackground
-        // resizeMode="contain"
-        source={{ uri: item.item }}
-        style={[styles.imageBackground, { backgroundColor: theme.background }]}
-        imageStyle={[styles.imagestyle, { backgroundColor: theme.background }]}
-      ></ImageBackground>
+      <View style={{ position: "static", flex: 1 }}>
+        <ImageBackground
+          // resizeMode="contain"
+          source={{ uri: item.item }}
+          style={[
+            styles.imageBackground,
+            { backgroundColor: theme.background },
+          ]}
+          imageStyle={[
+            styles.imagestyle,
+            { backgroundColor: theme.background },
+          ]}
+        ></ImageBackground>
+        <View style={styles.IconsAboveCarousal}>
+          <Pressable onPress={handleBackButton}>
+            <Image
+              style={styles.IconsAboveCarousalSize}
+              source={assets.backArrow}
+            />
+          </Pressable>
+          <Pressable onPress={handleAddToWishlist}>
+            <Image
+              style={styles.IconsAboveCarousalSize}
+              source={
+                wishlistToggle ? assets.redHeart : assets.blackOutlineHeart
+              }
+            />
+          </Pressable>
+        </View>
+      </View>
     );
   };
 
@@ -1177,59 +1201,43 @@ const ProductDetailPage = ({ route }) => {
   };
   return (
     <ScrollView style={styles.container} nestedScrollEnabled={true}>
-      {/* heading */}
-      <View style={[styles.header, { backgroundColor: theme.background }]}>
-        <HeaderComponent
-          onClick={handleBackButton}
-          onPress={function () {
-            throw new Error("Function not implemented.");
-          }}
-        />
-      </View>
-
       {/* CAROUSEL */}
-      <Carousel
-        loop
-        autoPlay
-        autoPlayInterval={2000}
-        width={width}
-        onSnapToItem={handleSnap}
-        height={width * 1.1}
-        data={data?.images}
-        scrollAnimationDuration={1000}
-        renderItem={(item) => CarouselRenderItem(item)}
-      />
 
-      {/* carousel pagination */}
-      <View
-        style={[
-          styles.paginationContainer,
-          { backgroundColor: theme.background },
-        ]}
-      >
-        {data?.images?.map((_, index) => {
-          return (
-            <Animated.View
-              key={index}
-              style={[
-                styles.dot,
-                {
-                  width: animations[index],
-                  backgroundColor:
-                    currentIndex === index
-                      ? Typography.Colors.primary
-                      : Typography.Colors.offwhite,
-                },
-              ]}
-            />
-          );
-        })}
+      <View>
+        <View style={{ position: "static" }}>
+          <Carousel
+            loop
+            autoPlay
+            autoPlayInterval={2000}
+            width={width}
+            onSnapToItem={handleSnap}
+            height={width * 1.3}
+            data={data?.images}
+            scrollAnimationDuration={1000}
+            renderItem={(item) => CarouselRenderItem(item)}
+          />
+          <View style={[styles.paginationContainer]}>
+            {data?.images?.map((_, index) => {
+              return (
+                <Animated.View
+                  key={index}
+                  style={[
+                    styles.dot,
+                    {
+                      width: animations[index],
+                      backgroundColor:
+                        currentIndex === index
+                          ? Typography.Colors.white
+                          : Typography.Colors.charcol,
+                    },
+                  ]}
+                />
+              );
+            })}
+          </View>
+        </View>
       </View>
-
-      {/* details container */}
-      <View
-        style={[styles.dataContainer, { backgroundColor: theme.background }]}
-      >
+      <View style={[styles.dataContainer,{backgroundColor:themeMode==="dark"?Typography.Colors.black:Typography.Colors.white}]}>
         <View style={styles.shareContainer}>
           <Text
             numberOfLines={1}
@@ -1243,18 +1251,16 @@ const ProductDetailPage = ({ route }) => {
           />
         </View>
         <View>
-        <Text
-          numberOfLines={1}
-          style={[styles.brandName, { color: theme.text }]}
-        >
-          {data.title}
-        </Text>
+          <Text
+            numberOfLines={1}
+            style={[styles.brandName, { color: theme.text }]}
+          >
+            {data.title}
+          </Text>
         </View>
         <View style={styles.ratingBox}>
-          <Text style={styles.ratingText}>
-            {data.averageRating}
-          </Text>
-          <Text style={{paddingLeft:3}}>★</Text>
+          <Text style={styles.ratingText}>{data.averageRating}</Text>
+          <Text style={{ paddingLeft: 3 ,color:Typography.Colors.white}}>★</Text>
         </View>
         <View style={styles.amountTimer}>
           <View style={styles.Amount}>
@@ -1275,223 +1281,201 @@ const ProductDetailPage = ({ route }) => {
             <Text style={styles.timerText}>13 hours left</Text>
           </View>
         </View>
-      </View>
+        <View style={{borderWidth:0.8,borderBottomColor:themeMode==='dark'?"#23262F":"#F5F5F5"}}></View>
+        {/* color set */}
+        <View style={[styles.colour]}>
+          <Text style={[styles.productName, { color: theme.text }]}>Color</Text>
+          {/* <Text style={[styles.colorText, { color: theme.text }]}>
+            {data?.productColor[selectedColorIndex]?.name}
+          </Text> */}
 
-      {/* color set */}
-      <View style={[styles.colour, { backgroundColor: theme.background }]}>
-        <Text style={[styles.productName, { color: theme.text }]}>Color</Text>
-        <Text style={[styles.colorText, { color: theme.text }]}>
-          {data?.productColor[selectedColorIndex]?.name}
-        </Text>
-
-        <View style={styles.circle}>
-          {data.productColor.map((colorItem, index) => (
-            <Pressable
-              key={index}
-              onPress={() => handleColorAddToCart(index, colorItem?.id)}
-            >
-              {selectedColorIndex === index ? (
-                <View style={styles.colorCircle}>
+          <View style={styles.circle}>
+            {data.productColor.map((colorItem, index) => (
+              <Pressable
+                key={index}
+                onPress={() => handleColorAddToCart(index, colorItem?.id)}
+              >
+                {selectedColorIndex === index ? (
+                  <View style={styles.colorCircle}>
+                    <View
+                      style={[
+                        styles.colorCircle1,
+                        { backgroundColor: colorItem.hexCode },
+                      ]}
+                    />
+                  </View>
+                ) : (
                   <View
                     style={[
                       styles.colorCircle1,
                       { backgroundColor: colorItem.hexCode },
                     ]}
                   />
-                </View>
-              ) : (
-                <View
-                  style={[
-                    styles.colorCircle1,
-                    { backgroundColor: colorItem.hexCode },
-                  ]}
-                />
-              )}
-            </Pressable>
-          ))}
-        </View>
-      </View>
-
-      {/* size set */}
-      <View style={[styles.size, { backgroundColor: theme.background }]}>
-        <View style={[styles.sizeView]}>
-          <Text
-            style={[
-              styles.brandName,
-              { fontFamily: Typography.font.medium, color: theme.text },
-            ]}
-          >
-            Select Size
-          </Text>
-          <TouchableOpacity>
-            <Text style={styles.textStyle}>Size Chart</Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={[styles.sizeData]}>
-          {data.productSize.map((sizeItem, index) => (
-            <SizeComponent
-              key={index}
-              size={sizeItem.name}
-              selectedSize={selectedSize === index}
-              onClick={() => handleSizeAddToCart(index, sizeItem?.id)}
-            />
-          ))}
-        </View>
-      </View>
-
-      {/* button */}
-      <View style={[styles.buttonView, { backgroundColor: theme.background }]}>
-        <ButtonComponent
-          icon={wishlistToggle ? assets.HeartBlue : assets.heart}
-          buttonText="Wishlist"
-          buttonStyle={[
-            styles.buttonStyle,
-            {
-              backgroundColor: wishlistToggle
-                ? Typography.Colors.lightpurple
-                : Typography.Colors.white,
-            },
-          ]}
-          TextStyle={{
-            color: wishlistToggle
-              ? Typography.Colors.primary
-              : Typography.Colors.black,
-          }}
-          onClick={handleAddToWishlist}
-        />
-        <ButtonComponent
-          onClick={handleAddToCart}
-          icon={assets.WhiteBag}
-          buttonText="Add to Bag"
-          TextStyle={styles.textStyle}
-          buttonStyle={[
-            styles.buttonStyle,
-            { backgroundColor: Typography.Colors.primary },
-          ]}
-        />
-      </View>
-
-      {/* accordion */}
-      <View style={{ paddingTop: 10, backgroundColor: theme.background }}>
-        <Pressable onPress={toggleExpanded} style={styles.header1}>
-          <View>
-            {collapsed ? (
-              <View
-                style={[
-                  styles.accordionHeading,
-                  { borderBottomWidth: 1, borderBottomColor: "#EAEAEA" },
-                ]}
-              >
-                <Text style={[styles.accordionTitle, { color: theme.text }]}>
-                  Product Details
-                </Text>
-                <Image source={assets.Down} style={styles.accordionIcon} />
-              </View>
-            ) : (
-              <View style={styles.accordionHeading}>
-                <Text style={[styles.accordionTitle, { color: theme.text }]}>
-                  Product Details
-                </Text>
-                <Image source={assets.Up} style={styles.accordionIcon} />
-              </View>
-            )}
+                )}
+              </Pressable>
+            ))}
           </View>
-        </Pressable>
+        </View>
 
-        <Collapsible collapsed={collapsed}>
-          <View style={styles.content}>
+        {/* size set */}
+        <View style={[styles.size]}>
+          <View style={[styles.sizeView]}>
             <Text
-              numberOfLines={4}
-              style={[styles.accordionText, { color: theme.text }]}
+              style={[
+                styles.brandName,
+                { fontFamily: Typography.font.medium, color: theme.text },
+              ]}
             >
-              {data.description}
+              Select Size
             </Text>
           </View>
-        </Collapsible>
-      </View>
 
-      <View style={{ backgroundColor: theme.background }}>
-        <Pressable onPress={toggleExpanded1} style={styles.header1}>
-          <View>
-            {collapsed1 ? (
-              <View
-                style={[
-                  styles.accordionHeading,
-                  { borderBottomWidth: 1.5, borderBottomColor: "#EAEAEA" },
-                ]}
-              >
-                <Text style={[styles.accordionTitle, { color: theme.text }]}>
-                  Specifications
-                </Text>
-                <Image source={assets.Down} style={styles.accordionIcon} />
-              </View>
-            ) : (
-              <View style={styles.accordionHeading}>
-                <Text style={[styles.accordionTitle, { color: theme.text }]}>
-                  Specifications
-                </Text>
-                <Image source={assets.Up} style={styles.accordionIcon} />
-              </View>
-            )}
+          <View style={[styles.sizeData]}>
+            {data.productSize.map((sizeItem, index) => (
+              <SizeComponent
+                key={index}
+                size={sizeItem.name}
+                selectedSize={selectedSize === index}
+                onClick={() => handleSizeAddToCart(index, sizeItem?.id)}
+              />
+            ))}
           </View>
-        </Pressable>
+        </View>
 
-        <Collapsible collapsed={collapsed1}>
-          <View style={styles.content}>
-            <FlatList
-              data={data.specifications}
-              renderItem={SpecificationRenderItem}
-              numColumns={2}
-              scrollEnabled={false}
-              nestedScrollEnabled={false}
-            />
-          </View>
-        </Collapsible>
-      </View>
-
-      <View style={{ backgroundColor: theme.background }}>
-        <Pressable onPress={toggleExpanded2} style={styles.header1}>
-          <View>
-            {collapsed2 ? (
-              <View
-                style={[
-                  styles.accordionHeading,
-                  { borderBottomWidth: 1.5, borderBottomColor: "#EAEAEA" },
-                ]}
-              >
-                <Text style={[styles.accordionTitle, { color: theme.text }]}>
-                  Ratings & Reviews
-                </Text>
-                <Image source={assets.Down} style={styles.accordionIcon} />
-              </View>
-            ) : (
-              <View style={styles.accordionHeading}>
-                <Text style={[styles.accordionTitle, { color: theme.text }]}>
-                  Ratings & Reviews
-                </Text>
-                <Image source={assets.Up} style={styles.accordionIcon} />
-              </View>
-            )}
-          </View>
-        </Pressable>
-
-        <Collapsible collapsed={collapsed2}>
-          <View style={styles.ratingContainer}>
-            <View style={styles.rating}>
-              <Text style={[styles.averageRating, { color: theme.text }]}>
-                {data.averageRating}
-              </Text>
-              {renderStars(data.averageRating)}
+        {/* button */}
+        <View style={[styles.buttonView]}>
+          <ButtonComponent
+            onClick={handleAddToCart}
+            icon={assets.BagBlue}
+            buttonText="Add to Cart"
+            TextStyle={styles.textStyle}
+            buttonStyle={[
+              styles.buttonStyle,
+              { backgroundColor: theme.background,height:40 },
+            ]}
+          />
+        </View>
+        {/* accordion */}
+        <View style={{ paddingTop: 10 }}>
+          <Pressable onPress={toggleExpanded} style={styles.header1}>
+            <View>
+              {collapsed ? (
+                <View
+                  style={[
+                    styles.accordionHeading,
+                    { borderBottomWidth: 1, borderBottomColor: "#EAEAEA" },
+                  ]}
+                >
+                  <Text style={[styles.accordionTitle, { color: theme.text }]}>
+                    Product Details
+                  </Text>
+                  <Image source={assets.Down} style={styles.accordionIcon} />
+                </View>
+              ) : (
+                <View style={styles.accordionHeading}>
+                  <Text style={[styles.accordionTitle, { color: theme.text }]}>
+                    Product Details
+                  </Text>
+                  <Image source={assets.Up} style={styles.accordionIcon} />
+                </View>
+              )}
             </View>
-            <FlatList
-              data={data.reviews}
-              renderItem={ratingData}
-              scrollEnabled={false}
-              nestedScrollEnabled={false}
-            />
-          </View>
-        </Collapsible>
+          </Pressable>
+
+          <Collapsible collapsed={collapsed}>
+            <View style={styles.content}>
+              <Text
+                numberOfLines={4}
+                style={[styles.accordionText, { color: theme.text }]}
+              >
+                {data.description}
+              </Text>
+            </View>
+          </Collapsible>
+        </View>
+
+        <View>
+          <Pressable onPress={toggleExpanded1} style={styles.header1}>
+            <View>
+              {collapsed1 ? (
+                <View
+                  style={[
+                    styles.accordionHeading,
+                    { borderBottomWidth: 1.5, borderBottomColor: "#EAEAEA" },
+                  ]}
+                >
+                  <Text style={[styles.accordionTitle, { color: theme.text }]}>
+                    Specifications
+                  </Text>
+                  <Image source={assets.Down} style={styles.accordionIcon} />
+                </View>
+              ) : (
+                <View style={styles.accordionHeading}>
+                  <Text style={[styles.accordionTitle, { color: theme.text }]}>
+                    Specifications
+                  </Text>
+                  <Image source={assets.Up} style={styles.accordionIcon} />
+                </View>
+              )}
+            </View>
+          </Pressable>
+
+          <Collapsible collapsed={collapsed1}>
+            <View style={styles.content}>
+              <FlatList
+                data={data.specifications}
+                renderItem={SpecificationRenderItem}
+                numColumns={2}
+                scrollEnabled={false}
+                nestedScrollEnabled={false}
+              />
+            </View>
+          </Collapsible>
+        </View>
+
+        <View>
+          <Pressable onPress={toggleExpanded2} style={styles.header1}>
+            <View>
+              {collapsed2 ? (
+                <View
+                  style={[
+                    styles.accordionHeading,
+                    { borderBottomWidth: 1.5, borderBottomColor: "#EAEAEA" },
+                  ]}
+                >
+                  <Text style={[styles.accordionTitle, { color: theme.text }]}>
+                    Ratings & Reviews
+                  </Text>
+                  <Image source={assets.Down} style={styles.accordionIcon} />
+                </View>
+              ) : (
+                <View style={styles.accordionHeading}>
+                  <Text style={[styles.accordionTitle, { color: theme.text }]}>
+                    Ratings & Reviews
+                  </Text>
+                  <Image source={assets.Up} style={styles.accordionIcon} />
+                </View>
+              )}
+            </View>
+          </Pressable>
+
+          <Collapsible collapsed={collapsed2}>
+            <View style={styles.ratingContainer}>
+              <View style={styles.rating}>
+                <Text style={[styles.averageRating, { color: theme.text }]}>
+                  {data.averageRating}
+                </Text>
+                {renderStars(data.averageRating)}
+              </View>
+              <FlatList
+                data={data.reviews}
+                renderItem={ratingData}
+                scrollEnabled={false}
+                nestedScrollEnabled={false}
+              />
+            </View>
+          </Collapsible>
+        </View>
       </View>
     </ScrollView>
   );
@@ -1501,6 +1485,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Typography.Colors.white,
+    // paddingBottom:30
   },
   header: {
     backgroundColor: Typography.Colors.white,
@@ -1510,15 +1495,34 @@ const styles = StyleSheet.create({
   imageBackground: {
     width: "100%",
     height: "100%",
+    // position:'static'
   },
   imagestyle: {
     borderWidth: 2,
     borderColor: Typography.Colors.white,
   },
+  // dataContainer: {
+  //   paddingTop: 15,
+  //   paddingHorizontal: 20,
+  //   paddingBottom: 15,
+  //   // backgroundColor: "black",
+  //   // flex: 1,
+  //   borderTopRightRadius: 25,
+  //   borderTopLeftRadius: 25,
+  //   elevation: 5,
+  //   position: "absolute",
+  //   top: 530,
+  //   width: width,
+  // },
   dataContainer: {
     paddingTop: 15,
-    paddingHorizontal: 20,
-    paddingBottom: 15,
+    paddingHorizontal: 30,
+    paddingBottom: 20,
+    borderTopRightRadius: 25,
+    borderTopLeftRadius: 25,
+    elevation: 5,
+    marginTop: -45, 
+    zIndex: 1,      
   },
   Amount: {
     flexDirection: "row",
@@ -1530,14 +1534,16 @@ const styles = StyleSheet.create({
     fontFamily: Typography.font.regular,
     fontWeight: "bold",
     color: Typography.Colors.lightblack,
+    paddingBottom:5
   },
   brandName: {
     fontSize: 18,
     fontFamily: Typography.font.regular,
     color: Typography.Colors.lightblack,
+    fontWeight:'bold'
   },
   initialRate: {
-    fontSize: 16,
+    fontSize: 18,
     alignSelf: "center",
     paddingLeft: 17,
     fontFamily: Typography.font.regular,
@@ -1568,6 +1574,9 @@ const styles = StyleSheet.create({
   shareContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
+    // paddingHorizontal:10,
+    paddingTop:20,
+    alignContent:'center'
   },
   ShareIcon: {
     height: 24,
@@ -1595,9 +1604,11 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     flex: 1,
+    paddingBottom:10
   },
   colour: {
-    paddingHorizontal: 20,
+    paddingTop:10
+    // paddingHorizontal: 20,
   },
   circle: {
     flexDirection: "row",
@@ -1629,7 +1640,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    paddingTop: 10,
+    position: "absolute",
+    bottom: 70,
+    left: 180,
   },
   dot: {
     height: 8,
@@ -1637,7 +1650,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 4,
   },
   size: {
-    padding: 20,
+    paddingVertical: 20,
   },
   sizeView: {
     flexDirection: "row",
@@ -1645,9 +1658,9 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   textStyle: {
-    fontSize: 14,
+    fontSize: 16,
     fontFamily: Typography.font.regular,
-    color: Typography.Colors.white,
+    color: Typography.Colors.black, 
   },
   sizeData: {
     flexDirection: "row",
@@ -1656,16 +1669,17 @@ const styles = StyleSheet.create({
   },
   buttonView: {
     flex: 1,
-    gap: 13,
-    paddingHorizontal: 13,
+    // gap: 13,
+    // paddingHorizontal: 13,
     flexDirection: "row",
   },
   buttonStyle: {
     borderWidth: 1,
-    borderColor: Typography.Colors.primary,
+    borderColor: Typography.Colors.white,
+    // padding:20
   },
   header1: {
-    paddingHorizontal: 20,
+    // paddingHorizontal: 20,
   },
   content: {
     paddingVertical: 15,
@@ -1757,20 +1771,37 @@ const styles = StyleSheet.create({
     fontSize: 14,
     paddingTop: 9,
   },
-  ratingBox:{
-    backgroundColor : Typography.Colors.lightgreen,
-    padding:2,
-    marginTop:10,
-    borderRadius:4,
-    width:'10%',
-    flexDirection:'row'
+  ratingBox: {
+    backgroundColor: Typography.Colors.lightgreen,
+    padding: 2,
+    marginTop: 10,
+    borderRadius: 4,
+    width: "13%",
+    flexDirection: "row",
   },
-  ratingText:{
+  ratingText: {
     fontFamily: Typography.font.regular,
-    color: Typography.Colors.lightblack,
+    color: Typography.Colors.white,
     fontSize: 16,
-    paddingLeft:5
-  }
+    paddingLeft: 5,
+  },
+  IconsAboveCarousal: {
+    flex: 2,
+    // backgroundColor:'red',
+    position: "absolute",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: width,
+    paddingHorizontal: 20,
+    paddingVertical: 30,
+  },
+  IconsAboveCarousalSize: {
+    height: 40,
+    width: 40,
+  },
 });
 
 export default ProductDetailPage;
+
+

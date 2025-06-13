@@ -11,6 +11,7 @@ import {
   Platform,
   Keyboard,
   ScrollView,
+  ImageBackground,
 } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import { Typography } from "../../theme/Colors";
@@ -200,6 +201,7 @@ const SearchScreen = () => {
   
   const renderSearchResults = () => (
     <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
+      
       <View style={styles.viewaccount}>
         <TouchableOpacity
           onPress={() => {
@@ -241,13 +243,16 @@ const SearchScreen = () => {
   );
 
   return (
+    <ImageBackground source={themeMode === 'dark'? assets.BackgroundDark : assets.Background} style={{flex:1,}} resizeMode="cover">
+
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : undefined}
       style={{ flex: 1 }}
       keyboardVerticalOffset={Platform.OS === "ios" ? 80 : 0}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={[styles.container, { backgroundColor: theme.background }]}>
+        
+        <View style={[styles.container]}>
           {loading ? (
             // Replace ActivityIndicator with SearchScreenSkeleton
             <SearchScreenSkeleton
@@ -255,11 +260,12 @@ const SearchScreen = () => {
           ) : isSearching ? (
             renderSearchResults()
           ) : (
-            <>
+            <ImageBackground source={themeMode === 'dark'? assets.BackgroundDark : assets.Background} style={{flex:1,}} resizeMode="cover">
+
               <View
                 style={[
                   styles.HeaderStyle,
-                  { backgroundColor: theme.background },
+                  // { backgroundColor: theme.background },
                 ]}
               >
                 <TopHeaderComponent />
@@ -282,11 +288,12 @@ const SearchScreen = () => {
                   contentContainerStyle={styles.sectionListContent}
                 />
               </View>
-            </>
+            </ImageBackground>
           )}
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
+    </ImageBackground>
   );
 };
 
@@ -297,11 +304,11 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   HeaderStyle: {
-    backgroundColor: Typography.Colors.white,
+    // backgroundColor: Typography.Colors.white,
   },
   container: {
     flex: 1,
-    backgroundColor: Typography.Colors.white,
+    // backgroundColor: Typography.Colors.white,
     paddingHorizontal: 20,
   },
   sectionListContent: {

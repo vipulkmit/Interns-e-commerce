@@ -13,7 +13,7 @@ const SizeComponent = ({
   const theme =
     themeMode === "dark"
       ? {
-          background: Typography.Colors.black,
+          background: Typography.Colors.charcol,
           text: Typography.Colors.white,
         }
       : {
@@ -22,20 +22,17 @@ const SizeComponent = ({
         };
     return (
         <Pressable 
-            style={[
-                styles.sizeBox, 
-                selectedSize && styles.selectedSize
-            ]} 
+            style={[styles.sizeBox,selectedSize && styles.selectedSize,{backgroundColor:theme.background}]} 
             onPress={onClick}
         >
-            <Text style={styles.sizeText}>{size}</Text>
+            <Text style={[styles.sizeText,{color:theme.text}]}>{size}</Text>
         </Pressable>
     )
 }
 
 const styles = StyleSheet.create({
     sizeBox: {
-        backgroundColor: Typography.Colors.white,
+        // backgroundColor: Typography.Colors.white,
         height: 42,
         width: 42,
         alignItems: 'center',
@@ -44,15 +41,15 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: Typography.Colors.white,
         margin: 5,
-        borderRadius: 4,
+        borderRadius: 20,
     },
     selectedSize: {
         borderWidth: 3,
-        borderColor: Typography.Colors.darkruby,
+        borderColor: Typography.Colors.green,
     },
     sizeText: {
         color: Typography.Colors.lightblack,
-        fontSize: 12,
+        fontSize: 14,
         fontFamily: Typography.font.regular,
     },
 })

@@ -20,6 +20,7 @@ const TopHeaderComponent = () => {
           text: Typography.Colors.black,
         };
   return (
+    
     <View style={styles.container}>
       <View style={styles.UserContainer}>
         <Image

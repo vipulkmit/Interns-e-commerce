@@ -14,9 +14,9 @@ export const assets = {
   Heart: require("./Heart.png"),
   HeartBlue: require("./HeartBlue.png"),
   HeartBlack: require("./HeartBlack.png"),
-  Bag: require("./Bag.png"),
   BagBlue: require("./BagBlue.png"),
-  BagBlack: require("./BagBlack.png"),
+  BagBlack:require("./BagBlack.png"),
+  Bag: require("./Bag.png"),
   WhiteBag: require("./WhiteBag.png"),
   User: require("./User.png"),
   UserBlue: require("./UserBlue.png"),
@@ -67,5 +67,7 @@ export const assets = {
   NotificationLight:require("./Bell_pin black.png"),
   bannerLight:require("./bannerLight.png"),
   bannerDark:require("./bannerDark.png"),
-
+  redHeart:require("./redHeart.png"),
+  blackOutlineHeart:require("./blackoutlineHeart.png"),
+  backArrow:require("./backicon.png")
 };
