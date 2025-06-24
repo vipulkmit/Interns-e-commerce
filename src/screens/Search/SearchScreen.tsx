@@ -12,6 +12,7 @@ import {
   Keyboard,
   ScrollView,
   ImageBackground,
+  SafeAreaView,
 } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import { Typography } from "../../theme/Colors";
@@ -247,12 +248,12 @@ const SearchScreen = () => {
 
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : undefined}
-      style={{ flex: 1 }}
+      style={{ flex: 1 ,paddingHorizontal:20}}
       keyboardVerticalOffset={Platform.OS === "ios" ? 80 : 0}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         
-        <View style={[styles.container]}>
+        <SafeAreaView style={[styles.container]}>
           {loading ? (
             // Replace ActivityIndicator with SearchScreenSkeleton
             <SearchScreenSkeleton
@@ -290,7 +291,7 @@ const SearchScreen = () => {
               </View>
             </ImageBackground>
           )}
-        </View>
+        </SafeAreaView>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
     </ImageBackground>

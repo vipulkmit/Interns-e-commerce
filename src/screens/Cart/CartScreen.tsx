@@ -5,24 +5,17 @@ import {
   FlatList,
   Pressable,
   Image,
-  ScrollView,
-  Alert,
-  TextInput,
   ImageBackground,
+  SafeAreaView,
+  Dimensions,
 } from "react-native";
-import React, { useCallback, useEffect, useState } from "react";
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withRepeat,
-  withTiming,
-  interpolate,
-} from "react-native-reanimated";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+
 import { Typography } from "../../theme/Colors";
 import Icon from "react-native-vector-icons/AntDesign";
 import CustomTextInput from "../../components/textInput/CustomTextInput";
 import CustomButton from "../../components/button/CustomButton";
-import { useIsFocused, useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useIsFocused, useNavigation } from "@react-navigation/native";
 import {
   AddToCart,
   CartData,
@@ -32,116 +25,11 @@ import {
 } from "../../services/api/apiServices";
 import useAuthStore from "../../stores/useAuthStore";
 import { assets } from "../../../assets/images";
-
-// Skeleton Components
-const SkeletonBox = ({ width, height, style }) => {
-  const opacity = useSharedValue(0.3);
-
-  useEffect(() => {
-    opacity.value = withRepeat(withTiming(1, { duration: 1000 }), -1, true);
-  }, []);
-
-  const animatedStyle = useAnimatedStyle(() => ({
-    opacity: opacity.value,
-  }));
-
-  return (
-    <Animated.View
-      style={[
-        {
-          width,
-          height,
-          backgroundColor: Typography.Colors.lightgrey || "#E0E0E0",
-          borderRadius: 5,
-        },
-        animatedStyle,
-        style,
-      ]}
-    />
-  );
-};
-
-const SkeletonCartItem = ({ theme }) => {
-  return (
-    <View style={[styles.subContainer]}>
-      <View style={styles.imageConatiner}>
-        <SkeletonBox width={87} height={77} style={undefined} />
-      </View>
-      <View style={styles.dataContainer}>
-        <View style={styles.dataSubConatiner}>
-          <View style={styles.innerContainer}>
-            <SkeletonBox width="90%" height={16} style={{ marginBottom: 8 }} />
-            <SkeletonBox width="70%" height={14} />
-          </View>
-          <View style={styles.iconContainer}>
-            <SkeletonBox width={18} height={18} />
-          </View>
-        </View>
-        <View style={styles.priceContainer}>
-          <View style={styles.priceSubContainer}>
-            <SkeletonBox width={80} height={16} />
-          </View>
-          <View
-            style={[
-              styles.quantityContainer,
-              { backgroundColor: theme.background },
-            ]}
-          >
-            <SkeletonBox width={30} height={32} style={{ borderRadius: 5 }} />
-            <SkeletonBox
-              width={40}
-              height={32}
-              style={{ marginHorizontal: 2, borderRadius: 5 }}
-            />
-            <SkeletonBox width={30} height={32} style={{ borderRadius: 5 }} />
-          </View>
-        </View>
-      </View>
-    </View>
-  );
-};
-
-const SkeletonPriceSummary = () => {
-  return (
-    <View style={{ paddingLeft: 20 }}>
-      <View style={styles.amountContainer}>
-        <SkeletonBox width={100} height={14} />
-        <SkeletonBox width={80} height={14} />
-      </View>
-      <View style={styles.amountContainer}>
-        <SkeletonBox width={60} height={14} />
-        <SkeletonBox width={70} height={14} />
-      </View>
-      <View style={styles.amountContainer}>
-        <SkeletonBox width={90} height={14} />
-        <SkeletonBox width={85} height={14} />
-      </View>
-      <View style={styles.amountContainer}>
-        <SkeletonBox width={110} height={14} />
-        <SkeletonBox width={75} height={14} />
-      </View>
-      <View style={styles.totalAmount}>
-        <SkeletonBox width={100} height={18} />
-        <SkeletonBox width={120} height={18} />
-      </View>
-    </View>
-  );
-};
+const { width } = Dimensions.get("window");
 
 const CartScreen = () => {
-  const themeMode = useAuthStore((state) => state.theme);
-  const isDarkMode = themeMode === "dark";
-
-  // Example of conditionally setting special text color
-  const specialTextColor = isDarkMode
-    ? Typography.Colors.blue
-    : Typography.Colors.primary;
-
-  const theme = {
-    background: isDarkMode ? Typography.Colors.black : Typography.Colors.white,
-    text: isDarkMode ? Typography.Colors.white : Typography.Colors.black,
-    specialText: specialTextColor,
-  };
+  const [appliedPromoCode, setAppliedPromoCode] = useState("");
+  const [promoResponseData, setPromoResponseData] = useState(null);
   const { setCart } = useAuthStore();
   const navigation = useNavigation();
   const isFocus = useIsFocused();
@@ -153,34 +41,25 @@ const CartScreen = () => {
     totalPrice: 0,
   });
   const [isLoading, setIsLoading] = useState(true);
-  const [hasCheckedCart, setHasCheckedCart] = useState(false); // New state to track if we've checked cart initially
+  const [hasCheckedCart, setHasCheckedCart] = useState(false); 
   const [coupon, setCoupon] = useState("");
   const [promoData, setPromoData] = useState({ discount: 0 });
-
-  const handleCouponChange = (text) => {
-    setCoupon(text);
+  const themeMode = useAuthStore((state) => state.theme);
+  const isDarkMode = themeMode === "dark";
+  const specialTextColor = isDarkMode 
+    ? Typography.Colors.blue
+    : Typography.Colors.primary;
+  const theme = {
+    background: isDarkMode ? Typography.Colors.black : Typography.Colors.white,
+    text: isDarkMode ? Typography.Colors.white : Typography.Colors.black,
+    specialText: specialTextColor,
   };
+  const flatListRef = useRef(null);
+const [shouldScrollToFooter, setShouldScrollToFooter] = useState(false);
 
-  const handlePromoCode = async () => {
-    if (!coupon.trim()) {
-      Alert.alert("Invalid Coupon", "Please enter a valid coupon code");
-      return;
-    }
 
-    try {
-      const response = await PromoCode(coupon);
-      setPromoData(response?.data);
-      GetCartData();
-      GetCartPrice();
-    } catch (error) {
-      console.log("Error applying promo code:", error);
-      Alert.alert("Error", "Failed to apply promo code. Please try again.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
-  // Get cart data from API
+
   const GetCartData = async () => {
     // setIsLoading(true);
     try {
@@ -188,13 +67,12 @@ const CartScreen = () => {
       const items = data?.data?.cartDetails?.items || [];
       setCartData(items);
       setCart(items.length);
-      setHasCheckedCart(true); // Mark that we've checked the cart
+      setHasCheckedCart(true);
       setIsLoading(false);
     } catch (e) {
       console.log("Error fetching cart data:", e);
       setCartData([]);
-      setHasCheckedCart(true); // Mark that we've checked the cart even on error
-      // setIsLoading(false);
+      setHasCheckedCart(true);
     }
   };
 
@@ -232,6 +110,22 @@ const CartScreen = () => {
       GetCartPrice();
     }
   }, [isFocus]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      if (shouldScrollToFooter) {
+        const timer = setTimeout(() => {
+          if (flatListRef.current && cartData.length > 0) {
+            flatListRef.current.scrollToEnd({ animated: true });
+          }
+          setShouldScrollToFooter(false); 
+        }, 300); 
+  
+        return () => clearTimeout(timer);
+      }
+    }, [shouldScrollToFooter, cartData.length])
+  );
+  
 
   // Increment quantity handler
   const handleIncrementQuantity = async (item) => {
@@ -309,6 +203,7 @@ const CartScreen = () => {
 
   const renderData = useCallback(
     ({ item }) => {
+      // console.log("item", item);
       return (
         <View style={{ flex: 1 }}>
           <Pressable style={[styles.subContainer]}>
@@ -316,14 +211,20 @@ const CartScreen = () => {
               <Image
                 source={{ uri: item.productImage[0] }}
                 style={styles.Image}
+                resizeMode="cover"
               />
             </View>
-            <View style={styles.dataContainer}>
+            <View
+              style={[
+                styles.dataContainer,
+                { backgroundColor: theme.background },
+              ]}
+            >
               <View style={styles.dataSubConatiner}>
                 <View style={styles.innerContainer}>
                   <Text
                     style={[styles.title, { color: theme.text }]}
-                    numberOfLines={2}
+                    numberOfLines={1}
                   >
                     {item?.productName}
                   </Text>
@@ -334,6 +235,20 @@ const CartScreen = () => {
                 >
                   <Icon name="delete" color={theme.text} size={18} />
                 </Pressable>
+              </View>
+              <View style={[styles.dataSubConatiner]}>
+                <Text
+                  style={styles.productText}
+                >
+                  Size : {item.productSize}
+                </Text>
+              </View>
+              <View style={styles.dataSubConatiner}>
+                <Text
+                  style={{ fontSize: 14, fontWeight: "600", color: theme.text }}
+                >
+                  Color: {item.productColor}
+                </Text>
               </View>
               <View style={styles.priceContainer}>
                 <View style={styles.priceSubContainer}>
@@ -360,13 +275,15 @@ const CartScreen = () => {
                       -
                     </Text>
                   </Pressable>
-                  <View style={[styles.quantity]}>
-                    <Text
-                      style={[styles.quantityText, { paddingHorizontal: 6 }]}
-                    >
-                      {item.quantity}
-                    </Text>
-                  </View>
+
+                  <Text
+                    style={[
+                      styles.quantityText,
+                      { paddingHorizontal: 6, color: theme.text },
+                    ]}
+                  >
+                    {item.quantity}
+                  </Text>
                   <Pressable
                     style={styles.quantityButton}
                     onPress={() => handleIncrementQuantity(item)}
@@ -382,6 +299,26 @@ const CartScreen = () => {
                   </Pressable>
                 </View>
               </View>
+              <View
+                style={[
+                  styles.dataSubConatiner,
+                  { paddingLeft: 7, paddingTop: 4 },
+                ]}
+              >
+                <Image
+                  source={
+                    themeMode === "dark"
+                      ? assets.exchangeWhite
+                      : assets.exchange
+                  }
+                  style={{ height: 18, width: 18 }}
+                />
+                <Text
+                  style={{ fontSize: 12, paddingLeft: 2, color: theme.text }}
+                >
+                  Exchange Only
+                </Text>
+              </View>
             </View>
           </Pressable>
         </View>
@@ -390,167 +327,158 @@ const CartScreen = () => {
     [cartData]
   );
 
-  const renderSkeletonData = useCallback(
-    ({ item }) => {
-      return (
-        <View style={{ flex: 1 }}>
-          <SkeletonCartItem theme={theme} />
-        </View>
-      );
-    },
-    [theme]
-  );
-
   const EmptyCartView = () => {
     return (
-      <View style={styles.emptyCartContainer}>
-        <Icon
-          name="shoppingcart"
-          size={80}
-          color={Typography.Colors.greydark}
-        />
-        <Text style={[styles.emptyCartTitle, { color: theme.specialText }]}>
-          Your cart is empty
-        </Text>
-        <Text style={styles.emptyCartText}>
-          Looks like you haven't added anything to your cart yet.
-        </Text>
-      </View>
+      <ImageBackground
+        source={
+          themeMode === "dark" ? assets.BackgroundDark : assets.Background
+        }
+        style={{ flex: 1 }}
+        resizeMode="cover"
+      >
+        <View style={styles.emptyCartContainer}>
+          <Icon
+            name="shoppingcart"
+            size={80}
+            color={Typography.Colors.greydark}
+          />
+          <Text style={[styles.emptyCartTitle, { color: theme.specialText }]}>
+            Your cart is empty
+          </Text>
+          <Text style={styles.emptyCartText}>
+            Looks like you haven't added anything to your cart yet.
+          </Text>
+        </View>
+      </ImageBackground>
     );
   };
 
-  // Create skeleton data array for consistent skeleton count
-  const skeletonData = Array.from({ length: 3 }, (_, index) => ({ id: index }));
 
-  // Show skeleton only if loading AND we haven't checked cart yet, OR if we have items in cart
-  const shouldShowSkeleton =
-    isLoading && (!hasCheckedCart || cartData.length > 0);
 
-  // Show empty cart only if we've checked cart and it's empty and not loading
   const shouldShowEmptyCart =
     hasCheckedCart && !isLoading && (!cartData || cartData.length === 0);
 
-  if (shouldShowSkeleton) {
-    return (
-      <View style={[styles.container, { backgroundColor: theme.background }]}>
-        <View style={styles.header}>
-          <Text style={styles.heading}>Your Cart</Text>
-        </View>
-        <>
-          <FlatList
-            data={skeletonData}
-            renderItem={renderSkeletonData}
-            keyExtractor={(item) => item.id.toString()}
-            showsVerticalScrollIndicator={false}
-          />
-          <View style={{ flexDirection: "row", paddingTop: 10 }}>
-            <View style={styles.priceSubContainer}>
-              <SkeletonBox
-                width="100%"
-                height={50}
-                style={{ borderRadius: 10 }}
-              />
-            </View>
-            <View>
-              <SkeletonBox
-                width={80}
-                height={50}
-                style={{ marginLeft: 8, borderRadius: 10 }}
-              />
-            </View>
-          </View>
-          <View style={styles.offers}>
-            <SkeletonBox width={80} height={16} />
-          </View>
-          <SkeletonPriceSummary />
-          <View style={{ paddingTop: 10, paddingBottom: 20 }}>
-            <SkeletonBox
-              width="100%"
-              height={50}
-              style={{ borderRadius: 10 }}
-            />
-          </View>
-        </>
-      </View>
-    );
-  }
+
 
   if (shouldShowEmptyCart) {
     return <EmptyCartView />;
   }
 
-  return (
-    <ImageBackground source={themeMode === 'dark'? assets.BackgroundDark : assets.Background} style={{flex:1,}} resizeMode="cover">
+  const listFooter = () => {
+    return (
+      <View style={[styles.mainAmountContainer]}>
+        <View>
+          <Text
+            style={{
+              paddingVertical: 10,
+              paddingHorizontal: 30,
+              fontSize: 16,
+              color: theme.text,
+            }}
+          >
+            Coupons
+          </Text>
+        </View>
+        <View
+          style={[
+            styles.amountContainer,
+            {
+              flexDirection: "column",
+              alignItems: "stretch",
+              marginBottom: 10,
+              backgroundColor: theme.background,
 
-    <View style={[styles.container ]}>
-      <View style={styles.header}>
-        <Text style={[styles.heading, { color: theme.specialText }]}>
-          Your Cart
-        </Text>
-      </View>
-      <>
-        <FlatList
-          data={cartData}
-          renderItem={renderData}
-          keyExtractor={(item) => item.productId}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{backgroundColor:'white'}}
-/>
-        <View style={{ flexDirection: "row", paddingTop: 10 }}>
-          <View style={styles.priceSubContainer}>
-            <CustomTextInput
-              placeholder="Enter Coupon Code"
-              containerStyle={styles.containerStyle}
-              value={coupon}
-              onChangeText={handleCouponChange}
-            />
-          </View>
-          <View>
-            <CustomButton
-              title="Apply"
-              buttonStyle={styles.button}
-              onPress={() => handlePromoCode()}
-            />
+            },
+          ]}
+        >
+          <View style={[styles.glassOfferContainer]}>
+            <View style={{ flexDirection: "row", paddingVertical: 10 }}>
+              <Image
+                source={themeMode==="light"?assets.offerGif:assets.offerWhite}
+                style={{ height: 26, width: 26}}
+              />
+              <Text style={[styles.couponText, { color: theme.text }]}>
+                Apply Coupons
+              </Text>
+            </View>
+
+            <Pressable
+              style={{ flexDirection: "row", alignItems: "center" }}
+              onPress={() =>
+                navigation.navigate("PromoCodeScreen", {
+                  onApplyPromo: (promoCode, responseData) => {
+                    setAppliedPromoCode(promoCode);
+                    setPromoResponseData(responseData);
+                    setPromoData(responseData);
+                    setShouldScrollToFooter(true);
+                    GetCartData();
+                    GetCartPrice();
+                  },
+                })
+              }
+            >
+              <Text
+                style={{
+                  paddingRight: 8,
+                  color: theme.specialText,
+                  fontSize: 15,
+                }}
+              >
+                All Coupons
+              </Text>
+              <Image
+                source={assets.rightarrow}
+                style={{
+                  height: 11,
+                  width: 11,
+                  tintColor: specialTextColor,
+                }}
+                resizeMode="contain"
+              />
+            </Pressable>
           </View>
         </View>
-        <Pressable
-          style={[styles.offers]}
-          onPress={() => {
-            navigation.navigate("PromoCodeScreen");
-          }}
+        <View
+          style={{ backgroundColor: theme.background, paddingHorizontal: 30 }}
         >
-          <Text style={[styles.price, { color: theme.specialText }]}>
-            See Offers
-          </Text>
-        </Pressable>
-        <View style={{ paddingLeft: 20 }}>
-          <View style={styles.amountContainer}>
-            <Text style={styles.text1}>Items ({cartData?.length})</Text>
+          <View style={[styles.amountContainer, , { paddingTop: 10 }]}>
+            <Text style={{ paddingBottom: 6, color: theme.text }}>
+              PRICE DETAILS ({cartData?.length} Item)
+            </Text>
+          </View>
+          <View style={styles.line} />
+          <View style={[styles.amountContainer, , { paddingTop: 10 }]}>
+            <Text style={styles.text1}>Total MRP</Text>
             <Text style={[styles.perItemAmount, { color: theme.specialText }]}>
               Rs.{priceData?.subtotal?.toFixed(2)}
             </Text>
           </View>
+          {/* <View style={styles.line}></View> */}
           <View style={styles.amountContainer}>
             <Text style={styles.text1}>Shipping</Text>
             <Text style={[styles.perItemAmount, { color: theme.specialText }]}>
               Rs.{priceData?.shippingPrice}
             </Text>
           </View>
+
           <View style={styles.amountContainer}>
             <Text style={styles.text1}>Promo Code</Text>
             <Text style={[styles.perItemAmount, { color: theme.specialText }]}>
               (- Rs. {promoData?.discount?.toFixed(2)} )
             </Text>
           </View>
+
           <View style={styles.amountContainer}>
             <Text style={styles.text1}>Import Charges</Text>
             <Text style={[styles.perItemAmount, { color: theme.specialText }]}>
               Rs.{priceData?.gstAmount?.toFixed(2)}
             </Text>
           </View>
+          <View style={styles.line} />
+
           <View style={styles.totalAmount}>
             <Text style={[styles.totalPriceText, { color: theme.text }]}>
-              Total Price
+              Total Amount
             </Text>
             <Text style={styles.totalPrice}>
               Rs.{" "}
@@ -560,15 +488,86 @@ const CartScreen = () => {
             </Text>
           </View>
         </View>
-        <View style={{ paddingTop: 10, paddingBottom: 20 }}>
-          <CustomButton
-            title={"Check Out"}
-            textStyle={{ fontWeight: "800", fontSize: 18 }}
-            onPress={() => navigation.navigate("DeliveryAddress")}
+      </View>
+    );
+  };
+  const listHeader = () => (
+    <>
+      <View
+        style={{
+          height: 120,
+          width:width,
+          marginBottom: 20,
+          paddingHorizontal: 20,
+          borderRadius: 20,
+        }}
+      >
+        <Image
+          source={themeMode === "dark" ? assets.bigSale : assets.bigSale1}
+          style={{ height: "100%", width: "100%", borderRadius: 20 }}
+          resizeMode="contain"
+        />
+      </View>
+      <View>
+        <Text
+          style={{
+            paddingBottom: 20,
+            paddingHorizontal: 30,
+            fontSize: 16,
+            color: theme.text,
+          }}
+        >
+          Products ({cartData?.length})
+        </Text>
+      </View>
+    </>
+  );
+
+
+  return (
+    <ImageBackground
+      source={themeMode === "dark" ? assets.BackgroundDark : assets.Background}
+      style={{ flex: 1 }}
+      resizeMode="cover"
+    >
+      <SafeAreaView style={[styles.container]}>
+        <View style={styles.header}>
+          <Text style={[styles.heading, { color: theme.specialText }]}>
+            Your Cart
+          </Text>
+        </View>
+
+        <View style={{ flex: 1 }}>
+          <FlatList
+          ref={flatListRef}
+            data={cartData}
+            renderItem={renderData}
+            keyExtractor={(item) => item.productId}
+            ListHeaderComponent={listHeader}
+            showsVerticalScrollIndicator={false}
+            ListFooterComponent={listFooter}
+            contentContainerStyle={{
+              flexGrow: 1,
+              paddingBottom: 20,
+            }}
           />
         </View>
-      </>
-    </View>
+
+        <View
+          style={{
+            paddingTop: 10,
+            paddingBottom: 70,
+            paddingHorizontal: 20,
+          }}
+        >
+          <CustomButton
+            title={"Proceed to checkout"}
+            textStyle={{ fontWeight: "800", fontSize: 18 }}
+            onPress={() => navigation.navigate("DeliveryAddress")}
+            buttonStyle={{ borderRadius: 25 }}
+          />
+        </View>
+      </SafeAreaView>
     </ImageBackground>
   );
 };
@@ -576,15 +575,13 @@ const CartScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // backgroundColor: Typography.Colors.black,
-    paddingHorizontal: 36,
-    paddingBottom:80
   },
   heading: {
-    fontFamily: Typography.font.bold,
-    fontWeight: "800",
+    fontFamily: Typography.font.medium,
+    fontWeight: "700",
     fontSize: 22,
     color: Typography.Colors.primary,
+    paddingHorizontal: 28,
   },
   header: {
     flexDirection: "row",
@@ -595,15 +592,19 @@ const styles = StyleSheet.create({
     paddingBottom: 16,
   },
   Image: {
-    height: 108,
-    width: 110,
-    borderTopLeftRadius:20,
-    borderBottomLeftRadius:20
+    height: "100%",
+    width: "100%",
+    borderTopLeftRadius: 20,
+    borderBottomLeftRadius: 20,
   },
   dataContainer: {
     flex: 2,
     paddingVertical: 18,
     paddingRight: 18,
+    borderTopRightRadius: 20,
+    borderBottomRightRadius: 20,
+    // backgroundColor:Typography.Colors.white,
+    elevation: 1,
   },
   title: {
     fontFamily: Typography.font.bold,
@@ -633,22 +634,26 @@ const styles = StyleSheet.create({
   subContainer: {
     flexDirection: "row",
     // borderWidth: 0.2,
-    marginBottom: 16,
+    marginBottom: 18,
     borderRadius: 10,
     marginTop: 4,
+    paddingHorizontal: 22,
+
     // elevation:2
   },
   imageConatiner: {
-    // paddingVertical: 18,
-    // paddingLeft: 18,
+
     flex: 1,
-    // backgroundColor:'red'
+    backgroundColor: Typography.Colors.white,
+    elevation: 1,
+    borderBottomLeftRadius: 20,
+    borderTopLeftRadius: 20,
+    height: 150,
+    width: 100,
   },
   quantityButton: {
-    paddingHorizontal: 10,
-    borderWidth: 1,
-    borderRadius: 5,
-    borderColor: Typography.Colors.lightpurple,
+    width: 20,
+    alignItems: "center",
   },
   quantity: {
     paddingHorizontal: 10,
@@ -658,8 +663,13 @@ const styles = StyleSheet.create({
   },
   quantityContainer: {
     flexDirection: "row",
-    flex: 1,
-    paddingVertical: 8,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 50,
+    height: 24,
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: 5,
   },
   innerContainer: {
     flex: 2,
@@ -674,11 +684,13 @@ const styles = StyleSheet.create({
   dataSubConatiner: {
     flex: 1,
     flexDirection: "row",
+    paddingLeft: 10,
   },
   priceContainer: {
     flex: 1,
     flexDirection: "row",
     alignItems: "center",
+    paddingLeft: 10,
   },
   priceSubContainer: {
     flex: 1,
@@ -689,17 +701,13 @@ const styles = StyleSheet.create({
     color: Typography.Colors.primary,
   },
   button: {
-    paddingHorizontal: 22,
-    paddingVertical: 16,
+    paddingHorizontal: 15,
+    paddingVertical: 9,
     borderTopRightRadius: 10,
     borderTopLeftRadius: 0,
     borderBottomLeftRadius: 0,
   },
-  couponSubContainer: {},
-  containerStyle: {
-    borderTopRightRadius: 0,
-    borderBottomRightRadius: 0,
-  },
+
   offers: {
     alignItems: "flex-end",
     paddingVertical: 15,
@@ -708,19 +716,26 @@ const styles = StyleSheet.create({
     fontFamily: Typography.font.medium,
     color: Typography.Colors.greydark,
     fontSize: 14,
+    paddingVertical: 4,
   },
   perItemAmount: {
     fontFamily: Typography.font.medium,
     color: Typography.Colors.primary,
     fontSize: 14,
   },
+  mainAmountContainer: {
+
+    borderTopRightRadius: 25,
+    borderTopLeftRadius: 25,
+
+  },
   amountContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingVertical: 15,
+    paddingVertical: 4,
   },
   totalAmount: {
-    paddingVertical: 20,
+    paddingVertical: 10,
     flexDirection: "row",
     justifyContent: "space-between",
   },
@@ -774,6 +789,33 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: Typography.Colors.primary,
   },
+  line: {
+    borderWidth: 0.3,
+    borderBottomColor: "#E8E8E8",
+  },
+
+  glassOfferContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 30,
+    justifyContent: "space-between",
+    borderRadius: 6,
+    paddingVertical: 10,
+
+  },
+  couponText: {
+    paddingLeft: 8,
+    alignItems: "center",
+    paddingTop: 2,
+    fontWeight: "500",
+    fontSize: 15,
+  },
+  productText:{
+    fontSize: 14,
+    fontWeight: "600",
+    backgroundColor: Typography.Colors.lightpurple,
+    padding: 3,
+  }
 });
 
 export default CartScreen;

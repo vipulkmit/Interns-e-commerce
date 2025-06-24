@@ -83,7 +83,7 @@ export class AutoNotificationManager {
 
       if (enabled) {
         const token = await messaging().getToken();
-        console.log('FCM Token:', token);
+        // console.log('FCM Token:', token);
       }
 
       // Handle foreground messages

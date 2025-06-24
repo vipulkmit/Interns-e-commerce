@@ -8,6 +8,8 @@ import {
   FlatList,
   Alert,
   Linking,
+  ImageBackground,
+  SafeAreaView,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { assets } from "../../../assets/images";
@@ -60,7 +62,6 @@ const OrderScreen = ({ route }) => {
   const GetCartPrice = async () => {
     try {
       const data = await CartData();
-
       setpriceData(
         data?.data?.cartDetails || {
           subtotal: 0,
@@ -89,7 +90,9 @@ const OrderScreen = ({ route }) => {
 
   const renderData = ({ item }) => {
     return (
-      <Pressable style={[styles.CartContainer]}>
+      <Pressable
+        style={[styles.CartContainer, { backgroundColor: theme.background }]}
+      >
         <View style={styles.imageConatiner}>
           <Image source={{ uri: item.productImage[0] }} style={styles.Image} />
         </View>
@@ -137,123 +140,142 @@ const OrderScreen = ({ route }) => {
     }
   };
   return (
-    <View style={[styles.container, { backgroundColor: theme.background }]}>
-      <View style={styles.header}>
-        <Pressable onPress={() => navigation.goBack()}>
-          <Image
-            source={assets.ArrowLeft}
-            style={[styles.backIcon, { tintColor: theme.text }]}
-          />
-        </Pressable>
-        <Text style={[styles.headerText, { color: theme.text }]}>
-          Order Summary
-        </Text>
-      </View>
-      <View style={{ flex: 0.55 }}>
-        <FlatList
+    <ImageBackground
+      source={themeMode === "dark" ? assets.BackgroundDark : assets.Background}
+      style={{ flex: 1 ,paddingHorizontal:12}}
+      resizeMode="cover"
+    >
+      <SafeAreaView style={[styles.container]}>
+        <View style={styles.header}>
+          <Pressable onPress={() => navigation.goBack()}>
+            <Image
+              source={themeMode==="dark"?assets.arrowBlack:assets.arrowWhite}
+              style={[styles.backIcon]}
+            />
+          </Pressable>
+          <Text style={[styles.headerText, { color: theme.text }]}>
+            Order Summary
+          </Text>
+        </View>
+        <View>
+          {/* <FlatList
           data={cartData}
           renderItem={renderData}
           keyExtractor={(item) => item.productId}
           showsVerticalScrollIndicator={false}
-        />
-      </View>
-      <View
-        style={{
-          borderBottomWidth: 1,
-          borderColor: Typography.Colors.lightpurple,
-        }}
-      />
-      <View style={styles.deliveryContainer}>
-        <Text style={[styles.heading, { color: theme.text }]}>
-          Delivery Address
-        </Text>
-        <View style={styles.subContainer}>
-          <View style={{ flex: 1 }}>
-            <Text
-              style={[styles.details, { color: theme.text }]}
-              numberOfLines={4}
-            >
-              {item?.firstName} {item?.lastName} , {item?.streetAddress}{" "}
-              {item?.city}, {item?.state}, {item?.country} {item?.zipCode},{" "}
-              {item?.phoneNumber}{" "}
+        /> */}
+          <Image
+            source={
+              themeMode === "dark" ? assets.OrderBlack : assets.OrderImage
+            }
+            style={{ width: "100%", height: 150 }}
+            resizeMode="contain"
+          />
+        </View>
+
+        <View style={[styles.deliveryContainer,{backgroundColor:theme.background}]}>
+          <Text style={[styles.heading, { color: theme.text }]}>
+            Delivery Address
+          </Text>
+          <View style={styles.subContainer}>
+            <View style={{ flex: 1 }}>
+              <Text
+                style={[styles.details, { color: theme.text }]}
+                numberOfLines={4}
+              >
+                {item?.firstName} {item?.lastName} , {item?.streetAddress}{" "}
+                {item?.city}, {item?.state}, {item?.country} {item?.zipCode},{" "}
+                {item?.phoneNumber}{" "}
+              </Text>
+            </View>
+          </View>
+        </View>
+
+        <View style={[styles.deliveryContainer,{backgroundColor:theme.background}]}>
+          <Text style={[styles.heading, { color: theme.text }]}>
+            Payment Method
+          </Text>
+          <Pressable style={styles.paymentContainer}>
+            <Image source={assets.Razorpay} style={styles.paymentImage} />
+            <Text style={[styles.details, { color: theme.text }]}>
+              Pay With Rozorpay Pay
+            </Text>
+            <View style={styles.arrowConatiner}></View>
+          </Pressable>
+        </View>
+        {/* <View style={styles.horizonLine} /> */}
+        {/* <View style={{ paddingHorizontal: 20 }}> */}
+        <View style={[styles.mainAmountContainer,{backgroundColor:theme.background}]}>
+          <View style={styles.amountContainer}>
+            <Text style={[styles.text1,{color:theme.text}]}>Items ({cartData?.length})</Text>
+            <Text style={[styles.perItemAmount, { color: theme.text }]}>
+              Rs.{priceData?.breakdown?.subtotal}
+            </Text>
+          </View>
+          <View style={styles.anotherline}></View>
+          <View style={styles.amountContainer}>
+            <Text style={[styles.text1,{color:theme.text}]}>Shipping </Text>
+            <Text style={[styles.perItemAmount, { color: theme.text }]}>
+              Rs.{priceData?.breakdown?.shippingPrice}
+            </Text>
+          </View>
+          <View style={styles.anotherline}></View>
+          <View style={styles.amountContainer}>
+            <Text style={[styles.text1,{color:theme.text}]}>Promo Code </Text>
+            <Text style={[styles.perItemAmount, { color: theme.text }]}>
+              Rs.{priceData?.discount || 0}
+            </Text>
+          </View>
+          <View style={styles.anotherline}></View>
+          <View style={styles.amountContainer}>
+            <Text style={[styles.text1,{color:theme.text}]}>Import Charges </Text>
+            <Text style={[styles.perItemAmount, { color: theme.text }]}>
+              Rs.{priceData?.breakdown?.gstAmount}
             </Text>
           </View>
         </View>
-      </View>
-      <View style={styles.horizonLine} />
-      <View style={styles.deliveryContainer}>
-        <Text style={[styles.heading, { color: theme.text }]}>
-          Payment Method
-        </Text>
-        <Pressable style={styles.paymentContainer}>
-          <Image source={assets.Razorpay} style={styles.paymentImage} />
-          <Text style={[styles.details, { color: theme.text }]}>
-            Pay With Rozorpay Pay
-          </Text>
-          <View style={styles.arrowConatiner}></View>
-        </Pressable>
-      </View>
-      <View style={styles.horizonLine} />
-      <View style={{ paddingHorizontal: 20 }}>
-        <View style={styles.amountContainer}>
-          <Text style={styles.text1}>Items (3)</Text>
-          <Text style={[styles.perItemAmount, { color: theme.specialText }]}>
-            Rs.{priceData?.breakdown?.subtotal}
-          </Text>
+        <View
+          style={{
+            flex:0.5,
+            // backgroundColor:'red',
+            flexDirection: "row",
+            paddingBottom: 20,
+            paddingHorizontal: 20,
+            // alignItems:'flex-end'
+          }}
+        >
+          <View style={{ flex: 1, justifyContent: "flex-end",paddingBottom:10 }}>
+            <Text
+              style={{
+                color: theme.specialText,
+                fontSize: 20,
+                fontWeight: "800",
+              }}
+            >
+              Rs. {priceData.totalPrice.toFixed(3)}{" "}
+            </Text>
+          </View>
+          <View style={{ flex: 1, justifyContent: "flex-end" }}>
+            <CustomButton title="Pay Now" onPress={handlePayment} buttonStyle={{borderRadius:10}}/>
+          </View>
         </View>
-        <View style={styles.amountContainer}>
-          <Text style={styles.text1}>Shipping</Text>
-          <Text style={[styles.perItemAmount, { color: theme.specialText }]}>
-            Rs.{priceData?.breakdown?.shippingPrice}
-          </Text>
-        </View>
-        <View style={styles.amountContainer}>
-          <Text style={styles.text1}>Promo Code</Text>
-          <Text style={[styles.perItemAmount, { color: theme.specialText }]}>
-            ( - Rs.1234 )
-          </Text>
-        </View>
-        <View style={styles.amountContainer}>
-          <Text style={styles.text1}>Import Charges</Text>
-          <Text style={[styles.perItemAmount, { color: theme.specialText }]}>
-            Rs.{priceData?.breakdown?.gstAmount}
-          </Text>
-        </View>
-      </View>
-      <View
-        style={{ flexDirection: "row", paddingTop: 20, paddingHorizontal: 20 }}
-      >
-        <View style={{ flex: 1, justifyContent: "center" }}>
-          <Text
-            style={{
-              color: theme.specialText,
-              fontSize: 20,
-              fontWeight: "800",
-            }}
-          >
-            Rs. {priceData.totalPrice.toFixed(3)}{" "}
-          </Text>
-        </View>
-        <View style={{ flex: 1 }}>
-          <CustomButton title="Pay Now" onPress={handlePayment} />
-        </View>
-      </View>
-    </View>
+      </SafeAreaView>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Typography.Colors.white,
-    paddingHorizontal: 12,
+    // backgroundColor: Typography.Colors.white,
+    // paddingHorizontal: 12,
   },
   subContainer: {
     flexDirection: "row",
   },
   backIcon: {
-    height: 28,
-    width: 28,
+    height: 32,
+    width: 32,
   },
   header: {
     flexDirection: "row",
@@ -298,17 +320,25 @@ const styles = StyleSheet.create({
   CartContainer: {
     flex: 1,
     flexDirection: "row",
-    borderRadius: 10,
+    borderRadius: 25,
+    // borderWidth:1,
+    // backgroundColor:Typography.Colors.white,
+    // borderColor:Typography.Colors.lightgrey
+    elevation: 1,
   },
   imageConatiner: {
-    paddingVertical: 18,
-    paddingLeft: 18,
+    // paddingVertical: 18,
+    // paddingLeft: 18,
     flex: 1,
+    borderTopLeftRadius: 25,
+    borderBottomLeftRadius: 25,
   },
   Image: {
-    height: 77,
-    width: 87,
+    height: 111,
+    width: 115,
     borderRadius: 5,
+    borderTopLeftRadius: 25,
+    borderBottomLeftRadius: 25,
   },
   dataContainer: {
     flex: 2,
@@ -341,13 +371,20 @@ const styles = StyleSheet.create({
     fontWeight: "800",
   },
   deliveryContainer: {
+    flex:0.5,
     paddingHorizontal: 20,
     paddingTop: 10,
+    borderRadius: 20,
+    // backgroundColor: Typography.Colors.white,
+    elevation: 2,
+    paddingVertical: 10,
+    marginBottom: 20,
   },
   details: {
     fontFamily: Typography.font.medium,
     color: Typography.Colors.lightblack,
     fontSize: 16,
+    paddingBottom: 6,
   },
   heading: {
     fontFamily: Typography.font.bold,
@@ -394,6 +431,21 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     paddingVertical: 15,
+  },
+  anotherline: {
+    borderWidth: 0.3,
+    borderBottomColor: "#E8E8E8",
+  },
+  mainAmountContainer: {
+    paddingHorizontal: 30,
+    paddingTop: 10,
+    // elevation: 3,
+    backgroundColor: Typography.Colors.white,
+    borderRadius:25
+    // borderRadius:25,
+    // borderTopRightRadius: 25,
+    // borderTopLeftRadius: 25,
+    // paddingBottom:30
   },
 });
 export default OrderScreen;

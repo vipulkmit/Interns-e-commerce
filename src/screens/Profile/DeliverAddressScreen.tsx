@@ -8,19 +8,19 @@ import {
   Alert,
   Pressable,
   Image,
+  ImageBackground,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import useAuthStore from "../../stores/useAuthStore";
-import Iconarrow from "react-native-vector-icons/Feather";
 import Icon from "react-native-vector-icons/AntDesign";
 import { Typography } from "../../theme/Colors";
 import CustomButton from "../../components/button/CustomButton";
 import { updateUserdata } from "../../services/api/apiServices";
-
 import { useState } from "react";
 import TopHeaderComponent from "../../components/header/TopHeaderComponent";
 import { assets } from "../../../assets/images";
 import { useAppTheme } from "../../theme/useAppTheme";
+import { SafeAreaView } from "react-native";
 
 const DeliveryAddress = () => {
   const themeMode = useAuthStore((state) => state.theme);
@@ -31,7 +31,7 @@ const DeliveryAddress = () => {
     ? Typography.Colors.blue
     : Typography.Colors.primary;
     const theme = useAppTheme();
-    console.log(theme,'Theme')
+    // console.log(theme,'Theme')
   // const theme = {
   //   background: isDarkMode ? Typography.Colors.black : Typography.Colors.white,
   //   text: isDarkMode ? Typography.Colors.white : Typography.Colors.black,
@@ -57,20 +57,6 @@ const DeliveryAddress = () => {
     Navigation.navigate("AddAddressList");
   };
 
-  const handlebutton = () => {
-    return (
-      <>
-        {user?.address && user?.address?.length > 0 && (
-          <CustomButton
-            title={"Add Address"}
-            onPress={handleaddAddress}
-            buttonStyle={styles.buttonstyleaddress}
-            textStyle={styles.buttontextstyleaddress}
-          />
-        )}
-      </>
-    );
-  };
 
   const onDeleteAddress = async (index: number) => {
     const updatedAddresses = [...user.address];
@@ -90,54 +76,64 @@ const DeliveryAddress = () => {
   };
   // console.log(user, "snfi");
   const Listitem = ({ item, index }: { item: any; index: number }) => {
+    const isSelected = selectedIndex === index;
     return (
-      <>
-        <>
-          {/* <View style={styles.headerRow}>
-            <Pressable onPress={() => Navigation.navigate("ProfileScreen")}>
-              <Image source={assets.ArrowLeft} style={styles.backIcon} />
-            </Pressable>
-            <Text numberOfLines={1} style={styles.headerTitle}>
-              Choose Delivery Address
-            </Text>
-          </View> */}
-        </>
         <TouchableOpacity
-          onPress={() => AddressNavigate(item, index)}
-          style={[
-            styles.addressItem,
-            {
-              borderColor:
-                selectedIndex === index
-                  ? Typography.Colors.primary
-                  : theme.text,
-              borderWidth: selectedIndex === index ? 2 : 1,
-            },
-          ]}
-        >
-          <View style={styles.addressHeader}>
-            <Text style={styles.addressText}>
-              {item.firstName} {item.lastName}
+      onPress={() => AddressNavigate(item, index)}
+      style={[
+        styles.addressItem,
+       
+      ]}
+    >
+      {/* Top Row */}
+      <View style={styles.addressHeader}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+          
+          {/* 🔘 Radio Button */}
+          <View
+
+    style={[styles.radioButton,{borderColor: isSelected ? Typography.Colors.primary : '#888',}]}
+          >
+            {isSelected && (
+              <View
+                style={{
+                  height: 12,
+                  width: 12,
+                  borderRadius: 8,
+                  backgroundColor: Typography.Colors.primary,
+                }}
+              />
+            )}
+          </View>
+
+          {/* 🏠 Icon and Address Info */}
+          <Image source={assets.homeIcon} style={{ height: 32, width: 32 }} />
+          <View style={{ marginLeft: 10 }}>
+            <Text style={styles.sendText}>SEND TO:</Text>
+            <Text style={[styles.addressText, { color: Typography.Colors.primary,fontSize:14 }]}>
+              My Home
             </Text>
           </View>
-          <Text style={styles.addressText}>{item.streetAddress}</Text>
-          <Text style={styles.addressText}>
-            {item.city}, {item.state}, {item.zipCode}
-          </Text>
-          <Text style={styles.addressText}>{item.country}</Text>
-          <Text style={styles.addressText}>Phone: {item.phoneNumber}</Text>
-          <View style={{ flexDirection: "row", gap: 10, alignItems: "center" }}>
-            <TouchableOpacity onPress={() => onEditAddress(item, index)}>
-              <Text style={[styles.editText, { color: theme.text }]}>
-                Edit
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => onDeleteAddress(index)}>
-              <Icon size={15} color={Typography.Colors.red} name="delete" />
-            </TouchableOpacity>
-          </View>
+        </View>
+
+        {/* ✏️ Edit */}
+        <TouchableOpacity onPress={() => onEditAddress(item, index)}>
+          <Text style={[styles.editText]}>Edit</Text>
         </TouchableOpacity>
-      </>
+      </View>
+
+      {/* 📍 Address */}
+      <View style={styles.addressData  }>
+        <Text style={styles.addressText}> {item.streetAddress}, </Text>
+        <Text style={styles.addressText}>
+          {item.city}, {item.state}, {item.zipCode}
+        </Text>
+        <Text style={styles.addressText}> {item.country}</Text>
+      </View>
+
+      {/* 📞 Phone */}
+      <Text style={[styles.addressText,{paddingLeft:36}]}> Phone: {item.phoneNumber}</Text>
+    </TouchableOpacity>
     );
   };
 
@@ -160,12 +156,14 @@ const DeliveryAddress = () => {
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.background }]}>
+    <ImageBackground source={themeMode === 'dark'? assets.BackgroundDark : assets.Background} style={{flex:1,paddingHorizontal:12}} resizeMode="cover">
+
+    <SafeAreaView style={[styles.container]}>
       <View style={styles.headerRow}>
         <Pressable onPress={() => Navigation.goBack()}>
           <Image
-            source={assets.ArrowLeft}
-            style={[styles.backIcon, { tintColor: theme.text }]}
+            source={themeMode==="dark"?assets.arrowBlack:assets.arrowWhite}
+            style={[styles.backIcon]}
           />
         </Pressable>
         <Text
@@ -174,22 +172,29 @@ const DeliveryAddress = () => {
         >
           Choose Delivery Address
         </Text>
+        <Pressable style={{flex:1,alignItems:"flex-end",paddingRight:10}} onPress={() =>handleaddAddress()}>
+          <Image
+            source={themeMode==="dark"?assets.plus:assets.blackplus}
+            style={[styles.backIcon,{height:28,width:28,tintColor:themeMode==="dark"?Typography.Colors.white:Typography.Colors.primary}]}
+          />
+        </Pressable>
       </View>
       <FlatList
         contentContainerStyle={{ paddingTop: 10, paddingBottom: 20 }}
         data={user?.address || []}
         renderItem={({ item, index }) => <Listitem item={item} index={index} />}
         ListEmptyComponent={Emptylist}
-        ListFooterComponent={handlebutton}
+        // ListFooterComponent={handlebutton}
       />
-    </View>
+    </SafeAreaView>
+    </ImageBackground>
   );
 };
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 15,
-    backgroundColor: Typography.Colors.white,
+    // backgroundColor: Typography.Colors.white,
   },
   containerm: {
     backgroundColor: Typography.Colors.white,
@@ -208,8 +213,8 @@ const styles = StyleSheet.create({
   },
   backIcon: {
     color: Typography.Colors.primary,
-    height: 28,
-    width: 28,
+    height: 32,
+    width: 32,
   },
   productType: {
     fontSize: 18,
@@ -225,8 +230,8 @@ const styles = StyleSheet.create({
     gap: 20,
   },
   addressText: {
-    fontSize: 18,
-    fontWeight: "700",
+    fontSize: 13,
+    fontWeight: "600",
     fontFamily: Typography.font.bold,
     color: Typography.Colors.darkgrey,
   },
@@ -266,11 +271,16 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   addressItem: {
-    marginBottom: 12,
-    padding: 10,
-    borderWidth: 2,
-    borderColor: Typography.Colors.primary,
-    borderRadius: 8,
+    marginBottom: 20,
+    padding: 18,
+
+    // borderWidth: 2,
+    // borderColor: Typography.Colors.primary,
+    borderRadius: 18,
+    backgroundColor:Typography.Colors.white,
+    elevation:2,
+    marginHorizontal:10
+
   },
   addressHeader: {
     flexDirection: "row",
@@ -279,15 +289,20 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   editText: {
-    color: Typography.Colors.primary,
+    color: Typography.Colors.red,
     fontSize: 16,
     fontWeight: "600",
+    textDecorationLine:'underline',
+    
+    // paddingRight:15
   },
   buttonstyleaddress: {
     alignSelf: "center",
     textAlign: "center",
     height: 57,
-    width: 267,
+    width: 300,
+    marginTop:230,
+    borderRadius:30,
     backgroundColor: Typography.Colors.primary,
   },
   buttontextstyleaddress: {
@@ -307,6 +322,27 @@ const styles = StyleSheet.create({
     fontFamily: Typography.font.bold,
     color: Typography.Colors.primary,
   },
+  sendText:{
+    fontSize: 13,
+    fontWeight: "600",
+    fontFamily: Typography.font.bold,
+    color: Typography.Colors.lightgrey,
+  },
+  radioButton:{
+    height:20,
+    width: 20,
+    borderRadius: 12,
+    borderWidth: 1.5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 10,
+  },
+  addressData:{
+    flexDirection: 'row', 
+    flexWrap: 'wrap',
+    paddingLeft:38,
+    paddingTop:10
+  }
 });
 
 export default DeliveryAddress;

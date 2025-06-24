@@ -6,6 +6,7 @@ import {
   FlatList,
   Pressable,
   TouchableOpacity,
+  ImageBackground,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Typography } from "../../theme/Colors";
@@ -21,6 +22,7 @@ import CustomButton from "../../components/button/CustomButton";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 import useAuthStore from "../../stores/useAuthStore";
 import WishlistSkeleton from "../../components/skeleton/WishlishSkeleton";
+import { assets } from "../../../assets/images";
 
 const WishlistScreen = () => {
   const themeMode = useAuthStore((state) => state.theme);
@@ -76,7 +78,7 @@ const WishlistScreen = () => {
 
   const wishlistData = ({ item }) => {
     return (
-      <Pressable style={[styles.subContainer]}>
+      <Pressable style={[styles.subContainer,{backgroundColor:theme.background}]}>
         <View style={styles.imageConatiner}>
           <Image source={{ uri: item.images[0] }} style={styles.Image} />
         </View>
@@ -140,8 +142,10 @@ const WishlistScreen = () => {
   }
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.background }]}>
-      <View style={[styles.header, { backgroundColor: theme.background }]}>
+    <ImageBackground source={themeMode === 'dark'? assets.BackgroundDark : assets.Background} style={{flex:1,}} resizeMode="cover">
+
+    <View style={styles.container}>
+      <View style={[styles.header]}>
         <Text style={[styles.heading, { color: theme.specialText }]}>
           Wishlist
         </Text>
@@ -160,7 +164,7 @@ const WishlistScreen = () => {
         data={Wishlist}
         renderItem={wishlistData}
         ListEmptyComponent={EmptyWishlist}
-        contentContainerStyle={{ flexGrow: 1 }}
+        contentContainerStyle={{ flexGrow: 1,paddingTop:20 }}
       />
       {Wishlist && Wishlist.length > 0 && (
         <View style={styles.buttonContainer}>
@@ -171,13 +175,15 @@ const WishlistScreen = () => {
         </View>
       )}
     </View>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Typography.Colors.white,
+    paddingHorizontal:20
+    // backgroundColor: Typography.Colors.white,
   },
   heading: {
     fontFamily: Typography.font.bold,
@@ -189,15 +195,17 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingHorizontal: 45,
+    paddingHorizontal: 25,
     paddingTop: 55,
     paddingBottom: 16,
   },
   Image: {
-    height: 77,
-    width: 87,
+    height: 100,
+    width: 100,
     borderRadius: 5,
-    paddingHorizontal: 16,
+    // paddingHorizontal: 16,
+    borderTopLeftRadius:25,
+    borderBottomLeftRadius:25
   },
   title: {
     fontFamily: Typography.font.bold,
@@ -223,14 +231,25 @@ const styles = StyleSheet.create({
   },
   subContainer: {
     flexDirection: "row",
-    paddingHorizontal: 30,
-    elevation: 1,
+    // paddingHorizontal: 30,
+    marginHorizontal:10,
+    elevation: 3,
+    gap:15,
+    marginBottom:15,
+    // paddingTop:15,
+    // backgroundColor:Typography.Colors.white,
+    borderRadius:25
+    // borderTopLeftRadius:25.,
+    // borderBottomLeftRadius:25
   },
   icon: {
     color: Typography.Colors.black,
   },
   imageConatiner: {
-    padding: 18,
+    // padding: 18,
+    // backgroundColor:Typography.Colors.red,
+    // borderTopLeftRadius:25,
+    // borderBottomLeftRadius:25
   },
   amountIcon: {
     alignItems: "flex-end",
@@ -267,6 +286,7 @@ const styles = StyleSheet.create({
     margin: 30,
     backgroundColor: Typography.Colors.white,
     elevation: 3,
+    marginBottom:120
   },
   heartIconContainer: {
     width: 110,

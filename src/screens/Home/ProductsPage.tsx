@@ -8,6 +8,7 @@ import {
   Image,
   Dimensions,
   ImageBackground,
+  SafeAreaView,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import Animated, {
@@ -25,7 +26,7 @@ import { Typography } from "../../theme/Colors";
 import { Products } from "../../services/api/apiServices";
 import useAuthStore from "../../stores/useAuthStore";
 const { width } = Dimensions.get("window");
-console.log(width,"width");
+// console.log(width,"width");
 
 // Skeleton Component
 const SkeletonPlaceholder = ({ width, height, style }) => {
@@ -198,8 +199,8 @@ const ProductsPage = ({ route }) => {
 
   return (
 
-    <ImageBackground source={themeMode === 'dark'? assets.BackgroundDark : assets.Background} style={{flex:1,}} resizeMode="cover">
-    <View style={[styles.mainContainer]}>
+    <ImageBackground source={themeMode === 'dark'? assets.BackgroundDark : assets.Background} style={{flex:1}} resizeMode="cover">
+    <SafeAreaView style={[styles.mainContainer]}>
       <FlatList
         data={displayData}
         renderItem={ProductRenderItem}
@@ -214,7 +215,7 @@ const ProductsPage = ({ route }) => {
         ListHeaderComponentStyle={[styles.header]}
         columnWrapperStyle={styles.row}
       />
-    </View>
+    </SafeAreaView>
     </ImageBackground>
 
   );
@@ -223,7 +224,7 @@ const ProductsPage = ({ route }) => {
 const styles = StyleSheet.create({
   header: {
     // backgroundColor: Typography.Colors.white,
-    paddingTop: 20,
+    paddingTop: 10,
     paddingHorizontal: 14,
   },
   container: {

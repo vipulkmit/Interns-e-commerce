@@ -5,23 +5,47 @@ import {
   NavigationContainer,
 } from "@react-navigation/native";
 import RootNavigator from "./src/navigation/RootNavigator";
-import { StatusBar } from "react-native";
+import { SafeAreaView, StatusBar, useColorScheme, View } from "react-native";
 import { Typography } from "./src/theme/Colors";
 import useAuthStore from "./src/stores/useAuthStore";
-
+import Toast from "react-native-toast-message";
+import { ToastConfig } from "./src/components/toast/ToastConfig";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { ColorSchemeProvider } from "./src/components/theme/ColorSchemeContext";
+import { ThemeProvider } from "@shopify/restyle";
+import { darkTheme } from "./src/components/theme/Theme";
 export default function App() {
+  
+  const colorScheme = useColorScheme();
   const theme = useAuthStore((state) => state.theme);
   return (
-    <NavigationContainer theme={theme === "dark" ? DarkTheme : DefaultTheme}>
-      <RootNavigator />
-      <StatusBar
-      // barStyle="default"
-        barStyle={theme === "dark" ?"light-content":"dark-content"}
-        backgroundColor={
-          theme === "dark" ? Typography.Colors.charcol : "#fef8f8"
-        }
-        
-      />
-    </NavigationContainer>
+    <GestureHandlerRootView style={{ flex: 1}}>
+      <ColorSchemeProvider>
+        <ThemeProvider theme={colorScheme === "dark" ? darkTheme : theme}>
+          <NavigationContainer >
+            {/* <SafeAreaView
+              style={{
+                flex: 1,
+                backgroundColor:
+                  theme === "dark"
+                    ? Typography.Colors.charcol
+                    : Typography.Colors.barColor,
+              }}
+            > */}
+              <RootNavigator />
+            {/* </SafeAreaView> */}
+            <StatusBar
+              barStyle={theme === "dark" ? "light-content" : "dark-content"}
+              backgroundColor={
+                theme === "dark"
+                  ? Typography.Colors.charcol
+                  : Typography.Colors.barColor
+              }
+            />
+            <Toast config={ToastConfig} />
+          </NavigationContainer>
+        </ThemeProvider>
+      </ColorSchemeProvider>
+    </GestureHandlerRootView>
   );
 }

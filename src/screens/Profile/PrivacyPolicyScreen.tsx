@@ -80,8 +80,7 @@ const PrivacyPolicyScreen = () => {
           updated policy. If you have any questions about this Privacy Policy,
           your rights, or our data handling practices, or if you wish to file a
           complaint, please do not hesitate to contact our Data Protection
-          Officer or support team at gsaurav641@gmail.com or
-          goyalsneha089@gmail.com, call us at +91-7376811531 or 7404800143, We
+          Officer or support team at Test@gmail.com, call us at +917854785600 , We
           are committed to resolving any issues promptly and transparently to
           ensure that your data and privacy are always treated with the highest
           level of care and respect.

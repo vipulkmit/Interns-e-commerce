@@ -19,6 +19,7 @@ type CustomTextInputProps = {
   placeholder?: string;
   secureTextEntry?: boolean;
   keyboardType?: KeyboardTypeOptions;
+  mainContainerStyle?:ViewStyle,
   containerStyle?: ViewStyle;
   inputStyle?: TextStyle;
   labelStyle?: TextStyle;
@@ -45,6 +46,7 @@ const CustomTextInput = forwardRef<TextInput, CustomTextInputProps>(
       placeholder,
       secureTextEntry = false,
       keyboardType = "default",
+      mainContainerStyle,
       containerStyle,
       inputStyle,
       labelStyle,
@@ -73,7 +75,7 @@ const CustomTextInput = forwardRef<TextInput, CustomTextInputProps>(
     };
 
     return (
-      <View style={{ marginBottom: 16 }}>
+      <View style={[styles.mainContainer, mainContainerStyle]}>
         <View style={[styles.container, containerStyle]}>
           {iconname && (
             <Icon
@@ -108,6 +110,9 @@ const CustomTextInput = forwardRef<TextInput, CustomTextInputProps>(
 );
 
 const styles = StyleSheet.create({
+  mainContainer:{
+marginBottom:18
+  },
   container: {
     flexDirection: "row",
     alignItems: "center",

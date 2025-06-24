@@ -7,6 +7,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   ActivityIndicator,
+  SafeAreaView,
 } from "react-native";
 import { orders } from "../../services/api/apiServices";
 import { useNavigation } from "@react-navigation/native";
@@ -88,7 +89,8 @@ const MyOrdersScreen = () => {
   }
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.background }]}>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]}>
+      <View style={{padding:15}}>
       <Text style={styles.header}>
         <Text style={[styles.boldText, { color: theme.text }]}>My Orders</Text>{" "}
         ({orderData.length} Item
@@ -100,7 +102,8 @@ const MyOrdersScreen = () => {
         keyExtractor={(item) => item.id}
         contentContainerStyle={{ paddingBottom: 20 }}
       />
-    </View>
+      </View>
+    </SafeAreaView>
   );
 };
 

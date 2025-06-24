@@ -51,7 +51,8 @@ const TopHeaderComponent = () => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    paddingVertical:15
+    // paddingTop:50
+    // paddingVertical:15
   },
   userImage: {
     height: 40,

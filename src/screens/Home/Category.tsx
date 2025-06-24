@@ -8,6 +8,7 @@ import {
   ImageBackground,
   Animated,
   Dimensions,
+  SafeAreaView,
 } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
 import React, { useEffect, useState, useRef } from "react";
@@ -152,10 +153,12 @@ const Category = ({ route }) => {
   };
 
   return (
-    <ImageBackground source={themeMode === 'dark'? assets.BackgroundDark : assets.Background} style={{flex:1,}} resizeMode="cover">
+    <ImageBackground source={themeMode === 'dark'? assets.BackgroundDark : assets.Background} style={{flex:1,paddingHorizontal: 5,}} resizeMode="cover">
 
-    <View style={[styles.container]}>
-      <HeaderComponent onClick={goback} />
+    <SafeAreaView style={[styles.container]}>
+      <HeaderComponent onClick={goback} onPress={function (): void {
+          throw new Error("Function not implemented.");
+        } } />
       
       <Animated.View
         style={[
@@ -195,7 +198,7 @@ const Category = ({ route }) => {
           />
         )}
       </Animated.View>
-    </View>
+    </SafeAreaView>
     </ImageBackground>
   );
 };
@@ -203,7 +206,9 @@ const Category = ({ route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 5,
+    // backgroundColor:"red"
+    // paddingHorizontal: 5,
+    // paddingVertical:50
   },
   contentWrapper: {
     flex: 1,
@@ -232,7 +237,7 @@ const styles = StyleSheet.create({
     opacity: 0.8,
   },
   flatListContainer: {
-    paddingHorizontal: 10,
+    // paddingHorizontal: 10,
     paddingBottom: 20,
   },
   row: {

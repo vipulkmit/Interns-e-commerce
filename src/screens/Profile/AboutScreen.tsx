@@ -1,6 +1,7 @@
 import {
   Image,
   Linking,
+  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
@@ -27,8 +28,8 @@ const AboutScreen = () => {
         };
   const navigation = useNavigation();
   return (
-    <View style={[styles.container,{backgroundColor:theme.background}]}>
-      <>
+    <SafeAreaView style={[styles.container,{backgroundColor:theme.background}]}>
+      <View style={{paddingHorizontal:20,paddingBottom:10}}>
         <View style={styles.headerRow}>
           <Pressable onPress={() => navigation.goBack()}>
             <Image source={assets.ArrowLeft} style={[styles.backIcon,{tintColor:theme.text}]} />
@@ -37,7 +38,7 @@ const AboutScreen = () => {
             About Us
           </Text>
         </View>
-      </>
+     
       {/* <Text style={styles.title}>About Snapshop</Text> */}
       <ScrollView>
         <Text style={[styles.heading,{color:theme.text}]}>Introduction</Text>
@@ -101,18 +102,14 @@ const AboutScreen = () => {
         <Text style={[styles.heading,{color:theme.text}]}>Contact Us</Text>
         <Text style={[styles.text,{color:theme.text}]}>📧 Email:</Text>
         <TouchableOpacity
-          onPress={() => Linking.openURL("mailto:gsaurav641@gmail.com")}
+          onPress={() => Linking.openURL("mailto:Admin@yopmail.com")}
         >
-          <Text style={styles.link}>gsaurav641@gmail.com</Text>
+          <Text style={styles.link}>Admin@yopmail.com</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => Linking.openURL("mailto:goyalsneha089@gmail.com")}
-        >
-          <Text style={styles.link}>goyalsneha089@gmail.com</Text>
-        </TouchableOpacity>
-        <Text style={[styles.text,{color:theme.text}]}>📞 Phone: +91-7376811531</Text>
+        <Text style={[styles.text,{color:theme.text}]}>📞 Phone: +91-73768XXXXX</Text>
       </ScrollView>
-    </View>
+      </View>
+    </SafeAreaView>
   );
 };
 

@@ -5,6 +5,7 @@
 //   Text,
 //   TouchableOpacity,
 //   View,
+//   Dimensions,
 // } from "react-native";
 // import Animated, {
 //   useSharedValue,
@@ -22,7 +23,9 @@
 // import { useNavigation } from "@react-navigation/native";
 // import useAuthStore from "../../stores/useAuthStore";
 // import { ThemeToggle } from "../../components/Themes/ThemeToggle";
-// import { useEffect } from "react";
+// import { useEffect, useRef } from "react";
+
+// const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 // const ProfileScreen = () => {
 //   const user = useAuthStore((state) => state.user);
@@ -40,15 +43,19 @@
 //   const logout = useAuthStore((state) => state.logout);
 //   const Navigation = useNavigation();
 
-//   // Reanimated shared values
+//   // Ref to measure theme toggle position
+//   const themeToggleRef = useRef(null);
+
+//   // Simple progress value for theme animation
 //   const themeProgress = useSharedValue(themeMode === "dark" ? 1 : 0);
-//   const overlayScale = useSharedValue(0);
-//   const overlayOpacity = useSharedValue(0);
-//   const contentOpacity = useSharedValue(1);
-//   const itemsTranslateY = useSharedValue(0);
+
+//   // Ripple effect values
 //   const rippleScale = useSharedValue(0);
-  
-//   // Individual item press animations - create them outside renderItem
+//   const rippleOpacity = useSharedValue(0);
+//   const rippleX = useSharedValue(screenWidth / 2);
+//   const rippleY = useSharedValue(100);
+
+//   // Individual item press animations
 //   const item0Scale = useSharedValue(1);
 //   const item1Scale = useSharedValue(1);
 //   const item2Scale = useSharedValue(1);
@@ -57,86 +64,55 @@
 //   const item5Scale = useSharedValue(1);
 //   const item6Scale = useSharedValue(1);
 
-//   // Enhanced theme change animation with Reanimated
+//   // Simple theme change handler
+//   const handleThemeChange = () => {
+//     if (themeToggleRef.current) {
+//       themeToggleRef.current.measureInWindow((x, y, width, height) => {
+//         // Set ripple position to center of the toggle button
+//         rippleX.value = x + width / 2;
+//         rippleY.value = y + height / 2;
+
+//         // Start ripple animation
+//         animateRipple();
+//       });
+//     } else {
+//       animateRipple();
+//     }
+//   };
+
+//   // Simple ripple animation
+//   const animateRipple = () => {
+//     // Calculate scale to cover screen
+//     const maxDistance = Math.sqrt(screenWidth * screenWidth + screenHeight * screenHeight);
+//     const finalScale = maxDistance / 50; // 50 is half of base circle (100px)
+
+//     // Reset and animate ripple
+//     rippleScale.value = 0;
+//     rippleOpacity.value = withTiming(0.7, { duration: 100 });
+//     rippleScale.value = withTiming(finalScale, { duration: 1000 });
+
+//     // Fade out ripple
+//     rippleOpacity.value = withDelay(800, withTiming(0, { duration: 300 }));
+//     rippleScale.value = withDelay(1100, withTiming(0, { duration: 0 }));
+//   };
+
+//   // Update theme progress when theme changes
 //   useEffect(() => {
 //     const targetValue = themeMode === "dark" ? 1 : 0;
-    
-//     // Create sophisticated animation sequence
-//     const animateThemeChange = () => {
-//       // Phase 1: Dim content and start ripple effect
-//       contentOpacity.value = withTiming(0.3, { duration: 200 });
-//       itemsTranslateY.value = withTiming(-15, { 
-//         duration: 200,
-//         easing: Easing.out(Easing.quad)
-//       });
-      
-//       // Start ripple effect
-//       rippleScale.value = withSequence(
-//         withTiming(0, { duration: 0 }),
-//         withTiming(1.2, { 
-//           duration: 600,
-//           easing: Easing.out(Easing.quad)
-//         }),
-//         withTiming(0, { duration: 0 })
-//       );
-      
-//       // Phase 2: Main overlay animation with spring physics
-//       overlayScale.value = withSequence(
-//         withTiming(0, { duration: 0 }),
-//         withDelay(100, withSpring(1, {
-//           damping: 15,
-//           stiffness: 150,
-//           mass: 1,
-//         }))
-//       );
-      
-//       overlayOpacity.value = withSequence(
-//         withTiming(0, { duration: 0 }),
-//         withDelay(100, withTiming(0.95, { 
-//           duration: 400,
-//           easing: Easing.out(Easing.cubic)
-//         })),
-//         withDelay(200, withTiming(0, { 
-//           duration: 450,
-//           easing: Easing.in(Easing.cubic)
-//         }))
-//       );
+//     themeProgress.value = withTiming(targetValue, { duration: 1000 });
 
-//       // Phase 3: Color transition
-//       themeProgress.value = withDelay(150, withTiming(targetValue, {
-//         duration: 500,
-//         easing: Easing.inOut(Easing.quad)
-//       }));
-
-//       // Phase 4: Restore content with bounce
-//       contentOpacity.value = withDelay(400, withSpring(1, {
-//         damping: 12,
-//         stiffness: 200,
-//       }));
-      
-//       itemsTranslateY.value = withDelay(350, withSpring(0, {
-//         damping: 15,
-//         stiffness: 180,
-//       }));
-
-//       // Reset overlay scale after animation
-//       overlayScale.value = withDelay(800, withTiming(0, { duration: 0 }));
-//     };
-
-//     animateThemeChange();
+//     // Trigger ripple animation
+//     setTimeout(() => handleThemeChange(), 50);
 //   }, [themeMode]);
 
-//   // Animated styles
+//   // Simple animated styles using interpolateColor
 //   const animatedBackgroundStyle = useAnimatedStyle(() => {
 //     const backgroundColor = interpolateColor(
 //       themeProgress.value,
 //       [0, 1],
-//       [Typography.Colors.white, Typography.Colors.black]
+//       [Typography.Colors.barColor, Typography.Colors.charcol]
 //     );
-    
-//     return {
-//       backgroundColor,
-//     };
+//     return { backgroundColor };
 //   });
 
 //   const animatedTextStyle = useAnimatedStyle(() => {
@@ -145,56 +121,42 @@
 //       [0, 1],
 //       [Typography.Colors.black, Typography.Colors.white]
 //     );
-    
-//     return {
-//       color,
-//     };
+//     return { color };
 //   });
 
-//   const contentAnimatedStyle = useAnimatedStyle(() => ({
-//     opacity: contentOpacity.value,
-//   }));
-
-//   const itemsAnimatedStyle = useAnimatedStyle(() => ({
-//     opacity: contentOpacity.value,
-//     transform: [{ translateY: itemsTranslateY.value }],
-//   }));
-
-//   const overlayAnimatedStyle = useAnimatedStyle(() => ({
-//     transform: [{ scale: overlayScale.value }],
-//     opacity: overlayOpacity.value,
-//   }));
-
+//   // Ripple animation style
 //   const rippleAnimatedStyle = useAnimatedStyle(() => ({
 //     transform: [{ scale: rippleScale.value }],
-//     opacity: rippleScale.value > 0 ? 0.3 : 0,
+//     opacity: rippleOpacity.value,
+//     left: rippleX.value - 50,
+//     top: rippleY.value - 50,
 //   }));
 
 //   // Individual item animated styles
 //   const item0AnimatedStyle = useAnimatedStyle(() => ({
 //     transform: [{ scale: item0Scale.value }],
 //   }));
-  
+
 //   const item1AnimatedStyle = useAnimatedStyle(() => ({
 //     transform: [{ scale: item1Scale.value }],
 //   }));
-  
+
 //   const item2AnimatedStyle = useAnimatedStyle(() => ({
 //     transform: [{ scale: item2Scale.value }],
 //   }));
-  
+
 //   const item3AnimatedStyle = useAnimatedStyle(() => ({
 //     transform: [{ scale: item3Scale.value }],
 //   }));
-  
+
 //   const item4AnimatedStyle = useAnimatedStyle(() => ({
 //     transform: [{ scale: item4Scale.value }],
 //   }));
-  
+
 //   const item5AnimatedStyle = useAnimatedStyle(() => ({
 //     transform: [{ scale: item5Scale.value }],
 //   }));
-  
+
 //   const item6AnimatedStyle = useAnimatedStyle(() => ({
 //     transform: [{ scale: item6Scale.value }],
 //   }));
@@ -203,11 +165,10 @@
 //     if (screen) Navigation.navigate(screen, params);
 //   };
 
-//   // Helper function to get the right scale value and style for each item
 //   const getItemScaleAndStyle = (index) => {
 //     const scales = [item0Scale, item1Scale, item2Scale, item3Scale, item4Scale, item5Scale, item6Scale];
 //     const styles = [item0AnimatedStyle, item1AnimatedStyle, item2AnimatedStyle, item3AnimatedStyle, item4AnimatedStyle, item5AnimatedStyle, item6AnimatedStyle];
-    
+
 //     return {
 //       scaleValue: scales[index],
 //       animatedStyle: styles[index]
@@ -216,14 +177,12 @@
 
 //   const handleItemPress = (onPress, index) => {
 //     const { scaleValue } = getItemScaleAndStyle(index);
-    
-//     // Add press feedback animation
+
 //     scaleValue.value = withSequence(
 //       withTiming(0.95, { duration: 100 }),
 //       withSpring(1, { damping: 10, stiffness: 300 })
 //     );
-    
-//     // Execute the actual press action with slight delay
+
 //     setTimeout(() => onPress(), 150);
 //   };
 
@@ -272,26 +231,26 @@
 //     const { animatedStyle } = getItemScaleAndStyle(index);
 
 //     return (
-//       <Animated.View style={[itemsAnimatedStyle, animatedStyle]}>
+//       <Animated.View style={animatedStyle}>
 //         <TouchableOpacity onPress={() => handleItemPress(item.onPress, index)}>
 //           <View style={styles.secondsection}>
 //             <View style={styles.logocontainer}>
-//               <Image
-//                 source={item.icon}
-//                 style={[
-//                   item.iconStyle || styles.logostyle,
-//                   {
-//                     tintColor:
-//                       item.icon === assets.Logout
-//                         ? Typography.Colors.red
-//                         : theme.text,
-//                   },
-//                 ]}
-//               />
+// <Image
+//   source={item.icon}
+//   style={[
+//     item.iconStyle || styles.logostyle,
+//     {
+//       tintColor:
+//         item.icon === assets.Logout
+//           ? Typography.Colors.red
+//           : theme.text,
+//     },
+//   ]}
+// />
 //               <Animated.Text
 //                 style={[
 //                   item.textStyle || styles.textlist,
-//                   item.title === "Log Out" 
+//                   item.title === "Log Out"
 //                     ? { color: Typography.Colors.red }
 //                     : animatedTextStyle,
 //                 ]}
@@ -315,39 +274,8 @@
 
 //   return (
 //     <Animated.View style={[styles.container, animatedBackgroundStyle]}>
-//       {/* Ripple Effect Overlay */}
-//       <Animated.View
-//         style={[styles.rippleOverlay, rippleAnimatedStyle]}
-//         pointerEvents="none"
-//       >
-//         <Animated.View
-//           style={[
-//             styles.rippleInner,
-//             {
-//               backgroundColor: themeMode === "dark" 
-//                 ? Typography.Colors.black 
-//                 : Typography.Colors.white,
-//             }
-//           ]}
-//         />
-//       </Animated.View>
-
-//       {/* Main Theme Overlay */}
-//       <Animated.View
-//         style={[
-//           styles.themeOverlay,
-//           overlayAnimatedStyle,
-//           {
-//             backgroundColor: themeMode === "dark" 
-//               ? Typography.Colors.black 
-//               : Typography.Colors.white,
-//           }
-//         ]}
-//         pointerEvents="none"
-//       />
-
 //       {/* Main Content */}
-//       <Animated.View style={[styles.contentContainer, contentAnimatedStyle]}>
+//       <View style={styles.contentContainer}>
 //         <TouchableOpacity onPress={() => handleNavigation("EditProfile")}>
 //           <View style={styles.firstsection}>
 //             <Image
@@ -366,7 +294,7 @@
 //                 {user?.email}
 //               </Animated.Text>
 //             </View>
-//             <View style={styles.modeContainer}>
+//             <View style={styles.modeContainer} ref={themeToggleRef}>
 //               <ThemeToggle />
 //             </View>
 //           </View>
@@ -380,7 +308,7 @@
 //           showsVerticalScrollIndicator={true}
 //         />
 
-//         <Animated.View style={[styles.tncstyle, itemsAnimatedStyle]}>
+//         <View style={styles.tncstyle}>
 //           <TouchableOpacity onPress={() => handleNavigation("PrivacyPolicy")}>
 //             <Animated.Text style={[styles.policystyle, animatedTextStyle]}>
 //               Privacy Policy
@@ -394,7 +322,24 @@
 //               Terms and Conditions
 //             </Animated.Text>
 //           </TouchableOpacity>
-//         </Animated.View>
+//         </View>
+//       </View>
+
+//       {/* Simple Ripple Wave Effect */}
+//       <Animated.View
+//         style={[styles.rippleContainer, rippleAnimatedStyle]}
+//         pointerEvents="none"
+//       >
+//         <View
+//           style={[
+//             styles.rippleCircle,
+//             {
+//               backgroundColor: themeMode === "light"
+//                 ? Typography.Colors.black
+//                 : Typography.Colors.white,
+//             }
+//           ]}
+//         />
 //       </Animated.View>
 //     </Animated.View>
 //   );
@@ -408,38 +353,23 @@
 //   contentContainer: {
 //     flex: 1,
 //   },
-//   themeOverlay: {
+
+//   // Enhanced ripple effect
+//   rippleContainer: {
 //     position: "absolute",
-//     top: "-70%",
-//     left: "-70%",
-//     width: "200%",
-//     height: "200%",
-//     borderRadius: 1000,
-//     marginTop: "100%",
-//     marginLeft: "100%",
-//     zIndex: 9999,
-//     elevation: 20,
-//   },
-//   rippleOverlay: {
-//     position: "absolute",
-//     top: "-100%",
-//     left: "-100%",
-//     width: "300%",
-//     height: "300%",
-//     borderRadius: 2000,
-//     marginTop: "150%",
-//     marginLeft: "150%",
-//     zIndex: 9998,
-//     elevation: 19,
+//     width: 100,
+//     height: 100,
+//     zIndex: 998, // Behind content but visible
 //     justifyContent: 'center',
 //     alignItems: 'center',
 //   },
-//   rippleInner: {
+//   rippleCircle: {
 //     width: '100%',
 //     height: '100%',
-//     borderRadius: 2000,
-//     opacity: 0.1,
+//     borderRadius: 50,
+//     opacity: 0.9,
 //   },
+
 //   modeContainer: {
 //     flexDirection: "row",
 //     gap: 20,
@@ -530,18 +460,18 @@
 //     alignSelf: "center",
 //     borderWidth: 0.2,
 //     opacity: 0.5,
-//     color: Typography.Colors.lightgrey,
+//     color: Typography.Colors.white,
 //   },
 //   policystyle: {
 //     paddingVertical: 1.5,
 //   },
 //   conditionstyle: {
 //     paddingVertical: 1.5,
+//     paddingBottom:90
 //   },
 // });
 
 // export default ProfileScreen;
-
 
 import {
   Image,
@@ -550,31 +480,19 @@ import {
   Text,
   TouchableOpacity,
   View,
-  Dimensions,
+  ImageBackground,
 } from "react-native";
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withSpring,
-  withTiming,
-  withSequence,
-  withDelay,
-  interpolateColor,
-  runOnJS,
-  Easing,
-} from "react-native-reanimated";
 import { Typography } from "../../theme/Colors";
 import { assets } from "../../../assets/images";
 import { useNavigation } from "@react-navigation/native";
 import useAuthStore from "../../stores/useAuthStore";
-import { ThemeToggle } from "../../components/Themes/ThemeToggle";
-import { useEffect, useRef } from "react";
-
-const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
+import { ColorSchemeButton } from "../../components/theme/ColorSchemeButton";
+import { darkTheme, lightTheme,  } from "../../components/theme/Theme";
+import { useColorScheme } from "../../components/theme/ColorSchemeContext";
 
 const ProfileScreen = () => {
-  const user = useAuthStore((state) => state.user);
   const themeMode = useAuthStore((state) => state.theme);
+  // console.log(themeMode,'thyememeeee')
   const theme =
     themeMode === "dark"
       ? {
@@ -582,153 +500,15 @@ const ProfileScreen = () => {
           text: Typography.Colors.white,
         }
       : {
-          background: Typography.Colors.white,
+          background: Typography.Colors.barColor,
           text: Typography.Colors.black,
         };
+  const user = useAuthStore((state) => state.user);
   const logout = useAuthStore((state) => state.logout);
   const Navigation = useNavigation();
 
-  // Ref to measure theme toggle position
-  const themeToggleRef = useRef(null);
-
-  // Simple progress value for theme animation
-  const themeProgress = useSharedValue(themeMode === "dark" ? 1 : 0);
-  
-  // Ripple effect values
-  const rippleScale = useSharedValue(0);
-  const rippleOpacity = useSharedValue(0);
-  const rippleX = useSharedValue(screenWidth / 2);
-  const rippleY = useSharedValue(100);
-  
-  // Individual item press animations
-  const item0Scale = useSharedValue(1);
-  const item1Scale = useSharedValue(1);
-  const item2Scale = useSharedValue(1);
-  const item3Scale = useSharedValue(1);
-  const item4Scale = useSharedValue(1);
-  const item5Scale = useSharedValue(1);
-  const item6Scale = useSharedValue(1);
-
-  // Simple theme change handler
-  const handleThemeChange = () => {
-    if (themeToggleRef.current) {
-      themeToggleRef.current.measureInWindow((x, y, width, height) => {
-        // Set ripple position to center of the toggle button
-        rippleX.value = x + width / 2;
-        rippleY.value = y + height / 2;
-        
-        // Start ripple animation
-        animateRipple();
-      });
-    } else {
-      animateRipple();
-    }
-  };
-
-  // Simple ripple animation
-  const animateRipple = () => {
-    // Calculate scale to cover screen
-    const maxDistance = Math.sqrt(screenWidth * screenWidth + screenHeight * screenHeight);
-    const finalScale = maxDistance / 50; // 50 is half of base circle (100px)
-    
-    // Reset and animate ripple
-    rippleScale.value = 0;
-    rippleOpacity.value = withTiming(0.7, { duration: 100 });
-    rippleScale.value = withTiming(finalScale, { duration: 1000 });
-    
-    // Fade out ripple
-    rippleOpacity.value = withDelay(800, withTiming(0, { duration: 300 }));
-    rippleScale.value = withDelay(1100, withTiming(0, { duration: 0 }));
-  };
-
-  // Update theme progress when theme changes
-  useEffect(() => {
-    const targetValue = themeMode === "dark" ? 1 : 0;
-    themeProgress.value = withTiming(targetValue, { duration: 1000 });
-    
-    // Trigger ripple animation
-    setTimeout(() => handleThemeChange(), 50);
-  }, [themeMode]);
-
-  // Simple animated styles using interpolateColor
-  const animatedBackgroundStyle = useAnimatedStyle(() => {
-    const backgroundColor = interpolateColor(
-      themeProgress.value,
-      [0, 1],
-      [Typography.Colors.white, Typography.Colors.black]
-    );
-    return { backgroundColor };
-  });
-
-  const animatedTextStyle = useAnimatedStyle(() => {
-    const color = interpolateColor(
-      themeProgress.value,
-      [0, 1],
-      [Typography.Colors.black, Typography.Colors.white]
-    );
-    return { color };
-  });
-
-  // Ripple animation style
-  const rippleAnimatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: rippleScale.value }],
-    opacity: rippleOpacity.value,
-    left: rippleX.value - 50,
-    top: rippleY.value - 50,
-  }));
-
-  // Individual item animated styles
-  const item0AnimatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: item0Scale.value }],
-  }));
-  
-  const item1AnimatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: item1Scale.value }],
-  }));
-  
-  const item2AnimatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: item2Scale.value }],
-  }));
-  
-  const item3AnimatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: item3Scale.value }],
-  }));
-  
-  const item4AnimatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: item4Scale.value }],
-  }));
-  
-  const item5AnimatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: item5Scale.value }],
-  }));
-  
-  const item6AnimatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: item6Scale.value }],
-  }));
-
   const handleNavigation = (screen, params = {}) => {
     if (screen) Navigation.navigate(screen, params);
-  };
-
-  const getItemScaleAndStyle = (index) => {
-    const scales = [item0Scale, item1Scale, item2Scale, item3Scale, item4Scale, item5Scale, item6Scale];
-    const styles = [item0AnimatedStyle, item1AnimatedStyle, item2AnimatedStyle, item3AnimatedStyle, item4AnimatedStyle, item5AnimatedStyle, item6AnimatedStyle];
-    
-    return {
-      scaleValue: scales[index],
-      animatedStyle: styles[index]
-    };
-  };
-
-  const handleItemPress = (onPress, index) => {
-    const { scaleValue } = getItemScaleAndStyle(index);
-    
-    scaleValue.value = withSequence(
-      withTiming(0.95, { duration: 100 }),
-      withSpring(1, { damping: 10, stiffness: 300 })
-    );
-    
-    setTimeout(() => onPress(), 150);
   };
 
   const menuItems = [
@@ -772,15 +552,26 @@ const ProfileScreen = () => {
     },
   ];
 
-  const renderItem = ({ item, index }) => {
-    const { animatedStyle } = getItemScaleAndStyle(index);
+  const renderItem = ({ item }) => (
+    <TouchableOpacity onPress={item.onPress}>
+      <View style={styles.secondsection}>
+        <View style={styles.logocontainer}>
+          <Image
+            source={item.icon}
+            style={[
+              item.iconStyle || styles.logostyle,
+              {
+                tintColor:
+                  item.icon === assets.Logout
+                    ? "red"
+                    : theme.text
+                    // ? darkTheme.colors.mainBackground
+                    // : darkTheme.colors.mainForeground,
+              },
+            ]}
+          />
 
-    return (
-      <Animated.View style={animatedStyle}>
-        <TouchableOpacity onPress={() => handleItemPress(item.onPress, index)}>
-          <View style={styles.secondsection}>
-            <View style={styles.logocontainer}>
-              <Image
+          {/* <Image
                 source={item.icon}
                 style={[
                   item.iconStyle || styles.logostyle,
@@ -791,36 +582,49 @@ const ProfileScreen = () => {
                         : theme.text,
                   },
                 ]}
-              />
-              <Animated.Text
-                style={[
-                  item.textStyle || styles.textlist,
-                  item.title === "Log Out" 
-                    ? { color: Typography.Colors.red }
-                    : animatedTextStyle,
-                ]}
-              >
-                {item.title}
-              </Animated.Text>
-            </View>
-            {item.title !== "Log Out" && (
-              <View style={styles.arrowstyleview}>
-                <Image
-                  source={assets.rightarrow}
-                  style={[styles.arrowstyle, { tintColor: theme.text }]}
-                />
-              </View>
-            )}
+              /> */}
+          <Text
+            style={[
+              styles.textlist,
+              {
+                color:theme.text
+              },
+              item.textStyle, // allow per-item text style override
+            ]}
+          >
+            {item.title}
+          </Text>
+        </View>
+        {item.title !== "Log Out" && (
+          <View style={styles.arrowstyleview}>
+            <Image source={assets.rightarrow} style={styles.arrowstyle} />
           </View>
-        </TouchableOpacity>
-      </Animated.View>
-    );
-  };
-
+        )}
+      </View>
+    </TouchableOpacity>
+  );
+  const { colorScheme } = useColorScheme();
+  // console.log(colorScheme,"colorSchemecolorSchemecolorScheme")
   return (
-    <Animated.View style={[styles.container, animatedBackgroundStyle]}>
-      {/* Main Content */}
-      <View style={styles.contentContainer}>
+    // <ScrollView style={{ flex: 1, backgroundColor: Typography.Colors.white }}>
+    <View
+      style={[
+        styles.container,
+        {
+          backgroundColor:theme.background
+            // colorScheme === "light"
+            //   ? darkTheme.colors.mainBackground
+            //   : lightTheme.colors.mainBackground,
+        },
+      ]}
+    >
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
         <TouchableOpacity onPress={() => handleNavigation("EditProfile")}>
           <View style={styles.firstsection}>
             <Image
@@ -832,95 +636,59 @@ const ProfileScreen = () => {
               style={styles.profilepic}
             />
             <View style={styles.textcontainer}>
-              <Animated.Text style={[styles.textname, animatedTextStyle]}>
+              <Text
+                style={[
+                  styles.textname,
+                  {
+                    color:theme.text
+                      // colorScheme === "light"
+                      //   ? darkTheme.colors.text
+                      //   : lightTheme.colors.text,
+                  },
+                ]}
+              >
                 {user?.name}
-              </Animated.Text>
-              <Animated.Text style={[styles.mailcontainer, animatedTextStyle]}>
-                {user?.email}
-              </Animated.Text>
-            </View>
-            <View style={styles.modeContainer} ref={themeToggleRef}>
-              <ThemeToggle />
+              </Text>
+              <Text style={styles.mailcontainer}>{user?.email}</Text>
             </View>
           </View>
         </TouchableOpacity>
-
-        <FlatList
-          data={menuItems}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={renderItem}
-          scrollEnabled={false}
-          showsVerticalScrollIndicator={true}
-        />
-
-        <View style={styles.tncstyle}>
-          <TouchableOpacity onPress={() => handleNavigation("PrivacyPolicy")}>
-            <Animated.Text style={[styles.policystyle, animatedTextStyle]}>
-              Privacy Policy
-            </Animated.Text>
-          </TouchableOpacity>
-          <Animated.View style={[styles.line, animatedTextStyle]} />
-          <TouchableOpacity
-            onPress={() => handleNavigation("TermsnConditions")}
-          >
-            <Animated.Text style={[styles.conditionstyle, animatedTextStyle]}>
-              Terms and Conditions
-            </Animated.Text>
-          </TouchableOpacity>
-        </View>
+        {/* <View style={{ backgroundColor:'red'}}> */}
+        <ColorSchemeButton />
+        {/* </View> */}
       </View>
+      <FlatList
+        data={menuItems}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={renderItem}
+        scrollEnabled={false}
+        showsVerticalScrollIndicator={true}
+      />
 
-      {/* Simple Ripple Wave Effect */}
-      <Animated.View
-        style={[styles.rippleContainer, rippleAnimatedStyle]}
-        pointerEvents="none"
-      >
-        <View
-          style={[
-            styles.rippleCircle,
-            {
-              backgroundColor: themeMode === "light" 
-                ? Typography.Colors.black
-                : Typography.Colors.white,
-            }
-          ]}
-        />
-      </Animated.View>
-    </Animated.View>
+      <View style={styles.tncstyle}>
+        <TouchableOpacity onPress={() => handleNavigation("PrivacyPolicy")}>
+          <Text style={styles.policystyle}>Privacy Policy</Text>
+        </TouchableOpacity>
+        <View style={styles.line}></View>
+        <TouchableOpacity onPress={() => handleNavigation("TermsnConditions")}>
+          <Text style={styles.conditionstyle}>Terms and Conditions</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+    // </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 20,
+    paddingTop:20,
     flex: 1,
+    backgroundColor: Typography.Colors.white,
   },
-  contentContainer: {
-    flex: 1,
-  },
-  
-  // Enhanced ripple effect
-  rippleContainer: {
-    position: "absolute",
-    width: 100,
-    height: 100,
-    zIndex: 998, // Behind content but visible
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  rippleCircle: {
-    width: '100%',
-    height: '100%',
-    borderRadius: 50,
-    opacity: 0.9,
-  },
-
-  modeContainer: {
-    flexDirection: "row",
-    gap: 20,
-    flex: 1,
-    justifyContent: "flex-end",
-    alignItems: "center",
+  HeaderStyle: {
+    backgroundColor: Typography.Colors.white,
+    paddingHorizontal: 20,
   },
   firstsection: {
     paddingVertical: 35,
@@ -946,20 +714,23 @@ const styles = StyleSheet.create({
   textname: {
     fontSize: 18,
     fontFamily: Typography.font.bold,
+    color: Typography.Colors.black,
     fontWeight: "500",
     textTransform: "capitalize",
   },
   mailcontainer: {
     fontSize: 14,
     fontFamily: Typography.font.regular,
-  },
-  iconStyle: {
-    color: Typography.Colors.white,
+    color: Typography.Colors.lightgrey,
   },
   logostyle: {
-    tintColor: Typography.Colors.white,
     marginTop: 5,
     height: 20,
+    width: 20,
+  },
+  logo: {
+    marginTop: 5,
+    height: 14,
     width: 20,
   },
   logodelivery: {
@@ -976,12 +747,20 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
     fontFamily: Typography.font.medium,
+    color: Typography.Colors.blackdim,
   },
   textlistlogout: {
     alignSelf: "center",
     fontSize: 16,
     fontWeight: "600",
     fontFamily: Typography.font.medium,
+    color: Typography.Colors.red,
+  },
+  textlistpayment: {
+    fontSize: 16,
+    fontWeight: "600",
+    fontFamily: Typography.font.medium,
+    color: Typography.Colors.blackdim,
   },
   arrowstyle: {
     paddingVertical: 8.5,
@@ -1008,9 +787,11 @@ const styles = StyleSheet.create({
     color: Typography.Colors.lightgrey,
   },
   policystyle: {
+    color: Typography.Colors.darksilver,
     paddingVertical: 1.5,
   },
   conditionstyle: {
+    color: Typography.Colors.darksilver,
     paddingVertical: 1.5,
   },
 });

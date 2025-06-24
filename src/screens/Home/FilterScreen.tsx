@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Pressable, ScrollView } from "react-native";
+import { View, Text, StyleSheet, Pressable, ScrollView, SafeAreaView } from "react-native";
 import React, { useEffect, useState } from "react";
 import RangeSlider from "../../components/slider/RangeSlider";
 import { Typography } from "../../theme/Colors";
@@ -134,7 +134,7 @@ const FilterScreen = ({ route }) => {
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.background }]}>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]}>
       <View style={styles.heading}>
         <Pressable onPress={() => navigation.goBack()}>
           <Icon name="cross" size={24} style={styles.icon} />
@@ -300,7 +300,7 @@ const FilterScreen = ({ route }) => {
           <Text style={styles.buttonText}>Apply Filters</Text>
         </Pressable>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 

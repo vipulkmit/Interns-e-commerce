@@ -33,24 +33,30 @@ import messaging from "@react-native-firebase/messaging";
 
 // Import Notifee
 import notifee, { AndroidImportance } from "@notifee/react-native";
+import { useTheme } from "@shopify/restyle";
+import { useAppTheme } from "../../theme/useAppTheme";
+import { SafeAreaView } from "react-native";
 
 const { width } = Dimensions.get("window");
 
 const HomeScreen = () => {
   const navigation = useNavigation();
-
+  const themes = useTheme();
+  const theme = useAppTheme();
+// console.log(theme,'themeaaaathemeaaaathemeaaaa')
   //Dark theme
   const themeMode = useAuthStore((state) => state.theme);
-  const theme =
-    themeMode === "dark"
-      ? {
-          background: Typography.Colors.black,
-          text: Typography.Colors.white,
-        }
-      : {
-          background: Typography.Colors.white,
-          text: Typography.Colors.black,
-        };
+  // console.log(themeMode,'thyememeeee')
+  // const theme =
+  //   themeMode === "dark"
+  //     ? {
+  //         background: Typography.Colors.black,
+  //         text: Typography.Colors.white,
+  //       }
+  //     : {
+  //         background: Typography.Colors.white,
+  //         text: Typography.Colors.black,
+  //       };
 
   // Initialize Notifee
   const initializeNotifee = async () => {
@@ -136,7 +142,7 @@ const HomeScreen = () => {
 
   const getFcmToken = async () => {
     const token = await messaging().getToken();
-    console.log("FCM Token:", token);
+    // console.log("FCM Token:", token);
     // You can send this token to your server
   };
 
@@ -199,7 +205,7 @@ const HomeScreen = () => {
 
     // Handle background notification events
     notifee.onBackgroundEvent(async ({ type, detail }) => {
-      console.log(type, "+");
+      // console.log(type, "+");
 
       if (type === "press") {
         console.log("Background notification press:", detail.notification);
@@ -402,7 +408,7 @@ const HomeScreen = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
 
     return (
-      <>
+      <SafeAreaView>
         {/* Header View */}
         <View
           style={[styles.HeaderStyle]}
@@ -499,8 +505,8 @@ const HomeScreen = () => {
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={{ gap: 20 }}
           />
-          <View style={{paddingVertical:20}} >
-            <Image source={themeMode==='dark'? assets.bannerDark:assets.bannerLight} style={styles.bannerSize} resizeMode="cover"/>
+          <View style={{paddingVertical:20 ,height:200,width:width-20}} >
+            <Image source={themeMode==='dark'? assets.bannerDark:assets.bannerLight} style={styles.bannerSize} resizeMode="cover" />
           </View>
         </View>
 
@@ -512,7 +518,7 @@ const HomeScreen = () => {
             Deals Of The Day
           </Text>
         </View>
-      </>
+      </SafeAreaView>
     );
   };
 
@@ -580,6 +586,7 @@ const styles = StyleSheet.create({
   //HeaderStyle
   HeaderStyle: {
     paddingHorizontal: 20,
+    // paddingTop:40
   },
 
   //Category Style
@@ -684,8 +691,8 @@ const styles = StyleSheet.create({
   },
   bannerSize:{
     // flex:1,
-    width:width,
-    height:200,
+    width:'100%',
+    height:'100%',
   },
   TrendingText: {
     fontWeight: "500",

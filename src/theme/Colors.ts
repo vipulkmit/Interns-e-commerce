@@ -32,7 +32,9 @@ export const Typography = {
     grayy: "#F2F3F2",
     blue: "#bcccdc",
     charcol: "#1C2128",
-    navigatorColor:'#fcf7fd'
+    navigatorColor:'#fcf7fd',
+    barColor:"#fef8f8",
+    
   },
 
   font: {
@@ -44,13 +46,13 @@ export const Typography = {
   },
 };
 
-export const LightColors = {
-  background: "#ffffff",
-  text: Typography.Colors.black,
+// export const LightColors = {
+//   background: "#ffffff",
+//   text: Typography.Colors.black,
   
-};
+// };
 
-export const DarkColors = {
-  background: "#121212",
-  text: Typography.Colors.white,
-};
+// export const DarkColors = {
+//   background: "#121212",
+//   text: Typography.Colors.white,
+// };

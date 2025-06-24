@@ -6,6 +6,9 @@ import {
   StyleSheet,
   TouchableOpacity,
   Alert,
+  ImageBackground,
+  Pressable,
+  Image
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Formik } from "formik";
@@ -16,6 +19,7 @@ import { Typography } from "../../theme/Colors";
 import Iconarrow from "react-native-vector-icons/Feather";
 import CustomButton from "../../components/button/CustomButton";
 import CustomTextInput from "../../components/textInput/CustomTextInput";
+import { assets } from "../../../assets/images";
 
 const AddAddressList = ({ route }) => {
    const themeMode = useAuthStore((state) => state.theme);
@@ -127,17 +131,17 @@ const AddAddressList = ({ route }) => {
   };
 
   return (
-    <ScrollView style={{ backgroundColor: theme.background}}>
-      <View style={[styles.container,{backgroundColor:theme.background}]}>
+    <ScrollView>
+          <ImageBackground source={themeMode === 'dark'? assets.BackgroundDark : assets.Background} style={{flex:1,}} resizeMode="cover">
+
+      <View style={[styles.container]}>
         <View style={styles.mainContainer}>
-          <TouchableOpacity onPress={handlearrowbutton}>
-            <Iconarrow
-              size={35}
-              color={Typography.Colors.black}
-              style={[styles.arrow,{color:theme.text}]}
-              name="arrow-left"
+          <Pressable onPress={handlearrowbutton}>
+            <Image 
+              source={themeMode==="dark"?assets.arrowBlack:assets.arrowWhite}
+              style={[styles.arrow]}
             />
-          </TouchableOpacity>
+          </Pressable>
           <Text style={[styles.addressText,{color:theme.text}]}>Add Address</Text>
         </View>
 
@@ -279,6 +283,7 @@ const AddAddressList = ({ route }) => {
           }}
         </Formik>
       </View>
+      </ImageBackground>
     </ScrollView>
   );
 };
@@ -314,7 +319,7 @@ const styles = StyleSheet.create({
   container: {
     padding: 15,
     flex: 1,
-    backgroundColor: Typography.Colors.white,
+    // backgroundColor: Typography.Colors.white,
   },
   boxstyle: {
     marginHorizontal: 15,
@@ -334,6 +339,8 @@ const styles = StyleSheet.create({
   },
   arrow: {
     marginTop: 3,
+    height:36,
+    width:36
   },
   buttonstyle: {
     textAlign: "center",

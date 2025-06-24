@@ -51,11 +51,10 @@ const HeaderComponent = ({
   };
 
   return (
-
       <View style={styles.container}>
         <View style={styles.UserContainer}>
           <Pressable onPress={onClick}>
-            <Image source={assets.ArrowLeft} style={[styles.backIcon,{tintColor:theme.text}]} />
+            <Image source={themeMode==="dark"?assets.arrowBlack:assets.arrowWhite} style={[styles.backIcon]} />
           </Pressable>
           <Text numberOfLines={1} style={[styles.productType,{color:theme.text}]}>
             {Title}{" "}
@@ -98,10 +97,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   productType: {
-    fontSize: 18,
+    fontSize: 20,
     fontFamily: Typography.font.medium,
     color: Typography.Colors.black,
     paddingLeft: 13,
+    // alignItems:"center"
   },
   iconContainer: {
     flex: 1,
@@ -117,10 +117,11 @@ const styles = StyleSheet.create({
   UserContainer: {
     flex: 2,
     flexDirection: "row",
+    alignItems:'center'
   },
   backIcon: {
-    height: 28,
-    width: 28,
+    height: 34,
+    width: 34,
   },
   cartContainer: {
     position: "relative",

@@ -1,7 +1,7 @@
+import { darkTheme, lightTheme } from "../components/theme/Theme";
 import useAuthStore from "../stores/useAuthStore";
-import { DarkColors, LightColors } from "./Colors";
 
 export const useAppTheme = () => {
   const theme = useAuthStore((state) => state.theme);
-  return theme === "dark" ? DarkColors : LightColors;
+  return theme === "dark" ? darkTheme.colors : lightTheme.colors;
 };

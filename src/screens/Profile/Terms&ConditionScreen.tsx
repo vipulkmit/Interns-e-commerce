@@ -73,8 +73,8 @@ const TermsnConditionScreen = () => {
           these Terms is held invalid or unenforceable, the remaining provisions
           will remain in full force and effect. For any questions, concerns, or
           legal notices regarding these Terms and Conditions, please contact us
-          at gsaurav641@gmail.com, goyalsneha089@gmail.com, call +91-7376811531.
-          We appreciate your trust in Snapshop and look forward to serving you.
+          at Test@gmail.com, call +91-7854856900. We appreciate your trust in Snapshop 
+          and look forward to serving you.
         </Text>
       </View>
     </ScrollView>
